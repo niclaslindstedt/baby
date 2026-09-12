@@ -1,0 +1,189 @@
+{
+  "version": 1,
+  "child": {
+    "name": "Alva",
+    "birthDate": "2026-01-15",
+    "sex": "female",
+    "motherHeightCm": 166,
+    "fatherHeightCm": 180,
+    "updatedAt": "2026-01-15T12:00:00.000Z"
+  },
+  "measurements": {
+    "m-birth": {
+      "id": "m-birth",
+      "date": "2026-01-15",
+      "weightKg": 3.3,
+      "lengthCm": 49.5,
+      "headCm": 34,
+      "updatedAt": "2026-01-15T12:00:00.000Z"
+    },
+    "m-1mo": {
+      "id": "m-1mo",
+      "date": "2026-02-16",
+      "weightKg": 4.3,
+      "lengthCm": 54,
+      "headCm": 37,
+      "updatedAt": "2026-02-16T10:00:00.000Z"
+    },
+    "m-3mo": {
+      "id": "m-3mo",
+      "date": "2026-04-15",
+      "weightKg": 5.9,
+      "lengthCm": 60,
+      "headCm": 40,
+      "updatedAt": "2026-04-15T10:00:00.000Z"
+    },
+    "m-6mo": {
+      "id": "m-6mo",
+      "date": "2026-07-15",
+      "weightKg": 7.4,
+      "lengthCm": 66,
+      "headCm": 42.5,
+      "updatedAt": "2026-07-15T10:00:00.000Z"
+    },
+    "m-8mo": {
+      "id": "m-8mo",
+      "date": "2026-09-10",
+      "weightKg": 8.1,
+      "lengthCm": null,
+      "headCm": null,
+      "updatedAt": "2026-09-10T08:00:00.000Z"
+    }
+  },
+  "diapers": {
+    "d-1": {
+      "id": "d-1",
+      "kind": "both",
+      "at": "2026-09-12T06:40:00.000Z"
+    },
+    "d-2": {
+      "id": "d-2",
+      "kind": "pee",
+      "at": "2026-09-12T09:10:00.000Z"
+    },
+    "d-3": {
+      "id": "d-3",
+      "kind": "pee",
+      "at": "2026-09-12T11:55:00.000Z"
+    },
+    "d-4": {
+      "id": "d-4",
+      "kind": "poo",
+      "at": "2026-09-12T14:20:00.000Z"
+    },
+    "d-5": {
+      "id": "d-5",
+      "kind": "pee",
+      "at": "2026-09-12T17:05:00.000Z"
+    }
+  },
+  "foods": {
+    "f-porridge": {
+      "id": "f-porridge",
+      "name": "Fullkornsgröt (berikad)",
+      "amount": 150,
+      "unit": "g",
+      "per100": {
+        "kcal": 104,
+        "ironMg": 1.7,
+        "vitaminDUg": 1.79,
+        "fatG": 3.7,
+        "saturatedG": 0.7,
+        "monounsaturatedG": 1.7,
+        "polyunsaturatedG": 1.1,
+        "omega3G": 0.2,
+        "omega6G": 0.9
+      },
+      "updatedAt": "2026-08-01T09:00:00.000Z"
+    },
+    "f-egg": {
+      "id": "f-egg",
+      "name": "Ägg (kokt)",
+      "amount": 30,
+      "unit": "g",
+      "per100": {
+        "kcal": 136,
+        "ironMg": 1.8,
+        "vitaminDUg": 1.92,
+        "fatG": 9.8,
+        "saturatedG": 2.6,
+        "monounsaturatedG": 3.9,
+        "polyunsaturatedG": 1.5,
+        "omega3G": 0.19,
+        "omega6G": 1.32,
+        "dhaG": 0.1
+      },
+      "updatedAt": "2026-08-01T09:00:00.000Z"
+    },
+    "f-banana": {
+      "id": "f-banana",
+      "name": "Banan",
+      "amount": 40,
+      "unit": "g",
+      "per100": {
+        "kcal": 95
+      },
+      "updatedAt": "2026-08-01T09:00:00.000Z"
+    },
+    "f-oil": {
+      "id": "f-oil",
+      "name": "Rapsolja",
+      "amount": 5,
+      "unit": "g",
+      "per100": {
+        "kcal": 884,
+        "fatG": 100,
+        "saturatedG": 7.1,
+        "monounsaturatedG": 61.3,
+        "polyunsaturatedG": 27.4,
+        "omega3G": 8.5,
+        "omega6G": 18.8,
+        "alaG": 8.5
+      },
+      "updatedAt": "2026-08-01T09:00:00.000Z"
+    }
+  },
+  "milk": {
+    "kind": "breast",
+    "formulaMlPerDay": null,
+    "updatedAt": "2026-08-01T09:00:00.000Z"
+  },
+  "vaccinations": {
+    "v-rota-1": {
+      "id": "v-rota-1",
+      "doseId": "rota-1",
+      "date": "2026-02-27",
+      "vaccineName": "RotaTeq",
+      "label": "",
+      "note": "",
+      "updatedAt": "2026-02-27T10:00:00.000Z"
+    },
+    "v-dtp-1": {
+      "id": "v-dtp-1",
+      "doseId": "dtp-1",
+      "date": "2026-04-15",
+      "vaccineName": "Infanrix hexa",
+      "label": "",
+      "note": "",
+      "updatedAt": "2026-04-15T10:00:00.000Z"
+    },
+    "v-pcv-1": {
+      "id": "v-pcv-1",
+      "doseId": "pcv-1",
+      "date": "2026-04-15",
+      "vaccineName": "Synflorix",
+      "label": "",
+      "note": "",
+      "updatedAt": "2026-04-15T10:00:00.000Z"
+    },
+    "v-rota-2": {
+      "id": "v-rota-2",
+      "doseId": "rota-2",
+      "date": "2026-04-15",
+      "vaccineName": "RotaTeq",
+      "label": "",
+      "note": "",
+      "updatedAt": "2026-04-15T10:00:00.000Z"
+    }
+  }
+}

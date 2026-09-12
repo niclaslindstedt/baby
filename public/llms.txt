@@ -1,0 +1,32 @@
+# Nird Baby
+
+> A local-first baby health and nutrition tracker PWA for parents in Sweden,
+> built on @niclaslindstedt/oss-framework. Parents keep a simple daily food
+> regimen (from about 6 months) that the app checks against age- and
+> size-appropriate recommendations, record weight / length / head
+> circumference on the WHO growth standards, log diapers with one tap, and
+> follow the Swedish childhood vaccination programme. The document is stored
+> on-device as JSON, with an optional copy synced to the user's own Dropbox
+> or Google Drive. Every assessment is derived from the document at read time.
+
+- App: https://baby.niclaslindstedt.se/
+- Source: https://github.com/niclaslindstedt/baby
+- Framework: https://github.com/niclaslindstedt/oss-framework
+
+## Features
+
+- Today: the child's age, a one-tap diaper log (pee / poo / both, time
+  recorded automatically) with today's tally, and the headline answers —
+  is the food regimen still sufficient, the latest growth reading, and the
+  next vaccination
+- Food: a daily regimen of the foods the baby typically gets, each with
+  calories (required) and optional iron, vitamin D and fat details, compared
+  against the recommendations for the child's current age and weight; the
+  app says when the child has outgrown the regimen
+- Growth: weight, length and head circumference plotted on the WHO growth
+  standards as SD lines, with the trend emphasised over any single reading,
+  and the mid-parental target height
+- Vaccinations: the Swedish childhood vaccination timeline — given, due and
+  upcoming doses — plus vaccinations outside the general programme
+- Settings: light/dark theme, cloud sync, JSON backup and restore
+- No account, no server, no analytics; installable and fully offline
