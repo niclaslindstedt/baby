@@ -1,0 +1,77 @@
+<!doctype html>
+<!-- `data-theme` seeds the default preset before the app mounts (the engine
+     then keeps it in sync); the framework's token blocks key off it. -->
+<html lang="en" data-theme="githubDark">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Lock the viewport scale: an installed PWA is an app, not a document.
+         `maximum-scale=1, user-scalable=no` disables pinch-zoom and iOS's
+         focus auto-zoom; `viewport-fit=cover` lets the app paint under the
+         notch / home indicator (it pads with `env(safe-area-inset-*)`). -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#12101a"
+      media="(prefers-color-scheme: dark)"
+    />
+    <title>Nird Baby</title>
+    <meta
+      name="description"
+      content="Nird Baby is a local-first baby health and nutrition tracker for parents in Sweden. Keep a simple daily food regimen and see whether it still covers your baby's needs as they grow, plot weight, length and head circumference on standard growth curves, log diapers in one tap, and follow the Swedish childhood vaccination timeline. Everything stays on your device unless you connect your own Dropbox or Google Drive."
+    />
+    <link rel="canonical" href="https://baby.niclaslindstedt.se/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Nird Baby" />
+    <meta
+      property="og:description"
+      content="A privacy-first baby tracker for parents in Sweden: is the food regimen still enough, is the baby growing along the curve, how many diapers today, and which vaccination comes next. No account, no server."
+    />
+    <meta property="og:url" content="https://baby.niclaslindstedt.se/" />
+    <meta
+      property="og:image"
+      content="https://baby.niclaslindstedt.se/og.png"
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nird Baby" />
+    <meta
+      name="twitter:description"
+      content="A privacy-first baby tracker for parents in Sweden: is the food regimen still enough, is the baby growing along the curve, how many diapers today, and which vaccination comes next. No account, no server."
+    />
+    <meta
+      name="twitter:image"
+      content="https://baby.niclaslindstedt.se/og.png"
+    />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Nird Baby",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Any",
+        "description": "A local-first baby health and nutrition tracker PWA for parents in Sweden: a daily food regimen checked against age-appropriate recommendations, growth on standard curves, one-tap diaper logging, and the Swedish childhood vaccination timeline. Optional Dropbox / Google Drive sync.",
+        "url": "https://baby.niclaslindstedt.se/",
+        "image": "https://baby.niclaslindstedt.se/og.png",
+        "offers": { "@type": "Offer", "price": "0" }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
