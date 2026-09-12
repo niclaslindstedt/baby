@@ -4,7 +4,10 @@ Record weight, length and head circumference as often as you like — the
 readings from the child health centre, or a scale at home every morning —
 and see them on the WHO growth standard for your child's sex, drawn the way
 Swedish child health care draws its curves: a median and the ±1 and ±2 SD
-channels.
+channels. Weight and length follow your child to six years (the WHO's 5–19
+reference carries the curves past the standards' five); head circumference
+has no published curve past five, so later head readings are listed but not
+placed.
 
 The **trend** is the headline, not the single reading. Your child following
 the same channel over months is what the curve is for; a move across a

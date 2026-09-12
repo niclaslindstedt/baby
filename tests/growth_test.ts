@@ -15,7 +15,9 @@ import {
   curveAtZ,
   forecast,
   heightCorrelationAt,
+  lastStandardDays,
   lmsAt,
+  MAX_STANDARD_DAYS,
   normalCdf,
   readings,
   targetHeight,
@@ -81,7 +83,40 @@ describe("the standards", () => {
     expect(between).toBeGreaterThan(at6);
     expect(between).toBeLessThan(at7);
     expect(lmsAt(WEIGHT_FOR_AGE, "male", -1)).toBeNull();
-    expect(lmsAt(WEIGHT_FOR_AGE, "male", 61 * 30.4375)).toBeNull();
+    expect(lmsAt(WEIGHT_FOR_AGE, "male", 72 * 30.4375)).not.toBeNull();
+    expect(lmsAt(WEIGHT_FOR_AGE, "male", 72 * 30.4375 + 1)).toBeNull();
+    expect(lmsAt(LENGTH_FOR_AGE, "female", 72 * 30.4375)).not.toBeNull();
+    expect(lmsAt(LENGTH_FOR_AGE, "female", 73 * 30.4375)).toBeNull();
+  });
+
+  it("carry the WHO 2007 reference from five to six years, per table", () => {
+    // Published medians at 72 months: boys' weight-for-age and girls'
+    // height-for-age from the 5–19 reference's expanded month tables.
+    expect(lmsAt(WEIGHT_FOR_AGE, "male", 72 * 30.4375)?.M).toBeCloseTo(
+      20.5137,
+      3,
+    );
+    expect(lmsAt(LENGTH_FOR_AGE, "female", 72 * 30.4375)?.M).toBeCloseTo(
+      115.1244,
+      3,
+    );
+    expect(lastStandardDays(WEIGHT_FOR_AGE)).toBeCloseTo(72 * 30.4375, 6);
+    expect(lastStandardDays(LENGTH_FOR_AGE)).toBeCloseTo(72 * 30.4375, 6);
+    // No head-circumference curve is published past five years.
+    expect(lastStandardDays(HEAD_FOR_AGE)).toBeCloseTo(60 * 30.4375, 6);
+    expect(lmsAt(HEAD_FOR_AGE, "female", 60 * 30.4375)).not.toBeNull();
+    expect(lmsAt(HEAD_FOR_AGE, "female", 61 * 30.4375)).toBeNull();
+    expect(MAX_STANDARD_DAYS).toBeCloseTo(72 * 30.4375, 6);
+  });
+
+  it("interpolate across the seam between the standards and the reference", () => {
+    // Row 60 is the 2006 standard's, row 61 the 2007 reference's; the
+    // median must still rise monotonically through the seam.
+    const at60 = lmsAt(WEIGHT_FOR_AGE, "female", 60 * 30.4375)!.M;
+    const mid = lmsAt(WEIGHT_FOR_AGE, "female", 60.5 * 30.4375)!.M;
+    const at61 = lmsAt(WEIGHT_FOR_AGE, "female", 61 * 30.4375)!.M;
+    expect(mid).toBeGreaterThan(at60);
+    expect(mid).toBeLessThan(at61);
   });
 });
 

@@ -205,7 +205,7 @@ export const en = {
       "From the current length channel ({z}), kept at {share} of its weight because length at this age only loosely predicts adult height, and regressed the rest of the way toward the average. Add both parents' heights to anchor it.",
     projectionMissing: "Add a length reading to project an adult height.",
     outOfRange:
-      "The standards cover the first five years; later readings are listed but not placed.",
+      "The curves cover the first six years for weight and length, and the first five for head circumference; later readings are listed but not placed.",
     form: {
       addTitle: "New reading",
       editTitle: "Edit reading",

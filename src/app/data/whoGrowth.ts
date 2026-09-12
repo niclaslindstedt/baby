@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
-// The WHO Child Growth Standards (2006), as LMS parameters by completed
-// month of age, 0–60 months, for the three measurements the app records.
+// The WHO growth curves, as LMS parameters by completed month of age, for
+// the three measurements the app records: the WHO Child Growth Standards
+// (2006) for months 0–60, extended for weight and height to month 72 with
+// the WHO Growth Reference (2007) so the app follows a child to six years.
+// Head circumference stops at 60 months — the WHO publishes no curve for it
+// beyond five years.
 //
 // GENERATED from the WHO's published monthly z-score tables — do not edit by
 // hand. Source files (World Health Organization, "Child growth standards"):
@@ -9,13 +13,22 @@
 //   https://www.who.int/tools/child-growth-standards/standards/head-circumference-for-age
 // (`wfa_*_0-to-5-years_zscores.xlsx`, `lhfa_*_0-to-2-years_zscores.xlsx` +
 // `lhfa_*_2-to-5-years_zscores.xlsx`, `hcfa-*-0-5-zscores.xlsx`.)
+// Months 61–72 (World Health Organization, "Growth reference 5–19 years"):
+//   https://www.who.int/tools/growth-reference-data-for-5to19-years/indicators/weight-for-age-5to10-years
+//   https://www.who.int/tools/growth-reference-data-for-5to19-years/indicators/height-for-age
+// (`wfa-*-z-who-2007-exp.xlsx`, `hfa-*-z-who-2007-exp.xlsx`, as also shipped
+// in the WHO's own `anthroplus` package.)
 //
 // Each row is `[month, L, M, S]`: Box-Cox power, median, coefficient of
 // variation. A measurement `x` at that age has the z-score
 // `((x / M) ** L - 1) / (L * S)` (see `growth.ts`). Length is recumbent
 // length for months 0–24 and standing height from month 25 on, exactly as
 // the WHO publishes it; the WHO's separate standing-height row at month 24
-// (0.7 cm lower) is not carried.
+// (0.7 cm lower) is not carried. The 2007 reference was smoothed onto the
+// 2006 standards at five years, but its own month-60 row differs a little
+// from the standards' (about 0.1 kg and 0.3 cm on the medians); the app keeps
+// the standards' row 60 and the reference's rows from 61, so the seam is
+// spread over one month of interpolation.
 //
 // Why the WHO standards and not the Swedish reference. Swedish child health
 // care (BVC) plots on the Swedish reference (Wikland et al. 2002, Göteborg
@@ -31,7 +44,9 @@ import type { Sex } from "../types.ts";
 /** One LMS row: `[month, L, M, S]`. */
 export type LmsRow = readonly [number, number, number, number];
 
-/** A standard's rows per sex, month 0 through 60 in order. */
+/** A standard's rows per sex, from month 0 in order, one row a month up to
+ *  the table's last covered month (72 for weight and length, 60 for head
+ *  circumference). */
 export type WhoTable = Readonly<Record<Sex, readonly LmsRow[]>>;
 
 export const WEIGHT_FOR_AGE: WhoTable = {
@@ -97,6 +112,18 @@ export const WEIGHT_FOR_AGE: WhoTable = {
     [58, -0.3492, 17.8686, 0.14675],
     [59, -0.3505, 18.0445, 0.14748],
     [60, -0.3518, 18.2193, 0.14821],
+    [61, -0.4681, 18.2579, 0.14295],
+    [62, -0.4711, 18.4329, 0.1435],
+    [63, -0.4742, 18.6073, 0.14404],
+    [64, -0.4773, 18.7811, 0.14459],
+    [65, -0.4803, 18.9545, 0.14514],
+    [66, -0.4834, 19.1276, 0.14569],
+    [67, -0.4864, 19.3004, 0.14624],
+    [68, -0.4894, 19.473, 0.14679],
+    [69, -0.4924, 19.6455, 0.14735],
+    [70, -0.4954, 19.818, 0.1479],
+    [71, -0.4984, 19.9908, 0.14845],
+    [72, -0.5013, 20.1639, 0.149],
   ],
   male: [
     [0, 0.3487, 3.3464, 0.14602],
@@ -160,6 +187,18 @@ export const WEIGHT_FOR_AGE: WhoTable = {
     [58, -0.1447, 18.0073, 0.13389],
     [59, -0.1477, 18.1722, 0.13453],
     [60, -0.1506, 18.3366, 0.13517],
+    [61, -0.2026, 18.5057, 0.12988],
+    [62, -0.213, 18.6802, 0.13028],
+    [63, -0.2234, 18.8563, 0.13067],
+    [64, -0.2338, 19.034, 0.13105],
+    [65, -0.2443, 19.2132, 0.13142],
+    [66, -0.2548, 19.394, 0.13178],
+    [67, -0.2653, 19.5765, 0.13213],
+    [68, -0.2758, 19.7607, 0.13246],
+    [69, -0.2864, 19.9468, 0.13279],
+    [70, -0.2969, 20.1344, 0.13311],
+    [71, -0.3075, 20.3235, 0.13342],
+    [72, -0.318, 20.5137, 0.13372],
   ],
 };
 
@@ -226,6 +265,18 @@ export const LENGTH_FOR_AGE: WhoTable = {
     [58, 1, 108.3613, 0.04322],
     [59, 1, 108.8948, 0.04334],
     [60, 1, 109.4233, 0.04347],
+    [61, 1, 109.6016, 0.04355],
+    [62, 1, 110.1258, 0.04364],
+    [63, 1, 110.6451, 0.04373],
+    [64, 1, 111.1596, 0.04382],
+    [65, 1, 111.6696, 0.0439],
+    [66, 1, 112.1753, 0.04399],
+    [67, 1, 112.6767, 0.04407],
+    [68, 1, 113.174, 0.04415],
+    [69, 1, 113.6672, 0.04423],
+    [70, 1, 114.1565, 0.04431],
+    [71, 1, 114.6421, 0.04439],
+    [72, 1, 115.1244, 0.04447],
   ],
   male: [
     [0, 1, 49.8842, 0.03795],
@@ -289,6 +340,18 @@ export const LENGTH_FOR_AGE: WhoTable = {
     [58, 1, 108.8689, 0.0419],
     [59, 1, 109.417, 0.04202],
     [60, 1, 109.9638, 0.04214],
+    [61, 1, 110.2647, 0.04164],
+    [62, 1, 110.8006, 0.04172],
+    [63, 1, 111.3338, 0.0418],
+    [64, 1, 111.8636, 0.04187],
+    [65, 1, 112.3895, 0.04195],
+    [66, 1, 112.911, 0.04203],
+    [67, 1, 113.428, 0.04211],
+    [68, 1, 113.941, 0.04218],
+    [69, 1, 114.45, 0.04226],
+    [70, 1, 114.9547, 0.04234],
+    [71, 1, 115.4549, 0.04241],
+    [72, 1, 115.9509, 0.04249],
   ],
 };
 

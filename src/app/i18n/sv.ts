@@ -181,7 +181,7 @@ export const sv: Catalog = {
       "Från den nuvarande längdkanalen ({z}), viktad till {share} eftersom längden i den här åldern bara löst förutsäger slutlängden, och resten dragen mot genomsnittet. Lägg in båda föräldrarnas längd för att förankra den.",
     projectionMissing: "Lägg in ett längdmått för att beräkna en slutlängd.",
     outOfRange:
-      "Standarden täcker de första fem åren; senare mätvärden listas men placeras inte.",
+      "Kurvorna täcker de första sex åren för vikt och längd, och de första fem för huvudomfång; senare mätvärden listas men placeras inte.",
     form: {
       addTitle: "Nytt mätvärde",
       editTitle: "Ändra mätvärde",

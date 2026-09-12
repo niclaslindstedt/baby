@@ -23,6 +23,16 @@ by sex and completed month, generated into `src/app/data/whoGrowth.ts` from
 the WHO's own files. Length is recumbent length to 24 months and standing
 height after, as the WHO publishes it.
 
+The standards stop at five years. To follow a child to **six years**, the
+weight and height tables continue from month 61 to month 72 with the **WHO
+Growth Reference** (2007, 5–19 years), which the WHO smoothed onto the
+standards at the five-year seam; the app keeps the standards' month-60 row
+and the reference's rows from 61, so the small remaining step (about 0.1 kg
+and 0.3 cm on the medians) is spread over one month of interpolation. The
+WHO publishes no head-circumference curve past five years, so that table
+ends at month 60 and a later head reading is listed but not placed — the
+Growth screen says so under the chart.
+
 ## Placing a reading
 
 The standards publish, per sex and month, the Box-Cox power **L**, the median

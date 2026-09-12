@@ -84,17 +84,31 @@ export const INDICATORS: Indicator[] = ["weight", "length", "head"];
 /** The three WHO tables, as the Growth screen loads them. */
 export type GrowthStandards = Record<Indicator, WhoTable>;
 
-/** The last age the standards cover, in days (60 months). */
-export const MAX_STANDARD_DAYS = 60 * DAYS_PER_MONTH;
+/** The last age any of the tables covers, in days (72 months — six years,
+ *  where the weight and height curves end). Head circumference ends at 60
+ *  months; ask `lastStandardDays` for a particular table. */
+export const MAX_STANDARD_DAYS = 72 * DAYS_PER_MONTH;
+
+/** The last age a table covers, in days: its rows run one a month from
+ *  birth, so the last row's month is the range. */
+export function lastStandardDays(table: WhoTable): number {
+  const rows = table.female;
+  return (rows[rows.length - 1]?.[0] ?? 0) * DAYS_PER_MONTH;
+}
 
 /** The LMS parameters at an exact age, interpolated between the published
- *  months. Null outside the standards' 0–60 month range. */
+ *  months. Null outside the table's range — before birth, or past its last
+ *  month. */
 export function lmsAt(
   table: WhoTable,
   sex: Sex,
   ageDays: number,
 ): { L: number; M: number; S: number } | null {
-  if (!Number.isFinite(ageDays) || ageDays < 0 || ageDays > MAX_STANDARD_DAYS) {
+  if (
+    !Number.isFinite(ageDays) ||
+    ageDays < 0 ||
+    ageDays > lastStandardDays(table)
+  ) {
     return null;
   }
   const rows = table[sex];
@@ -163,8 +177,8 @@ export type Reading = {
   date: DayKey;
   ageDays: number;
   value: number;
-  /** Null when the standards don't cover that age (before birth, or past
-   *  five years). */
+  /** Null when the curve doesn't cover that age (before birth, or past six
+   *  years for weight and length, five for head circumference). */
   z: number | null;
 };
 
@@ -209,7 +223,7 @@ export function curveAtZ(
 ): CurvePoint[] {
   const out: CurvePoint[] = [];
   const start = Math.max(0, fromDays);
-  const end = Math.min(MAX_STANDARD_DAYS, toDays);
+  const end = Math.min(lastStandardDays(table), toDays);
   for (let age = start; age <= end; age += stepDays) {
     const lms = lmsAt(table, sex, age);
     if (lms) out.push({ ageDays: age, value: valueAtZ(lms, z) });

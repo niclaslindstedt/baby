@@ -14,7 +14,7 @@ import { DAYS_PER_MONTH } from "./age.ts";
 import { formatDay } from "./format.ts";
 import {
   curveAtZ,
-  MAX_STANDARD_DAYS,
+  lastStandardDays,
   type Forecast,
   type Reading,
 } from "./growth.ts";
@@ -85,7 +85,7 @@ export function GrowthChart({
   // The age span: around the readings, plus the projection, clamped to the
   // standards' range and widened to a readable minimum.
   const placed = series.filter((r) => r.z !== null);
-  const { from, to } = ageSpan(placed, forecast);
+  const { from, to } = ageSpan(table, placed, forecast);
 
   // The channels, sampled weekly across the span.
   const channels = useMemo(() => {
@@ -403,19 +403,21 @@ export function GrowthChart({
 }
 
 /** The age span the chart draws: around the placed readings and the
- *  projection, clamped to the standards' range and widened to a readable
+ *  projection, clamped to this table's range and widened to a readable
  *  minimum. */
 function ageSpan(
+  table: WhoTable,
   placed: Reading[],
   forecast: Forecast | null,
 ): { from: number; to: number } {
+  const maxDays = lastStandardDays(table);
   const firstAge = placed[0]?.ageDays ?? 0;
   const lastAge =
     forecast?.points.at(-1)?.ageDays ?? placed.at(-1)?.ageDays ?? MIN_SPAN_DAYS;
   const from = Math.max(0, firstAge - MARGIN_DAYS);
-  const to = Math.min(MAX_STANDARD_DAYS, lastAge + MARGIN_DAYS);
+  const to = Math.min(maxDays, lastAge + MARGIN_DAYS);
   if (to - from >= MIN_SPAN_DAYS) return { from, to };
-  const wideTo = Math.min(MAX_STANDARD_DAYS, from + MIN_SPAN_DAYS);
+  const wideTo = Math.min(maxDays, from + MIN_SPAN_DAYS);
   return { from: Math.max(0, wideTo - MIN_SPAN_DAYS), to: wideTo };
 }
 
