@@ -6,7 +6,8 @@ import { Button } from "@niclaslindstedt/oss-framework/components";
 
 import { useT } from "./i18n/index.ts";
 import { newId, type Measurement } from "./types.ts";
-import { DateField, Field, parseNumber, TextInput } from "./ui.tsx";
+import { parseNumber } from "./number.ts";
+import { DateField, Field, TextInput } from "./ui.tsx";
 
 // One growth reading: a date and whichever of the three measurements was
 // taken. One field is enough — a home scale gives one number, a BVC visit
@@ -71,10 +72,7 @@ export function MeasurementForm({ initial, today, onSave, onCancel }: Props) {
       <p className="text-xs text-muted">{t("growth.form.hint")}</p>
       <Field label={t("growth.form.weight")}>
         <TextInput
-          type="number"
-          inputMode="decimal"
-          step="0.01"
-          min="0"
+          type="decimal"
           value={weight}
           onChange={(v) => {
             setWeight(v);
@@ -85,10 +83,7 @@ export function MeasurementForm({ initial, today, onSave, onCancel }: Props) {
       </Field>
       <Field label={t("growth.form.length")}>
         <TextInput
-          type="number"
-          inputMode="decimal"
-          step="0.1"
-          min="0"
+          type="decimal"
           value={length}
           onChange={(v) => {
             setLength(v);
@@ -98,10 +93,7 @@ export function MeasurementForm({ initial, today, onSave, onCancel }: Props) {
       </Field>
       <Field label={t("growth.form.head")} error={error ?? undefined}>
         <TextInput
-          type="number"
-          inputMode="decimal"
-          step="0.1"
-          min="0"
+          type="decimal"
           value={head}
           onChange={(v) => {
             setHead(v);

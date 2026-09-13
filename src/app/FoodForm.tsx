@@ -16,7 +16,8 @@ import {
   type NutrientKey,
   type Nutrients,
 } from "./types.ts";
-import { Field, parseNumber, TextInput } from "./ui.tsx";
+import { parseNumber } from "./number.ts";
+import { Field, TextInput } from "./ui.tsx";
 
 // One food in the regimen: a name, a daily amount, and what is in 100 g of
 // it. Calories are the only thing the form insists on — every other value
@@ -206,14 +207,7 @@ export function FoodForm({ initial, onSave, onCancel }: Props) {
 
       <div className="grid grid-cols-[1fr_auto] items-end gap-2">
         <Field label={t("food.form.amount")}>
-          <TextInput
-            type="number"
-            inputMode="decimal"
-            step="1"
-            min="0"
-            value={amount}
-            onChange={setAmount}
-          />
+          <TextInput type="decimal" value={amount} onChange={setAmount} />
         </Field>
         <SegmentedControl<"g" | "ml">
           value={unit}
@@ -269,10 +263,7 @@ export function FoodForm({ initial, onSave, onCancel }: Props) {
         error={kcalMissing ? t("food.form.kcalMissing") : undefined}
       >
         <TextInput
-          type="number"
-          inputMode="decimal"
-          step="1"
-          min="0"
+          type="decimal"
           value={values.kcal}
           invalid={kcalMissing}
           onChange={(v) => {
@@ -287,14 +278,7 @@ export function FoodForm({ initial, onSave, onCancel }: Props) {
             key={key}
             label={`${t(`food.form.${key}` as const)} · ${t("common.optional")}`}
           >
-            <TextInput
-              type="number"
-              inputMode="decimal"
-              step="0.01"
-              min="0"
-              value={values[key]}
-              onChange={set(key)}
-            />
+            <TextInput type="decimal" value={values[key]} onChange={set(key)} />
           </Field>
         ))}
       </div>
@@ -303,10 +287,7 @@ export function FoodForm({ initial, onSave, onCancel }: Props) {
           {DETAIL.map((key) => (
             <Field key={key} label={t(`food.form.${key}` as const)}>
               <TextInput
-                type="number"
-                inputMode="decimal"
-                step="0.001"
-                min="0"
+                type="decimal"
                 value={values[key]}
                 onChange={set(key)}
               />

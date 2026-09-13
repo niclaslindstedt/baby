@@ -8,15 +8,9 @@ import {
 } from "@niclaslindstedt/oss-framework/components";
 
 import { useT } from "./i18n/index.ts";
+import { parseNumber } from "./number.ts";
 import type { Child, Sex } from "./types.ts";
-import {
-  Card,
-  DateField,
-  Field,
-  Heading,
-  TextInput,
-  parseNumber,
-} from "./ui.tsx";
+import { Card, DateField, Field, Heading, TextInput } from "./ui.tsx";
 
 // The child: the first screen of an empty install, and the profile editor
 // behind Settings. Four facts and two optional ones — a birth date and a sex
@@ -129,24 +123,10 @@ export function ChildScreen({ initial, today, onSave, onCancel }: Props) {
             <span className="text-xs text-muted">{t("child.parentsHint")}</span>
             <div className="mt-1 grid grid-cols-2 gap-2">
               <Field label={t("child.motherHeight")}>
-                <TextInput
-                  type="number"
-                  inputMode="decimal"
-                  step="0.5"
-                  min="50"
-                  value={mother}
-                  onChange={setMother}
-                />
+                <TextInput type="decimal" value={mother} onChange={setMother} />
               </Field>
               <Field label={t("child.fatherHeight")}>
-                <TextInput
-                  type="number"
-                  inputMode="decimal"
-                  step="0.5"
-                  min="50"
-                  value={father}
-                  onChange={setFather}
-                />
+                <TextInput type="decimal" value={father} onChange={setFather} />
               </Field>
             </div>
           </div>

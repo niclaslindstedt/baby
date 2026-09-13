@@ -24,7 +24,8 @@ import {
   type FormulaType,
   type MilkFeeding,
 } from "./types.ts";
-import { Card, EmptyState, Field, Heading, parseNumber } from "./ui.tsx";
+import { parseNumber } from "./number.ts";
+import { Card, EmptyState, Field, Heading } from "./ui.tsx";
 
 // Food, the input side: the regimen, and where the milk comes from.
 //

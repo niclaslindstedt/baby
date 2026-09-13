@@ -19,6 +19,7 @@ import {
 
 import { formatDayYear } from "./format.ts";
 import { useLang, useT } from "./i18n/index.ts";
+import { sanitizeDecimal } from "./number.ts";
 
 /** The bordered-field look, matching the framework's own fields.
  *
@@ -88,7 +89,14 @@ export function Field({
   );
 }
 
-/** A text input the forms share. */
+/** A text input the forms share.
+ *
+ *  `type="decimal"` is a measurement field rather than a native
+ *  `<input type="number">`: the native control only keeps what parses as a
+ *  floating-point literal, so a Swedish keyboard's comma — the separator the
+ *  scale and the tape measure are read in — is swallowed before it reaches
+ *  `parseNumber`. A text field with `inputMode="decimal"` keeps the numeric
+ *  keypad on a phone and lets both separators through. */
 export function TextInput({
   value,
   onChange,
@@ -104,7 +112,7 @@ export function TextInput({
   value: string;
   onChange: (next: string) => void;
   invalid?: boolean;
-  type?: "text" | "number";
+  type?: "text" | "number" | "decimal";
   placeholder?: string;
   inputMode?: "decimal" | "numeric" | "text";
   step?: string;
@@ -112,20 +120,29 @@ export function TextInput({
   max?: string;
   autoFocus?: boolean;
 }) {
+  const decimal = type === "decimal";
   return (
     <input
-      type={type}
+      type={decimal ? "text" : type}
       value={value}
       placeholder={placeholder}
-      inputMode={inputMode}
-      step={step}
-      min={min}
-      max={max}
+      inputMode={decimal ? "decimal" : inputMode}
+      step={decimal ? undefined : step}
+      min={decimal ? undefined : min}
+      max={decimal ? undefined : max}
       autoFocus={autoFocus}
       autoComplete="off"
       enterKeyHint="done"
       aria-invalid={invalid || undefined}
-      onInput={(e) => onChange(e.currentTarget.value)}
+      onInput={(e) => {
+        const raw = e.currentTarget.value;
+        const next = decimal ? sanitizeDecimal(raw) : raw;
+        // The field is controlled, so a rejected character leaves the value
+        // prop unchanged and nothing re-renders — the DOM has to be put back
+        // by hand or the stray character stays on screen.
+        if (next !== raw) e.currentTarget.value = next;
+        onChange(next);
+      }}
       className={invalid ? INPUT_INVALID_CLASS : INPUT_CLASS}
     />
   );
@@ -194,15 +211,6 @@ export function DateField({
       className="w-full px-3! py-2! bg-surface!"
     />
   );
-}
-
-/** A number typed into a text field, or null when it isn't one. Accepts a
- *  decimal comma, because a Swedish keyboard offers one. */
-export function parseNumber(raw: string): number | null {
-  const trimmed = raw.trim().replace(",", ".");
-  if (trimmed === "") return null;
-  const n = Number(trimmed);
-  return Number.isFinite(n) ? n : null;
 }
 
 /** An empty-state card: a glyph, a sentence, and maybe a button. */
