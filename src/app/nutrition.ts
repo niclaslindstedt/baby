@@ -23,6 +23,22 @@
 // Formula is measurable, so a formula-fed child's bottles are part of the
 // regimen (`MilkFeeding.formulaMlPerDay`) and the target is the whole day.
 //
+// A child who gets both is the case that needs stating. The bottles are milk
+// the child is *not* getting from the breast, so they do not arrive on top of
+// the WHO share — they eat into it. What the app cannot see is only the
+// remainder: `unmeasuredMilkKcal = max(0, dayKcal × share − formulaKcal)`,
+// and the target is the day less that. Give a mixed-fed baby more formula and
+// the target rises by exactly what the bottles add, so the bottles can never
+// buy coverage the food has not earned; give them none and the figure is the
+// breastfed one; give them enough to cover the whole milk share and it is the
+// formula-fed one. The three cases are one formula with the share set to zero
+// when nobody is nursing.
+//
+// Which formula it is matters. Infant formula (modersmjölksersättning) and
+// follow-on formula (tillskottsnäring, from six months) are separate products
+// in law with separate iron floors, and the app reads the one the parent says
+// is in the bottle — see `FormulaType` in `types.ts`.
+//
 // ## The numbers
 //
 // Energy: the Nordic Nutrition Recommendations 2023 (which adopt FAO/WHO/UNU
@@ -66,6 +82,7 @@ import {
   sortedMeasurements,
   type AppData,
   type Food,
+  type FormulaType,
   type MilkFeeding,
   type NutrientKey,
   type Nutrients,
@@ -131,8 +148,16 @@ export type Requirements = {
   weightSource: "measured" | "reference";
   /** Total energy for the day. */
   kcalPerDay: number;
-  /** What the regimen (foods plus formula) is held to: the whole day, or
-   *  the complementary share for a breastfed child. */
+  /** The share of the day's energy milk of any kind is expected to supply at
+   *  this age (WHO 2023), or 0 when nobody is nursing. */
+  milkEnergyShare: number;
+  /** What the bottles supply, and so what the app can see of the milk. */
+  formulaKcal: number;
+  /** The milk the app cannot see: the WHO milk share less the bottles. This
+   *  is the only part of the day the regimen is *not* held to. */
+  unmeasuredMilkKcal: number;
+  /** What the regimen (foods plus formula) is held to: the day less the
+   *  breast milk nobody can measure. */
   targetKcal: number;
   ironMg: number;
   vitaminDUg: number;
@@ -171,6 +196,12 @@ export function requirements(
   const kcalPerDay = kcalPerKg(ageMonths, child.sex) * weightKg;
   const breastfed = data.milk.kind === "breast" || data.milk.kind === "mixed";
   const share = breastfed ? breastMilkEnergyShare(ageMonths) : 0;
+  // The bottles replace breast milk rather than adding to it, so they come
+  // off the milk share before the remainder is set aside as unmeasurable.
+  // Without this a mixed-fed baby's formula would be counted twice — once as
+  // energy in the regimen and once as energy the target never asked for.
+  const formulaKcal = formulaKcalPerDay(data.milk);
+  const unmeasuredMilkKcal = Math.max(0, kcalPerDay * share - formulaKcal);
   const under12 = ageMonths < 12;
   const under24 = ageMonths < 24;
   return {
@@ -179,7 +210,10 @@ export function requirements(
     weightKg,
     weightSource: measured === null ? "reference" : "measured",
     kcalPerDay,
-    targetKcal: kcalPerDay * (1 - share),
+    milkEnergyShare: share,
+    formulaKcal,
+    unmeasuredMilkKcal,
+    targetKcal: kcalPerDay - unmeasuredMilkKcal,
     ironMg: under12 ? 10 : 7,
     vitaminDUg: 10,
     fatE: under12
@@ -194,11 +228,13 @@ export function requirements(
   };
 }
 
-/** Standard infant formula, per 100 ml — Livsmedelsverket's database entry
- *  for modersmjölksersättning, with DHA at the EU-mandated minimum since the
- *  database rounds it away. Used for the formula the child gets, so a parent
- *  never has to type a bottle's label in. */
-export const FORMULA_PER_100ML: Nutrients = {
+/** Standard infant formula (modersmjölksersättning), per 100 ml —
+ *  Livsmedelsverket's database entry (id 6552), with DHA at the EU-mandated
+ *  minimum since the database rounds it away. That minimum is 20 mg per 100
+ *  *kcal* (Regulation (EU) 2016/127 Annex I §5.6), which at 66 kcal is
+ *  13.2 mg per 100 ml — the figure Swedish tins print as 14 mg. Used for the
+ *  formula the child gets, so a parent never has to type a bottle's label in. */
+export const INFANT_FORMULA_PER_100ML: Nutrients = {
   kcal: 66,
   ironMg: 0.4,
   vitaminDUg: 1.37,
@@ -208,8 +244,55 @@ export const FORMULA_PER_100ML: Nutrients = {
   polyunsaturatedG: 0.6,
   omega3G: 0.1,
   omega6G: 0.6,
-  dhaG: 0.02,
+  dhaG: 0.0132,
 };
+
+/** Follow-on formula (tillskottsnäring), per 100 ml made up — the declaration
+ *  a Swedish tin carries, taken from Semper BabySemp 2 and matched within
+ *  rounding by the other brands on the shelf. Iron is the reason the product
+ *  exists: 1.0 mg against infant formula's 0.4, because the fetal iron stores
+ *  start to run out at around six months, which is the age from which this
+ *  product is sold (1177, "Bröstmjölksersättning och tillskottsnäring").
+ *  Regulation (EU) 2016/127 Annex II sets the floor at 0.6 mg per 100 kcal
+ *  against Annex I's 0.3, so no tillskottsnäring is as iron-poor as an infant
+ *  formula may be. DHA is the same EU minimum, at 69 kcal. Labels differ by a
+ *  tenth or two between brands and pack formats — a parent who wants their own
+ *  tin exactly enters it as a food in the regimen instead. */
+export const FOLLOW_ON_FORMULA_PER_100ML: Nutrients = {
+  kcal: 69,
+  ironMg: 1.0,
+  vitaminDUg: 1.5,
+  fatG: 3.4,
+  saturatedG: 1.2,
+  monounsaturatedG: 1.3,
+  polyunsaturatedG: 0.6,
+  // The label prints ALA 57 mg and DHA 14 mg; omega-3 is their sum.
+  omega3G: 0.071,
+  omega6G: 0.52,
+  alaG: 0.057,
+  dhaG: 0.0138,
+};
+
+/** What is in 100 ml of the bottle the child actually gets. */
+export function formulaPer100Ml(type: FormulaType): Nutrients {
+  return type === "followOn"
+    ? FOLLOW_ON_FORMULA_PER_100ML
+    : INFANT_FORMULA_PER_100ML;
+}
+
+/** The millilitres of formula a day this document claims — 0 unless the
+ *  child is on bottles at all, so every caller can multiply without first
+ *  asking which kind of feeding it is. */
+export function formulaMlPerDay(milk: MilkFeeding): number {
+  if (milk.kind !== "formula" && milk.kind !== "mixed") return 0;
+  const ml = milk.formulaMlPerDay;
+  return ml !== null && ml > 0 ? ml : 0;
+}
+
+/** The energy the bottles supply in a day. */
+export function formulaKcalPerDay(milk: MilkFeeding): number {
+  return (formulaMlPerDay(milk) / 100) * formulaPer100Ml(milk.formulaType).kcal;
+}
 
 /** What the regimen adds up to, per day. Each nutrient carries the sum over
  *  the foods that stated it, plus whether every food did — a sum a third of
@@ -258,13 +341,8 @@ function addPortion(totals: Totals, per100: Nutrients, amount: number): void {
 export function regimenTotals(foods: Food[], milk: MilkFeeding): Totals {
   const totals = emptyTotals();
   for (const food of foods) addPortion(totals, food.per100, food.amount);
-  if (
-    (milk.kind === "formula" || milk.kind === "mixed") &&
-    milk.formulaMlPerDay !== null &&
-    milk.formulaMlPerDay > 0
-  ) {
-    addPortion(totals, FORMULA_PER_100ML, milk.formulaMlPerDay);
-  }
+  const ml = formulaMlPerDay(milk);
+  if (ml > 0) addPortion(totals, formulaPer100Ml(milk.formulaType), ml);
   return totals;
 }
 

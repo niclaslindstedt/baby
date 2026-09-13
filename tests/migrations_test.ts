@@ -132,6 +132,31 @@ describe("normalizeDoc", () => {
     expect(normalizeDoc({ milk: 7 }).milk.kind).toBe("breast");
     expect(normalizeDoc({ milk: { kind: "goat" } }).milk.kind).toBe("breast");
   });
+
+  it("reads a v1 document's bottles as infant formula", () => {
+    // v1 had no `formulaType`, and what it recorded was infant formula's
+    // values — so that is what those millilitres keep meaning until the
+    // parent says otherwise. Anything unrecognised lands on the same side.
+    const doc = normalizeDoc({
+      version: 1,
+      milk: { kind: "formula", formulaMlPerDay: 600, updatedAt: "" },
+    });
+    expect(doc.version).toBe(DOC_VERSION);
+    expect(doc.milk.formulaType).toBe("infant");
+    expect(doc.milk.formulaMlPerDay).toBe(600);
+    expect(
+      normalizeDoc({ milk: { kind: "formula", formulaType: "goat" } }).milk
+        .formulaType,
+    ).toBe("infant");
+  });
+
+  it("keeps a stated follow-on formula", () => {
+    const doc = normalizeDoc({
+      version: DOC_VERSION,
+      milk: { kind: "mixed", formulaMlPerDay: 400, formulaType: "followOn" },
+    });
+    expect(doc.milk.formulaType).toBe("followOn");
+  });
 });
 
 describe("parseDoc / serializeDoc", () => {

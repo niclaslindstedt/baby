@@ -38,10 +38,68 @@ at 77% of energy at 6–8 months, 63% at 9–11 and 44% at 12–23 months; the a
 uses 15% for the third year and nothing after.
 
 **Formula is measurable**, so a formula-fed child's typical daily millilitres
-are part of the regimen (standard formula at 66 kcal/100 ml, from
-Livsmedelsverket's database, with DHA at the EU-mandated minimum) and the
-target is the whole day. "Both" is treated as breastfed with the formula
-counting toward the complementary share.
+are part of the regimen and the target is the whole day.
+
+### Which formula
+
+Infant formula (modersmjölksersättning) and follow-on formula
+(tillskottsnäring, sold from six months) are separate products in law, and the
+Food screen asks which one is in the bottle:
+
+| Per 100 ml               | Infant formula | Follow-on formula |
+| ------------------------ | -------------- | ----------------- |
+| Energy                   | 66 kcal        | 69 kcal           |
+| **Iron**                 | **0.4 mg**     | **1.0 mg**        |
+| Vitamin D                | 1.37 µg        | 1.5 µg            |
+| Fat (of which saturated) | 3.5 g (1.1 g)  | 3.4 g (1.2 g)     |
+| Omega-6 (LA)             | 0.6 g          | 0.52 g            |
+| Omega-3 (ALA + DHA)      | 0.1 g          | 0.071 g           |
+| DHA                      | 13.2 mg        | 13.8 mg           |
+
+Iron is the whole reason the second product exists: the fetal iron stores
+start to run out at around six months. Commission Delegated Regulation (EU)
+2016/127 floors infant formula at 0.3 mg iron per 100 kcal (Annex I) and
+follow-on formula at 0.6 mg (Annex II), and on the Swedish shelf the printed
+figures are 0.4 and 1.0 mg per 100 ml — roughly two and a half times. Reading
+one as the other would misstate the iron line by more than a third of the
+day's 10 mg target at 600 ml.
+
+The app does **not** infer the product from the child's age. Livsmedelsverket's
+advice is that infant formula may be used for the whole first year, so a
+six-month-old on bottles may be on either; crediting a child with iron they
+are not getting is not a claim this app makes. Infant formula is the default
+and what every document written before this question existed is read as.
+
+The figures above are the typical Swedish declaration (Semper BabySemp 1 and
+2, matched within rounding by the other brands), with DHA at the EU minimum of
+20 mg per 100 kcal. Labels differ by a tenth or two between brands and pack
+formats; a parent who wants their own tin exactly enters it as a food in the
+regimen, where the label's numbers go in verbatim. The milk drinks sold from a
+year (mjölkdryck) are not formula at all and belong in the regimen the same
+way — there is a preset for them.
+
+### Both breast and bottle
+
+The bottles a mixed-fed child drinks are milk they are **not** getting from
+the breast, so they come off the WHO milk share rather than landing on top of
+it. Only the remainder is treated as unmeasurable:
+
+```
+unmeasuredMilkKcal = max(0, dayKcal × milkShare − formulaKcal)
+targetKcal         = dayKcal − unmeasuredMilkKcal
+```
+
+Give a mixed-fed child more formula and the target rises by exactly what the
+bottles add, so the bottles can never buy coverage the food has not earned.
+Give them none and the figure is the breastfed one; give them enough to cover
+the whole milk share and it is the formula-fed one. All four milk settings are
+this one expression with the share set to zero when nobody is nursing.
+
+What breast milk itself contributes is still not counted on the nutrient
+lines, because there is no volume to count. For iron that changes little —
+breast milk carries almost none, which is why food takes over at six months —
+and the Food screen says so where a breastfed or mixed-fed child's nutrients
+are listed.
 
 ## The targets
 
@@ -88,5 +146,6 @@ decision to the parent and BVC.
 The food form's **Common foods** chips fill a row with typical values from
 Livsmedelsverket's food database (version 2026-06-29): fortified whole-grain
 baby porridge and välling, boiled egg, boiled salmon, banana, avocado,
-rapeseed oil, and infant formula. They are a typing aid — adjust to the label
+rapeseed oil, infant formula, follow-on formula and toddler milk drink. They
+are a typing aid — adjust to the label
 if it differs — and a bundled chunk, never a lookup service.

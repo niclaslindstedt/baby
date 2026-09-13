@@ -66,6 +66,7 @@ is connected:
   "milk": {
     "kind": "breast", // "breast" | "formula" | "mixed" | "none"
     "formulaMlPerDay": null,
+    "formulaType": "infant", // "infant" | "followOn" (tillskottsnäring)
     "updatedAt": "2026-08-01T09:00:00.000Z",
   },
   "vaccinations": {

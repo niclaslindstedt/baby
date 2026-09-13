@@ -237,7 +237,12 @@ export const en = {
     formula: "Formula",
     mixed: "Both",
     none: "Neither",
-    formulaMl: "Formula per day (ml)",
+    formulaType: "Which formula",
+    formulaInfant: "Infant formula",
+    formulaFollowOn: "Follow-on formula",
+    formulaTypeHint:
+      "Follow-on formula (tillskottsnäring) is sold from six months and carries about two and a half times the iron of infant formula, so which one is in the bottle moves the iron figure below. Infant formula is fine for the whole first year — say what {name} actually gets, not what the age suggests.",
+    formulaMl: "Amount per day (ml)",
     dDrops:
       "The D-drops — five drops, 10 µg a day, from about one week until two years — cover vitamin D on their own. The figure below is what the food adds.",
     // The regimen list.
@@ -257,13 +262,19 @@ export const en = {
     energyUnknown: "Add a food to see whether the regimen covers the day.",
     targetBreast:
       "At {months} months a breastfed child is expected to get about {share} of the day's energy from food — about {target} of {total} kcal, at {weight}.",
+    targetMixed:
+      "At {months} months milk is expected to supply about {milkShare} of the day's energy. The {ml} ml of formula covers about {formulaKcal} kcal of that, so it counts toward the day rather than on top of it — formula and food together are held to about {target} of {total} kcal, at {weight}.",
     targetFormula:
       "Formula and food together are held to the whole day: about {total} kcal, at {weight}.",
+    targetWholeDay:
+      "With no milk feed left, food is held to the whole day: about {total} kcal, at {weight}.",
     weightReference:
       "No weight recorded yet, so the WHO median weight for age stands in. Add a reading under Growth for a figure that is {name}'s own.",
     nutrients: "The rest",
     nutrientsHint:
       "Compared against the Nordic Nutrition Recommendations 2023 for this age. A nutrient no food states is unknown — never read as zero.",
+    nutrientsBreastNote:
+      "Breast milk is not measured, so what it contributes is not counted below. For iron that changes little — breast milk carries almost none, which is why food takes over at around six months.",
     nutrient: {
       ironMg: "Iron",
       vitaminDUg: "Vitamin D",

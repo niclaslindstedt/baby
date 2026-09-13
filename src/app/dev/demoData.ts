@@ -245,6 +245,7 @@ export function buildDemoData(today: DayKey): AppData {
     milk: {
       kind: "breast",
       formulaMlPerDay: null,
+      formulaType: "infant",
       updatedAt: stamp(edited),
     },
     vaccinations,

@@ -152,9 +152,14 @@ function parseMilk(value: unknown): MilkFeeding {
     value.kind === "none"
       ? value.kind
       : "breast";
+  // An unknown or missing type reads as infant formula — the conservative
+  // side, since it is the iron-poorer of the two and the app would rather
+  // understate the day than credit iron the child may not be getting.
+  const formulaType = value.formulaType === "followOn" ? "followOn" : "infant";
   return {
     kind,
     formulaMlPerDay: parseQuantity(value.formulaMlPerDay),
+    formulaType,
     updatedAt: parseTimestamp(value.updatedAt),
   };
 }
@@ -182,6 +187,14 @@ const migrator = createMigrator({
     // `version` as 0) carry the v1 shape already — this step exists so the
     // stored number moves and later steps have a floor to build on.
     0: (doc) => ({ ...doc, version: 1 }),
+    // v1 → v2: `MilkFeeding.formulaType`. Every document written before this
+    // step recorded its bottles against infant formula's values, so that is
+    // what those millilitres meant and that is what they keep meaning — a
+    // parent who has moved to tillskottsnäring says so on the Food screen.
+    1: (doc) => {
+      const milk = isRecord(doc.milk) ? doc.milk : {};
+      return { ...doc, version: 2, milk: { ...milk, formulaType: "infant" } };
+    },
   },
 });
 

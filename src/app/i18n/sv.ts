@@ -211,7 +211,12 @@ export const sv: Catalog = {
     formula: "Ersättning",
     mixed: "Båda",
     none: "Ingetdera",
-    formulaMl: "Ersättning per dygn (ml)",
+    formulaType: "Vilken ersättning",
+    formulaInfant: "Modersmjölksersättning",
+    formulaFollowOn: "Tillskottsnäring",
+    formulaTypeHint:
+      "Tillskottsnäring säljs från sex månader och innehåller ungefär två och en halv gånger så mycket järn som modersmjölksersättning, så vilken som står i flaskan flyttar järnsiffran nedan. Modersmjölksersättning duger hela första året — ange det {name} faktiskt får, inte det åldern antyder.",
+    formulaMl: "Mängd per dygn (ml)",
     dDrops:
       "D-dropparna — fem droppar, 10 µg om dagen, från ungefär en veckas ålder till två år — täcker D-vitaminet på egen hand. Siffran nedan är vad maten lägger till.",
     regimen: "Daglig regim",
@@ -230,13 +235,19 @@ export const sv: Catalog = {
       "Lägg till ett livsmedel för att se om regimen täcker dagen.",
     targetBreast:
       "Vid {months} månader förväntas ett ammat barn få ungefär {share} av dagens energi från mat — ungefär {target} av {total} kcal, vid {weight}.",
+    targetMixed:
+      "Vid {months} månader förväntas mjölken stå för ungefär {milkShare} av dagens energi. De {ml} ml ersättning täcker ungefär {formulaKcal} kcal av det, så den räknas in i dagen i stället för ovanpå den — ersättning och mat tillsammans ställs mot ungefär {target} av {total} kcal, vid {weight}.",
     targetFormula:
       "Ersättning och mat tillsammans ställs mot hela dagen: ungefär {total} kcal, vid {weight}.",
+    targetWholeDay:
+      "Utan mjölkmåltid kvar ställs maten mot hela dagen: ungefär {total} kcal, vid {weight}.",
     weightReference:
       "Ingen vikt sparad än, så WHO:s medianvikt för åldern får duga. Lägg in ett mätvärde under Tillväxt för en siffra som är {name}s egen.",
     nutrients: "Resten",
     nutrientsHint:
       "Jämfört med de nordiska näringsrekommendationerna 2023 för den här åldern. Ett näringsämne som inget livsmedel anger är okänt — räknas aldrig som noll.",
+    nutrientsBreastNote:
+      "Bröstmjölk mäts inte, så det den bidrar med räknas inte nedan. För järn spelar det liten roll — bröstmjölk innehåller nästan inget, vilket är skälet till att maten tar över vid ungefär sex månader.",
     nutrient: {
       ironMg: "Järn",
       vitaminDUg: "D-vitamin",

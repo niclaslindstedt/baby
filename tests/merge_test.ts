@@ -82,6 +82,7 @@ describe("mergeDocs", () => {
       milk: {
         kind: "formula",
         formulaMlPerDay: 700,
+        formulaType: "infant",
         updatedAt: "2026-03-05T00:00:00.000Z",
       },
     };
@@ -90,6 +91,7 @@ describe("mergeDocs", () => {
       milk: {
         kind: "breast",
         formulaMlPerDay: null,
+        formulaType: "infant",
         updatedAt: "2026-03-01T00:00:00.000Z",
       },
     };
