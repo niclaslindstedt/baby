@@ -74,11 +74,15 @@ export function ViewModal({
         {summary && <p className="mt-1 text-sm text-fg-bright">{summary}</p>}
         {toolbar && <div className="mt-3">{toolbar}</div>}
       </div>
-      {/* `bg-page` rather than the modal's own surface: the body is a column
-          of the same cards Today is built from, and on the wide layout a card
-          on a bare surface reads as a panel inside a panel. The page ground
-          puts them on the ground they have everywhere else. */}
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-page px-4 py-4">
+      {/* The page ground rather than the modal's own surface: the body is a
+          column of the same cards Today is built from, and on the wide layout
+          a card on a bare surface reads as a panel inside a panel.
+
+          `bg-page-bg`, not `bg-page`: the token the theme engine writes is
+          `--page-bg`, so Tailwind's colour utility for it is spelled with the
+          suffix. A bare `bg-page` names no colour, resolves to transparent,
+          and silently does nothing. */}
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-page-bg px-4 py-4">
         <div className="mx-auto flex max-w-2xl flex-col gap-3">{children}</div>
       </div>
     </Modal>
