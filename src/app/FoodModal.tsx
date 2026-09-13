@@ -164,7 +164,7 @@ export function FoodModal({ open, onClose, data, today, standards }: Props) {
           <p className="mt-2 text-sm text-fg">
             {coverage.metAtMinutes === null
               ? t("food.coverage.short", {
-                  short: kcal(
+                  kcal: kcal(
                     Math.max(0, coverage.targetKcal - coverage.totalKcal),
                   ),
                 })

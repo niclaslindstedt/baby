@@ -139,8 +139,11 @@ record goes in — a reading, a food, a dose marked given — and each of Today'
 headline cards opens the matching _view_ over the screen instead of
 navigating to it (`ViewModal.tsx`, which is the framework's `Modal` in its
 non-centred mode: full screen on a phone, a card over a blurred page from
-`sm:` up). A view never writes; closing one returns to Today rather than
-leaving the parent on a tab to navigate out of.
+`sm:` up). It is dismissed the way the sibling `contacts` app's card is — a
+swipe down on a phone, the backdrop or Escape on a desktop, and no footer bar
+in either, so the height a Close row would take goes to the chart instead. A
+view never writes; closing one returns to Today rather than leaving the
+parent on a tab to navigate out of.
 
 The bottom bar carries _destinations_ in a fixed order, and a swipe moves
 along it; the two off-bar screens cross-fade in and go back where they came

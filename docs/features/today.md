@@ -18,9 +18,12 @@ reading and its trend ([growth](feature:growth)), and the next vaccination
 **Today is where the answers are.** Each card's **View** opens the full
 picture over this screen — the growth curves, the day's food coverage, the
 vaccination card — full screen on a phone, a panel over a blurred page on a
-desktop, and **Close** puts you back exactly where you were. The Growth, Food
-and Vaccines tabs are for putting things _in_: a reading, a food, a dose
-marked given.
+desktop. Swipe it down to put it away on a phone, or click outside it or
+press Escape on a desktop; either way you land back exactly where you were.
+There is no Close bar along the bottom, because on the screen a chart has the
+least room to spare it was asking for a tap you already had a gesture for.
+The Growth, Food and Vaccines tabs are for putting things _in_: a reading, a
+food, a dose marked given.
 
 The point of gathering the answers here is that a parent with fifteen seconds
 gets the whole picture without visiting four tabs — and never has to navigate
