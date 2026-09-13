@@ -38,6 +38,11 @@ adult height under Growth.
 
 All of it can be changed later from **Settings → Your child**.
 
+Every date in the app — the birth date, a reading's date, a dose's date — is
+picked from the same calendar: tap the field, and tap the month caption at
+the top of the calendar to jump to another month or year without paging
+through them one at a time.
+
 ## Log a diaper
 
 On **Today**, tap **Pee**, **Poo** or **Both**. That is the whole flow — the
