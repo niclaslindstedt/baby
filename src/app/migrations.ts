@@ -16,6 +16,7 @@ import {
   defaultMilk,
   DOC_VERSION,
   emptyDoc,
+  isClockTime,
   NUTRIENT_KEYS,
   type AppData,
   type Child,
@@ -127,6 +128,18 @@ function parseNutrients(value: unknown): Nutrients | null {
   return out;
 }
 
+/** The `HH:MM` times a food is given at: de-duplicated and sorted, anything
+ *  that isn't a wall-clock time dropped. An unreadable list is an empty one —
+ *  "sometime during the day" — never a reason to drop the food itself. */
+function parseTimes(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const seen = new Set<string>();
+  for (const entry of value) {
+    if (typeof entry === "string" && isClockTime(entry)) seen.add(entry);
+  }
+  return [...seen].sort();
+}
+
 function parseFood(id: string, value: unknown): Food | null {
   if (!isRecord(value)) return null;
   const name = typeof value.name === "string" ? value.name.trim() : "";
@@ -139,6 +152,7 @@ function parseFood(id: string, value: unknown): Food | null {
     amount,
     unit: value.unit === "ml" ? "ml" : "g",
     per100,
+    times: parseTimes(value.times),
     updatedAt: parseTimestamp(value.updatedAt),
   };
 }
@@ -194,6 +208,19 @@ const migrator = createMigrator({
     1: (doc) => {
       const milk = isRecord(doc.milk) ? doc.milk : {};
       return { ...doc, version: 2, milk: { ...milk, formulaType: "infant" } };
+    },
+    // v2 → v3: `Food.times`. Nothing to infer — a regimen written before this
+    // step never said when a food is given, and an empty list is exactly that
+    // claim, so the coverage curve spreads those foods across the day until a
+    // parent says otherwise. `parseFood` would supply the same default on
+    // read; the step exists so the stored bytes carry the field too.
+    2: (doc) => {
+      const foods = isRecord(doc.foods) ? doc.foods : {};
+      const withTimes: Record<string, unknown> = {};
+      for (const [id, food] of Object.entries(foods)) {
+        withTimes[id] = isRecord(food) ? { times: [], ...food } : food;
+      }
+      return { ...doc, version: 3, foods: withTimes };
     },
   },
 });

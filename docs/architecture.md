@@ -31,7 +31,7 @@ is connected:
 
 ```jsonc
 {
-  "version": 1,
+  "version": 3,
   "child": {
     "name": "Alva", // "" when none was given
     "birthDate": "2026-01-15",
@@ -60,6 +60,7 @@ is connected:
       "amount": 150, // per day, in `unit`
       "unit": "g", // "g" | "ml"
       "per100": { "kcal": 104, "ironMg": 1.7, "fatG": 3.7 }, // kcal required; the rest optional
+      "times": ["08:00", "18:00"], // when it is typically given; [] = sometime during the day
       "updatedAt": "2026-08-01T09:00:00.000Z",
     },
   },
@@ -120,8 +121,11 @@ App.tsx
 ├── TopBar          the mark, the sync glyph, `+` (diaper sheet), ⚙ (Settings)
 ├── <main>          one scrolling region; the swipe is measured across it
 │   ├── TodayScreen     diaper buttons, last 24 h, today's log, week chart, headline cards
-│   ├── GrowthScreen    indicator switch, GrowthChart, trend, forecast, target height, readings
-│   ├── FoodScreen      milk feeding, assessment, nutrients, the regimen (FoodForm)
+│   │   ├── GrowthModal     indicator tabs, GrowthChart, trend, forecast, adult height
+│   │   ├── FoodModal       the verdict, DayCoverageChart, the target, the regimen, nutrients
+│   │   └── VaccinesModal   the card at a glance: visits, ticks, the count
+│   ├── GrowthScreen    the readings list, and MeasurementForm
+│   ├── FoodScreen      the regimen (FoodForm), then milk feeding
 │   ├── VaccinesScreen  the programme timeline, the extras, the record form
 │   ├── ChildScreen     first run, and Settings → Your child
 │   └── SettingsScreen
@@ -129,6 +133,14 @@ App.tsx
 ├── DiaperSheet     the `+` sheet — the same DiaperButtons Today renders
 └── SyncDetailsModal, ToastViewport, UpdateToast
 ```
+
+**Input on the tabs, answers on Today.** The four destinations are where a
+record goes in — a reading, a food, a dose marked given — and each of Today's
+headline cards opens the matching _view_ over the screen instead of
+navigating to it (`ViewModal.tsx`, which is the framework's `Modal` in its
+non-centred mode: full screen on a phone, a card over a blurred page from
+`sm:` up). A view never writes; closing one returns to Today rather than
+leaving the parent on a tab to navigate out of.
 
 The bottom bar carries _destinations_ in a fixed order, and a swipe moves
 along it; the two off-bar screens cross-fade in and go back where they came

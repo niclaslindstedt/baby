@@ -14,6 +14,12 @@ chickenpox, TBE, meningococcal, an extra pneumococcal dose, or anything else
 — are listed separately so the card stays complete without muddling the
 timeline.
 
+Today's **Next vaccination** card opens the card at a glance: every visit the
+programme books, in order, with a tick against what you have recorded and a
+count of how much of the card is done. It is an overview and nothing more —
+the route, the notes, the product names and the extras stay on the Vaccines
+tab, where they are entered.
+
 The ages are the programme's; the child health centre calls you in and may
 adjust them. The programme and its sources are in
 [the vaccinations documentation](../vaccinations.md).

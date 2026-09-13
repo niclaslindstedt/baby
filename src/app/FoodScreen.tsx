@@ -12,21 +12,11 @@ import {
 
 import { childName } from "./copy.ts";
 import { FoodForm } from "./FoodForm.tsx";
-import {
-  formatAmount,
-  formatKg,
-  formatPercent,
-  formatWhole,
-} from "./format.ts";
-import type { GrowthStandards } from "./growth.ts";
-import { AlertIcon, BowlIcon, TrashIcon } from "./icons.tsx";
+import { formatAmount, formatWhole } from "./format.ts";
+import { ageInDays } from "./age.ts";
+import { BowlIcon, ClockIcon, TrashIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
-import {
-  assess,
-  outgrown,
-  regimenApplies,
-  type NutrientLine,
-} from "./nutrition.ts";
+import { feedingStage, foodKcal } from "./nutrition.ts";
 import {
   sortedFoods,
   type AppData,
@@ -36,18 +26,22 @@ import {
 } from "./types.ts";
 import { Card, EmptyState, Field, Heading, parseNumber } from "./ui.tsx";
 
-// Food: the regimen, and whether it covers the day.
+// Food, the input side: the regimen, and where the milk comes from.
 //
-// Before six months the screen says so and stays out of the way — that is a
-// feature, and the one this app's premise rests on. From six months it is
-// two cards: the regimen (the foods the child typically gets in a day), and
-// the assessment against the recommendation for the child's age and weight,
-// with the energy verdict on top and the rest below it.
+// The regimen leads, because it is the thing this screen exists to keep
+// current — the foods the child typically gets in a day, with a daily amount
+// and (optionally) the times they are given. Milk follows it: one segmented
+// control and, for a bottle-fed child, the millilitres.
+//
+// What the regimen *adds up to* is not here. "Does it cover the day", the
+// nutrient lines and the coverage curve are all answers, and answers open
+// from Today's Food card (see `FoodModal.tsx`). Before six months there is
+// nothing to add up at all, and the screen still says so — that is the
+// premise the app rests on, not a detail of where the numbers live.
 
 type Props = {
   data: AppData;
   today: DayKey;
-  standards: GrowthStandards | null;
   onSaveFood: (food: Food) => void;
   onRemoveFood: (id: string) => void;
   onSetMilk: (milk: MilkFeeding) => void;
@@ -57,7 +51,6 @@ type Props = {
 export function FoodScreen({
   data,
   today,
-  standards,
   onSaveFood,
   onRemoveFood,
   onSetMilk,
@@ -73,13 +66,12 @@ export function FoodScreen({
     data.milk.formulaMlPerDay === null ? "" : String(data.milk.formulaMlPerDay),
   );
 
-  const assessment = useMemo(
-    () => (standards ? assess(data, today, standards.weight) : null),
-    [data, today, standards],
-  );
-  const grownOut = useMemo(
-    () => (standards ? outgrown(data, today, standards.weight) : false),
-    [data, today, standards],
+  const stage = useMemo(
+    () =>
+      data.child === null
+        ? "complementary"
+        : feedingStage(ageInDays(data.child.birthDate, today)),
+    [data.child, today],
   );
   const foods = sortedFoods(data);
 
@@ -107,47 +99,6 @@ export function FoodScreen({
       </div>
     );
   }
-
-  const stage = assessment?.requirements.stage ?? "complementary";
-  const applies = assessment ? regimenApplies(assessment) : true;
-
-  // Which sentence explains the target depends on where the day's milk comes
-  // from. The mixed case is the one worth spelling out: the bottles are
-  // counted *inside* the milk share rather than on top of it, so the copy
-  // says so rather than leaving a parent to wonder why adding formula also
-  // raised the bar.
-  const req = assessment?.requirements ?? null;
-  const nursing = data.milk.kind === "breast" || data.milk.kind === "mixed";
-  const targetText =
-    req === null
-      ? null
-      : nursing && req.formulaKcal > 0
-        ? t("food.targetMixed", {
-            months: String(Math.floor(req.ageMonths)),
-            milkShare: formatPercent(req.milkEnergyShare, locale),
-            ml: formatWhole(data.milk.formulaMlPerDay ?? 0, locale),
-            formulaKcal: formatWhole(req.formulaKcal, locale),
-            target: formatWhole(req.targetKcal, locale),
-            total: formatWhole(req.kcalPerDay, locale),
-            weight: formatKg(req.weightKg, locale),
-          })
-        : nursing
-          ? t("food.targetBreast", {
-              months: String(Math.floor(req.ageMonths)),
-              share: formatPercent(req.targetKcal / req.kcalPerDay, locale),
-              target: formatWhole(req.targetKcal, locale),
-              total: formatWhole(req.kcalPerDay, locale),
-              weight: formatKg(req.weightKg, locale),
-            })
-          : t(
-              data.milk.kind === "formula"
-                ? "food.targetFormula"
-                : "food.targetWholeDay",
-              {
-                total: formatWhole(req.kcalPerDay, locale),
-                weight: formatKg(req.weightKg, locale),
-              },
-            );
 
   const setMilkKind = (kind: MilkFeeding["kind"]) => {
     onSetMilk({
@@ -180,7 +131,7 @@ export function FoodScreen({
 
   return (
     <div className="flex flex-col gap-3 px-3 py-3">
-      {!applies && (
+      {stage !== "complementary" && (
         <Card>
           <Heading>{t("food.title")}</Heading>
           <p className="mt-1 text-sm text-fg">
@@ -190,6 +141,84 @@ export function FoodScreen({
           </p>
         </Card>
       )}
+
+      <Card>
+        <div className="flex items-center justify-between gap-2">
+          <Heading>{t("food.regimen")}</Heading>
+          <button
+            type="button"
+            onClick={() => setEditing("new")}
+            className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-accent hover:bg-surface-2"
+          >
+            <PlusIcon className="h-4 w-4" />
+            {t("food.add")}
+          </button>
+        </div>
+        <p className="mt-1 text-xs text-muted">
+          {t("food.regimenHint", { name })}
+        </p>
+        {foods.length === 0 ? (
+          <div className="mt-3">
+            <EmptyState
+              icon={<BowlIcon className="h-8 w-8" />}
+              text={t("food.empty")}
+              action={
+                <Button variant="primary" onClick={() => setEditing("new")}>
+                  {t("food.add")}
+                </Button>
+              }
+            />
+          </div>
+        ) : (
+          <ul className="mt-3 flex flex-col gap-2">
+            {foods.map((food) => (
+              <li
+                key={food.id}
+                className="flex items-start justify-between gap-2 text-sm"
+              >
+                <div className="min-w-0">
+                  <p className="truncate font-medium text-fg-bright">
+                    {food.name}
+                  </p>
+                  <p className="text-xs text-muted tabular-nums">
+                    {t("food.amountLine", {
+                      amount: formatAmount(food.amount, locale),
+                      unit: food.unit,
+                      kcal: formatWhole(foodKcal(food), locale),
+                    })}
+                  </p>
+                  {food.times.length > 0 && (
+                    <p className="flex items-center gap-1 text-xs text-muted tabular-nums">
+                      <ClockIcon className="h-3 w-3" />
+                      {food.times.join(" · ")}
+                    </p>
+                  )}
+                </div>
+                <div className="flex shrink-0 gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setEditing(food)}
+                    aria-label={t("common.edit")}
+                    title={t("common.edit")}
+                    className="flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-2 hover:text-fg"
+                  >
+                    <PencilIcon className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDelete(food)}
+                    aria-label={t("common.remove")}
+                    title={t("common.remove")}
+                    className="flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-2 hover:text-danger"
+                  >
+                    <TrashIcon className="h-4 w-4" />
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
 
       <Card>
         <Heading>{t("food.milk")}</Heading>
@@ -242,148 +271,6 @@ export function FoodScreen({
         <p className="mt-3 text-xs text-muted">{t("food.dDrops")}</p>
       </Card>
 
-      {applies && (
-        <>
-          <Card
-            tone={
-              grownOut
-                ? "warn"
-                : assessment &&
-                    !assessment.empty &&
-                    assessment.energy.status === "covered"
-                  ? "accent"
-                  : "default"
-            }
-          >
-            <Heading>{t("food.assessment")}</Heading>
-            {assessment === null || assessment.empty ? (
-              <p className="mt-1 text-sm text-fg">{t("food.energyUnknown")}</p>
-            ) : (
-              <>
-                <p className="mt-1 flex gap-2 text-sm text-fg">
-                  {grownOut && (
-                    <AlertIcon className="mt-0.5 h-4 w-4 shrink-0 text-danger" />
-                  )}
-                  <span>
-                    {grownOut
-                      ? t("food.outgrown", { name })
-                      : assessment.energy.status === "covered"
-                        ? t("food.covered")
-                        : t("food.low")}
-                  </span>
-                </p>
-                {assessment.energy.actual !== null && (
-                  <p className="mt-1 text-lg font-bold text-fg-bright tabular-nums">
-                    {t("food.energyLine", {
-                      actual: formatWhole(assessment.energy.actual, locale),
-                      target: formatWhole(assessment.energy.target, locale),
-                    })}
-                  </p>
-                )}
-              </>
-            )}
-            {req !== null && (
-              <p className="mt-2 text-xs text-muted">
-                {targetText}
-                {req.weightSource === "reference" && (
-                  <> {t("food.weightReference", { name })}</>
-                )}
-              </p>
-            )}
-          </Card>
-
-          {assessment && !assessment.empty && (
-            <Card>
-              <Heading>{t("food.nutrients")}</Heading>
-              <p className="mt-1 text-xs text-muted">
-                {t("food.nutrientsHint")}
-                {nursing && <> {t("food.nutrientsBreastNote")}</>}
-              </p>
-              <ul className="mt-2 flex flex-col gap-2">
-                {assessment.lines.map((line) => (
-                  <NutrientRow key={line.key} line={line} locale={locale} />
-                ))}
-              </ul>
-            </Card>
-          )}
-        </>
-      )}
-
-      <Card>
-        <div className="flex items-center justify-between gap-2">
-          <Heading>{t("food.regimen")}</Heading>
-          <button
-            type="button"
-            onClick={() => setEditing("new")}
-            className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-accent hover:bg-surface-2"
-          >
-            <PlusIcon className="h-4 w-4" />
-            {t("food.add")}
-          </button>
-        </div>
-        <p className="mt-1 text-xs text-muted">
-          {t("food.regimenHint", { name })}
-        </p>
-        {foods.length === 0 ? (
-          <div className="mt-3">
-            <EmptyState
-              icon={<BowlIcon className="h-8 w-8" />}
-              text={t("food.empty")}
-              action={
-                <Button variant="primary" onClick={() => setEditing("new")}>
-                  {t("food.add")}
-                </Button>
-              }
-            />
-          </div>
-        ) : (
-          <ul className="mt-3 flex flex-col gap-2">
-            {foods.map((food) => (
-              <li
-                key={food.id}
-                className="flex items-start justify-between gap-2 text-sm"
-              >
-                <div className="min-w-0">
-                  <p className="truncate font-medium text-fg-bright">
-                    {food.name}
-                  </p>
-                  <p className="text-xs text-muted tabular-nums">
-                    {t("food.amountLine", {
-                      amount: formatAmount(food.amount, locale),
-                      unit: food.unit,
-                      kcal: formatWhole(
-                        (food.per100.kcal * food.amount) / 100,
-                        locale,
-                      ),
-                    })}
-                  </p>
-                </div>
-                <div className="flex shrink-0 gap-1">
-                  <button
-                    type="button"
-                    onClick={() => setEditing(food)}
-                    aria-label={t("common.edit")}
-                    title={t("common.edit")}
-                    className="flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-2 hover:text-fg"
-                  >
-                    <PencilIcon className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setConfirmDelete(food)}
-                    aria-label={t("common.remove")}
-                    title={t("common.remove")}
-                    className="flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-2 hover:text-danger"
-                  >
-                    <TrashIcon className="h-4 w-4" />
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
-
       <ConfirmDialog
         open={confirmDelete !== null}
         title={t("food.form.deleteConfirm", {
@@ -400,49 +287,5 @@ export function FoodScreen({
         onCancel={() => setConfirmDelete(null)}
       />
     </div>
-  );
-}
-
-function NutrientRow({ line, locale }: { line: NutrientLine; locale: string }) {
-  const t = useT();
-  const unit =
-    line.key === "ironMg" || line.key === "dhaG"
-      ? t("food.unit.mg")
-      : line.key === "vitaminDUg"
-        ? t("food.unit.ug")
-        : t("food.unit.e");
-  const isMax = line.key === "saturatedE";
-  const tone =
-    line.status === "covered"
-      ? "text-accent"
-      : line.status === "low" || line.status === "high"
-        ? "text-danger"
-        : "text-muted";
-  return (
-    <li className="flex items-baseline justify-between gap-2 text-sm">
-      <span className="min-w-0 text-fg">
-        {t(`food.nutrient.${line.key}` as Parameters<typeof t>[0])}
-      </span>
-      <span className="shrink-0 text-right">
-        <span className="text-xs text-fg tabular-nums">
-          {line.actual === null
-            ? t("common.noData")
-            : isMax
-              ? t("food.lineMax", {
-                  actual: formatAmount(line.actual, locale),
-                  target: formatAmount(line.target, locale),
-                  unit,
-                })
-              : t("food.line", {
-                  actual: formatAmount(line.actual, locale),
-                  target: formatAmount(line.target, locale),
-                  unit,
-                })}
-        </span>
-        <span className={`block text-xs ${tone}`}>
-          {t(`food.status.${line.status}` as const)}
-        </span>
-      </span>
-    </li>
   );
 }

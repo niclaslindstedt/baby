@@ -10,6 +10,9 @@ import { WEIGHT_FOR_AGE } from "../src/app/data/whoGrowth.ts";
 import {
   assess,
   breastMilkEnergyShare,
+  DAY_WINDOW_END_MIN,
+  DAY_WINDOW_START_MIN,
+  dayCoverage,
   feedingStage,
   formulaPer100Ml,
   kcalPerKg,
@@ -31,6 +34,7 @@ function food(overrides: Partial<Food> = {}): Food {
     amount: 150,
     unit: "g",
     per100: { kcal: 104, ironMg: 1.7, fatG: 3.7 },
+    times: [],
     updatedAt: "2026-07-20T09:00:00.000Z",
     ...overrides,
   };
@@ -372,5 +376,136 @@ describe("outgrown", () => {
       "unknown",
     );
     expect(outgrown(early, "2026-12-01", WEIGHT_FOR_AGE)).toBe(false);
+  });
+});
+
+// ── The day's shape ─────────────────────────────────────────────────────────
+// `dayCoverage` is what the food view draws: the regimen's energy through the
+// day against the line it is held to. The properties worth pinning are the
+// ones a chart would hide — that an untimed food really is spread rather than
+// dropped, that a food given twice contributes half at each sitting, and that
+// the crossing minute is interpolated inside the segment that reaches the
+// target rather than rounded to the nearest meal.
+
+describe("dayCoverage", () => {
+  const milk: MilkFeeding = {
+    kind: "none",
+    formulaMlPerDay: null,
+    formulaType: "infant",
+    updatedAt: "",
+  };
+
+  it("spreads an untimed food evenly across the default window", () => {
+    // 100 g at 100 kcal/100 g = 100 kcal, no times.
+    const cover = dayCoverage(
+      [food({ amount: 100, per100: { kcal: 100 }, times: [] })],
+      milk,
+      100,
+    );
+    expect(cover.from).toBe(DAY_WINDOW_START_MIN);
+    expect(cover.to).toBe(DAY_WINDOW_END_MIN);
+    expect(cover.spreadKcal).toBeCloseTo(100, 6);
+    expect(cover.meals).toEqual([]);
+    expect(cover.points[0]).toEqual({ minutes: DAY_WINDOW_START_MIN, kcal: 0 });
+    expect(cover.points.at(-1)!.kcal).toBeCloseTo(100, 6);
+    // Half the window is half the day's energy, and the target is met at the
+    // very end rather than at some earlier step.
+    expect(cover.metAtMinutes).toBe(DAY_WINDOW_END_MIN);
+  });
+
+  it("steps at each time a food names, splitting the daily amount evenly", () => {
+    const cover = dayCoverage(
+      [
+        food({
+          amount: 100,
+          per100: { kcal: 100 },
+          times: ["08:00", "17:00"],
+        }),
+      ],
+      milk,
+      100,
+    );
+    expect(cover.spreadKcal).toBe(0);
+    expect(cover.meals).toEqual([
+      { minutes: 8 * 60, kcal: 50, names: ["Porridge"] },
+      { minutes: 17 * 60, kcal: 50, names: ["Porridge"] },
+    ]);
+    // Two points per meal — the step's foot and its head.
+    expect(cover.points.filter((p) => p.minutes === 8 * 60)).toEqual([
+      { minutes: 480, kcal: 0 },
+      { minutes: 480, kcal: 50 },
+    ]);
+    expect(cover.totalKcal).toBeCloseTo(100, 6);
+    expect(cover.metAtMinutes).toBe(17 * 60);
+  });
+
+  it("gathers foods given at the same time into one meal", () => {
+    const cover = dayCoverage(
+      [
+        food({
+          id: "a",
+          name: "Porridge",
+          amount: 100,
+          per100: { kcal: 100 },
+          times: ["08:00"],
+        }),
+        food({
+          id: "b",
+          name: "Banana",
+          amount: 50,
+          per100: { kcal: 100 },
+          times: ["08:00"],
+        }),
+      ],
+      milk,
+      150,
+    );
+    expect(cover.meals).toHaveLength(1);
+    expect(cover.meals[0]!.kcal).toBeCloseTo(150, 6);
+    expect(cover.meals[0]!.names).toEqual(["Porridge", "Banana"]);
+  });
+
+  it("interpolates the crossing inside the segment that reaches the target", () => {
+    // 160 kcal spread across a 16-hour window is 10 kcal an hour, so a target
+    // of 40 is reached four hours in — 10:00, not the window's end.
+    const cover = dayCoverage(
+      [food({ amount: 160, per100: { kcal: 100 }, times: [] })],
+      milk,
+      40,
+    );
+    expect(cover.metAtMinutes).toBeCloseTo(10 * 60, 6);
+  });
+
+  it("reports a day that never reaches the target", () => {
+    const cover = dayCoverage(
+      [food({ amount: 100, per100: { kcal: 100 }, times: ["12:00"] })],
+      milk,
+      400,
+    );
+    expect(cover.metAtMinutes).toBeNull();
+    expect(cover.totalKcal).toBeCloseTo(100, 6);
+    expect(cover.targetKcal).toBe(400);
+  });
+
+  it("widens the window around a time outside the waking day", () => {
+    const cover = dayCoverage(
+      [food({ amount: 100, per100: { kcal: 100 }, times: ["04:30", "23:30"] })],
+      milk,
+      100,
+    );
+    expect(cover.from).toBe(4 * 60 + 30);
+    expect(cover.to).toBe(23 * 60 + 30);
+  });
+
+  it("counts the bottles as energy with no time on it", () => {
+    // 200 ml of infant formula at 66 kcal per 100 ml.
+    const cover = dayCoverage(
+      [],
+      { ...milk, kind: "formula", formulaMlPerDay: 200 },
+      500,
+    );
+    expect(cover.spreadKcal).toBeCloseTo(132, 6);
+    expect(cover.totalKcal).toBeCloseTo(132, 6);
+    expect(cover.meals).toEqual([]);
   });
 });

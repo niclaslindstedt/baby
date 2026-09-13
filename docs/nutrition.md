@@ -122,6 +122,34 @@ comparison and matches Livsmedelsverket's practical advice: a teaspoon of
 rapeseed oil per home-made portion, at most a tablespoon of extra fat a day,
 because children under two need somewhat fattier food than adults.
 
+## Over the day
+
+The same comparison, drawn with the clock on the x axis. A food may carry the
+**times of day it is typically given** (`Food.times`, `HH:MM`, ascending), and
+the daily amount is split evenly across them — "porridge, 150 g a day, at
+08:00 and 18:00" is two 78 kcal steps, not two 156 kcal meals. That is still
+the regimen and not a diary: the times describe a typical day and are edited
+when the normal day changes, exactly like the amounts beside them.
+
+`dayCoverage` turns the regimen into one monotone curve of cumulative energy
+across a window that runs 06:00–22:00, widened at either end when the regimen
+names a time outside it:
+
+- a **timed** food steps the curve at each of its times;
+- an **untimed** food is spread evenly across the window, because "sometime
+  during the day" is what the regimen actually said and drawing a meal nobody
+  claimed would be an invention;
+- the **bottles** are spread for the same reason — `MilkFeeding` records
+  millilitres a day and never when they are drunk.
+
+The dashed line across the plot is `targetKcal`, and `metAtMinutes` is where
+the curve first reaches it, interpolated inside the crossing segment rather
+than rounded to the nearest meal. A day that never reaches the line has no
+crossing minute, and the gap at the right-hand edge is the answer.
+
+Nothing about the curve is stored — it is recomputed from the foods, the milk
+and the day's target on every render, like every other derivation in the app.
+
 ## What the assessment says, and refuses to say
 
 Each nutrient gets one reading:

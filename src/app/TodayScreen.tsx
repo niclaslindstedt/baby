@@ -26,20 +26,28 @@ import {
 import { readings, trend, type GrowthStandards } from "./growth.ts";
 import { AlertIcon, BowlIcon, GrowthIcon, SyringeIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
+import { FoodModal } from "./FoodModal.tsx";
+import { GrowthModal } from "./GrowthModal.tsx";
 import { assess, outgrown, regimenApplies } from "./nutrition.ts";
-import type { NavTab } from "./BottomNav.tsx";
 import { sortedMeasurements, type AppData, type DiaperKind } from "./types.ts";
 import { Card, Heading } from "./ui.tsx";
 import { nextDose, timeline } from "./vaccines.ts";
+import { VaccinesModal } from "./VaccinesModal.tsx";
 
-// The first screen: the child's age, the diaper log, and the three headline
-// answers — one line each, each leading to its own screen.
+// The front page, and the only page that answers anything.
 //
-// The diaper buttons are the top of the screen because they are the reason
-// it is opened most often. Under them the last 24 hours as two numbers, and
-// the norm's verdict when a day looks thin. Everything else is a readout of
-// the other screens; the point of gathering it here is that a parent with
-// fifteen seconds gets the whole picture without visiting four tabs.
+// The four tabs are where things go *in* — a reading, a food, a dose marked
+// given. What those things add up to is here: the child's age, the diaper log,
+// and the three headline answers, each of which opens its own view (see
+// `ViewModal.tsx`) rather than sending the parent off to a tab. That split is
+// the whole shape of the app. A tab you navigate to is a place you then have
+// to navigate out of; a view you open over Today closes back onto the screen
+// you were already reading, which is the right cost for "let me look at the
+// curve for a second".
+//
+// The diaper buttons are the top of the screen because they are the reason it
+// is opened most often. Under them the last 24 hours as two numbers, and the
+// norm's verdict when a day looks thin.
 
 const CHART_DAYS = 7;
 
@@ -49,8 +57,10 @@ type Props = {
   standards: GrowthStandards | null;
   onLogDiaper: (kind: DiaperKind) => void;
   onRemoveDiaper: (id: string) => void;
-  onOpen: (tab: NavTab) => void;
 };
+
+/** Which headline answer is open over the screen, if any. */
+type View = "growth" | "food" | "vaccines";
 
 export function TodayScreen({
   data,
@@ -58,7 +68,6 @@ export function TodayScreen({
   standards,
   onLogDiaper,
   onRemoveDiaper,
-  onOpen,
 }: Props) {
   const t = useT();
   const lang = useLang();
@@ -103,6 +112,8 @@ export function TodayScreen({
   }, [data, standards]);
   const latestMeasurement = sortedMeasurements(data).at(-1) ?? null;
   const next = useMemo(() => nextDose(timeline(data, today)), [data, today]);
+
+  const [view, setView] = useState<View | null>(null);
 
   return (
     <div className="flex flex-col gap-3 px-3 py-3">
@@ -222,8 +233,8 @@ export function TodayScreen({
               ? "accent"
               : "default"
         }
-        onOpen={() => onOpen("food")}
-        openLabel={t("today.open")}
+        onOpen={() => setView("food")}
+        openLabel={t("today.view")}
       >
         {food === null
           ? t("common.noData")
@@ -254,8 +265,8 @@ export function TodayScreen({
       <HeadlineCard
         icon={<GrowthIcon className="h-4 w-4" />}
         title={t("today.growthCard")}
-        onOpen={() => onOpen("growth")}
-        openLabel={t("today.open")}
+        onOpen={() => setView("growth")}
+        openLabel={t("today.view")}
       >
         {latestMeasurement === null
           ? t("today.noReadings")
@@ -296,8 +307,8 @@ export function TodayScreen({
         icon={<SyringeIcon className="h-4 w-4" />}
         title={t("today.vaccinesCard")}
         tone={next?.status === "due" ? "warn" : "default"}
-        onOpen={() => onOpen("vaccines")}
-        openLabel={t("today.open")}
+        onOpen={() => setView("vaccines")}
+        openLabel={t("today.view")}
       >
         {next === null
           ? t("today.allGiven")
@@ -311,6 +322,30 @@ export function TodayScreen({
               date: formatDayYear(next.due, locale),
             })}
       </HeadlineCard>
+
+      {/* The views. Mounted here rather than in the shell because every one
+          of them reads the same derivations this screen already summarises —
+          the card is the headline and the modal is the rest of the sentence. */}
+      <GrowthModal
+        open={view === "growth"}
+        onClose={() => setView(null)}
+        data={data}
+        today={today}
+        standards={standards}
+      />
+      <FoodModal
+        open={view === "food"}
+        onClose={() => setView(null)}
+        data={data}
+        today={today}
+        standards={standards}
+      />
+      <VaccinesModal
+        open={view === "vaccines"}
+        onClose={() => setView(null)}
+        data={data}
+        today={today}
+      />
     </div>
   );
 }

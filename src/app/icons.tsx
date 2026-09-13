@@ -109,6 +109,36 @@ export function DropFilledIcon({ className }: IconProps) {
   );
 }
 
+/**
+ * A dirty diaper — a pile, as three stacked mounds on a shared baseline.
+ *
+ * Drawn rather than spelled with the pile emoji it replaces. An emoji is the
+ * font's, not the app's: it arrives in whatever colour and weight the
+ * platform ships, ignores `currentColor`, and sits beside a 2px Lucide stroke
+ * looking like a sticker someone stuck on the button. This one is the same
+ * grid and the same stroke as every other glyph here, so the three diaper
+ * buttons read as one set.
+ */
+export function PooIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M8.5 11.5h7a3.5 3.5 0 0 0-7 0Z" />
+      <path d="M5 16h14a4.5 4.5 0 0 0-4.5-4.5h-5A4.5 4.5 0 0 0 5 16Z" />
+      <path d="M2 20.5h20a4.5 4.5 0 0 0-4.5-4.5h-11A4.5 4.5 0 0 0 2 20.5Z" />
+    </Glyph>
+  );
+}
+
+/** A clock, for the times of day a food is given. */
+export function ClockIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3.5 2" />
+    </Glyph>
+  );
+}
+
 /** Growth — a rising curve over an axis. */
 export function GrowthIcon({ className }: IconProps) {
   return (

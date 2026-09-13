@@ -134,6 +134,7 @@ export function buildDemoData(today: DayKey): AppData {
         omega3G: 0.2,
         omega6G: 0.9,
       },
+      times: ["08:00", "17:00"],
       updatedAt: stamp(edited),
     },
     {
@@ -153,6 +154,7 @@ export function buildDemoData(today: DayKey): AppData {
         omega6G: 1.32,
         dhaG: 0.1,
       },
+      times: ["12:00"],
       updatedAt: stamp(edited),
     },
     {
@@ -173,6 +175,7 @@ export function buildDemoData(today: DayKey): AppData {
         dhaG: 0.7,
         epaG: 0.4,
       },
+      times: ["12:00"],
       updatedAt: stamp(edited),
     },
     {
@@ -181,6 +184,7 @@ export function buildDemoData(today: DayKey): AppData {
       amount: 40,
       unit: "g",
       per100: { kcal: 95 },
+      times: ["10:00", "15:00"],
       updatedAt: stamp(edited),
     },
     {
@@ -198,6 +202,9 @@ export function buildDemoData(today: DayKey): AppData {
         omega6G: 18.8,
         alaG: 8.5,
       },
+      // Stirred into whatever is on the plate, so it is never its own
+      // sitting: the coverage curve spreads it across the day.
+      times: [],
       updatedAt: stamp(edited),
     },
   ];

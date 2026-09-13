@@ -276,6 +276,27 @@ body {
   bottom: calc(100% + 0.75rem);
 }
 
+/* ── The view modals ─────────────────────────────────────────────────────────
+   Today's cards open the growth, food and vaccination *views* as modals (see
+   `ViewModal.tsx`). The framework's `Modal` gives them the right shape for
+   nothing — full screen on a phone, a floating card from `sm:` up — and
+   reads two variables for the backdrop, both of which default to "no blur".
+
+   Blur is worth having on the wide layout and worth skipping on the narrow
+   one. On a desktop the card covers maybe half the window, and the page
+   behind it is a column of cards busy enough to compete with a chart; taking
+   the detail out of it while leaving the shape puts the two on different
+   planes. On a phone the modal *is* the screen, so there is no visible
+   backdrop to blur — only a full-viewport filter for the compositor to run
+   behind an opaque card. Hence the breakpoint, which is the framework's own
+   `sm:` (40rem), the width at which its modal stops being full-bleed. */
+@media (width >= 40rem) {
+  :root {
+    --modal-backdrop-blur: 10px;
+    --modal-backdrop-darkness: 0.45;
+  }
+}
+
 /* ── Moving between screens ──────────────────────────────────────────────────
    The bottom bar is four destinations in a fixed left-to-right order and a
    swipe moves one step along it (see `useSwipeNav.ts`). Without motion the

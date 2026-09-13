@@ -227,14 +227,12 @@ export function App() {
                 store.removeDiaper(id);
                 notice(t("today.removed"));
               }}
-              onOpen={show}
             />
           )}
           {tab === "growth" && hasChild && (
             <GrowthScreen
               data={store.data}
               today={today}
-              standards={standards}
               onSave={store.saveMeasurement}
               onRemove={store.removeMeasurement}
               onNotice={notice}
@@ -244,7 +242,6 @@ export function App() {
             <FoodScreen
               data={store.data}
               today={today}
-              standards={standards}
               onSaveFood={store.saveFood}
               onRemoveFood={store.removeFood}
               onSetMilk={store.setMilk}

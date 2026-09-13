@@ -7,6 +7,7 @@ import {
 } from "@niclaslindstedt/oss-framework/components";
 
 import type { FoodPreset } from "./data/foods.ts";
+import { ClockIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
 import {
   newId,
@@ -43,6 +44,24 @@ const MAIN: NutrientKey[] = [
 ];
 const DETAIL: NutrientKey[] = ["alaG", "dhaG", "epaG"];
 
+/** The times a food can be pinned to: every second hour of a baby's waking
+ *  day. Two-hourly rather than to the minute on purpose — the regimen claims
+ *  a typical day, and the one thing the times are read for is the shape of
+ *  the coverage curve, which a quarter of an hour either way does not move.
+ *  A time already on a food that is not on this grid (a hand-edited document,
+ *  a finer grid later) is offered beside them rather than dropped. */
+const TIME_CHIPS = [
+  "06:00",
+  "08:00",
+  "10:00",
+  "12:00",
+  "14:00",
+  "16:00",
+  "18:00",
+  "20:00",
+  "22:00",
+];
+
 export function FoodForm({ initial, onSave, onCancel }: Props) {
   const t = useT();
   const lang = useLang();
@@ -57,6 +76,7 @@ export function FoodForm({ initial, onSave, onCancel }: Props) {
     }
     return out;
   });
+  const [times, setTimes] = useState<string[]>(initial?.times ?? []);
   const [showDetail, setShowDetail] = useState(
     DETAIL.some((k) => initial?.per100[k] !== undefined),
   );
@@ -116,12 +136,23 @@ export function FoodForm({ initial, onSave, onCancel }: Props) {
       amount: amt !== null && amt >= 0 ? amt : 0,
       unit,
       per100,
+      times: [...times].sort(),
       updatedAt: new Date().toISOString(),
     });
   };
 
   const set = (key: NutrientKey) => (v: string) =>
     setValues((prev) => ({ ...prev, [key]: v }));
+
+  const toggleTime = (time: string) =>
+    setTimes((prev) =>
+      prev.includes(time)
+        ? prev.filter((t) => t !== time)
+        : [...prev, time].sort(),
+    );
+  const timeOptions = [
+    ...new Set([...TIME_CHIPS, ...(initial?.times ?? [])]),
+  ].sort();
 
   return (
     <form
@@ -193,6 +224,38 @@ export function FoodForm({ initial, onSave, onCancel }: Props) {
           onChange={setUnit}
           ariaLabel={t("food.form.unit")}
         />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <span className="flex items-center gap-1.5 text-xs font-medium text-fg">
+          <ClockIcon className="h-3.5 w-3.5 text-accent" />
+          {`${t("food.form.times")} · ${t("common.optional")}`}
+        </span>
+        <div
+          role="group"
+          aria-label={t("food.form.times")}
+          className="flex flex-wrap gap-1.5"
+        >
+          {timeOptions.map((time) => {
+            const on = times.includes(time);
+            return (
+              <button
+                key={time}
+                type="button"
+                aria-pressed={on}
+                onClick={() => toggleTime(time)}
+                className={`rounded-full border px-2.5 py-1 text-xs tabular-nums ${
+                  on
+                    ? "border-accent bg-accent/15 text-fg-bright"
+                    : "border-line text-fg hover:bg-surface-2"
+                }`}
+              >
+                {time}
+              </button>
+            );
+          })}
+        </div>
+        <span className="text-xs text-muted">{t("food.form.timesHint")}</span>
       </div>
 
       <div className="flex flex-col gap-1">

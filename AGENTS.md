@@ -38,7 +38,8 @@ choose, it is the wrong change however useful the feature is.
 **Rule two: minimal input, useful output.** The app is not a diary. A diaper
 change is one tap and a timestamp; a growth reading is what the scale said;
 the food regimen is the foods the child _typically_ gets in a day with a
-daily amount each, updated when the normal diet changes — never a meal log.
+daily amount each and, optionally, the times of day they are given, updated
+when the normal diet changes — never a meal log.
 Before six months there is nothing to track about food, and the Food screen
 says so and stays out of the way. Every field in the model is read by a
 number on some screen; a field nothing reads is a question asked for
@@ -180,9 +181,13 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   `SettingsScreen.tsx` — the two off-bar screens; `DiaperSheet.tsx` — the
   sheet behind the top bar's `+`. `DiaperButtons.tsx` is the app's only
   diaper-logging control and every place that logs one renders it.
-- `src/app/GrowthChart.tsx`, `DiaperChart.tsx` — hand-built from the
-  framework's chart _primitives_ (`bandPath`, `linePath`, `barPath`,
-  `linearScale`, `niceTicks`), not its finished chart components.
+- `src/app/ViewModal.tsx` and the three views it wraps — `GrowthModal.tsx`,
+  `FoodModal.tsx`, `VaccinesModal.tsx` — the read-only answers, opened from
+  Today's headline cards. See "Input on the tabs, answers on Today" below.
+- `src/app/GrowthChart.tsx`, `DiaperChart.tsx`, `DayCoverageChart.tsx` —
+  hand-built from the framework's chart _primitives_ (`bandPath`, `linePath`,
+  `areaPath`, `barPath`, `linearScale`, `niceTicks`), not its finished chart
+  components.
 - `src/app/i18n/en.ts` — every user-facing string; `sv.ts` must satisfy it.
 - `src/output.ts` — the §19.4 central output module.
 - `pwa-plugin.ts` — emits the service worker + version/precache manifests
@@ -190,6 +195,19 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
 
 Dependency direction: screens → stores → framework. Nothing imports from the
 framework's internals — only its published subpaths.
+
+### Input on the tabs, answers on Today
+
+The four bottom-bar destinations are where a record goes **in** — a reading, a
+food, a dose marked given — and they carry no derived numbers. Everything the
+app _concludes_ is on Today, one tap behind a headline card, in a `ViewModal`:
+the growth curves, the day's food coverage, the vaccination card. Full screen
+on a phone, a card over a blurred page from `sm:` up.
+
+Two rules follow. **A view never writes** — a modal that could edit would be a
+second write path for data the tab behind it owns. And **a stat never moves to
+a tab**: if a new derivation needs a home, it belongs in the matching view or
+on a Today card, not on the screen where the record is typed.
 
 ### Derive, don't store
 
@@ -220,6 +238,7 @@ same PR.
 | A new programme dose or extra vaccine  | `src/app/vaccines.ts` (`PROGRAMME` / `EXTRAS`) + the group label in `i18n/en.ts` and `sv.ts`                                   |
 | A food preset                          | `src/app/data/foods.ts`                                                                                                        |
 | A new screen                           | `src/app/<Name>Screen.tsx` + a tab in `BottomNav.tsx`, or a button in `TopBar.tsx` if it is an action rather than a place      |
+| A new answer to show a parent          | A card on `TodayScreen.tsx`, or the matching `*Modal.tsx` behind it — never one of the four input tabs                         |
 | A new way to log a diaper              | Never a second write path — render `DiaperButtons` and write through `addDiaper`                                               |
 | A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                          |
 | A new storage backend                  | The framework, if generic; `useSyncEngine.ts` wires adapters up, and `idbAdapter.ts` is the one app-local adapter              |
