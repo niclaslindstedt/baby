@@ -6,7 +6,7 @@ import { Button } from "@niclaslindstedt/oss-framework/components";
 
 import { useT } from "./i18n/index.ts";
 import { newId, type Measurement } from "./types.ts";
-import { Field, parseNumber, TextInput } from "./ui.tsx";
+import { DateField, Field, parseNumber, TextInput } from "./ui.tsx";
 
 // One growth reading: a date and whichever of the three measurements was
 // taken. One field is enough — a home scale gives one number, a BVC visit
@@ -61,7 +61,12 @@ export function MeasurementForm({ initial, today, onSave, onCancel }: Props) {
       }}
     >
       <Field label={t("growth.form.date")}>
-        <TextInput type="date" value={date} max={today} onChange={setDate} />
+        <DateField
+          label={t("growth.form.date")}
+          value={date}
+          max={today}
+          onChange={setDate}
+        />
       </Field>
       <p className="text-xs text-muted">{t("growth.form.hint")}</p>
       <Field label={t("growth.form.weight")}>

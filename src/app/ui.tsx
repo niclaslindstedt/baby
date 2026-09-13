@@ -12,12 +12,25 @@
 
 import type { ReactNode } from "react";
 
-/** The bordered-field look, matching the framework's own fields. */
+import {
+  DatePicker,
+  type DayKey,
+} from "@niclaslindstedt/oss-framework/calendar";
+
+import { formatDayYear } from "./format.ts";
+import { useLang, useT } from "./i18n/index.ts";
+
+/** The bordered-field look, matching the framework's own fields.
+ *
+ *  `max-w-full` is not decoration: a control that sizes itself to its own
+ *  content — which is every native control with a platform editor behind it
+ *  — ignores `w-full` and renders past the card's padding on iOS. The
+ *  framework's own field class pins it for the same reason. */
 export const INPUT_CLASS =
-  "w-full min-w-0 rounded-md border border-line bg-surface px-3 py-2 text-sm text-fg-bright outline-none focus:border-accent";
+  "w-full max-w-full min-w-0 rounded-md border border-line bg-surface px-3 py-2 text-sm text-fg-bright outline-none focus:border-accent";
 
 export const INPUT_INVALID_CLASS =
-  "w-full min-w-0 rounded-md border border-danger bg-surface px-3 py-2 text-sm text-fg-bright outline-none focus:border-danger";
+  "w-full max-w-full min-w-0 rounded-md border border-danger bg-surface px-3 py-2 text-sm text-fg-bright outline-none focus:border-danger";
 
 /** A card: the surface every screen is built from. */
 export function Card({
@@ -91,7 +104,7 @@ export function TextInput({
   value: string;
   onChange: (next: string) => void;
   invalid?: boolean;
-  type?: "text" | "number" | "date";
+  type?: "text" | "number";
   placeholder?: string;
   inputMode?: "decimal" | "numeric" | "text";
   step?: string;
@@ -114,6 +127,71 @@ export function TextInput({
       aria-invalid={invalid || undefined}
       onInput={(e) => onChange(e.currentTarget.value)}
       className={invalid ? INPUT_INVALID_CLASS : INPUT_CLASS}
+    />
+  );
+}
+
+/** The date field every form uses — the framework's `DatePicker`, never an
+ *  `<input type="date">`.
+ *
+ *  The native control loses on both counts on an iPhone, which is most of
+ *  the app's traffic. It sizes itself to its own intrinsic width and spills
+ *  out of the card it sits in. And its wheel commits a whole date at once:
+ *  spinning to a month and confirming it closes the popover, so picking the
+ *  day means opening the field a second time. `DatePicker` is a button over
+ *  an in-panel grid — it takes the width it is given, and its month grid
+ *  drops straight back to that month's days without ever closing.
+ *
+ *  A record's date is never blank, so the picker is not clearable; the empty
+ *  string only ever arrives from the child form before a birth date is set. */
+export function DateField({
+  label,
+  value,
+  onChange,
+  max,
+  invalid,
+}: {
+  /** The field's caption. A `<label>` cannot name a button, so it is the
+   *  trigger's `aria-label` — with the picked date in it, since an
+   *  `aria-label` replaces the visible text rather than adding to it. */
+  label: string;
+  /** The picked day, or "" before one is set (the child's birth date). */
+  value: string;
+  onChange: (next: DayKey) => void;
+  max?: DayKey;
+  invalid?: boolean;
+}) {
+  const t = useT();
+  const lang = useLang();
+  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  return (
+    <DatePicker
+      value={value === "" ? null : (value as DayKey)}
+      onChange={(next) => next !== null && onChange(next)}
+      max={max}
+      locale={locale}
+      formatValue={(day) => formatDayYear(day, locale)}
+      ariaLabel={
+        value === ""
+          ? label
+          : `${label}: ${formatDayYear(value as DayKey, locale)}`
+      }
+      labels={{
+        placeholder: t("datePicker.placeholder"),
+        prevMonth: t("datePicker.prevMonth"),
+        nextMonth: t("datePicker.nextMonth"),
+        prevYear: t("datePicker.prevYear"),
+        nextYear: t("datePicker.nextYear"),
+        prevYears: t("datePicker.prevYears"),
+        nextYears: t("datePicker.nextYears"),
+        clear: t("datePicker.clear"),
+      }}
+      invalid={invalid}
+      // The trigger carries the framework's own field skin; these put it on
+      // this app's metrics instead. The `!` is load-bearing: a bare
+      // `bg-surface` and the component's `bg-surface-2` are the same utility
+      // family, so which one wins is stylesheet order, not class order.
+      className="w-full px-3! py-2! bg-surface!"
     />
   );
 }

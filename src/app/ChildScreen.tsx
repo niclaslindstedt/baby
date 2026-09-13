@@ -9,7 +9,14 @@ import {
 
 import { useT } from "./i18n/index.ts";
 import type { Child, Sex } from "./types.ts";
-import { Card, Field, Heading, TextInput, parseNumber } from "./ui.tsx";
+import {
+  Card,
+  DateField,
+  Field,
+  Heading,
+  TextInput,
+  parseNumber,
+} from "./ui.tsx";
 
 // The child: the first screen of an empty install, and the profile editor
 // behind Settings. Four facts and two optional ones — a birth date and a sex
@@ -88,8 +95,8 @@ export function ChildScreen({ initial, today, onSave, onCancel }: Props) {
             label={t("child.birthDate")}
             error={dateMissing ? t("child.birthDateMissing") : undefined}
           >
-            <TextInput
-              type="date"
+            <DateField
+              label={t("child.birthDate")}
               value={birthDate}
               invalid={dateMissing}
               max={today}

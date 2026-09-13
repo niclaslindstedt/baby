@@ -14,7 +14,7 @@ import { SyringeIcon, TrashIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
 import { doseName } from "./TodayScreen.tsx";
 import { newId, type AppData, type Vaccination } from "./types.ts";
-import { Card, Field, Heading, TextInput } from "./ui.tsx";
+import { Card, DateField, Field, Heading, TextInput } from "./ui.tsx";
 import {
   EXTRAS,
   extraFor,
@@ -339,7 +339,12 @@ function RecordForm({
         </Field>
       )}
       <Field label={t("vaccines.form.date")}>
-        <TextInput type="date" value={date} max={today} onChange={setDate} />
+        <DateField
+          label={t("vaccines.form.date")}
+          value={date}
+          max={today}
+          onChange={setDate}
+        />
       </Field>
       <Field label={t("vaccines.form.vaccineName")}>
         <TextInput

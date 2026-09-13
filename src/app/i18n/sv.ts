@@ -37,6 +37,17 @@ export const sv: Catalog = {
     optional: "valfritt",
   },
 
+  datePicker: {
+    placeholder: "Välj ett datum",
+    prevMonth: "Föregående månad",
+    nextMonth: "Nästa månad",
+    prevYear: "Föregående år",
+    nextYear: "Nästa år",
+    prevYears: "Föregående tolv år",
+    nextYears: "Nästa tolv år",
+    clear: "Rensa",
+  },
+
   age: {
     years: "{count} år",
     months: "{count} mån",

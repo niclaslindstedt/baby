@@ -45,6 +45,20 @@ export const en = {
     optional: "optional",
   },
 
+  // The framework `DatePicker`'s own chrome — the trigger's empty text and
+  // the panel's month/year paging arrows, which are icons and so carry their
+  // names for a screen reader rather than on screen.
+  datePicker: {
+    placeholder: "Pick a date",
+    prevMonth: "Previous month",
+    nextMonth: "Next month",
+    prevYear: "Previous year",
+    nextYear: "Next year",
+    prevYears: "Previous years",
+    nextYears: "Next years",
+    clear: "Clear",
+  },
+
   age: {
     // "7 mo 2 wk" — the parts a parent says out loud, joined by spaces.
     years: "{count} y",
