@@ -22,7 +22,7 @@
   "dependencies": {
     "@fontsource/inter": "^5.2.5",
     "@fontsource/jetbrains-mono": "^5.2.5",
-    "@niclaslindstedt/oss-framework": "^3.3.2",
+    "@niclaslindstedt/oss-framework": "^3.3.3",
     "preact": "^10.29.8",
     "workbox-window": "^7.0.0"
   },

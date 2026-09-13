@@ -186,15 +186,12 @@ export function DateField({
         nextYears: t("datePicker.nextYears"),
         clear: t("datePicker.clear"),
       }}
+      invalid={invalid}
       // The trigger carries the framework's own field skin; these put it on
       // this app's metrics instead. The `!` is load-bearing: a bare
       // `bg-surface` and the component's `bg-surface-2` are the same utility
       // family, so which one wins is stylesheet order, not class order.
-      // `border-danger!` goes when the framework release that carries
-      // `DatePicker`'s own `invalid` prop lands.
-      className={`w-full px-3! py-2! bg-surface! ${
-        invalid ? "border-danger!" : ""
-      }`.trim()}
+      className="w-full px-3! py-2! bg-surface!"
     />
   );
 }
