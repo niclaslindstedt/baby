@@ -123,15 +123,34 @@ export type Food = {
   updatedAt: string;
 };
 
+/** Which bottle the child gets. The two are different products in law, not
+ *  brand variants: infant formula (modersmjölksersättning) carries 0.3–1.3 mg
+ *  iron per 100 kcal, follow-on formula (tillskottsnäring, from six months)
+ *  0.6–2.0 mg — Commission Delegated Regulation (EU) 2016/127, Annexes I and
+ *  II. On the shelf that is a 2.5× difference on the one nutrient the second
+ *  product exists to deliver, so the app has to be told which is in the
+ *  bottle rather than guessing from the child's age: Livsmedelsverket's
+ *  advice is that infant formula may be used the whole first year, and
+ *  crediting a child with iron they are not getting is the kind of claim
+ *  this app does not make. */
+export type FormulaType = "infant" | "followOn";
+
 /** How the child's milk is fed — the one fact the nutrition assessment needs
  *  beyond the regimen. Breast milk is not measured, on purpose: the app then
  *  compares the regimen against the *complementary* need, the part of the
  *  day's energy that solids are expected to cover at that age. Formula is
- *  measurable, so a formula-fed child's bottles are part of the regimen. */
+ *  measurable, so a formula-fed child's bottles are part of the regimen, and
+ *  for a child who gets both they are counted as *replacing* the breast milk
+ *  they stand in for rather than as arriving on top of it (see
+ *  `nutrition.ts`). */
 export type MilkFeeding = {
   kind: "breast" | "formula" | "mixed" | "none";
   /** Typical formula per day in ml, when `kind` includes formula. */
   formulaMlPerDay: number | null;
+  /** Which product those millilitres are. Read only when `kind` includes
+   *  formula; kept across a switch to "Breastfed" so turning bottles back on
+   *  does not ask again. */
+  formulaType: FormulaType;
   updatedAt: string;
 };
 
@@ -166,14 +185,20 @@ export type AppData = {
   vaccinations: Record<string, Vaccination>;
 };
 
-/** The current document schema version. v1 is the first published shape. */
-export const DOC_VERSION = 1;
+/** The current document schema version. v1 is the first published shape;
+ *  v2 added `MilkFeeding.formulaType`. */
+export const DOC_VERSION = 2;
 
 /** The milk feeding a new document starts on. Breast, because it is what
  *  most newborns in Sweden start on and what the nutrition screen's
  *  "nothing to track yet" state assumes. */
 export function defaultMilk(): MilkFeeding {
-  return { kind: "breast", formulaMlPerDay: null, updatedAt: "" };
+  return {
+    kind: "breast",
+    formulaMlPerDay: null,
+    formulaType: "infant",
+    updatedAt: "",
+  };
 }
 
 /** The document a first run starts from. */

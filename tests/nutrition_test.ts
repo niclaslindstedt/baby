@@ -11,12 +11,18 @@ import {
   assess,
   breastMilkEnergyShare,
   feedingStage,
+  formulaPer100Ml,
   kcalPerKg,
   outgrown,
   regimenTotals,
   requirements,
 } from "../src/app/nutrition.ts";
-import { emptyDoc, type AppData, type Food } from "../src/app/types.ts";
+import {
+  emptyDoc,
+  type AppData,
+  type Food,
+  type MilkFeeding,
+} from "../src/app/types.ts";
 
 function food(overrides: Partial<Food> = {}): Food {
   return {
@@ -45,6 +51,7 @@ function docWith(foods: Food[], birthDate = "2026-01-01"): AppData {
     milk: {
       kind: "breast",
       formulaMlPerDay: null,
+      formulaType: "infant",
       updatedAt: "2026-07-20T09:00:00.000Z",
     },
   };
@@ -127,7 +134,12 @@ describe("regimenTotals", () => {
           per100: { kcal: 95 },
         }),
       ],
-      { kind: "breast", formulaMlPerDay: null, updatedAt: "" },
+      {
+        kind: "breast",
+        formulaMlPerDay: null,
+        formulaType: "infant",
+        updatedAt: "",
+      },
     );
     expect(totals.kcal.sum).toBeCloseTo(104 * 1.5 + 95 * 0.4, 6);
     expect(totals.kcal.stated).toBe(2);
@@ -140,10 +152,145 @@ describe("regimenTotals", () => {
     const totals = regimenTotals([], {
       kind: "formula",
       formulaMlPerDay: 600,
+      formulaType: "infant",
       updatedAt: "",
     });
     expect(totals.kcal.sum).toBeCloseTo(66 * 6, 6);
     expect(totals.ironMg.sum).toBeCloseTo(0.4 * 6, 6);
+  });
+
+  it("count the product the parent said is in the bottle", () => {
+    const totals = regimenTotals([], {
+      kind: "formula",
+      formulaMlPerDay: 600,
+      formulaType: "followOn",
+      updatedAt: "",
+    });
+    expect(totals.kcal.sum).toBeCloseTo(69 * 6, 6);
+    expect(totals.ironMg.sum).toBeCloseTo(1.0 * 6, 6);
+  });
+
+  it("ignore millilitres recorded against a child who is not on bottles", () => {
+    const totals = regimenTotals([], {
+      kind: "breast",
+      formulaMlPerDay: 600,
+      formulaType: "followOn",
+      updatedAt: "",
+    });
+    expect(totals.kcal.stated).toBe(0);
+  });
+});
+
+describe("formulaPer100Ml", () => {
+  it("separates the two products by the iron that separates them in law", () => {
+    // Regulation (EU) 2016/127 floors infant formula at 0.3 mg iron per 100
+    // kcal and follow-on formula at 0.6; the Swedish tins print 0.4 and 1.0
+    // mg per 100 ml. Tillskottsnäring exists for this number.
+    expect(formulaPer100Ml("infant").ironMg).toBe(0.4);
+    expect(formulaPer100Ml("followOn").ironMg).toBe(1.0);
+    expect(formulaPer100Ml("infant").kcal).toBe(66);
+    expect(formulaPer100Ml("followOn").kcal).toBe(69);
+    // Both carry the EU minimum DHA, which is 20 mg per 100 *kcal*.
+    expect(formulaPer100Ml("infant").dhaG! * 1000).toBeCloseTo(0.2 * 66, 6);
+    expect(formulaPer100Ml("followOn").dhaG! * 1000).toBeCloseTo(0.2 * 69, 6);
+  });
+});
+
+describe("requirements, mixed feeding", () => {
+  const measured = (milk: MilkFeeding): AppData => ({
+    ...docWith([]),
+    measurements: {
+      a: {
+        id: "a",
+        date: "2026-07-20",
+        weightKg: 8.4,
+        lengthCm: null,
+        headCm: null,
+        updatedAt: "",
+      },
+    },
+    milk,
+  });
+  const bottles = (
+    kind: MilkFeeding["kind"],
+    ml: number | null,
+    formulaType: MilkFeeding["formulaType"] = "infant",
+  ): MilkFeeding => ({
+    kind,
+    formulaMlPerDay: ml,
+    formulaType,
+    updatedAt: "2026-07-20T09:00:00.000Z",
+  });
+
+  it("counts the bottles inside the milk share, not on top of it", () => {
+    const breastfed = requirements(
+      measured(bottles("breast", null)),
+      "2026-08-01",
+      WEIGHT_FOR_AGE,
+    )!;
+    const mixed = requirements(
+      measured(bottles("mixed", 400, "followOn")),
+      "2026-08-01",
+      WEIGHT_FOR_AGE,
+    )!;
+    // 400 ml of tillskottsnäring is 276 kcal of the day's milk.
+    expect(mixed.formulaKcal).toBeCloseTo(69 * 4, 6);
+    // Which is milk the child is not getting from the breast, so the target
+    // rises by exactly what the bottles bring: the food side is held to the
+    // same complementary figure as for a child who nurses for all of it.
+    expect(mixed.targetKcal - breastfed.targetKcal).toBeCloseTo(
+      mixed.formulaKcal,
+      6,
+    );
+    expect(mixed.unmeasuredMilkKcal).toBeCloseTo(
+      mixed.kcalPerDay * 0.77 - mixed.formulaKcal,
+      6,
+    );
+  });
+
+  it("reads enough formula as the formula-fed case", () => {
+    // 900 ml of infant formula is more than the whole 77% milk share, so
+    // there is no unmeasured breast milk left to set aside.
+    const heavy = requirements(
+      measured(bottles("mixed", 900)),
+      "2026-08-01",
+      WEIGHT_FOR_AGE,
+    )!;
+    expect(heavy.unmeasuredMilkKcal).toBe(0);
+    expect(heavy.targetKcal).toBeCloseTo(heavy.kcalPerDay, 6);
+  });
+
+  it("leaves the breastfed, formula-fed and weaned cases where they were", () => {
+    const at = (milk: MilkFeeding) =>
+      requirements(measured(milk), "2026-08-01", WEIGHT_FOR_AGE)!;
+    const breastfed = at(bottles("breast", null));
+    expect(breastfed.targetKcal).toBeCloseTo(breastfed.kcalPerDay * 0.23, 6);
+    for (const milk of [bottles("formula", 600), bottles("none", null)]) {
+      const req = at(milk);
+      expect(req.unmeasuredMilkKcal).toBe(0);
+      expect(req.targetKcal).toBeCloseTo(req.kcalPerDay, 6);
+    }
+  });
+
+  it("stops the bottles from covering a mixed-fed day on their own", () => {
+    // The regression this model exists for: 400 ml of formula and no food at
+    // all used to clear a target that had already been cut by the full
+    // breast-milk share.
+    const data = { ...measured(bottles("mixed", 400, "followOn")), foods: {} };
+    const a = assess(data, "2026-08-01", WEIGHT_FOR_AGE)!;
+    expect(a.energy.actual).toBeCloseTo(69 * 4, 6);
+    expect(a.energy.target).toBeGreaterThan(69 * 4);
+    expect(a.energy.status).toBe("low");
+  });
+
+  it("moves the iron line when the bottle is tillskottsnäring", () => {
+    const ironOf = (milk: MilkFeeding) =>
+      assess(measured(milk), "2026-08-01", WEIGHT_FOR_AGE)!.lines.find(
+        (l) => l.key === "ironMg",
+      )!.actual;
+    // 600 ml a day, against the 10 mg the NNR2023 recommend at 7–11 months.
+    expect(ironOf(bottles("formula", 600))).toBeCloseTo(2.4, 6);
+    expect(ironOf(bottles("formula", 600, "followOn"))).toBeCloseTo(6.0, 6);
   });
 });
 

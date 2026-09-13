@@ -31,6 +31,7 @@ import {
   sortedFoods,
   type AppData,
   type Food,
+  type FormulaType,
   type MilkFeeding,
 } from "./types.ts";
 import { Card, EmptyState, Field, Heading, parseNumber } from "./ui.tsx";
@@ -110,11 +111,58 @@ export function FoodScreen({
   const stage = assessment?.requirements.stage ?? "complementary";
   const applies = assessment ? regimenApplies(assessment) : true;
 
+  // Which sentence explains the target depends on where the day's milk comes
+  // from. The mixed case is the one worth spelling out: the bottles are
+  // counted *inside* the milk share rather than on top of it, so the copy
+  // says so rather than leaving a parent to wonder why adding formula also
+  // raised the bar.
+  const req = assessment?.requirements ?? null;
+  const nursing = data.milk.kind === "breast" || data.milk.kind === "mixed";
+  const targetText =
+    req === null
+      ? null
+      : nursing && req.formulaKcal > 0
+        ? t("food.targetMixed", {
+            months: String(Math.floor(req.ageMonths)),
+            milkShare: formatPercent(req.milkEnergyShare, locale),
+            ml: formatWhole(data.milk.formulaMlPerDay ?? 0, locale),
+            formulaKcal: formatWhole(req.formulaKcal, locale),
+            target: formatWhole(req.targetKcal, locale),
+            total: formatWhole(req.kcalPerDay, locale),
+            weight: formatKg(req.weightKg, locale),
+          })
+        : nursing
+          ? t("food.targetBreast", {
+              months: String(Math.floor(req.ageMonths)),
+              share: formatPercent(req.targetKcal / req.kcalPerDay, locale),
+              target: formatWhole(req.targetKcal, locale),
+              total: formatWhole(req.kcalPerDay, locale),
+              weight: formatKg(req.weightKg, locale),
+            })
+          : t(
+              data.milk.kind === "formula"
+                ? "food.targetFormula"
+                : "food.targetWholeDay",
+              {
+                total: formatWhole(req.kcalPerDay, locale),
+                weight: formatKg(req.weightKg, locale),
+              },
+            );
+
   const setMilkKind = (kind: MilkFeeding["kind"]) => {
     onSetMilk({
+      ...data.milk,
       kind,
       formulaMlPerDay:
         kind === "breast" || kind === "none" ? null : parseNumber(formulaDraft),
+      updatedAt: new Date().toISOString(),
+    });
+    onNotice(t("food.milkSaved"));
+  };
+  const setFormulaType = (formulaType: FormulaType) => {
+    onSetMilk({
+      ...data.milk,
+      formulaType,
       updatedAt: new Date().toISOString(),
     });
     onNotice(t("food.milkSaved"));
@@ -162,6 +210,21 @@ export function FoodScreen({
         </div>
         {(data.milk.kind === "formula" || data.milk.kind === "mixed") && (
           <div className="mt-3">
+            <Field label={t("food.formulaType")}>
+              <SegmentedControl<FormulaType>
+                value={data.milk.formulaType}
+                options={[
+                  { value: "infant", label: t("food.formulaInfant") },
+                  { value: "followOn", label: t("food.formulaFollowOn") },
+                ]}
+                onChange={setFormulaType}
+                ariaLabel={t("food.formulaType")}
+                fullWidth
+              />
+            </Field>
+            <p className="mt-1 mb-3 text-xs text-muted">
+              {t("food.formulaTypeHint", { name })}
+            </p>
             <Field label={t("food.formulaMl")}>
               <input
                 type="number"
@@ -219,43 +282,10 @@ export function FoodScreen({
                 )}
               </>
             )}
-            {assessment && (
+            {req !== null && (
               <p className="mt-2 text-xs text-muted">
-                {data.milk.kind === "breast" || data.milk.kind === "mixed"
-                  ? t("food.targetBreast", {
-                      months: String(
-                        Math.floor(assessment.requirements.ageMonths),
-                      ),
-                      share: formatPercent(
-                        1 -
-                          assessment.requirements.targetKcal /
-                            assessment.requirements.kcalPerDay,
-                        locale,
-                      ),
-                      target: formatWhole(
-                        assessment.requirements.targetKcal,
-                        locale,
-                      ),
-                      total: formatWhole(
-                        assessment.requirements.kcalPerDay,
-                        locale,
-                      ),
-                      weight: formatKg(
-                        assessment.requirements.weightKg,
-                        locale,
-                      ),
-                    })
-                  : t("food.targetFormula", {
-                      total: formatWhole(
-                        assessment.requirements.kcalPerDay,
-                        locale,
-                      ),
-                      weight: formatKg(
-                        assessment.requirements.weightKg,
-                        locale,
-                      ),
-                    })}
-                {assessment.requirements.weightSource === "reference" && (
+                {targetText}
+                {req.weightSource === "reference" && (
                   <> {t("food.weightReference", { name })}</>
                 )}
               </p>
@@ -267,6 +297,7 @@ export function FoodScreen({
               <Heading>{t("food.nutrients")}</Heading>
               <p className="mt-1 text-xs text-muted">
                 {t("food.nutrientsHint")}
+                {nursing && <> {t("food.nutrientsBreastNote")}</>}
               </p>
               <ul className="mt-2 flex flex-col gap-2">
                 {assessment.lines.map((line) => (

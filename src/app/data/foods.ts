@@ -15,6 +15,8 @@
 //   - Avocado (id 320)
 //   - Rapeseed oil (id 2189)
 //   - Infant formula (id 6552), DHA at the EU minimum the database rounds away
+//   - Follow-on formula (tillskottsnäring) and the milk drink that follows it
+//     from a year, both from the Swedish label rather than the database
 
 import type { Nutrients } from "../types.ts";
 
@@ -161,7 +163,53 @@ export const FOOD_PRESETS: FoodPreset[] = [
       polyunsaturatedG: 0.6,
       omega3G: 0.1,
       omega6G: 0.6,
-      dhaG: 0.02,
+      // 20 mg per 100 kcal, the EU minimum, at 66 kcal per 100 ml.
+      dhaG: 0.0132,
+    },
+  },
+  // Tillskottsnäring, from six months. The Food screen's milk card counts
+  // these bottles on its own once the parent says which product they are —
+  // this chip is for a parent who would rather carry their own tin's label
+  // in the regimen, and for anyone whose brand differs from the typical one.
+  {
+    id: "follow-on-formula",
+    name: { sv: "Tillskottsnäring", en: "Follow-on formula" },
+    unit: "ml",
+    typicalAmount: 200,
+    per100: {
+      kcal: 69,
+      ironMg: 1.0,
+      vitaminDUg: 1.5,
+      fatG: 3.4,
+      saturatedG: 1.2,
+      monounsaturatedG: 1.3,
+      polyunsaturatedG: 0.6,
+      omega3G: 0.071,
+      omega6G: 0.52,
+      alaG: 0.057,
+      dhaG: 0.0138,
+    },
+  },
+  // Mjölkdryck from a year — not a formula at all, and never the milk card's
+  // millilitres: it is a drink alongside a table diet, so it belongs in the
+  // regimen like any other food.
+  {
+    id: "toddler-milk",
+    name: { sv: "Mjölkdryck (från 1 år)", en: "Toddler milk drink (from 1)" },
+    unit: "ml",
+    typicalAmount: 400,
+    per100: {
+      kcal: 64,
+      ironMg: 1.2,
+      vitaminDUg: 1.6,
+      fatG: 2.8,
+      saturatedG: 0.9,
+      monounsaturatedG: 1.2,
+      polyunsaturatedG: 0.6,
+      omega3G: 0.084,
+      omega6G: 0.55,
+      alaG: 0.08,
+      dhaG: 0.0039,
     },
   },
 ];

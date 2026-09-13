@@ -110,12 +110,12 @@ npm run build && npm run preview
 
 Four tabs on a bottom bar — swipe left or right to move between them:
 
-| Tab          | What it does                                                                                                                                                                                                                                  |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Today**    | The child's age, the three diaper buttons, the last 24 hours' wet and dirty count with a warning when the day looks thin for the age, today's changes (removable), a week's chart, and one line each on the regimen, growth and next vaccine. |
-| **Growth**   | Weight, length or head circumference on the WHO standard with the SD channels, the trend across them, the projected range ahead, the readings list, and (under Length) the expected adult height from the parents' heights.                   |
-| **Food**     | Milk feeding (breast / formula / both), the daily regimen with one-tap presets, and whether it covers the day: energy first, then iron, vitamin D, fat shares, omega-3/6 and DHA against the recommendations for the age.                     |
-| **Vaccines** | The Swedish programme as a timeline — given, expected by now, upcoming — with the vaccine name off the card, and the extras outside the programme.                                                                                            |
+| Tab          | What it does                                                                                                                                                                                                                                                                              |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Today**    | The child's age, the three diaper buttons, the last 24 hours' wet and dirty count with a warning when the day looks thin for the age, today's changes (removable), a week's chart, and one line each on the regimen, growth and next vaccine.                                             |
+| **Growth**   | Weight, length or head circumference on the WHO standard with the SD channels, the trend across them, the projected range ahead, the readings list, and (under Length) the expected adult height from the parents' heights.                                                               |
+| **Food**     | Milk feeding (breast / formula / both, and which formula — modersmjölksersättning or tillskottsnäring), the daily regimen with one-tap presets, and whether it covers the day: energy first, then iron, vitamin D, fat shares, omega-3/6 and DHA against the recommendations for the age. |
+| **Vaccines** | The Swedish programme as a timeline — given, expected by now, upcoming — with the vaccine name off the card, and the extras outside the programme.                                                                                                                                        |
 
 …and two buttons on the top bar, for the things you do and then leave:
 

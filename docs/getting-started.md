@@ -61,8 +61,10 @@ reading is where the next ones are likely to land. See [`growth.md`](growth.md).
 
 ## Keep the regimen
 
-Under **Food**, first say how the child's milk is fed: breastfed, formula
-(with a typical daily amount), both, or neither. Before six months that is
+Under **Food**, first say how the child's milk is fed: breastfed, formula,
+both, or neither. On bottles, say which formula — modersmjölksersättning or
+tillskottsnäring, which carries about two and a half times the iron — and a
+typical daily amount. Before six months that is
 all the screen asks; from six months, **Add a food** for each thing the child
 typically gets in a day — the **Common foods** chips fill in typical values
 from Livsmedelsverket's database — with a daily amount. Only calories are
