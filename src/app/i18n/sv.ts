@@ -124,7 +124,7 @@ export const sv: Catalog = {
     foodCard: "Matregim",
     growthCard: "Tillväxt",
     vaccinesCard: "Nästa vaccination",
-    open: "Öppna",
+    view: "Visa",
     latestReading: "{value} den {date} · {z}",
     noReadings: "Inga mätvärden än.",
     nextDue: "{dose} — förväntades {date}",
@@ -154,6 +154,8 @@ export const sv: Catalog = {
       "Lägg in mätvärdena från BVC — eller från en våg hemma, så ofta du vill — så hamnar de här på tillväxtkurvan.",
     add: "Lägg till mätvärde",
     readings: "Mätvärden",
+    readingsHint:
+      "Vad vågen och måttbandet sa. Öppna Tillväxt från Idag för att se dem på standardkurvan.",
     reading: "{date} · {age}",
     z: "{z}",
     channel: {
@@ -229,7 +231,7 @@ export const sv: Catalog = {
       "Tillskottsnäring säljs från sex månader och innehåller ungefär två och en halv gånger så mycket järn som modersmjölksersättning, så vilken som står i flaskan flyttar järnsiffran nedan. Modersmjölksersättning duger hela första året — ange det {name} faktiskt får, inte det åldern antyder.",
     formulaMl: "Mängd per dygn (ml)",
     dDrops:
-      "D-dropparna — fem droppar, 10 µg om dagen, från ungefär en veckas ålder till två år — täcker D-vitaminet på egen hand. Siffran nedan är vad maten lägger till.",
+      "D-dropparna — fem droppar, 10 µg om dagen, från ungefär en veckas ålder till två år — täcker D-vitaminet på egen hand. D-vitaminsiffran i matvyn är vad maten lägger till utöver dem.",
     regimen: "Daglig regim",
     regimenHint:
       "Den mat {name} vanligtvis får under en dag, med en daglig mängd för varje. Ingen dagbok — uppdatera när den vanliga kosten ändras, eller när appen säger att regimen inte längre räcker till dagen.",
@@ -237,6 +239,7 @@ export const sv: Catalog = {
     add: "Lägg till livsmedel",
     amountLine: "{amount} {unit} per dag · {kcal} kcal",
     assessment: "Räcker den till dagen?",
+    target: "Vad dagen ställs mot",
     covered: "Ja — regimen täcker det beräknade energibehovet.",
     low: "Inte riktigt — regimen ger kanske inte tillräckligt med energi för det beräknade behovet.",
     outgrown:
@@ -285,6 +288,21 @@ export const sv: Catalog = {
     },
     line: "{actual} av {target} {unit}",
     lineMax: "{actual} {unit}, högst {target} {unit}",
+    coverage: {
+      title: "Över dagen",
+      chartDesc:
+        "Energin från regimen som byggs upp under dagen mot den streckade linje den ställs mot. Kurvan tar ett steg där ett livsmedel anger en tid det ges på och lutar där det inte gör det — ett livsmedel utan tid, och eventuell ersättning, ritas jämnt utspritt över dagen.",
+      readout: "{actual} av {target} kcal",
+      metAt:
+        "En vanlig dag når regimen det beräknade behovet vid ungefär {time}.",
+      short:
+        "En vanlig dag slutar ungefär {kcal} kcal under det beräknade behovet. Större portioner, ett livsmedel till, eller ett energirikare är vägarna tillbaka.",
+      spreadNote:
+        "{kcal} kcal per dag har ingen tid på sig — livsmedel utan tider och eventuell ersättning — så de ritas jämnt utspridda över dagen. Ge ett livsmedel sina vanliga tider under Mat så tar dagen steg i stället.",
+      anytime: "någon gång under dagen",
+      legendGiven: "Given energi",
+      legendNeed: "Behövs till dagens slut",
+    },
     form: {
       addTitle: "Nytt livsmedel",
       editTitle: "Ändra livsmedel",
@@ -295,6 +313,9 @@ export const sv: Catalog = {
         "Tryck på ett för att fylla i typiska värden från Livsmedelsverkets livsmedelsdatabas; justera efter förpackningen om den säger något annat.",
       amount: "Mängd per dag",
       unit: "Enhet",
+      times: "När på dagen",
+      timesHint:
+        "Tiderna det här livsmedlet vanligtvis ges på. Den dagliga mängden delas jämnt mellan dem, och de formar kurvan i matvyn. Lämna dem tomma för något som ges när det passar.",
       grams: "g",
       millilitres: "ml",
       per100: "Per 100 g / 100 ml",
@@ -329,6 +350,7 @@ export const sv: Catalog = {
     programmeHint:
       "Sveriges allmänna program, som Folkhälsomyndigheten publicerar det. BVC kallar er; det här är vad varje besök gäller, och vad som kommer sedan.",
     given: "Given",
+    recordedCount: "{given} av {total} noterade",
     due: "Förväntad vid det här laget",
     upcoming: "Kommande",
     dose: "Dos {n}",
@@ -352,6 +374,16 @@ export const sv: Catalog = {
       pneumococcal: "Pneumokocker",
       rotavirus: "Rotavirus",
       mpr: "Mässling, påssjuka, röda hund (MPR)",
+      hpv: "HPV",
+      varicella: "Vattkoppor",
+    },
+    short: {
+      dtp: "DTP-polio-Hib-HepB",
+      dtpLate: "DTP-polio",
+      dtpBooster: "DTP",
+      pneumococcal: "Pneumokocker",
+      rotavirus: "Rotavirus",
+      mpr: "MPR",
       hpv: "HPV",
       varicella: "Vattkoppor",
     },

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
+import { DropIcon, PooIcon } from "./icons.tsx";
 import { useT } from "./i18n/index.ts";
 import type { DiaperKind } from "./types.ts";
 
@@ -9,6 +10,11 @@ import type { DiaperKind } from "./types.ts";
 //
 // Big on purpose: the tap happens at a changing table with one hand on the
 // baby, so each target is a third of the row and at least 3.5rem tall.
+//
+// The marks are the app's own glyphs (`icons.tsx`), not emoji: "both" is
+// literally the other two side by side, which an emoji pair could only
+// imitate — and only in the platform's colours, at the platform's weight,
+// deaf to `currentColor` and to the accent the button is wearing.
 
 const KINDS: DiaperKind[] = ["pee", "poo", "both"];
 
@@ -35,8 +41,13 @@ export function DiaperButtons({ onLog, large }: Props) {
             large ? "min-h-24 text-base" : "min-h-14 text-sm"
           }`}
         >
-          <span aria-hidden="true" className="text-lg leading-none">
-            {kind === "pee" ? "💧" : kind === "poo" ? "💩" : "💧💩"}
+          <span className="flex items-center gap-0.5 text-accent">
+            {kind !== "poo" && (
+              <DropIcon className={large ? "h-7 w-7" : "h-5 w-5"} />
+            )}
+            {kind !== "pee" && (
+              <PooIcon className={large ? "h-7 w-7" : "h-5 w-5"} />
+            )}
           </span>
           {t(`today.${kind}` as const)}
         </button>

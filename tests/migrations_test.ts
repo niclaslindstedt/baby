@@ -157,6 +157,52 @@ describe("normalizeDoc", () => {
     });
     expect(doc.milk.formulaType).toBe("followOn");
   });
+
+  it("reads a v2 food as given sometime during the day", () => {
+    // v2 had no `Food.times`. An empty list is that claim exactly — the
+    // coverage curve spreads such a food across the day rather than inventing
+    // a meal for it.
+    const doc = normalizeDoc({
+      version: 2,
+      foods: {
+        f: { id: "f", name: "Porridge", amount: 150, per100: { kcal: 104 } },
+      },
+    });
+    expect(doc.version).toBe(DOC_VERSION);
+    expect(doc.foods.f!.times).toEqual([]);
+  });
+
+  it("keeps, sorts and de-duplicates a food's times, dropping non-times", () => {
+    const doc = normalizeDoc({
+      version: DOC_VERSION,
+      foods: {
+        f: {
+          id: "f",
+          name: "Porridge",
+          amount: 150,
+          per100: { kcal: 104 },
+          times: ["17:00", "08:00", "08:00", "25:00", "8:00", 12, null],
+        },
+      },
+    });
+    expect(doc.foods.f!.times).toEqual(["08:00", "17:00"]);
+  });
+
+  it("keeps a food whose times are unreadable", () => {
+    const doc = normalizeDoc({
+      version: DOC_VERSION,
+      foods: {
+        f: {
+          id: "f",
+          name: "Porridge",
+          amount: 150,
+          per100: { kcal: 104 },
+          times: "08:00",
+        },
+      },
+    });
+    expect(doc.foods.f!.times).toEqual([]);
+  });
 });
 
 describe("parseDoc / serializeDoc", () => {

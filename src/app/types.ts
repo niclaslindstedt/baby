@@ -120,8 +120,32 @@ export type Food = {
   unit: "g" | "ml";
   /** Content per 100 g / 100 ml. */
   per100: Nutrients;
+  /**
+   * The times of day this food is typically given, as `HH:MM` in local wall
+   * clock, ascending. Still not a meal log: it is part of the same claim the
+   * rest of the row makes — "porridge, 150 g a day, at 08:00 and 17:00" — and
+   * it is edited when the normal day changes, not when a meal happens.
+   *
+   * The daily `amount` is split evenly across them, and an empty list means
+   * "sometime during the day", which is what every food said before this
+   * field existed. The one number it moves is the coverage curve in the food
+   * view (`dayCoverage` in `nutrition.ts`): with times the curve steps at the
+   * meals, without them it ramps evenly across the day.
+   */
+  times: string[];
   updatedAt: string;
 };
+
+/** Whether a string is a `HH:MM` wall-clock time the app will store. */
+export function isClockTime(value: string): boolean {
+  return /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+}
+
+/** `HH:MM` as minutes past local midnight. */
+export function minutesOfClock(time: string): number {
+  const [h, m] = time.split(":").map(Number);
+  return (h ?? 0) * 60 + (m ?? 0);
+}
 
 /** Which bottle the child gets. The two are different products in law, not
  *  brand variants: infant formula (modersmjölksersättning) carries 0.3–1.3 mg
@@ -186,8 +210,8 @@ export type AppData = {
 };
 
 /** The current document schema version. v1 is the first published shape;
- *  v2 added `MilkFeeding.formulaType`. */
-export const DOC_VERSION = 2;
+ *  v2 added `MilkFeeding.formulaType`; v3 added `Food.times`. */
+export const DOC_VERSION = 3;
 
 /** The milk feeding a new document starts on. Breast, because it is what
  *  most newborns in Sweden start on and what the nutrition screen's

@@ -78,6 +78,7 @@ import { ageInDays, ageInMonths } from "./age.ts";
 import type { WhoTable } from "./data/whoGrowth.ts";
 import { lmsAt } from "./growth.ts";
 import {
+  minutesOfClock,
   sortedFoods,
   sortedMeasurements,
   type AppData,
@@ -503,6 +504,165 @@ export function assess(
   }
 
   return { requirements: req, totals, energy, lines, empty };
+}
+
+// ── The day's shape ─────────────────────────────────────────────────────────
+//
+// Everything above answers "does the regimen cover the day?" as one number
+// against another. The food view asks the same question with the clock on the
+// x axis: energy accumulating through the day against the line it is held to.
+//
+// It is still the regimen, not a diary. A food carries the times it is
+// *typically* given (`Food.times`) and its daily amount is split evenly
+// across them, so the curve steps at the meals a parent named. A food with no
+// times — which is every food entered before the field existed, and every
+// food a parent never bothers to time — is spread evenly across the window,
+// because "sometime during the day" is exactly what the regimen said and
+// pretending otherwise would draw a meal nobody claimed. The bottles are
+// spread for the same reason: `MilkFeeding` records millilitres a day, never
+// when they are drunk.
+
+/** The clock window the coverage curve is drawn across, in minutes past local
+ *  midnight: 06:00 to 22:00, a baby's waking day. Widened at either end by
+ *  `dayCoverage` when the regimen names a time outside it. */
+export const DAY_WINDOW_START_MIN = 6 * 60;
+export const DAY_WINDOW_END_MIN = 22 * 60;
+
+/** The energy one food supplies in a day, kcal. */
+export function foodKcal(food: Food): number {
+  return (food.per100.kcal * food.amount) / 100;
+}
+
+/** One moment the regimen names, and what it delivers there. */
+export type CoverageMeal = {
+  /** Minutes past local midnight. */
+  minutes: number;
+  kcal: number;
+  /** The foods given then, in regimen order. */
+  names: string[];
+};
+
+/** A point on the cumulative curve: kcal delivered by this minute. */
+export type CoveragePoint = { minutes: number; kcal: number };
+
+/** The regimen's day, as a curve against the target. */
+export type DayCoverage = {
+  /** The clock window the curve spans. */
+  from: number;
+  to: number;
+  /** The cumulative curve — ascending in `minutes`, non-decreasing in `kcal`,
+   *  with a pair of points at each meal so it steps rather than slopes. */
+  points: CoveragePoint[];
+  /** The timed meals, in clock order. */
+  meals: CoverageMeal[];
+  /** Energy with no time on it — untimed foods and the bottles — spread
+   *  evenly across the window. */
+  spreadKcal: number;
+  /** The regimen's whole day. */
+  totalKcal: number;
+  /** What the regimen is held to (`Requirements.targetKcal`). */
+  targetKcal: number;
+  /** The minute the curve first reaches the target, or null when it never
+   *  does. */
+  metAtMinutes: number | null;
+};
+
+/**
+ * The regimen's energy through the day against the target it is held to.
+ *
+ * Pure, and clock-free in the same sense as the rest of this module: the
+ * times come from the document, not from `Date.now()`, so the curve is the
+ * shape of a *typical* day rather than of today so far.
+ */
+export function dayCoverage(
+  foods: Food[],
+  milk: MilkFeeding,
+  targetKcal: number,
+): DayCoverage {
+  // Group the timed foods by the minute they are given at. A food given twice
+  // splits its daily amount evenly — the row claims a day's worth, not a
+  // portion per sitting.
+  const byMinute = new Map<number, CoverageMeal>();
+  let spreadKcal = formulaKcalPerDay(milk);
+  for (const food of foods) {
+    const kcal = foodKcal(food);
+    if (food.times.length === 0) {
+      spreadKcal += kcal;
+      continue;
+    }
+    const share = kcal / food.times.length;
+    for (const time of food.times) {
+      const minutes = minutesOfClock(time);
+      const meal = byMinute.get(minutes);
+      if (meal) {
+        meal.kcal += share;
+        if (!meal.names.includes(food.name)) meal.names.push(food.name);
+      } else {
+        byMinute.set(minutes, { minutes, kcal: share, names: [food.name] });
+      }
+    }
+  }
+  const meals = [...byMinute.values()].sort((a, b) => a.minutes - b.minutes);
+
+  // The window holds every meal the regimen names, so a 05:00 bottle of
+  // porridge is drawn where it happens rather than clamped onto the edge.
+  const from = Math.min(DAY_WINDOW_START_MIN, meals[0]?.minutes ?? Infinity);
+  const to = Math.max(
+    DAY_WINDOW_END_MIN,
+    meals[meals.length - 1]?.minutes ?? -Infinity,
+  );
+  const span = to - from;
+  const spreadAt = (minutes: number) =>
+    span <= 0
+      ? spreadKcal
+      : spreadKcal * Math.min(1, Math.max(0, (minutes - from) / span));
+
+  const points: CoveragePoint[] = [{ minutes: from, kcal: spreadAt(from) }];
+  let timed = 0;
+  for (const meal of meals) {
+    points.push({
+      minutes: meal.minutes,
+      kcal: spreadAt(meal.minutes) + timed,
+    });
+    timed += meal.kcal;
+    points.push({
+      minutes: meal.minutes,
+      kcal: spreadAt(meal.minutes) + timed,
+    });
+  }
+  const totalKcal = spreadKcal + timed;
+  points.push({ minutes: to, kcal: totalKcal });
+
+  return {
+    from,
+    to,
+    points,
+    meals,
+    spreadKcal,
+    totalKcal,
+    targetKcal,
+    metAtMinutes: crossingMinute(points, targetKcal),
+  };
+}
+
+/** The first minute a monotone curve reaches `target`, interpolated inside
+ *  the segment that crosses it. Null when the curve never gets there — the
+ *  gap at the right-hand edge is then the whole answer. */
+function crossingMinute(
+  points: CoveragePoint[],
+  target: number,
+): number | null {
+  if (target <= 0) return points[0]?.minutes ?? null;
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1]!;
+    const b = points[i]!;
+    if (b.kcal < target) continue;
+    if (a.kcal >= target) return a.minutes;
+    const rise = b.kcal - a.kcal;
+    if (rise <= 0 || b.minutes === a.minutes) return b.minutes;
+    return a.minutes + ((target - a.kcal) / rise) * (b.minutes - a.minutes);
+  }
+  return null;
 }
 
 /** True when the regimen assessment applies at all — from about six months,

@@ -29,6 +29,7 @@ describe("mergeDocs", () => {
           amount: 100,
           unit: "g",
           per100: { kcal: 104 },
+          times: [],
           updatedAt: "2026-03-01T00:00:00.000Z",
         },
       },
@@ -43,6 +44,7 @@ describe("mergeDocs", () => {
           amount: 150,
           unit: "g",
           per100: { kcal: 104 },
+          times: [],
           updatedAt: "2026-02-20T00:00:00.000Z",
         },
         g: {
@@ -51,6 +53,7 @@ describe("mergeDocs", () => {
           amount: 30,
           unit: "g",
           per100: { kcal: 136 },
+          times: [],
           updatedAt: "2026-02-20T00:00:00.000Z",
         },
       },

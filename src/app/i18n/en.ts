@@ -142,11 +142,12 @@ export const en = {
     saveFailed:
       "Couldn't save to this device — check the browser's storage settings.",
     // The headline cards under the diapers: the other three questions the
-    // app answers, one line each, each leading to its screen.
+    // app answers, one line each, each opening its own read-only view over
+    // this screen rather than sending the parent off to a tab.
     foodCard: "Food regimen",
     growthCard: "Growth",
     vaccinesCard: "Next vaccination",
-    open: "Open",
+    view: "View",
     latestReading: "{value} on {date} · {z}",
     noReadings: "No readings yet.",
     nextDue: "{dose} — was expected {date}",
@@ -177,6 +178,8 @@ export const en = {
       "Add the readings from the child health centre — or from a scale at home, as often as you like — and they appear here on the growth curve.",
     add: "Add a reading",
     readings: "Readings",
+    readingsHint:
+      "What the scale and the tape said. Open Growth from Today to see these on the standard curve.",
     reading: "{date} · {age}",
     // The z-score, and the channel it puts a reading in.
     z: "{z}",
@@ -258,7 +261,7 @@ export const en = {
       "Follow-on formula (tillskottsnäring) is sold from six months and carries about two and a half times the iron of infant formula, so which one is in the bottle moves the iron figure below. Infant formula is fine for the whole first year — say what {name} actually gets, not what the age suggests.",
     formulaMl: "Amount per day (ml)",
     dDrops:
-      "The D-drops — five drops, 10 µg a day, from about one week until two years — cover vitamin D on their own. The figure below is what the food adds.",
+      "The D-drops — five drops, 10 µg a day, from about one week until two years — cover vitamin D on their own. The vitamin D figure in the food view is what the food adds on top of them.",
     // The regimen list.
     regimen: "Daily regimen",
     regimenHint:
@@ -266,8 +269,9 @@ export const en = {
     empty: "No foods yet.",
     add: "Add a food",
     amountLine: "{amount} {unit} a day · {kcal} kcal",
-    // The assessment.
+    // The assessment, which opens from Today's Food card.
     assessment: "Does it cover the day?",
+    target: "What the day is held to",
     covered: "Yes — the regimen covers the estimated energy needs.",
     low: "Not quite — the regimen may not provide enough energy for the estimated needs.",
     outgrown:
@@ -315,6 +319,22 @@ export const en = {
     },
     line: "{actual} of {target} {unit}",
     lineMax: "{actual} {unit}, up to {target} {unit}",
+    // The coverage curve: the same comparison with the clock on the x axis.
+    coverage: {
+      title: "Over the day",
+      chartDesc:
+        "Energy from the regimen accumulating through the day against the dashed line it is held to. The curve steps where a food names a time it is given and slopes where it doesn't — a food with no time, and the bottles, are spread evenly across the day.",
+      readout: "{actual} of {target} kcal",
+      metAt:
+        "On a typical day the regimen reaches the estimated need at about {time}.",
+      short:
+        "A typical day ends about {kcal} kcal short of the estimated need. Bigger portions, an extra food, or a richer one are the ways back.",
+      spreadNote:
+        "{kcal} kcal a day has no time on it — untimed foods and any formula — so it is drawn spread evenly across the day. Give a food its usual times under Food to see the day step instead.",
+      anytime: "sometime during the day",
+      legendGiven: "Energy given",
+      legendNeed: "Needed by the end of the day",
+    },
     form: {
       addTitle: "New food",
       editTitle: "Edit food",
@@ -325,6 +345,9 @@ export const en = {
         "Tap one to fill in typical values from Livsmedelsverket's food database; adjust to the label if it differs.",
       amount: "Amount per day",
       unit: "Unit",
+      times: "When in the day",
+      timesHint:
+        "The times this food is usually given. The daily amount is split evenly between them, and they shape the coverage curve in the food view. Leave them off for something given whenever it suits.",
       grams: "g",
       millilitres: "ml",
       per100: "Per 100 g / 100 ml",
@@ -359,6 +382,7 @@ export const en = {
     programmeHint:
       "Sweden's general programme, as Folkhälsomyndigheten publishes it. The child health centre calls you in; this is what each visit is for, and what comes after it.",
     given: "Given",
+    recordedCount: "{given} of {total} recorded",
     due: "Expected by now",
     upcoming: "Upcoming",
     dose: "Dose {n}",
@@ -382,6 +406,18 @@ export const en = {
       pneumococcal: "Pneumococcal",
       rotavirus: "Rotavirus",
       mpr: "Measles, mumps, rubella (MPR)",
+      hpv: "HPV",
+      varicella: "Chickenpox",
+    },
+    // The overview's short names — the card as a parent scans it, rather
+    // than the six diseases one injection covers spelled out.
+    short: {
+      dtp: "DTP-polio-Hib-HepB",
+      dtpLate: "DTP-polio",
+      dtpBooster: "DTP",
+      pneumococcal: "Pneumococcal",
+      rotavirus: "Rotavirus",
+      mpr: "MPR",
       hpv: "HPV",
       varicella: "Chickenpox",
     },

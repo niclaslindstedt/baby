@@ -1,10 +1,14 @@
 # Growth
 
 Record weight, length and head circumference as often as you like — the
-readings from the child health centre, or a scale at home every morning —
-and see them on the WHO growth standard for your child's sex, drawn the way
-Swedish child health care draws its curves: a median and the ±1 and ±2 SD
-channels.
+readings from the child health centre, or a scale at home every morning. The
+**Growth** tab is the list of readings and the form behind it; the curves open
+from Today's **Growth** card, with a tab each for weight, length and head
+circumference.
+
+There the readings sit on the WHO growth standard for your child's sex, drawn
+the way Swedish child health care draws its curves: a median and the ±1 and ±2
+SD channels.
 
 The **trend** is the headline, not the single reading. Your child following
 the same channel over months is what the curve is for; a move across a
@@ -16,7 +20,7 @@ likely to land**: a projection that follows your child's own channel, with
 any recent drift fading over a season, and bands that widen the further out
 they go. A reading outside the band is a reason to look, not a verdict.
 
-With both parents' heights entered, the Length view shows the **expected
+With both parents' heights entered, the Length tab shows the **expected
 adult height**, computed with the formula Swedish child health care uses,
 and the wide range that honestly goes with it. Beside it is the fun one: a
 **projected adult height from your child's own growth**, which believes the
