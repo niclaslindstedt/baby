@@ -16,6 +16,8 @@ import {
   formatNumber,
 } from "@niclaslindstedt/oss-framework/format";
 
+import type { Measurement } from "./types.ts";
+
 /** A `DayKey` as a local `Date` at midnight, or null when it isn't a real
  *  day. */
 export const toDate = dayKeyToDate;
@@ -67,6 +69,21 @@ export function formatCm(cm: number, locale?: string): string {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   })} cm`;
+}
+
+/** The values one reading holds, in the order a parent reads them off the
+ *  clinic's card: weight, length, head. A value the reading doesn't carry is
+ *  left out rather than written blank — a visit where only the length was
+ *  taken says "80.5 cm", not an empty slot beside it. Head wears the `↺`
+ *  mark because it is the second measurement in centimetres on the line.
+ *
+ *  The array, not a joined string, so a caller picks its own separator. */
+export function measurementValues(m: Measurement, locale?: string): string[] {
+  const parts: string[] = [];
+  if (m.weightKg !== null) parts.push(formatKg(m.weightKg, locale));
+  if (m.lengthCm !== null) parts.push(formatCm(m.lengthCm, locale));
+  if (m.headCm !== null) parts.push(`${formatCm(m.headCm, locale)} ↺`);
+  return parts;
 }
 
 /** A z-score with its sign ("+0.4 SD", "−1.2 SD"), to one decimal. */
