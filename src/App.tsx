@@ -20,8 +20,8 @@ import {
   BottomNav,
   initialTab,
   isNavTab,
+  navTabs,
   screenEnter,
-  TABS,
   type NavTab,
   type ScreenEnter,
   type Tab,
@@ -62,7 +62,7 @@ const toasts = createToastStore();
 
 export function App() {
   const t = useT();
-  const { settings, update } = useAppSettings();
+  const { settings, update, setFeature } = useAppSettings();
   useApplyTheme(useMemo(() => appearanceFor(settings.theme), [settings.theme]));
 
   // Today, as a calendar day. Recomputed on focus rather than on a timer:
@@ -92,6 +92,12 @@ export function App() {
   const sync = useSyncEngine(store, demo.on);
   const standards = useGrowthStandards();
 
+  // The trackers this parent uses, and the bar that follows from them: a
+  // switched-off tracker loses its tab, and the swipe order closes over the
+  // gap (see `navTabs`).
+  const features = settings.features;
+  const tabs = useMemo(() => navTabs(features), [features]);
+
   // Where the app opens: Today, or the child setup on an empty install
   // (see `initialTab`). Decided once, from the document this render started
   // with — the store reads localStorage synchronously, so it is the real one.
@@ -100,19 +106,19 @@ export function App() {
   const [enter, setEnter] = useState<ScreenEnter>("none");
   const show = useCallback(
     (next: Tab) => {
-      setEnter(screenEnter(tab, next));
+      setEnter(screenEnter(tab, next, tabs));
       if (isNavTab(next)) setHome(next);
       setTab(next);
     },
-    [tab],
+    [tab, tabs],
   );
   const toggle = useCallback(
     (next: "child" | "settings") => {
       const target = tab === next ? home : next;
-      setEnter(screenEnter(tab, target));
+      setEnter(screenEnter(tab, target, tabs));
       setTab(target);
     },
-    [tab, home],
+    [tab, home, tabs],
   );
 
   // A swipe moves one tab along the bar, and stops at its ends. From Child
@@ -123,16 +129,27 @@ export function App() {
     (direction: 1 | -1) => {
       if (!isNavTab(tab)) {
         if (store.data.child === null) return;
-        setEnter(screenEnter(tab, home));
+        setEnter(screenEnter(tab, home, tabs));
         setTab(home);
         return;
       }
-      const next = TABS[TABS.indexOf(tab) + direction];
+      const next = tabs[tabs.indexOf(tab) + direction];
       if (next !== undefined) show(next);
     },
-    [tab, home, show, store.data.child],
+    [tab, home, show, tabs, store.data.child],
   );
   useSwipeNav(main, swipe);
+
+  // A tracker switched off while its own tab is up: the screen behind the
+  // switch is gone, so fall back to Today — the one destination that is
+  // always on the bar.
+  useEffect(() => {
+    if (isNavTab(tab) && !tabs.includes(tab)) {
+      setEnter("none");
+      setTab("today");
+    }
+    if (!tabs.includes(home)) setHome("today");
+  }, [tabs, tab, home]);
 
   // The demo toggle can swap in a document with a child while the setup
   // screen is up, or take one away; follow it.
@@ -194,6 +211,7 @@ export function App() {
         onOpenSettings={() => toggle("settings")}
         onQuickLog={() => setDiaperOpen(true)}
         quickLogOpen={diaperOpen}
+        showQuickLog={features.diapers}
         syncSlot={
           sync.backend !== "local" ? (
             <SyncStatus
@@ -222,6 +240,7 @@ export function App() {
               data={store.data}
               today={today}
               standards={standards}
+              features={features}
               onLogDiaper={logDiaper}
               onRemoveDiaper={(id) => {
                 store.removeDiaper(id);
@@ -229,7 +248,7 @@ export function App() {
               }}
             />
           )}
-          {tab === "growth" && hasChild && (
+          {tab === "growth" && hasChild && features.growth && (
             <GrowthScreen
               data={store.data}
               today={today}
@@ -238,7 +257,7 @@ export function App() {
               onNotice={notice}
             />
           )}
-          {tab === "food" && hasChild && (
+          {tab === "food" && hasChild && features.food && (
             <FoodScreen
               data={store.data}
               today={today}
@@ -248,7 +267,7 @@ export function App() {
               onNotice={notice}
             />
           )}
-          {tab === "vaccines" && hasChild && (
+          {tab === "vaccines" && hasChild && features.vaccines && (
             <VaccinesScreen
               data={store.data}
               today={today}
@@ -273,6 +292,7 @@ export function App() {
             <SettingsScreen
               settings={settings}
               update={update}
+              setFeature={setFeature}
               store={store}
               sync={sync}
               demoData={demo}
@@ -311,11 +331,11 @@ export function App() {
             />
           </div>
         )}
-        <BottomNav active={tab} onSelect={show} />
+        <BottomNav active={tab} tabs={tabs} onSelect={show} />
       </div>
 
       <DiaperSheet
-        open={diaperOpen}
+        open={diaperOpen && features.diapers}
         onLog={logDiaper}
         onClose={() => setDiaperOpen(false)}
       />

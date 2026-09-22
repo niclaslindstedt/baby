@@ -129,7 +129,7 @@ App.tsx
 │   ├── VaccinesScreen  the programme timeline, the extras, the record form
 │   ├── ChildScreen     first run, and Settings → Your child
 │   └── SettingsScreen
-├── BottomNav       Today · Growth · Food · Vaccines
+├── BottomNav       Today · Growth · Food · Vaccines (minus the trackers that are off)
 ├── DiaperSheet     the `+` sheet — the same DiaperButtons Today renders
 └── SyncDetailsModal, ToastViewport, UpdateToast
 ```
@@ -149,6 +149,21 @@ The bottom bar carries _destinations_ in a fixed order, and a swipe moves
 along it; the two off-bar screens cross-fade in and go back where they came
 from. Logging a diaper is one code path: both places render `DiaperButtons`
 and both write through `addDiaper`.
+
+**Trackers switch off.** Settings → What you track carries a switch per
+tracker — diapers, growth, food, vaccines — stored in `useAppSettings.ts`
+(`Features`, defaulting to all on, and only an explicit `false` reads as
+off). A switched-off tracker loses its tab (`navTabs()` filters `TABS`, so
+the order survives and the swipe closes over the gap), its card on Today,
+and — for diapers — the top bar's `+` and the sheet behind it. Today is
+never one of them: it is the home screen, the tab the shell falls back to
+when the screen someone is on disappears under them, and with every tracker
+off it still says how old the child is.
+
+The switches hide screens and nothing else. They are a display setting, not
+a data one: they live in localStorage rather than the document, they are not
+synced, and nothing in `AppData` is dropped or stops being merged when one
+goes off — which is what makes switching a tracker back on cost nothing.
 
 ## The service worker
 

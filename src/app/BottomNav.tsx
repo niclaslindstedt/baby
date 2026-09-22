@@ -9,6 +9,7 @@ import {
 import { BabyIcon, BowlIcon, GrowthIcon, SyringeIcon } from "./icons.tsx";
 import { useT } from "./i18n/index.ts";
 import type { AppData } from "./types.ts";
+import type { Features } from "./useAppSettings.ts";
 
 // The app's navigation: four tabs pinned to the bottom of the screen — the
 // same shell the sibling meds app uses, because the two are used the same
@@ -21,6 +22,10 @@ import type { AppData } from "./types.ts";
 // the app is opened; Vaccines sits last because it changes a handful of
 // times a year.
 //
+// Three of the four are a tracker a parent can switch off in Settings, and
+// a switched-off tracker is not on the bar at all (see `navTabs`) — the
+// order survives, it just gets shorter. Today is never one of them.
+//
 // Setting up the child and changing a setting are not on the bar: they are
 // things you do and then leave, and they sit on the top bar instead (see
 // `TopBar.tsx`). What that buys is a bar of four destinations you can swipe
@@ -31,13 +36,30 @@ export type Tab =
   "today" | "growth" | "food" | "vaccines" | "child" | "settings";
 
 /** The screens that are *destinations* — the ones the bottom bar carries and
- *  a swipe moves between. */
+ *  a swipe moves between. Three of them share their name with the tracker
+ *  that can switch them off (`FeatureId`); Today has no switch. */
 export type NavTab = "today" | "growth" | "food" | "vaccines";
 
+/** Every destination, in order, with none switched off. The bar itself is
+ *  `navTabs` — this is the order it draws from. */
 export const TABS: NavTab[] = ["today", "growth", "food", "vaccines"];
 
+/**
+ * The destinations the bar carries, given the trackers that are on.
+ *
+ * A switched-off tracker loses its tab: there is nothing to type into it,
+ * and a tab that opens on an empty screen is worse than one that is not
+ * there. Today always stays — it is the home screen, it is where the app
+ * opens, and the bar needs somewhere for a swipe to land.
+ */
+export function navTabs(features: Features): NavTab[] {
+  return TABS.filter((tab) => tab === "today" || features[tab]);
+}
+
 /** Whether a screen is one of the bar's destinations — which is also the
- *  question "can a swipe move from here?". */
+ *  question "can a swipe move from here?". Structural: it answers for the
+ *  four tabs that exist, not for the ones currently on the bar (that is
+ *  `navTabs().includes`). */
 export function isNavTab(tab: Tab): tab is NavTab {
   return (TABS as Tab[]).includes(tab);
 }
@@ -47,10 +69,15 @@ export function isNavTab(tab: Tab): tab is NavTab {
 export type ScreenEnter = "forward" | "back" | "none";
 
 /** How a move from one screen to another should animate — the framework's
- *  `stepDirection` over the bar's order, which already answers "none" for
- *  a screen that is not on it. */
-export function screenEnter(from: Tab, to: Tab): ScreenEnter {
-  return stepDirection(TABS, from as NavTab, to as NavTab);
+ *  `stepDirection` over the bar as it currently stands, which already
+ *  answers "none" for a screen that is not on it. A hidden tab is not on the
+ *  bar, so a move involving one has no direction either. */
+export function screenEnter(
+  from: Tab,
+  to: Tab,
+  tabs: NavTab[] = TABS,
+): ScreenEnter {
+  return stepDirection(tabs, from as NavTab, to as NavTab);
 }
 
 /**
@@ -75,11 +102,14 @@ const ICONS: Record<NavTab, (props: { className?: string }) => ReactNode> = {
 
 export function BottomNav({
   active,
+  tabs = TABS,
   onSelect,
 }: {
   /** The screen on display, which may be one the bar does not carry — no tab
    *  is then current, and the top bar's own button is lit instead. */
   active: Tab;
+  /** The destinations to draw, from `navTabs`. */
+  tabs?: NavTab[];
   onSelect: (tab: NavTab) => void;
 }) {
   const t = useT();
@@ -88,12 +118,12 @@ export function BottomNav({
   // each one's glyph is.
   const items = useMemo(
     () =>
-      TABS.map((tab) => ({
+      tabs.map((tab) => ({
         id: tab,
         label: t(`nav.${tab}` as const),
         icon: ICONS[tab],
       })),
-    [t],
+    [t, tabs],
   );
   return (
     <NavBar

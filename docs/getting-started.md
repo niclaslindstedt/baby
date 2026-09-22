@@ -88,6 +88,15 @@ name off the card. Vaccinations outside the programme — BCG, the RSV
 antibody, TBE, an extra pneumococcal dose, or anything else — are recorded
 under **Outside the programme**. See [`vaccinations.md`](vaccinations.md).
 
+## Track only what you use
+
+Everything is on out of the box, and **Settings → What you track** switches
+off what you don't. A switched-off tracker leaves the bottom bar — and, for
+diapers, takes the **+** and the buttons on Today with it — so an app opened
+only for the vaccination card is one tab deep. Nothing is deleted: the
+records stay, they keep syncing, and switching the tracker back on puts
+everything where you left it. The choice is per device, like the theme.
+
 ## Install it as an app
 
 The production build is an installable PWA that works fully offline:

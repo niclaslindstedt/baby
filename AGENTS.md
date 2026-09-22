@@ -241,6 +241,7 @@ same PR.
 | A new answer to show a parent          | A card on `TodayScreen.tsx`, or the matching `*Modal.tsx` behind it — never one of the four input tabs                         |
 | A new way to log a diaper              | Never a second write path — render `DiaperButtons` and write through `addDiaper`                                               |
 | A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                          |
+| A new feature switch                   | `FeatureId` in `useAppSettings.ts`, guards on the screens it owns, and `navTabs()` if it has a tab                             |
 | A new storage backend                  | The framework, if generic; `useSyncEngine.ts` wires adapters up, and `idbAdapter.ts` is the one app-local adapter              |
 | A change to what the demo shows        | `src/app/dev/demoData.ts` (offsets from `today`, never fixed dates)                                                            |
 | Any user-facing string                 | `src/app/i18n/en.ts` **and** `sv.ts`, never inline in a component                                                              |
@@ -320,7 +321,9 @@ references live under `docs/` proper.
   framework ships a dozen palettes; this app deliberately exposes none of
   them. Don't reintroduce the picker.
 - **The bottom nav is the navigation.** Four tabs, no sidebar, no drawer, and
-  they are _destinations_ in a fixed order a swipe moves along. Things you do
+  they are _destinations_ in a fixed order a swipe moves along — minus the
+  ones whose tracker is switched off in Settings (`navTabs()` filters the
+  order; Today is never one of them). Things you do
   and then leave — logging a diaper, editing the child, changing a setting —
   belong on the top bar. The `+` opens a sheet rather than a screen so logging
   a diaper never costs the chart someone had open.

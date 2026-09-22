@@ -12,7 +12,9 @@ import type { Tab } from "./BottomNav.tsx";
 // changing a setting.
 //
 // The `+` is deliberately the loudest thing on screen and the last thing
-// before the right edge, where a right thumb lands. What it opens is the
+// before the right edge, where a right thumb lands. It is there only while
+// diaper tracking is on: with that tracker switched off the bar keeps the
+// mark, the sync glyph and the cog, and nothing takes the `+`'s place. What it opens is the
 // diaper sheet (`DiaperSheet.tsx`), not a form: the loudest button on this
 // app should do the thing the app is picked up for most often, and that is
 // three taps a day on a changing table. It inverts to an outline while the
@@ -34,6 +36,9 @@ type Props = {
   onQuickLog: () => void;
   /** Whether that sheet is up, so the `+` can say so. */
   quickLogOpen: boolean;
+  /** Whether to offer it at all. Diaper tracking is a tracker a parent can
+   *  switch off in Settings, and with it off the `+` has nothing to open. */
+  showQuickLog?: boolean;
   /** The sync glyph, when a backend is connected. */
   syncSlot?: ReactNode;
 };
@@ -43,6 +48,7 @@ export function TopBar({
   onOpenSettings,
   onQuickLog,
   quickLogOpen,
+  showQuickLog = true,
   syncSlot,
 }: Props) {
   const t = useT();
@@ -67,21 +73,23 @@ export function TopBar({
         >
           <CogIcon className="h-5 w-5" />
         </button>
-        <button
-          type="button"
-          onClick={onQuickLog}
-          aria-label={t("nav.logDiaper")}
-          aria-expanded={quickLogOpen}
-          aria-haspopup="dialog"
-          title={t("nav.logDiaper")}
-          className={`flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${
-            quickLogOpen
-              ? "border-accent text-accent"
-              : "border-accent bg-accent text-page-bg hover:bg-accent/90"
-          }`}
-        >
-          <PlusIcon className="h-5 w-5" />
-        </button>
+        {showQuickLog && (
+          <button
+            type="button"
+            onClick={onQuickLog}
+            aria-label={t("nav.logDiaper")}
+            aria-expanded={quickLogOpen}
+            aria-haspopup="dialog"
+            title={t("nav.logDiaper")}
+            className={`flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${
+              quickLogOpen
+                ? "border-accent text-accent"
+                : "border-accent bg-accent text-page-bg hover:bg-accent/90"
+            }`}
+          >
+            <PlusIcon className="h-5 w-5" />
+          </button>
+        )}
       </div>
     </header>
   );

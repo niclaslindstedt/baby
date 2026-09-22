@@ -38,6 +38,10 @@ input, useful output.**
   for your child — given, expected by now, upcoming — plus the vaccinations
   offered outside it, each recordable with its date and the vaccine's name.
 
+Each of the four is a switch in **Settings → What you track**. Switch one off
+and its tab and its cards leave the app; nothing is deleted, and switching it
+back on finds everything where you left it.
+
 It is built on [`@niclaslindstedt/oss-framework`](https://github.com/niclaslindstedt/oss-framework),
 the shared React/Preact surface behind the sibling
 [meds](https://github.com/niclaslindstedt/meds),
@@ -109,7 +113,9 @@ npm run build && npm run preview
 ## Usage
 
 Four tabs on a bottom bar — swipe left or right to move between them. **Today
-is where the answers are; the other three are where things go in.** Each of
+is where the answers are; the other three are where things go in.** Not
+everyone tracks everything: **Settings → What you track** switches a tracker
+off, and its tab and its cards go with it (nothing is deleted). Each of
 Today's cards opens the matching view over the screen — full screen on a
 phone, a panel over a blurred page on a desktop — and closing it puts you back
 where you were.
@@ -131,10 +137,10 @@ The three views Today opens:
 
 …and two buttons on the top bar, for the things you do and then leave:
 
-| Button | What it does                                                                                              |
-| ------ | --------------------------------------------------------------------------------------------------------- |
-| **+**  | Log a diaper from any screen: a sheet with the three buttons. One tap logs and closes.                    |
-| **⚙**  | Settings: theme, language, the child's profile, where the record lives, backup / restore / delete, About. |
+| Button | What it does                                                                                                              |
+| ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| **+**  | Log a diaper from any screen: a sheet with the three buttons. One tap logs and closes. Gone while diaper tracking is off. |
+| **⚙**  | Settings: theme, language, what you track, the child's profile, where the record lives, backup / restore / delete, About. |
 
 ## Configuration
 

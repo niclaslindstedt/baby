@@ -30,6 +30,7 @@ import { FoodModal } from "./FoodModal.tsx";
 import { GrowthModal } from "./GrowthModal.tsx";
 import { assess, outgrown, regimenApplies } from "./nutrition.ts";
 import { sortedMeasurements, type AppData, type DiaperKind } from "./types.ts";
+import type { Features } from "./useAppSettings.ts";
 import { Card, Heading } from "./ui.tsx";
 import { nextDose, timeline } from "./vaccines.ts";
 import { VaccinesModal } from "./VaccinesModal.tsx";
@@ -48,6 +49,11 @@ import { VaccinesModal } from "./VaccinesModal.tsx";
 // The diaper buttons are the top of the screen because they are the reason it
 // is opened most often. Under them the last 24 hours as two numbers, and the
 // norm's verdict when a day looks thin.
+//
+// Every block below the age line belongs to a tracker, and a tracker a parent
+// has switched off in Settings takes its block with it — the diaper log and
+// its chart, or one of the three headline cards. The age line always stays:
+// with everything off, Today is the one true sentence the app can still say.
 
 const CHART_DAYS = 7;
 
@@ -55,6 +61,8 @@ type Props = {
   data: AppData;
   today: DayKey;
   standards: GrowthStandards | null;
+  /** Which trackers are on. Each one owns a block of this screen. */
+  features: Features;
   onLogDiaper: (kind: DiaperKind) => void;
   onRemoveDiaper: (id: string) => void;
 };
@@ -66,6 +74,7 @@ export function TodayScreen({
   data,
   today,
   standards,
+  features,
   onLogDiaper,
   onRemoveDiaper,
 }: Props) {
@@ -130,55 +139,59 @@ export function TodayScreen({
         </p>
       </Card>
 
-      <Card>
-        <Heading>{t("today.diapers")}</Heading>
-        <div className="mt-3">
-          <DiaperButtons onLog={onLogDiaper} />
-        </div>
-        {diapers && (
-          <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm">
-            <span className="text-xs tracking-wide text-muted uppercase">
-              {t("today.last24")}
-            </span>
-            <span className="font-bold text-fg-bright tabular-nums">
-              {t("today.wet", { count: String(diapers.wet) })}
-            </span>
-            <span className="font-bold text-fg-bright tabular-nums">
-              {t("today.dirty", { count: String(diapers.dirty) })}
-            </span>
-            {last && (
-              <span className="text-xs text-muted">
-                {t("today.lastChange", { time: formatClock(last.at, locale) })}
-              </span>
-            )}
+      {features.diapers && (
+        <Card>
+          <Heading>{t("today.diapers")}</Heading>
+          <div className="mt-3">
+            <DiaperButtons onLog={onLogDiaper} />
           </div>
-        )}
-        {diapers?.tooEarly && (
-          <p className="mt-2 text-xs text-muted">{t("today.noneYet")}</p>
-        )}
-        {diapers?.fewWet && (
-          <Notice
-            text={t("today.fewWet", {
-              wet: String(diapers.wet),
-              diapers:
-                diapers.wet === 1
-                  ? t("today.diaper")
-                  : t("today.diapersPlural"),
-              min: String(diapers.norm.minWet),
-            })}
-            source={t(`today.norm.${diapers.norm.source}` as const)}
-          />
-        )}
-        {diapers?.longDirtyGap && diapers.dirtyGapHours !== null && (
-          <Notice
-            text={t("today.longGap", {
-              days: String(Math.floor(diapers.dirtyGapHours / 24)),
-            })}
-          />
-        )}
-      </Card>
+          {diapers && (
+            <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm">
+              <span className="text-xs tracking-wide text-muted uppercase">
+                {t("today.last24")}
+              </span>
+              <span className="font-bold text-fg-bright tabular-nums">
+                {t("today.wet", { count: String(diapers.wet) })}
+              </span>
+              <span className="font-bold text-fg-bright tabular-nums">
+                {t("today.dirty", { count: String(diapers.dirty) })}
+              </span>
+              {last && (
+                <span className="text-xs text-muted">
+                  {t("today.lastChange", {
+                    time: formatClock(last.at, locale),
+                  })}
+                </span>
+              )}
+            </div>
+          )}
+          {diapers?.tooEarly && (
+            <p className="mt-2 text-xs text-muted">{t("today.noneYet")}</p>
+          )}
+          {diapers?.fewWet && (
+            <Notice
+              text={t("today.fewWet", {
+                wet: String(diapers.wet),
+                diapers:
+                  diapers.wet === 1
+                    ? t("today.diaper")
+                    : t("today.diapersPlural"),
+                min: String(diapers.norm.minWet),
+              })}
+              source={t(`today.norm.${diapers.norm.source}` as const)}
+            />
+          )}
+          {diapers?.longDirtyGap && diapers.dirtyGapHours !== null && (
+            <Notice
+              text={t("today.longGap", {
+                days: String(Math.floor(diapers.dirtyGapHours / 24)),
+              })}
+            />
+          )}
+        </Card>
+      )}
 
-      {todays.length > 0 && (
+      {features.diapers && todays.length > 0 && (
         <Card>
           <Heading>{t("today.todayLog")}</Heading>
           <ul className="mt-2 flex flex-col gap-1">
@@ -208,7 +221,7 @@ export function TodayScreen({
         </Card>
       )}
 
-      {series.some((d) => d.total > 0) && (
+      {features.diapers && series.some((d) => d.total > 0) && (
         <Card>
           <Heading>{t("today.chart")}</Heading>
           <div className="mt-2">
@@ -222,126 +235,135 @@ export function TodayScreen({
         </Card>
       )}
 
-      {/* The three headline answers. */}
-      <HeadlineCard
-        icon={<BowlIcon className="h-4 w-4" />}
-        title={t("today.foodCard")}
-        tone={
-          grownOut
-            ? "warn"
-            : food && regimenApplies(food) && food.energy.status === "covered"
-              ? "accent"
-              : "default"
-        }
-        onOpen={() => setView("food")}
-        openLabel={t("today.view")}
-      >
-        {food === null
-          ? t("common.noData")
-          : food.requirements.stage === "milkOnly"
-            ? t("food.milkOnly", { name })
-            : food.requirements.stage === "tastes"
-              ? t("food.tastes")
-              : food.empty
-                ? t("food.energyUnknown")
-                : grownOut
-                  ? t("food.outgrown", { name })
-                  : food.energy.status === "covered"
-                    ? t("food.covered")
-                    : t("food.low")}
-        {food &&
-          regimenApplies(food) &&
-          !food.empty &&
-          food.energy.actual !== null && (
-            <span className="mt-1 block text-xs text-muted">
-              {t("food.energyLine", {
-                actual: formatWhole(food.energy.actual, locale),
-                target: formatWhole(food.energy.target, locale),
-              })}
-            </span>
-          )}
-      </HeadlineCard>
+      {/* The headline answers — one per tracker that is on. */}
+      {features.food && (
+        <HeadlineCard
+          icon={<BowlIcon className="h-4 w-4" />}
+          title={t("today.foodCard")}
+          tone={
+            grownOut
+              ? "warn"
+              : food && regimenApplies(food) && food.energy.status === "covered"
+                ? "accent"
+                : "default"
+          }
+          onOpen={() => setView("food")}
+          openLabel={t("today.view")}
+        >
+          {food === null
+            ? t("common.noData")
+            : food.requirements.stage === "milkOnly"
+              ? t("food.milkOnly", { name })
+              : food.requirements.stage === "tastes"
+                ? t("food.tastes")
+                : food.empty
+                  ? t("food.energyUnknown")
+                  : grownOut
+                    ? t("food.outgrown", { name })
+                    : food.energy.status === "covered"
+                      ? t("food.covered")
+                      : t("food.low")}
+          {food &&
+            regimenApplies(food) &&
+            !food.empty &&
+            food.energy.actual !== null && (
+              <span className="mt-1 block text-xs text-muted">
+                {t("food.energyLine", {
+                  actual: formatWhole(food.energy.actual, locale),
+                  target: formatWhole(food.energy.target, locale),
+                })}
+              </span>
+            )}
+        </HeadlineCard>
+      )}
 
-      <HeadlineCard
-        icon={<GrowthIcon className="h-4 w-4" />}
-        title={t("today.growthCard")}
-        onOpen={() => setView("growth")}
-        openLabel={t("today.view")}
-      >
-        {latestMeasurement === null
-          ? t("today.noReadings")
-          : latestMeasurement.weightKg !== null && weightTrend
-            ? t("today.latestReading", {
-                value: formatKg(latestMeasurement.weightKg, locale),
-                date: formatDay(latestMeasurement.date, locale),
-                z: formatZ(weightTrend.latest, locale),
-              })
-            : latestMeasurement.lengthCm !== null
+      {features.growth && (
+        <HeadlineCard
+          icon={<GrowthIcon className="h-4 w-4" />}
+          title={t("today.growthCard")}
+          onOpen={() => setView("growth")}
+          openLabel={t("today.view")}
+        >
+          {latestMeasurement === null
+            ? t("today.noReadings")
+            : latestMeasurement.weightKg !== null && weightTrend
               ? t("today.latestReading", {
-                  value: formatCm(latestMeasurement.lengthCm, locale),
+                  value: formatKg(latestMeasurement.weightKg, locale),
                   date: formatDay(latestMeasurement.date, locale),
-                  z: "",
-                })
-              : formatDay(latestMeasurement.date, locale)}
-        {weightTrend &&
-          weightTrend.verdict !== "single" &&
-          weightTrend.delta !== null && (
-            <span className="mt-1 block text-xs text-muted">
-              {t(
-                weightTrend.verdict === "up"
-                  ? "growth.trendUp"
-                  : weightTrend.verdict === "down"
-                    ? "growth.trendDown"
-                    : "growth.trendSteady",
-                {
                   z: formatZ(weightTrend.latest, locale),
-                  delta: formatZ(weightTrend.delta, locale),
-                  days: "60",
+                })
+              : latestMeasurement.lengthCm !== null
+                ? t("today.latestReading", {
+                    value: formatCm(latestMeasurement.lengthCm, locale),
+                    date: formatDay(latestMeasurement.date, locale),
+                    z: "",
+                  })
+                : formatDay(latestMeasurement.date, locale)}
+          {weightTrend &&
+            weightTrend.verdict !== "single" &&
+            weightTrend.delta !== null && (
+              <span className="mt-1 block text-xs text-muted">
+                {t(
+                  weightTrend.verdict === "up"
+                    ? "growth.trendUp"
+                    : weightTrend.verdict === "down"
+                      ? "growth.trendDown"
+                      : "growth.trendSteady",
+                  {
+                    z: formatZ(weightTrend.latest, locale),
+                    delta: formatZ(weightTrend.delta, locale),
+                    days: "60",
+                  },
+                )}
+              </span>
+            )}
+        </HeadlineCard>
+      )}
+
+      {features.vaccines && (
+        <HeadlineCard
+          icon={<SyringeIcon className="h-4 w-4" />}
+          title={t("today.vaccinesCard")}
+          tone={next?.status === "due" ? "warn" : "default"}
+          onOpen={() => setView("vaccines")}
+          openLabel={t("today.view")}
+        >
+          {next === null
+            ? t("today.allGiven")
+            : t(
+                next.status === "due" ? "today.nextDue" : "today.nextUpcoming",
+                {
+                  dose: doseName(
+                    t,
+                    next.dose.group,
+                    next.dose.doseNumber,
+                    next.dose.diseases.length,
+                  ),
+                  date: formatDayYear(next.due, locale),
                 },
               )}
-            </span>
-          )}
-      </HeadlineCard>
-
-      <HeadlineCard
-        icon={<SyringeIcon className="h-4 w-4" />}
-        title={t("today.vaccinesCard")}
-        tone={next?.status === "due" ? "warn" : "default"}
-        onOpen={() => setView("vaccines")}
-        openLabel={t("today.view")}
-      >
-        {next === null
-          ? t("today.allGiven")
-          : t(next.status === "due" ? "today.nextDue" : "today.nextUpcoming", {
-              dose: doseName(
-                t,
-                next.dose.group,
-                next.dose.doseNumber,
-                next.dose.diseases.length,
-              ),
-              date: formatDayYear(next.due, locale),
-            })}
-      </HeadlineCard>
+        </HeadlineCard>
+      )}
 
       {/* The views. Mounted here rather than in the shell because every one
           of them reads the same derivations this screen already summarises —
           the card is the headline and the modal is the rest of the sentence. */}
       <GrowthModal
-        open={view === "growth"}
+        open={view === "growth" && features.growth}
         onClose={() => setView(null)}
         data={data}
         today={today}
         standards={standards}
       />
       <FoodModal
-        open={view === "food"}
+        open={view === "food" && features.food}
         onClose={() => setView(null)}
         data={data}
         today={today}
         standards={standards}
       />
       <VaccinesModal
-        open={view === "vaccines"}
+        open={view === "vaccines" && features.vaccines}
         onClose={() => setView(null)}
         data={data}
         today={today}
