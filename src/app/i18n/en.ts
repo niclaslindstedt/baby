@@ -488,6 +488,27 @@ export const en = {
     themeDark: "Dark",
     themeSystem: "System",
     language: "Language",
+    // The tracker switches. Copy has one job here: say that switching a
+    // tracker off hides it and nothing more, because "off" next to a health
+    // record reads like "deleted" unless it is spelled out.
+    features: "What you track",
+    featuresHint:
+      "Switch off what you don't use and its tab and cards disappear. Nothing is deleted — switch it back on and everything you entered is still there.",
+    feature: {
+      diapers: "Diapers",
+      growth: "Growth",
+      food: "Food",
+      vaccines: "Vaccines",
+    },
+    featureHint: {
+      diapers:
+        "The one-tap log on Today, the + in the top bar, and the last 24 hours against the norm for the age.",
+      growth:
+        "Weight, length and head readings on the WHO curves, with the trend and the forecast.",
+      food: "The daily food regimen and the milk, checked against the recommendation for the age and weight.",
+      vaccines:
+        "The Swedish childhood programme, what is given and what comes next.",
+    },
     child: "Your child",
     childHint: "Name, birth date, sex and the parents' heights.",
     editChild: "Edit",

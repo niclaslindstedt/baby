@@ -12,6 +12,7 @@ import {
   InfoIcon,
   PaletteIcon,
   ScrollTextIcon,
+  SlidersIcon,
 } from "@niclaslindstedt/oss-framework/components";
 import { LogViewer } from "@niclaslindstedt/oss-framework/logging";
 
@@ -23,7 +24,12 @@ import { setLanguage, useLang, useT, type Lang } from "./i18n/index.ts";
 import { mergeDocs } from "./merge.ts";
 import { serializeDoc } from "./migrations.ts";
 import { emptyDoc } from "./types.ts";
-import type { AppSettings, ThemeChoice } from "./useAppSettings.ts";
+import {
+  FEATURES,
+  type AppSettings,
+  type FeatureId,
+  type ThemeChoice,
+} from "./useAppSettings.ts";
 import type { DocStore } from "./useDocStore.ts";
 import {
   AVAILABLE_BACKENDS,
@@ -32,14 +38,16 @@ import {
   type SyncEngine,
 } from "./useSyncEngine.ts";
 
-// One scrolling page: appearance, language, the child, where the record
-// lives, backup, the developer knobs, and About. The screen owns no state of
+// One scrolling page: appearance, language, what you track, the child, where
+// the record lives, backup, the developer knobs, and About. The screen owns no state of
 // its own beyond the confirm dialog — every knob reads and writes the
 // caller's stores, so what is on screen is always what is persisted.
 
 type Props = {
   settings: AppSettings;
   update: <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;
+  /** One tracker on or off. See `FeatureId`. */
+  setFeature: (id: FeatureId, on: boolean) => void;
   store: DocStore;
   sync: SyncEngine;
   /** The in-memory demo-data takeover. Not part of `settings` on purpose:
@@ -53,6 +61,7 @@ type Props = {
 export function SettingsScreen({
   settings,
   update,
+  setFeature,
   store,
   sync,
   demoData,
@@ -108,6 +117,22 @@ export function SettingsScreen({
             fullWidth
           />
         </div>
+      </Section>
+
+      <Section
+        title={t("settings.features")}
+        icon={<SlidersIcon className="h-3.5 w-3.5" />}
+      >
+        <p className="text-xs text-muted">{t("settings.featuresHint")}</p>
+        {FEATURES.map((id) => (
+          <ToggleRow
+            key={id}
+            label={t(`settings.feature.${id}` as const)}
+            hint={t(`settings.featureHint.${id}` as const)}
+            checked={settings.features[id]}
+            onChange={(next) => setFeature(id, next)}
+          />
+        ))}
       </Section>
 
       <Section

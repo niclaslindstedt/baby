@@ -454,6 +454,24 @@ export const sv: Catalog = {
     themeDark: "Mörkt",
     themeSystem: "System",
     language: "Språk",
+    features: "Vad du följer",
+    featuresHint:
+      "Stäng av det du inte använder, så försvinner fliken och korten. Inget tas bort — slå på det igen så finns allt du fyllt i kvar.",
+    feature: {
+      diapers: "Blöjor",
+      growth: "Tillväxt",
+      food: "Mat",
+      vaccines: "Vaccin",
+    },
+    featureHint: {
+      diapers:
+        "Enknappsloggen på Idag, plusknappen i toppraden och de senaste 24 timmarna mot normen för åldern.",
+      growth:
+        "Vikt, längd och huvudomfång på WHO-kurvorna, med trenden och prognosen.",
+      food: "Den dagliga matregimen och mjölken, jämförda med rekommendationen för ålder och vikt.",
+      vaccines:
+        "Det svenska barnvaccinationsprogrammet, vad som är givet och vad som står på tur.",
+    },
     child: "Ditt barn",
     childHint: "Namn, födelsedatum, kön och föräldrarnas längd.",
     editChild: "Ändra",
