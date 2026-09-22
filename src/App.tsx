@@ -352,9 +352,7 @@ export function App() {
         open={syncDetailsOpen}
         providerName={t(`settings.backendName.${sync.backend}` as const)}
         backendKind={
-          sync.backend === "dropbox" || sync.backend === "gdrive"
-            ? "cloud"
-            : "folder"
+          sync.backend === "dropbox" ? "cloud" : "folder"
         }
         location={sync.location}
         status={sync.status}

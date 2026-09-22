@@ -16,7 +16,7 @@ import type { Widen } from "@niclaslindstedt/oss-framework/i18n";
 
 export const en = {
   app: {
-    name: "Nird Baby",
+    name: "Baby",
   },
 
   nav: {
@@ -547,7 +547,7 @@ export const en = {
       idb: "This device",
       folder: "Local folder",
       dropbox: "Dropbox",
-      gdrive: "Google Drive",
+      gdrive: "Dropbox",
     },
     backendHint: {
       idb: "Kept in this browser's own storage. Nothing leaves the device, and nothing here can be read from another one.",
@@ -556,7 +556,7 @@ export const en = {
       dropbox:
         "A file in your own Dropbox, in the app's folder. Sign in on another device to read the same record.",
       gdrive:
-        "A file in your own Google Drive, in the app's folder. Sign in on another device to read the same record.",
+        "A file in your own Dropbox, in the app's folder. Sign in on another device to read the same record.",
     },
     folderUnavailable:
       "A local folder isn't offered here: it needs the browser's directory picker, which desktop Chrome, Edge and Opera have and no phone browser does.",

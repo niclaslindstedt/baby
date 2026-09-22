@@ -1,4 +1,4 @@
-# Nird Baby
+# Baby
 
 > A local-first baby health and nutrition tracker PWA for parents in Sweden,
 > built on @niclaslindstedt/oss-framework. Parents keep a simple daily food
@@ -7,7 +7,7 @@
 > circumference on the WHO growth standards, log diapers with one tap, and
 > follow the Swedish childhood vaccination programme. The document is stored
 > on-device as JSON, with an optional copy synced to the user's own Dropbox
-> or Google Drive. Every assessment is derived from the document at read time.
+>. Every assessment is derived from the document at read time.
 
 - App: https://baby.niclaslindstedt.se/
 - Source: https://github.com/niclaslindstedt/baby

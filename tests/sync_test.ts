@@ -14,7 +14,6 @@ describe("parseBackend", () => {
   it("keeps a backend this build still offers", () => {
     expect(parseBackend("folder")).toBe("folder");
     expect(parseBackend("dropbox")).toBe("dropbox");
-    expect(parseBackend("gdrive")).toBe("gdrive");
     expect(parseBackend("idb")).toBe("idb");
   });
 
@@ -51,8 +50,13 @@ describe("AVAILABLE_BACKENDS", () => {
   });
 
   it("hides a cloud provider this build has no client id for", () => {
-    // The test environment configures neither, so neither is offered.
+    // The test environment configures none, so none is offered.
     expect(AVAILABLE_BACKENDS).not.toContain("dropbox");
-    expect(AVAILABLE_BACKENDS).not.toContain("gdrive");
+  });
+
+  it("no longer answers for the retired Drive backend", () => {
+    // A device that had it selected reads back as this device, so the stored
+    // preference resolves rather than sticking on a backend that is gone.
+    expect(parseBackend("gdrive")).toBe("idb");
   });
 });

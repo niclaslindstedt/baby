@@ -9,7 +9,6 @@ import {
   completeDropboxAuth,
   createDropboxAdapter,
   createFolderAdapter,
-  createGdriveAdapter,
   describeStorageError,
   ensurePermission,
   hasPendingDropboxAuth,
@@ -19,7 +18,6 @@ import {
   localCacheKey,
   saveDirectoryHandle,
   startDropboxAuth,
-  startGdriveAuth,
   withLocalCache,
   type StorageAdapter,
 } from "@niclaslindstedt/oss-framework/storage";
@@ -58,7 +56,7 @@ import type { DocStore } from "./useDocStore.ts";
 //     re-probed on boot. The API is a desktop-Chromium one (Chrome, Edge,
 //     Opera) and no mobile browser ships it, so the choice is hidden where
 //     the picker doesn't exist rather than offered and then failing.
-//   - **Dropbox** and **Google Drive** — the user's own cloud account, so a
+//   - **Dropbox** and **Dropbox** — the user's own cloud account, so a
 //     second device can read the same document.
 //
 // Only the last three are *sync* in the sense the top bar's glyph means —
@@ -72,7 +70,7 @@ import type { DocStore } from "./useDocStore.ts";
 
 const syncLog = logStore.createLogger("sync");
 
-export type SyncBackendId = "idb" | "folder" | "dropbox" | "gdrive";
+export type SyncBackendId = "idb" | "folder" | "dropbox";
 
 /** Where a record lives until the parent says otherwise: this device, in the
  *  browser's IndexedDB. Everything else is a copy somewhere the record could
@@ -81,7 +79,9 @@ export const LOCAL_BACKEND: SyncBackendId = "idb";
 
 const BACKEND_KEY = "baby:sync:backend";
 const DROPBOX_TOKENS_KEY = "baby:sync:dropbox";
-const GDRIVE_TOKEN_KEY = "baby:sync:gdrive";
+// Dropbox is gone as a backend. The key stays named so a token a device
+// may still hold is cleared rather than left sitting in storage.
+const RETIRED_GDRIVE_TOKEN_KEY = "baby:sync:gdrive";
 const IDB_DB_NAME = "baby:documents";
 
 /** How long after the last edit a push is sent. Long enough to coalesce a
@@ -95,22 +95,14 @@ const CLOUD_FILE_NAME = "baby.json";
 // backend is hidden rather than offered and then failing at connect time.
 export const DROPBOX_APP_KEY: string =
   (import.meta.env.VITE_DROPBOX_APP_KEY as string | undefined) ?? "";
-export const GOOGLE_CLIENT_ID: string =
-  (import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined) ?? "";
 
 // Dropbox fixes the app-folder name from the app's own configuration (an
 // "App folder"-scoped app lives under `Apps/<name>/`), so it isn't always
-// `nird-baby`. Inject the real name at build time so the displayed location
+// `baby`. Inject the real name at build time so the displayed location
 // points at the folder that actually exists.
 export const DROPBOX_APP_FOLDER: string =
   (import.meta.env.VITE_DROPBOX_APP_FOLDER as string | undefined)?.trim() ||
-  "nird-baby";
-
-// Google Drive's folder, unlike Dropbox's, is created by us — this is the
-// folder made in the user's My Drive.
-export const GDRIVE_APP_FOLDER: string =
-  (import.meta.env.VITE_GDRIVE_APP_FOLDER as string | undefined)?.trim() ||
-  "nird-baby";
+  "baby";
 
 /** Whether the File System Access directory picker exists in this browser
  *  (Chromium-based). The local-folder backend is hidden where it doesn't. */
@@ -123,7 +115,6 @@ export const PROVIDER_NAMES: Record<SyncBackendId, string> = {
   idb: "This device",
   folder: "Local folder",
   dropbox: "Dropbox",
-  gdrive: "Google Drive",
 };
 
 /** Which backends this build can offer — a provider with no client id
@@ -132,7 +123,6 @@ export const AVAILABLE_BACKENDS: SyncBackendId[] = [
   "idb",
   ...(FOLDER_BACKEND_AVAILABLE ? (["folder"] as const) : []),
   ...(DROPBOX_APP_KEY ? (["dropbox"] as const) : []),
-  ...(GOOGLE_CLIENT_ID ? (["gdrive"] as const) : []),
 ];
 
 type DropboxTokens = { accessToken: string; refreshToken: string | null };
@@ -150,7 +140,7 @@ type DropboxTokens = { accessToken: string; refreshToken: string | null };
  * it.
  */
 export function parseBackend(raw: unknown): SyncBackendId {
-  return raw === "dropbox" || raw === "gdrive" || raw === "folder"
+  return raw === "dropbox" || raw === "folder"
     ? raw
     : LOCAL_BACKEND;
 }
@@ -231,13 +221,6 @@ export function useSyncEngine(
   const [dropboxTokens, setDropboxTokens] = useState<DropboxTokens | null>(
     readDropboxTokens,
   );
-  const [gdriveToken, setGdriveToken] = useState<string | null>(() => {
-    try {
-      return localStorage.getItem(GDRIVE_TOKEN_KEY);
-    } catch {
-      return null;
-    }
-  });
   // The picked local folder (File System Access API). `null` until the boot
   // probe rehydrates the stored grant, the user picks one, or a revoked grant
   // drops it. The handle itself is persisted in IndexedDB by the framework.
@@ -305,23 +288,11 @@ export function useSyncEngine(
         key: localCacheKey("dropbox", "baby"),
       });
     }
-    if (backend === "gdrive" && gdriveToken) {
-      const cloud = createGdriveAdapter(gdriveToken, {
-        appFolderName: GDRIVE_APP_FOLDER,
-        fileName: CLOUD_FILE_NAME,
-        logger: logStore.createLogger("gdrive"),
-      });
-      return withLocalCache(cloud, {
-        storage: localStorage,
-        key: localCacheKey("gdrive", "baby"),
-      });
-    }
     return null;
   }, [
     backend,
     folderHandle,
     dropboxTokens,
-    gdriveToken,
     markFolderPermissionLost,
   ]);
 
@@ -567,19 +538,9 @@ export function useSyncEngine(
         await connectFolder();
         return;
       }
-      if (next === "dropbox") {
-        if (!DROPBOX_APP_KEY) throw new Error("Dropbox is not configured");
+      if (!DROPBOX_APP_KEY) throw new Error("Dropbox is not configured");
         // Redirects away; `completeDropboxAuth` picks the flow up on return.
-        await startDropboxAuth(DROPBOX_APP_KEY, syncLog);
-        return;
-      }
-      if (!GOOGLE_CLIENT_ID) throw new Error("Google Drive is not configured");
-      const token = await startGdriveAuth(GOOGLE_CLIENT_ID, syncLog);
-      localStorage.setItem(GDRIVE_TOKEN_KEY, token);
-      writeBackend("gdrive");
-      setGdriveToken(token);
-      setBackendState("gdrive");
-      syncLog.info("gdrive: connected");
+      await startDropboxAuth(DROPBOX_APP_KEY, syncLog);
     },
     [connectFolder],
   );
@@ -590,11 +551,10 @@ export function useSyncEngine(
     // is. Where it lands is `LOCAL_BACKEND` — disconnecting from a cloud
     // account is a move back to this device, not to nowhere.
     writeDropboxTokens(null);
-    localStorage.removeItem(GDRIVE_TOKEN_KEY);
+    localStorage.removeItem(RETIRED_GDRIVE_TOKEN_KEY);
     void clearDirectoryHandle();
     writeBackend(LOCAL_BACKEND);
     setDropboxTokens(null);
-    setGdriveToken(null);
     setFolderHandle(null);
     setFolderReconnectNeeded(false);
     setBackendState(LOCAL_BACKEND);
@@ -648,7 +608,6 @@ export function useSyncEngine(
     if (backend === "dropbox") {
       return `Apps/${DROPBOX_APP_FOLDER}/${CLOUD_FILE_NAME}`;
     }
-    if (backend === "gdrive") return `${GDRIVE_APP_FOLDER}/${CLOUD_FILE_NAME}`;
     if (backend === "folder") {
       return `${folderHandle?.name ?? "…"}/${CLOUD_FILE_NAME}`;
     }

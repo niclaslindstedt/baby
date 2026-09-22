@@ -1,5 +1,5 @@
 {
-  "name": "nird-baby",
+  "name": "baby",
   "version": "0.1.0",
   "private": true,
   "description": "A local-first baby health and nutrition tracker PWA for parents in Sweden, built on @niclaslindstedt/oss-framework — a daily food regimen checked against your baby's needs, growth on standard curves, one-tap diaper logging, and the Swedish childhood vaccination timeline.",

@@ -10,7 +10,7 @@ import type { Catalog } from "./en.ts";
 
 export const sv: Catalog = {
   app: {
-    name: "Nird Baby",
+    name: "Baby",
   },
 
   nav: {
@@ -501,7 +501,7 @@ export const sv: Catalog = {
       idb: "Den här enheten",
       folder: "Lokal mapp",
       dropbox: "Dropbox",
-      gdrive: "Google Drive",
+      gdrive: "Dropbox",
     },
     backendHint: {
       idb: "Sparas i den här webbläsarens egen lagring. Inget lämnar enheten, och inget här går att läsa från en annan.",
@@ -510,7 +510,7 @@ export const sv: Catalog = {
       dropbox:
         "En fil i din egen Dropbox, i appens mapp. Logga in på en annan enhet för att läsa samma journal.",
       gdrive:
-        "En fil i din egen Google Drive, i appens mapp. Logga in på en annan enhet för att läsa samma journal.",
+        "En fil i din egen Dropbox, i appens mapp. Logga in på en annan enhet för att läsa samma journal.",
     },
     folderUnavailable:
       "Lokal mapp erbjuds inte här: det kräver webbläsarens mappväljare, som Chrome, Edge och Opera på dator har men ingen mobilwebbläsare.",

@@ -55,21 +55,21 @@ const PUBLIC_SKIP = new Set([
 
 // Per-release-channel PWA display name. The three Pages channels share one
 // origin, so a channel-specific name installs the preview/branch builds as
-// visibly separate home-screen tiles instead of three identical "Nird Baby"
+// visibly separate home-screen tiles instead of three identical "Baby"
 // icons that are impossible to tell apart once installed.
 //
 // `short_name` is what a home screen actually paints under the tile, and it
 // gets about a dozen characters before the launcher truncates it — so the
 // channel builds drop the second word rather than have three tiles that all
-// read "Nird Baby…".
+// read "Baby…".
 function channelName(base: string): { name: string; short_name: string } {
   if (base === "/preview/")
-    return { name: "Nird Baby (preview)", short_name: "Baby pre" };
+    return { name: "Baby (preview)", short_name: "Baby pre" };
   if (base === "/branch/")
-    return { name: "Nird Baby (branch)", short_name: "Baby br" };
+    return { name: "Baby (branch)", short_name: "Baby br" };
   return {
-    name: "Nird Baby",
-    short_name: "Nird Baby",
+    name: "Baby",
+    short_name: "Baby",
   };
 }
 
@@ -88,7 +88,7 @@ export function buildManifest(base: string): string {
     name,
     short_name,
     description:
-      "A privacy-first baby health and nutrition tracker PWA for parents in Sweden: keep a simple daily food regimen and see whether it still covers your baby's needs, plot growth on standard curves, log diapers in one tap, and follow the Swedish childhood vaccination timeline. Local-only or cloud-synced (Dropbox, Google Drive).",
+      "A privacy-first baby health and nutrition tracker PWA for parents in Sweden: keep a simple daily food regimen and see whether it still covers your baby's needs, plot growth on standard curves, log diapers in one tap, and follow the Swedish childhood vaccination timeline. Local-only or cloud-synced (Dropbox, Dropbox).",
     id: base,
     start_url: base,
     scope: base,
@@ -139,7 +139,7 @@ export function buildServiceWorker(
 ): string {
   const cacheName = `${cacheId}-precache`;
   return `// SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
-// GENERATED — do not edit. Emitted by pwa-plugin.ts for the Nird Baby PWA.
+// GENERATED — do not edit. Emitted by pwa-plugin.ts for the Baby PWA.
 // A minimal "prompt to update" precaching worker: it installs the build's
 // assets, parks in \`waiting\` (never auto-skipWaiting — a silent swap would
 // discard an in-progress edit), and applies on a SKIP_WAITING message from the

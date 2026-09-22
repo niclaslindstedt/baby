@@ -122,7 +122,7 @@ off-bar screens (the child profile and Settings).
 The framework owns the UI kit and the generic mechanics: modals, form
 primitives, the theme engine, the bottom bar and the tab-paging swipe, the
 chart primitives, the storage adapters (localStorage / a picked folder /
-Dropbox / Google Drive) and the IndexedDB store, the i18n runtime, logging,
+Dropbox) and the IndexedDB store, the i18n runtime, logging,
 the toast store, and the PWA update state machine.
 
 ### The renderer is Preact
@@ -170,7 +170,7 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   vocabulary.
 - `src/app/useSyncEngine.ts` — the sync engine over the framework's storage
   adapters plus the app's own `idbAdapter.ts`: local, IndexedDB, a picked
-  folder, Dropbox, Google Drive. Suspended wholesale while demo data has
+  folder, Dropbox. Suspended wholesale while demo data has
   taken over storage.
 - `src/app/dev/` — the developer "Demo data" switch: an invented
   eight-month-old (`demoData.ts`, pure, seeded PRNG, every date an offset

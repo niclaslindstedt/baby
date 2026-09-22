@@ -1,4 +1,4 @@
-# Nird Baby
+# Baby
 
 > A local-first baby health and nutrition tracker for parents in Sweden — is the food regimen still enough, is the baby growing along the curve, how many diapers today, and which vaccination comes next. No account, no server.
 
@@ -9,7 +9,7 @@
 
 ## What
 
-**Nird Baby** follows one child from birth and answers the four questions
+**Baby** follows one child from birth and answers the four questions
 that matter most, without turning childcare into data entry. It runs
 entirely in your browser and is built around one principle: **minimal
 input, useful output.**
@@ -59,7 +59,7 @@ cannot inspect — often with a feeding diary that asks for every millilitre.
 This one has no account and no server. The record lives on your device, in
 your browser's own storage. If you want it on more than one device, you keep
 a copy in a folder you pick, or
-in **your own** Dropbox or Google Drive — a JSON file you can open and read.
+in **your own** Dropbox — a JSON file you can open and read.
 Nothing else leaves the device: no analytics, no telemetry, no third-party
 requests at runtime. The growth standards, the food presets and the
 vaccination schedule are bundled with the app and read locally.
@@ -154,9 +154,7 @@ is no secret to protect), and leaving either unset simply hides that provider:
 | Variable                  | Effect                                                         |
 | ------------------------- | -------------------------------------------------------------- |
 | `VITE_DROPBOX_APP_KEY`    | Enables the Dropbox backend.                                   |
-| `VITE_GOOGLE_CLIENT_ID`   | Enables the Google Drive backend.                              |
-| `VITE_DROPBOX_APP_FOLDER` | Folder name the document is filed under (default `nird-baby`). |
-| `VITE_GDRIVE_APP_FOLDER`  | Folder name in My Drive (default `nird-baby`).                 |
+| `VITE_DROPBOX_APP_FOLDER` | Folder name the document is filed under (default `baby`). |
 | `VITE_BASE`               | Deploy base path (default `/`).                                |
 
 **This device** — the browser's own storage, and the default — and the local

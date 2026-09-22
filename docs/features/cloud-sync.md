@@ -9,7 +9,7 @@ device can read it too:
   back up, or point another app at. This one needs the browser's directory
   picker, which desktop Chrome, Edge and Opera have and no phone browser
   does, so it is offered only where it exists;
-- in your own **Dropbox** or **Google Drive** — a JSON file in a folder you
+- in your own **Dropbox** — a JSON file in a folder you
   can see, so another device can read the same record.
 
 Two devices reconcile record by record — the later edit of a reading, a food
