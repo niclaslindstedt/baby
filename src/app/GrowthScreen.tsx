@@ -10,7 +10,7 @@ import {
 } from "@niclaslindstedt/oss-framework/components";
 
 import { ageLabel } from "./copy.ts";
-import { formatCm, formatDayYear, formatKg } from "./format.ts";
+import { formatDayYear, measurementValues } from "./format.ts";
 import { GrowthIcon, TrashIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
 import { MeasurementForm } from "./MeasurementForm.tsx";
@@ -120,15 +120,7 @@ export function GrowthScreen({
                     })}
                   </p>
                   <p className="text-xs text-muted">
-                    {[
-                      m.weightKg !== null ? formatKg(m.weightKg, locale) : null,
-                      m.lengthCm !== null ? formatCm(m.lengthCm, locale) : null,
-                      m.headCm !== null
-                        ? `${formatCm(m.headCm, locale)} ↺`
-                        : null,
-                    ]
-                      .filter(Boolean)
-                      .join(" · ")}
+                    {measurementValues(m, locale).join(" · ")}
                   </p>
                 </div>
                 <div className="flex shrink-0 gap-1">

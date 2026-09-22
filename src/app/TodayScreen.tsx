@@ -9,12 +9,11 @@ import { ageLabel, childName } from "./copy.ts";
 import { assessDiapers } from "./diapers.ts";
 import { DiapersModal } from "./DiapersModal.tsx";
 import {
-  formatCm,
   formatDay,
   formatDayYear,
-  formatKg,
   formatWhole,
   formatZ,
+  measurementValues,
 } from "./format.ts";
 import { readings, trend, type GrowthStandards } from "./growth.ts";
 import { BowlIcon, DiaperIcon, GrowthIcon, SyringeIcon } from "./icons.tsx";
@@ -93,11 +92,36 @@ export function TodayScreen({ data, today, standards, features }: Props) {
     () => (standards ? outgrown(data, today, standards.weight) : false),
     [data, today, standards],
   );
-  const weightTrend = useMemo(() => {
-    if (!standards) return null;
-    return trend(readings(data, standards, "weight"));
-  }, [data, standards]);
-  const latestMeasurement = sortedMeasurements(data).at(-1) ?? null;
+  const weightSeries = useMemo(
+    () => (standards ? readings(data, standards, "weight") : []),
+    [data, standards],
+  );
+  const weightTrend = useMemo(() => trend(weightSeries), [weightSeries]);
+  // The trend sentence, when there is one: two weight readings far enough
+  // apart for the difference between them to be read as a trend. It names
+  // the z-score itself, so the headline above it doesn't repeat it.
+  const trendLine =
+    weightTrend !== null &&
+    weightTrend.verdict !== "single" &&
+    weightTrend.delta !== null
+      ? { ...weightTrend, delta: weightTrend.delta }
+      : null;
+
+  // The newest reading, said the way the Growth tab says one: every value it
+  // carries, and the z-score only when it is the weight of *this* reading
+  // that the standards place. A length-only visit therefore reads
+  // "80.5 cm on 3 Jun" with nothing dangling after it, and the SD beside a
+  // weight is always that weight's own.
+  const latest = useMemo(() => {
+    const m = sortedMeasurements(data).at(-1) ?? null;
+    if (!m) return null;
+    const last = weightSeries.at(-1);
+    return {
+      date: m.date,
+      values: measurementValues(m, locale),
+      z: last && last.id === m.id ? last.z : null,
+    };
+  }, [data, weightSeries, locale]);
   const next = useMemo(() => nextDose(timeline(data, today)), [data, today]);
 
   const [view, setView] = useState<View | null>(null);
@@ -184,39 +208,34 @@ export function TodayScreen({ data, today, standards, features }: Props) {
           title={t("today.growthCard")}
           onOpen={() => setView("growth")}
         >
-          {latestMeasurement === null
+          {latest === null || latest.values.length === 0
             ? t("today.noReadings")
-            : latestMeasurement.weightKg !== null && weightTrend
-              ? t("today.latestReading", {
-                  value: formatKg(latestMeasurement.weightKg, locale),
-                  date: formatDay(latestMeasurement.date, locale),
-                  z: formatZ(weightTrend.latest, locale),
+            : latest.z !== null && !trendLine
+              ? t("today.latestReadingZ", {
+                  value: latest.values.join(" · "),
+                  date: formatDay(latest.date, locale),
+                  z: formatZ(latest.z, locale),
                 })
-              : latestMeasurement.lengthCm !== null
-                ? t("today.latestReading", {
-                    value: formatCm(latestMeasurement.lengthCm, locale),
-                    date: formatDay(latestMeasurement.date, locale),
-                    z: "",
-                  })
-                : formatDay(latestMeasurement.date, locale)}
-          {weightTrend &&
-            weightTrend.verdict !== "single" &&
-            weightTrend.delta !== null && (
-              <span className="mt-1 block text-xs text-muted">
-                {t(
-                  weightTrend.verdict === "up"
-                    ? "growth.trendUp"
-                    : weightTrend.verdict === "down"
-                      ? "growth.trendDown"
-                      : "growth.trendSteady",
-                  {
-                    z: formatZ(weightTrend.latest, locale),
-                    delta: formatZ(weightTrend.delta, locale),
-                    days: "60",
-                  },
-                )}
-              </span>
-            )}
+              : t("today.latestReading", {
+                  value: latest.values.join(" · "),
+                  date: formatDay(latest.date, locale),
+                })}
+          {trendLine && (
+            <span className="mt-1 block text-xs text-muted">
+              {t(
+                trendLine.verdict === "up"
+                  ? "growth.trendUp"
+                  : trendLine.verdict === "down"
+                    ? "growth.trendDown"
+                    : "growth.trendSteady",
+                {
+                  z: formatZ(trendLine.latest, locale),
+                  delta: formatZ(trendLine.delta, locale),
+                  days: "60",
+                },
+              )}
+            </span>
+          )}
         </HeadlineCard>
       )}
 

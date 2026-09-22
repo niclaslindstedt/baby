@@ -109,7 +109,12 @@ export const en = {
     foodCard: "Food regimen",
     growthCard: "Growth",
     vaccinesCard: "Next vaccination",
-    latestReading: "{value} on {date} · {z}",
+    // Two shapes: the z-score joins the line only when the reading has a
+    // weight the standards place and the trend sentence below isn't already
+    // saying it — so a length-only visit doesn't trail a separator with
+    // nothing after it.
+    latestReading: "{value} on {date}",
+    latestReadingZ: "{value} on {date} · {z}",
     noReadings: "No readings yet.",
     nextDue: "{dose} — was expected {date}",
     nextUpcoming: "{dose} — {date}",

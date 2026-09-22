@@ -2,9 +2,10 @@
 
 Record weight, length and head circumference as often as you like — the
 readings from the child health centre, or a scale at home every morning. The
-**Growth** tab is the list of readings and the form behind it; the curves open
-from Today's **Growth** card, with a tab each for weight, length and head
-circumference.
+**Growth** tab is the list of readings and the form behind it. Today's
+**Growth** card says the latest reading back — every value it holds, and where
+its weight falls on the standard — and opens the curves, with a tab each for
+weight, length and head circumference.
 
 There the readings sit on the WHO growth standard for your child's sex, drawn
 the way Swedish child health care draws its curves: a median and the ±1 and ±2
