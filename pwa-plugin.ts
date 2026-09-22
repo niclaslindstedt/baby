@@ -88,7 +88,7 @@ export function buildManifest(base: string): string {
     name,
     short_name,
     description:
-      "A privacy-first baby health and nutrition tracker PWA for parents in Sweden: keep a simple daily food regimen and see whether it still covers your baby's needs, plot growth on standard curves, log diapers in one tap, and follow the Swedish childhood vaccination timeline. Local-only or cloud-synced (Dropbox, Dropbox).",
+      "A privacy-first baby health and nutrition tracker PWA for parents in Sweden: keep a simple daily food regimen and see whether it still covers your baby's needs, plot growth on standard curves, log diapers in one tap, and follow the Swedish childhood vaccination timeline. Local-only or cloud-synced (Dropbox).",
     id: base,
     start_url: base,
     scope: base,
