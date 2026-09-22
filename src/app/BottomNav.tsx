@@ -6,43 +6,56 @@ import {
   stepDirection,
 } from "@niclaslindstedt/oss-framework/components";
 
-import { BabyIcon, BowlIcon, GrowthIcon, SyringeIcon } from "./icons.tsx";
+import {
+  BabyIcon,
+  BowlIcon,
+  DiaperIcon,
+  GrowthIcon,
+  SyringeIcon,
+} from "./icons.tsx";
 import { useT } from "./i18n/index.ts";
 import type { AppData } from "./types.ts";
 import type { Features } from "./useAppSettings.ts";
 
-// The app's navigation: four tabs pinned to the bottom of the screen — the
+// The app's navigation: five tabs pinned to the bottom of the screen — the
 // same shell the sibling meds app uses, because the two are used the same
 // way: one-handed, in a short burst, with something else in the other arm.
 //
 // The order is the order of the questions: what is happening today (Today —
-// the diaper log and the headline answers), is the child growing along the
-// curve (Growth), is the food regimen still enough (Food), and which
-// vaccination comes next (Vaccines). Today leads because it is the reason
-// the app is opened; Vaccines sits last because it changes a handful of
-// times a year.
+// the child's age and the headline answers), what went into the diaper
+// (Diapers), is the child growing along the curve (Growth), is the food
+// regimen still enough (Food), and which vaccination comes next (Vaccines).
+// Today leads because it is the reason the app is opened; Diapers follows
+// because it is the one logged several times a day; Vaccines sits last
+// because it changes a handful of times a year.
 //
-// Three of the four are a tracker a parent can switch off in Settings, and
+// Four of the five are a tracker a parent can switch off in Settings, and
 // a switched-off tracker is not on the bar at all (see `navTabs`) — the
 // order survives, it just gets shorter. Today is never one of them.
 //
 // Setting up the child and changing a setting are not on the bar: they are
 // things you do and then leave, and they sit on the top bar instead (see
-// `TopBar.tsx`). What that buys is a bar of four destinations you can swipe
+// `TopBar.tsx`). What that buys is a bar of destinations you can swipe
 // between — an order that means something left-to-right.
 
 /** Every screen the shell can show. */
 export type Tab =
-  "today" | "growth" | "food" | "vaccines" | "child" | "settings";
+  "today" | "diapers" | "growth" | "food" | "vaccines" | "child" | "settings";
 
 /** The screens that are *destinations* — the ones the bottom bar carries and
- *  a swipe moves between. Three of them share their name with the tracker
+ *  a swipe moves between. Four of them share their name with the tracker
  *  that can switch them off (`FeatureId`); Today has no switch. */
-export type NavTab = "today" | "growth" | "food" | "vaccines";
+export type NavTab = "today" | "diapers" | "growth" | "food" | "vaccines";
 
 /** Every destination, in order, with none switched off. The bar itself is
  *  `navTabs` — this is the order it draws from. */
-export const TABS: NavTab[] = ["today", "growth", "food", "vaccines"];
+export const TABS: NavTab[] = [
+  "today",
+  "diapers",
+  "growth",
+  "food",
+  "vaccines",
+];
 
 /**
  * The destinations the bar carries, given the trackers that are on.
@@ -58,7 +71,7 @@ export function navTabs(features: Features): NavTab[] {
 
 /** Whether a screen is one of the bar's destinations — which is also the
  *  question "can a swipe move from here?". Structural: it answers for the
- *  four tabs that exist, not for the ones currently on the bar (that is
+ *  destinations that exist, not for the ones currently on the bar (that is
  *  `navTabs().includes`). */
 export function isNavTab(tab: Tab): tab is NavTab {
   return (TABS as Tab[]).includes(tab);
@@ -95,6 +108,7 @@ export function initialTab(data: AppData): Tab {
 
 const ICONS: Record<NavTab, (props: { className?: string }) => ReactNode> = {
   today: BabyIcon,
+  diapers: DiaperIcon,
   growth: GrowthIcon,
   food: BowlIcon,
   vaccines: SyringeIcon,

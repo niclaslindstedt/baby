@@ -29,7 +29,7 @@ export function DiaperButtons({ onLog, large }: Props) {
   return (
     <div
       role="group"
-      aria-label={t("today.diapers")}
+      aria-label={t("diapers.title")}
       className="grid grid-cols-3 gap-2"
     >
       {KINDS.map((kind) => (
@@ -49,7 +49,7 @@ export function DiaperButtons({ onLog, large }: Props) {
               <PooIcon className={large ? "h-7 w-7" : "h-5 w-5"} />
             )}
           </span>
-          {t(`today.${kind}` as const)}
+          {t(`diapers.${kind}` as const)}
         </button>
       ))}
     </div>

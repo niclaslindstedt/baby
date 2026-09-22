@@ -1,21 +1,20 @@
 # Sync
 
 The app is local-first: the record lives in this browser, and that copy is
-always the working copy. "Where the record lives" in Settings adds a second
-copy — on the same device or in your own account — so it survives more, or so
-another device can read it. There is no server in between.
+always the working copy. "Where the record lives" in Settings says where the
+durable copy is kept — on this device, or somewhere another device can read
+it too. There is no server in between.
 
 ## The backends
 
-| Backend          | What it is                                                                                                                                                                                                | Needs                                                |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| **This device**  | The localStorage working copy alone.                                                                                                                                                                      | Nothing.                                             |
-| **IndexedDB**    | A second copy in the browser's IndexedDB (`baby:documents`) — more room than localStorage, and kept when the browser trims other site data.                                                               | Nothing.                                             |
-| **Local folder** | A directory you pick through the browser's File System Access API; the record becomes `baby.json`, a real file you can open, back up, or point another app at. The grant is stored and re-probed on boot. | A Chromium browser (Chrome, Edge). Hidden elsewhere. |
-| **Dropbox**      | `Apps/nird-baby/baby.json` in your Dropbox.                                                                                                                                                               | `VITE_DROPBOX_APP_KEY` at build time.                |
-| **Google Drive** | `nird-baby/baby.json` in My Drive, with the `drive.file` scope — the app sees the files it created and nothing else.                                                                                      | `VITE_GOOGLE_CLIENT_ID` at build time.               |
+| Backend          | What it is                                                                                                                                                                                                               | Needs                                                         |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| **This device**  | The default, and where every install starts: a durable copy in the browser's own IndexedDB (`baby:documents`) — more room than localStorage, and kept when the browser trims other site data. Nothing leaves the device. | Nothing.                                                      |
+| **Local folder** | A directory you pick through the browser's File System Access API; the record becomes `baby.json`, a real file you can open, back up, or point another app at. The grant is stored and re-probed on boot.                | The browser's directory picker. Hidden where there isn't one. |
+| **Dropbox**      | `Apps/nird-baby/baby.json` in your Dropbox.                                                                                                                                                                              | `VITE_DROPBOX_APP_KEY` at build time.                         |
+| **Google Drive** | `nird-baby/baby.json` in My Drive, with the `drive.file` scope — the app sees the files it created and nothing else.                                                                                                     | `VITE_GOOGLE_CLIENT_ID` at build time.                        |
 
-All five speak the framework's one `StorageAdapter` contract, so the engine
+All four speak the framework's one `StorageAdapter` contract, so the engine
 (`src/app/useSyncEngine.ts`) is the same past the `create*Adapter` calls: it
 pulls the backend's copy on connect, pushes the document after a short
 debounce on every edit, and refuses a push whose base revision has moved.
@@ -23,9 +22,30 @@ The IndexedDB adapter is the one app-local one (`src/app/idbAdapter.ts`); it
 keeps a revision counter beside the text so two tabs cannot write over each
 other.
 
-**Disconnecting** removes the credentials or the folder grant from this
-device. The record stays here, and the copy already on the backend is left
-exactly where it is.
+Only the last three are _sync_ in the sense the top bar's glyph means —
+somewhere the record could also be read from. On **This device** there is no
+glyph: there is nothing to watch the status of.
+
+### Where the local folder is offered
+
+The picker is the File System Access API's `showDirectoryPicker`, which
+desktop Chrome, Edge and Opera ship and no mobile browser does — nor Safari
+or Firefox on any platform. Where it is missing the choice is left off the
+list rather than offered and then failing, and Settings says why. Use a cloud
+backend to read the record on a phone as well as a laptop.
+
+### An older install's "This device"
+
+Earlier builds listed **This device** — which connected no backend at all —
+beside **IndexedDB**. Both were this device, and one of them silently kept no
+second copy, so they are one choice now, backed by IndexedDB. A stored
+`local` reads as this device on the next boot; the document is untouched by
+that, and the first pull finds an empty IndexedDB and pushes the localStorage
+copy into it.
+
+**Disconnecting** removes the credentials or the folder grant and comes back
+to this device. The record stays here, and the copy already on the backend is
+left exactly where it is.
 
 ## How two copies reconcile
 

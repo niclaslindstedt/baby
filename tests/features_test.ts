@@ -53,24 +53,47 @@ describe("navTabs", () => {
   });
 
   it("drops the tab of a switched-off tracker, keeping the order", () => {
-    expect(navTabs(off("growth"))).toEqual(["today", "food", "vaccines"]);
-    expect(navTabs(off("food", "vaccines"))).toEqual(["today", "growth"]);
+    expect(navTabs(off("growth"))).toEqual([
+      "today",
+      "diapers",
+      "food",
+      "vaccines",
+    ]);
+    expect(navTabs(off("food", "vaccines"))).toEqual([
+      "today",
+      "diapers",
+      "growth",
+    ]);
   });
 
-  it("keeps Today whatever is off — diapers have no tab of their own", () => {
-    expect(navTabs(off("diapers"))).toEqual(TABS);
+  it("drops the Diapers tab with the tracker off", () => {
+    expect(navTabs(off("diapers"))).toEqual([
+      "today",
+      "growth",
+      "food",
+      "vaccines",
+    ]);
+  });
+
+  it("keeps Today whatever is off — it has no switch", () => {
     expect(navTabs(off("diapers", "growth", "food", "vaccines"))).toEqual([
       "today",
     ]);
+  });
+
+  it("gives every tracker a tab of its own", () => {
+    // The bar is Today plus one destination per switch, in the switches'
+    // own order — so a tracker can never be on with nowhere to type into.
+    expect(TABS).toEqual(["today", ...FEATURES]);
   });
 });
 
 describe("screenEnter", () => {
   it("steps along the bar as it currently stands", () => {
     const tabs = navTabs(off("growth"));
-    // Food is the neighbour to Today's right once Growth is gone, so the move
-    // that used to skip a tab now arrives from the right like any other.
-    expect(screenEnter("today", "food", tabs)).toBe("forward");
+    // Food is the neighbour to Diapers' right once Growth is gone, so the
+    // move that used to skip a tab now arrives from the right like any other.
+    expect(screenEnter("diapers", "food", tabs)).toBe("forward");
     expect(screenEnter("vaccines", "food", tabs)).toBe("back");
   });
 

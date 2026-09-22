@@ -21,6 +21,7 @@ export const en = {
 
   nav: {
     today: "Today",
+    diapers: "Diapers",
     growth: "Growth",
     food: "Food",
     vaccines: "Vaccines",
@@ -99,22 +100,54 @@ export const en = {
 
   today: {
     title: "Today",
-    // The whole tap-to-log surface: three buttons, then the day so far.
-    diapers: "Diapers",
-    last24: "Last 24 hours",
-    wet: "{count} wet",
-    dirty: "{count} dirty",
+    saveFailed:
+      "Couldn't save to this device — check the browser's storage settings.",
+    // The headline cards: the four questions the app answers, one line each,
+    // each opening its own read-only view over this screen rather than
+    // sending the parent off to a tab.
+    diapersCard: "Diapers",
+    foodCard: "Food regimen",
+    growthCard: "Growth",
+    vaccinesCard: "Next vaccination",
+    latestReading: "{value} on {date} · {z}",
+    noReadings: "No readings yet.",
+    nextDue: "{dose} — was expected {date}",
+    nextUpcoming: "{dose} — {date}",
+    allGiven: "Every programme dose is recorded.",
+  },
+
+  // The sheet behind the top bar's `+`: the three buttons, from anywhere.
+  quickLog: {
+    title: "Log a diaper",
+    subtitle: "Tap what the diaper held. The time is recorded now.",
+  },
+
+  // The Diapers tab — the buttons and the week's log — and the view behind
+  // Today's Diapers card, which is where the counting happens.
+  diapers: {
+    title: "Diapers",
+    log: "Log a change",
+    logHint:
+      "Tap what the diaper held. The time is recorded for you, and the same three buttons sit behind the + in the top bar from any screen.",
     pee: "Pee",
     poo: "Poo",
     both: "Both",
     logged: "Logged",
-    lastChange: "Last change {time}",
-    todayLog: "Today's changes",
+    removed: "Removed",
+    removeChange: "Remove this change",
+    recent: "The last 7 days",
+    recentHint:
+      "What was logged, newest first. Remove a row that was a mistap — the counts follow it.",
+    dayToday: "Today",
     noneToday: "Nothing logged today.",
     noneYet:
       "Tap a button when you change a diaper — the time is recorded for you.",
-    removeChange: "Remove this change",
-    removed: "Removed",
+    // The view: the rolling day, the floor it is read against, and the week.
+    last24: "Last 24 hours",
+    last24Line: "{wet} wet and {dirty} dirty in the last 24 hours",
+    wet: "{count} wet",
+    dirty: "{count} dirty",
+    lastChange: "Last change {time}",
     chart: "Last 7 days",
     chartDesc:
       "Wet and dirty diapers per day over the last week. A change with both counts in both.",
@@ -128,7 +161,7 @@ export const en = {
       "{days} days since the last dirty diaper — longer than usual for this age and feeding. Hard stools or an uncomfortable baby are the signs to act on; a soft stool after a long gap is fine.",
     diaper: "diaper",
     diapersPlural: "diapers",
-    // Which source the floor comes from, said once under the warning.
+    // Which source the floor comes from, said once under the tally.
     norm: {
       firstDays:
         "In the first days the count rises with the milk: about one wet diaper on day one, two on day two, and so on.",
@@ -139,26 +172,6 @@ export const en = {
       toddler:
         "After the first birthday the sources give no count; a toddler's diaper is dry for longer.",
     },
-    saveFailed:
-      "Couldn't save to this device — check the browser's storage settings.",
-    // The headline cards under the diapers: the other three questions the
-    // app answers, one line each, each opening its own read-only view over
-    // this screen rather than sending the parent off to a tab.
-    foodCard: "Food regimen",
-    growthCard: "Growth",
-    vaccinesCard: "Next vaccination",
-    view: "View",
-    latestReading: "{value} on {date} · {z}",
-    noReadings: "No readings yet.",
-    nextDue: "{dose} — was expected {date}",
-    nextUpcoming: "{dose} — {date}",
-    allGiven: "Every programme dose is recorded.",
-  },
-
-  // The sheet behind the top bar's `+`: the three buttons, from anywhere.
-  quickLog: {
-    title: "Log a diaper",
-    subtitle: "Tap what the diaper held. The time is recorded now.",
   },
 
   growth: {
@@ -502,7 +515,7 @@ export const en = {
     },
     featureHint: {
       diapers:
-        "The one-tap log on Today, the + in the top bar, and the last 24 hours against the norm for the age.",
+        "The Diapers tab, the + in the top bar, and the last 24 hours against the norm for the age.",
       growth:
         "Weight, length and head readings on the WHO curves, with the trend and the forecast.",
       food: "The daily food regimen and the milk, checked against the recommendation for the age and weight.",
@@ -510,22 +523,44 @@ export const en = {
         "The Swedish childhood programme, what is given and what comes next.",
     },
     child: "Your child",
-    childHint: "Name, birth date, sex and the parents' heights.",
+    // Read back on the page rather than behind the button: what the app
+    // derives every number from, in four lines.
+    childBorn: "{date} · {age}",
+    childHeights: "Mother {mother}, father {father}",
+    childHeightsMissing: "Not entered — the expected adult height needs both.",
+    childMissing:
+      "No child yet. Add a birth date and a sex and every screen starts working.",
+    addChild: "Add your child",
     editChild: "Edit",
     sync: "Where the record lives",
     syncHint:
-      "Your record lives in this browser. Keep a second copy on this device, in a folder you pick, or in your own cloud account to read it on another device.",
+      "Your record is kept on this device. Keep a second copy in a folder you pick, or in your own cloud account, to read it on another device too.",
     backend: "Backend",
+    // The places the record can live. "This device" is the browser's own
+    // storage: no account, no picker, nothing leaves the phone.
+    backendName: {
+      idb: "This device",
+      folder: "Local folder",
+      dropbox: "Dropbox",
+      gdrive: "Google Drive",
+    },
+    backendHint: {
+      idb: "Kept in this browser's own storage. Nothing leaves the device, and nothing here can be read from another one.",
+      folder:
+        "A folder on this computer, through the browser's file access. The record becomes a file you can open, copy and back up yourself.",
+      dropbox:
+        "A file in your own Dropbox, in the app's folder. Sign in on another device to read the same record.",
+      gdrive:
+        "A file in your own Google Drive, in the app's folder. Sign in on another device to read the same record.",
+    },
+    folderUnavailable:
+      "A local folder isn't offered here: it needs the browser's directory picker, which desktop Chrome, Edge and Opera have and no phone browser does.",
     disconnect: "Disconnect",
     connected: "Connected to {name}",
-    localOnly: "This device only",
+    localOnly: "On this device only",
     folderReconnect: "Reconnect to the folder",
     folderReconnectNeeded:
       "The browser needs you to confirm access to the folder again.",
-    folderHint:
-      "A folder on this computer, through the browser's file access (Chrome, Edge). The record becomes a file you can open and back up.",
-    idbHint:
-      "A second copy in the browser's IndexedDB — more room, and kept when the browser trims other site data.",
     saveNow: "Save now",
     reload: "Reload from the backend",
     data: "Your data",

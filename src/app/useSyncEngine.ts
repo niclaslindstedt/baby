@@ -46,15 +46,24 @@ import type { DocStore } from "./useDocStore.ts";
 // `StorageAdapter` contract, so the code below is backend-agnostic past the
 // `create*Adapter` calls:
 //
-//   - **IndexedDB** — a second, durable copy on the same device (see
-//     `idbAdapter.ts`). No credentials, no picker; it is on the moment it is
-//     chosen.
+//   - **This device** — a second, durable copy in the browser's own
+//     IndexedDB (see `idbAdapter.ts`). No credentials, no picker, nothing
+//     leaves the device; it is where every install starts. It used to sit
+//     beside a "local only" choice that connected nothing at all, which was
+//     a distinction without a difference to read — both were this device,
+//     and one of them silently had no second copy.
 //   - **A local folder** — a directory the user picks through the File System
-//     Access API (Chromium browsers), holding `baby.json` as a real file they
-//     can open, back up, or point another app at. The grant is persisted by
-//     the framework and re-probed on boot.
+//     Access API, holding `baby.json` as a real file they can open, back up,
+//     or point another app at. The grant is persisted by the framework and
+//     re-probed on boot. The API is a desktop-Chromium one (Chrome, Edge,
+//     Opera) and no mobile browser ships it, so the choice is hidden where
+//     the picker doesn't exist rather than offered and then failing.
 //   - **Dropbox** and **Google Drive** — the user's own cloud account, so a
 //     second device can read the same document.
+//
+// Only the last three are *sync* in the sense the top bar's glyph means —
+// somewhere the record could also be read from. `remote` is that question,
+// and it is why a plain install carries no glyph.
 //
 // Reconciliation is a per-record merge (see `merge.ts`), not a "pick a side"
 // prompt: records carry their own `updatedAt` and diaper changes merge as a
@@ -63,7 +72,12 @@ import type { DocStore } from "./useDocStore.ts";
 
 const syncLog = logStore.createLogger("sync");
 
-export type SyncBackendId = "local" | "idb" | "folder" | "dropbox" | "gdrive";
+export type SyncBackendId = "idb" | "folder" | "dropbox" | "gdrive";
+
+/** Where a record lives until the parent says otherwise: this device, in the
+ *  browser's IndexedDB. Everything else is a copy somewhere the record could
+ *  also be read from, and `disconnect` comes back here. */
+export const LOCAL_BACKEND: SyncBackendId = "idb";
 
 const BACKEND_KEY = "baby:sync:backend";
 const DROPBOX_TOKENS_KEY = "baby:sync:dropbox";
@@ -102,9 +116,11 @@ export const GDRIVE_APP_FOLDER: string =
  *  (Chromium-based). The local-folder backend is hidden where it doesn't. */
 export const FOLDER_BACKEND_AVAILABLE = isFolderBackendAvailable();
 
+/** The fallback display names, for the log lines and for anything that
+ *  reaches the framework before a catalog does. The screens spell them
+ *  through `t("settings.backendName.*")`. */
 export const PROVIDER_NAMES: Record<SyncBackendId, string> = {
-  local: "This device",
-  idb: "IndexedDB",
+  idb: "This device",
   folder: "Local folder",
   dropbox: "Dropbox",
   gdrive: "Google Drive",
@@ -113,7 +129,6 @@ export const PROVIDER_NAMES: Record<SyncBackendId, string> = {
 /** Which backends this build can offer — a provider with no client id
  *  configured, or a picker the browser lacks, is hidden entirely. */
 export const AVAILABLE_BACKENDS: SyncBackendId[] = [
-  "local",
   "idb",
   ...(FOLDER_BACKEND_AVAILABLE ? (["folder"] as const) : []),
   ...(DROPBOX_APP_KEY ? (["dropbox"] as const) : []),
@@ -122,17 +137,29 @@ export const AVAILABLE_BACKENDS: SyncBackendId[] = [
 
 type DropboxTokens = { accessToken: string; refreshToken: string | null };
 
+/**
+ * A stored backend choice, normalised.
+ *
+ * Anything this build does not recognise falls back to this device, which is
+ * the one backend that is always there and never asks for anything. That
+ * covers a stored `"local"`, written by a build that offered "This device"
+ * and "IndexedDB" as two choices where the first connected nothing: it reads
+ * as this device now, which is what it always was. The document itself is
+ * untouched by that — `useDocStore` writes localStorage whatever the backend
+ * is, so the first pull finds an empty IndexedDB and pushes that copy into
+ * it.
+ */
+export function parseBackend(raw: unknown): SyncBackendId {
+  return raw === "dropbox" || raw === "gdrive" || raw === "folder"
+    ? raw
+    : LOCAL_BACKEND;
+}
+
 function readBackend(): SyncBackendId {
   try {
-    const raw = localStorage.getItem(BACKEND_KEY);
-    return raw === "dropbox" ||
-      raw === "gdrive" ||
-      raw === "folder" ||
-      raw === "idb"
-      ? raw
-      : "local";
+    return parseBackend(localStorage.getItem(BACKEND_KEY));
   } catch {
-    return "local";
+    return LOCAL_BACKEND;
   }
 }
 
@@ -165,6 +192,11 @@ export type SyncEngine = {
   providerName: string;
   /** True when a backend is selected *and* ready to talk to. */
   connected: boolean;
+  /** True when the copy is somewhere other than this device — a folder or a
+   *  cloud account. The top bar's sync glyph rides on this: an IndexedDB
+   *  copy of a document that never leaves the browser is not something to
+   *  watch the status of. */
+  remote: boolean;
   status: SaveStatus;
   statusDetail: string | null;
   /** Local edits the backend hasn't got yet. */
@@ -526,7 +558,7 @@ export function useSyncEngine(
 
   const connect = useCallback(
     async (next: SyncBackendId): Promise<void> => {
-      if (next === "local" || next === "idb") {
+      if (next === "idb") {
         writeBackend(next);
         setBackendState(next);
         return;
@@ -555,16 +587,17 @@ export function useSyncEngine(
   const disconnect = useCallback((): void => {
     // Only the credentials and the grant go: the document stays on this
     // device, and the copy already on the backend is left exactly where it
-    // is.
+    // is. Where it lands is `LOCAL_BACKEND` — disconnecting from a cloud
+    // account is a move back to this device, not to nowhere.
     writeDropboxTokens(null);
     localStorage.removeItem(GDRIVE_TOKEN_KEY);
     void clearDirectoryHandle();
-    writeBackend("local");
+    writeBackend(LOCAL_BACKEND);
     setDropboxTokens(null);
     setGdriveToken(null);
     setFolderHandle(null);
     setFolderReconnectNeeded(false);
-    setBackendState("local");
+    setBackendState(LOCAL_BACKEND);
     syncLog.info("disconnected — the record stays on this device");
   }, []);
 
@@ -619,14 +652,14 @@ export function useSyncEngine(
     if (backend === "folder") {
       return `${folderHandle?.name ?? "…"}/${CLOUD_FILE_NAME}`;
     }
-    if (backend === "idb") return `IndexedDB · ${IDB_DB_NAME}`;
-    return "On this device only";
+    return `IndexedDB · ${IDB_DB_NAME}`;
   })();
 
   return {
     backend,
     providerName: PROVIDER_NAMES[backend],
     connected,
+    remote: backend !== LOCAL_BACKEND,
     status,
     statusDetail,
     dirty,

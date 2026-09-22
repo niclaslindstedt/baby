@@ -13,6 +13,7 @@ import {
   hoursSinceDirty,
   lastChange,
   normFor,
+  recentByDay,
   recentCounts,
 } from "../src/app/diapers.ts";
 import { emptyDoc, type AppData, type DiaperChange } from "../src/app/types.ts";
@@ -132,5 +133,47 @@ describe("norms", () => {
     expect(a.tooEarly).toBe(true);
     expect(a.fewWet).toBe(false);
     expect(a.longDirtyGap).toBe(false);
+  });
+});
+
+// The list the Diapers tab shows: a bounded window, newest first on both
+// axes, and no rows for days that saw nothing.
+describe("recentByDay", () => {
+  const data = docWith([
+    at("2026-09-12", 7, "pee"),
+    at("2026-09-12", 19, "both"),
+    at("2026-09-10", 9, "poo"),
+    // Outside a seven-day window ending on the 12th (which reaches the 6th).
+    at("2026-09-04", 9, "pee"),
+  ]);
+
+  it("groups the window's changes by day, newest day first", () => {
+    const days = recentByDay(data, "2026-09-12", 7);
+    expect(days.map((d) => d.day)).toEqual(["2026-09-12", "2026-09-10"]);
+    // Newest change first inside a day, so the row a mistap just wrote is
+    // the first one to hand.
+    expect(days[0]!.changes.map((c) => c.id)).toEqual([
+      "2026-09-12-19",
+      "2026-09-12-7",
+    ]);
+  });
+
+  it("drops days with nothing logged, and anything older than the window", () => {
+    const days = recentByDay(data, "2026-09-12", 7);
+    expect(days).toHaveLength(2);
+    expect(days.flatMap((d) => d.changes).map((c) => c.id)).not.toContain(
+      "2026-09-04-9",
+    );
+    // Widen the window and the older change comes back.
+    expect(recentByDay(data, "2026-09-12", 30).map((d) => d.day)).toEqual([
+      "2026-09-12",
+      "2026-09-10",
+      "2026-09-04",
+    ]);
+  });
+
+  it("is empty for a log with nothing in the window at all", () => {
+    expect(recentByDay(emptyDoc(), "2026-09-12", 7)).toEqual([]);
+    expect(recentByDay(data, "2026-09-30", 7)).toEqual([]);
   });
 });

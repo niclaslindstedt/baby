@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 import { useState } from "react";
 
+import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
 import {
   Button,
   ConfirmDialog,
@@ -18,7 +19,9 @@ import { LogViewer } from "@niclaslindstedt/oss-framework/logging";
 
 import { logStore } from "./log.ts";
 import { downloadBackup, readBackupFile } from "./backup.ts";
+import { ageLabel, childName } from "./copy.ts";
 import type { DemoDataToggle } from "./dev/useDemoData.ts";
+import { formatCm, formatDayYear } from "./format.ts";
 import { BabyIcon } from "./icons.tsx";
 import { setLanguage, useLang, useT, type Lang } from "./i18n/index.ts";
 import { mergeDocs } from "./merge.ts";
@@ -33,7 +36,8 @@ import {
 import type { DocStore } from "./useDocStore.ts";
 import {
   AVAILABLE_BACKENDS,
-  PROVIDER_NAMES,
+  FOLDER_BACKEND_AVAILABLE,
+  LOCAL_BACKEND,
   type SyncBackendId,
   type SyncEngine,
 } from "./useSyncEngine.ts";
@@ -42,9 +46,16 @@ import {
 // the record lives, backup, the developer knobs, and About. The screen owns no state of
 // its own beyond the confirm dialog — every knob reads and writes the
 // caller's stores, so what is on screen is always what is persisted.
+//
+// The child section spells the profile out rather than offering a door to
+// it. It is four facts, every screen in the app derives from them, and
+// reading them back should not cost a trip into a form with a Save button at
+// the bottom — which is also a form you can leave half-edited.
 
 type Props = {
   settings: AppSettings;
+  /** Today, for the age beside the birth date. */
+  today: DayKey;
   update: <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;
   /** One tracker on or off. See `FeatureId`. */
   setFeature: (id: FeatureId, on: boolean) => void;
@@ -60,6 +71,7 @@ type Props = {
 
 export function SettingsScreen({
   settings,
+  today,
   update,
   setFeature,
   store,
@@ -70,6 +82,8 @@ export function SettingsScreen({
 }: Props) {
   const t = useT();
   const lang = useLang();
+  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const child = store.data.child;
   const [confirmClear, setConfirmClear] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -139,9 +153,48 @@ export function SettingsScreen({
         title={t("settings.child")}
         icon={<BabyIcon className="h-3.5 w-3.5" />}
       >
-        <p className="text-xs text-muted">{t("settings.childHint")}</p>
+        {/* The facts themselves, not a door to them. Everything below is one
+            line in the document, and every screen in the app derives from
+            it — checking that the birth date is right should not cost a trip
+            into a form with a Save button at the bottom. */}
+        {child === null ? (
+          <p className="text-xs text-muted">{t("settings.childMissing")}</p>
+        ) : (
+          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+            <dt className="text-muted">{t("child.name")}</dt>
+            <dd className="text-fg">{childName(t, child)}</dd>
+            <dt className="text-muted">{t("child.birthDate")}</dt>
+            <dd className="text-fg">
+              {t("settings.childBorn", {
+                date: formatDayYear(child.birthDate, locale),
+                age: ageLabel(t, child.birthDate, today, locale),
+              })}
+            </dd>
+            <dt className="text-muted">{t("child.sex")}</dt>
+            <dd className="text-fg">
+              {t(child.sex === "female" ? "child.female" : "child.male")}
+            </dd>
+            <dt className="text-muted">{t("child.parents")}</dt>
+            <dd className="text-fg">
+              {child.motherHeightCm === null && child.fatherHeightCm === null
+                ? t("settings.childHeightsMissing")
+                : t("settings.childHeights", {
+                    mother:
+                      child.motherHeightCm === null
+                        ? t("common.noData")
+                        : formatCm(child.motherHeightCm, locale),
+                    father:
+                      child.fatherHeightCm === null
+                        ? t("common.noData")
+                        : formatCm(child.fatherHeightCm, locale),
+                  })}
+            </dd>
+          </dl>
+        )}
         <div>
-          <Button onClick={onEditChild}>{t("settings.editChild")}</Button>
+          <Button onClick={onEditChild}>
+            {child === null ? t("settings.addChild") : t("settings.editChild")}
+          </Button>
         </div>
       </Section>
 
@@ -154,11 +207,14 @@ export function SettingsScreen({
           value={sync.backend}
           options={AVAILABLE_BACKENDS.map((id) => ({
             value: id,
-            label: PROVIDER_NAMES[id],
+            label: t(`settings.backendName.${id}` as const),
           }))}
           onChange={(next) => {
             if (next === sync.backend) return;
-            if (next === "local") {
+            // Coming home to this device is a disconnect: the credentials
+            // and the folder grant go, and the copy left behind stays where
+            // it is.
+            if (next === LOCAL_BACKEND) {
               sync.disconnect();
               return;
             }
@@ -173,15 +229,23 @@ export function SettingsScreen({
           ariaLabel={t("settings.backend")}
           fullWidth
         />
-        {sync.backend === "folder" && (
-          <p className="text-xs text-muted">{t("settings.folderHint")}</p>
-        )}
-        {sync.backend === "idb" && (
-          <p className="text-xs text-muted">{t("settings.idbHint")}</p>
+        <p className="text-xs text-muted">
+          {t(`settings.backendHint.${sync.backend}` as const)}
+        </p>
+        {/* Why the folder isn't on the list. Silently dropping the choice
+            reads as "this app can't do that"; the honest answer is that no
+            mobile browser, and no Safari or Firefox, ships the directory
+            picker it needs. */}
+        {!FOLDER_BACKEND_AVAILABLE && (
+          <p className="text-xs text-muted">
+            {t("settings.folderUnavailable")}
+          </p>
         )}
         <p className="text-xs text-muted">
-          {sync.connected
-            ? t("settings.connected", { name: sync.providerName })
+          {sync.remote
+            ? t("settings.connected", {
+                name: t(`settings.backendName.${sync.backend}` as const),
+              })
             : t("settings.localOnly")}
           {" · "}
           {sync.location.path}
@@ -206,9 +270,13 @@ export function SettingsScreen({
             <Button onClick={() => void sync.reload()} disabled={busy}>
               {t("settings.reload")}
             </Button>
-            <Button variant="danger" onClick={sync.disconnect}>
-              {t("settings.disconnect")}
-            </Button>
+            {/* Nothing to disconnect *from* on this device: there are no
+                credentials and no grant, and the copy is the browser's own. */}
+            {sync.remote && (
+              <Button variant="danger" onClick={sync.disconnect}>
+                {t("settings.disconnect")}
+              </Button>
+            )}
           </div>
         )}
       </Section>

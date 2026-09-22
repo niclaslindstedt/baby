@@ -83,8 +83,8 @@ export function DiaperChart({
         </span>
         {day && (
           <span className="text-xs text-fg">
-            {t("today.wet", { count: String(day.wet) })} ·{" "}
-            {t("today.dirty", { count: String(day.dirty) })}
+            {t("diapers.wet", { count: String(day.wet) })} ·{" "}
+            {t("diapers.dirty", { count: String(day.dirty) })}
           </span>
         )}
       </div>
@@ -210,11 +210,11 @@ export function DiaperChart({
       <ul className="mt-1 flex gap-4 text-xs text-muted">
         <li className="flex items-center gap-1.5">
           <span className="h-3 w-3 rounded-sm bg-accent/90" />
-          {t("today.legendWet")}
+          {t("diapers.legendWet")}
         </li>
         <li className="flex items-center gap-1.5">
           <span className="h-3 w-3 rounded-sm bg-fg-bright/55" />
-          {t("today.legendDirty")}
+          {t("diapers.legendDirty")}
         </li>
       </ul>
     </div>

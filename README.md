@@ -15,8 +15,8 @@ entirely in your browser and is built around one principle: **minimal
 input, useful output.**
 
 - **Diapers.** Three buttons — pee, poo, both — and the time is recorded for
-  you. The app knows how many wet and dirty diapers a baby of that age usually
-  produces (from the first days' ramp to the Swedish "minst sex kissblöjor per
+  you, from the Diapers tab or the **+** on any screen. The app knows how many
+  wet and dirty diapers a baby of that age usually produces (from the first days' ramp to the Swedish "minst sex kissblöjor per
   dygn") and says so when the last 24 hours look thin, naming the sign to look
   for rather than a diagnosis.
 - **Growth.** Weight, length and head circumference, as often as you like —
@@ -38,9 +38,9 @@ input, useful output.**
   for your child — given, expected by now, upcoming — plus the vaccinations
   offered outside it, each recordable with its date and the vaccine's name.
 
-Each of the four is a switch in **Settings → What you track**. Switch one off
-and its tab and its cards leave the app; nothing is deleted, and switching it
-back on finds everything where you left it.
+Each of the four has a tab of its own and a switch in **Settings → What you
+track**. Switch one off and its tab and its card leave the app; nothing is
+deleted, and switching it back on finds everything where you left it.
 
 It is built on [`@niclaslindstedt/oss-framework`](https://github.com/niclaslindstedt/oss-framework),
 the shared React/Preact surface behind the sibling
@@ -56,8 +56,9 @@ A child's growth readings, diaper log and vaccination card are health data,
 and most apps in this category are an account wrapped around a server you
 cannot inspect — often with a feeding diary that asks for every millilitre.
 
-This one has no account and no server. The record lives in your browser. If
-you want it on more than one device, you keep a copy in a folder you pick, or
+This one has no account and no server. The record lives on your device, in
+your browser's own storage. If you want it on more than one device, you keep
+a copy in a folder you pick, or
 in **your own** Dropbox or Google Drive — a JSON file you can open and read.
 Nothing else leaves the device: no analytics, no telemetry, no third-party
 requests at runtime. The growth standards, the food presets and the
@@ -112,35 +113,37 @@ npm run build && npm run preview
 
 ## Usage
 
-Four tabs on a bottom bar — swipe left or right to move between them. **Today
-is where the answers are; the other three are where things go in.** Not
+Five tabs on a bottom bar — swipe left or right to move between them. **Today
+is where the answers are; the other four are where things go in.** Not
 everyone tracks everything: **Settings → What you track** switches a tracker
-off, and its tab and its cards go with it (nothing is deleted). Each of
+off, and its tab and its card go with it (nothing is deleted). Tapping one of
 Today's cards opens the matching view over the screen — full screen on a
 phone, a panel over a blurred page on a desktop — and closing it puts you back
 where you were.
 
-| Tab          | What it does                                                                                                                                                                                                                                                               |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Today**    | The child's age, the three diaper buttons, the last 24 hours' wet and dirty count with a warning when the day looks thin for the age, today's changes (removable), a week's chart, and one line each on the regimen, growth and next vaccine — each opening its full view. |
-| **Growth**   | The readings list, and the form behind it: weight, length and head circumference, as often as you like.                                                                                                                                                                    |
-| **Food**     | The daily regimen with one-tap presets and, optionally, the times of day each food is given; then milk feeding (breast / formula / both, and which formula — modersmjölksersättning or tillskottsnäring).                                                                  |
-| **Vaccines** | The Swedish programme as a timeline — given, expected by now, upcoming — where a dose is marked given with the vaccine name off the card, beside the extras outside the programme.                                                                                         |
+| Tab          | What it does                                                                                                                                                                                              |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Today**    | The child's age, then one line each on diapers, the regimen, growth and the next vaccine — tap a card for its full view, and it warms when it is asking for a look.                                       |
+| **Diapers**  | The three buttons — pee, poo, both — and the last seven days of changes under them, newest first, so a mistap is one tap to remove.                                                                       |
+| **Growth**   | The readings list, and the form behind it: weight, length and head circumference, as often as you like.                                                                                                   |
+| **Food**     | The daily regimen with one-tap presets and, optionally, the times of day each food is given; then milk feeding (breast / formula / both, and which formula — modersmjölksersättning or tillskottsnäring). |
+| **Vaccines** | The Swedish programme as a timeline — given, expected by now, upcoming — where a dose is marked given with the vaccine name off the card, beside the extras outside the programme.                        |
 
-The three views Today opens:
+The four views Today opens:
 
 | View             | What it shows                                                                                                                                                                                                                       |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Diapers**      | The last 24 hours as wet and dirty against the floor for the child's age, the source that floor comes from, and the week as a chart.                                                                                                |
 | **Growth**       | A tab each for weight, length and head circumference on the WHO standard with the SD channels, the trend across them, the projected range ahead, and (under Length) the expected and projected adult heights.                       |
 | **Food regimen** | Whether the regimen covers the day, and how the day fills up: energy accumulating across the clock against the line it is held to, then iron, vitamin D, the fat shares, omega-3/6 and DHA against the recommendations for the age. |
 | **Vaccinations** | The card at a glance: every visit the programme books, a tick against what is recorded, and how much of the card is done.                                                                                                           |
 
 …and two buttons on the top bar, for the things you do and then leave:
 
-| Button | What it does                                                                                                              |
-| ------ | ------------------------------------------------------------------------------------------------------------------------- |
-| **+**  | Log a diaper from any screen: a sheet with the three buttons. One tap logs and closes. Gone while diaper tracking is off. |
-| **⚙**  | Settings: theme, language, what you track, the child's profile, where the record lives, backup / restore / delete, About. |
+| Button | What it does                                                                                                                                         |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **+**  | Log a diaper without leaving the screen you are on: a sheet with the same three buttons. One tap logs and closes. Gone while diaper tracking is off. |
+| **⚙**  | Settings: theme, language, what you track, the child's profile, where the record lives, backup / restore / delete, About.                            |
 
 ## Configuration
 
@@ -156,7 +159,8 @@ is no secret to protect), and leaving either unset simply hides that provider:
 | `VITE_GDRIVE_APP_FOLDER`  | Folder name in My Drive (default `nird-baby`).                 |
 | `VITE_BASE`               | Deploy base path (default `/`).                                |
 
-The local folder and IndexedDB backends need nothing. See
+**This device** — the browser's own storage, and the default — and the local
+folder need nothing. See
 [`docs/configuration.md`](docs/configuration.md) for the details.
 
 ## Examples
@@ -196,13 +200,13 @@ in — nothing here reads the clock. A sample document is in
 
 ## Troubleshooting
 
-| Symptom                                     | Fix                                                                                                                        |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `npm install` fails with `401 Unauthorized` | The framework comes from GitHub Packages — see Prerequisites.                                                              |
-| The Food tab says there is nothing to track | The child is under six months. Tiny tastes from four months are fine; the regimen starts when solids do.                   |
-| A reading sits far off the curve            | Check the date and the unit (kg, cm). The trend across readings is what matters; one reading is a fact about that morning. |
-| The "Local folder" backend is missing       | The directory picker exists in Chromium browsers (Chrome, Edge) only; use IndexedDB or a cloud backend elsewhere.          |
-| Cloud sync shows "Reconnect needed"         | The provider's session lapsed, or the folder grant was revoked. Tap the sync glyph → Reconnect.                            |
+| Symptom                                     | Fix                                                                                                                                            |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm install` fails with `401 Unauthorized` | The framework comes from GitHub Packages — see Prerequisites.                                                                                  |
+| The Food tab says there is nothing to track | The child is under six months. Tiny tastes from four months are fine; the regimen starts when solids do.                                       |
+| A reading sits far off the curve            | Check the date and the unit (kg, cm). The trend across readings is what matters; one reading is a fact about that morning.                     |
+| The "Local folder" backend is missing       | The directory picker exists in desktop Chromium browsers (Chrome, Edge, Opera) only; stay on This device or connect a cloud backend elsewhere. |
+| Cloud sync shows "Reconnect needed"         | The provider's session lapsed, or the folder grant was revoked. Tap the sync glyph → Reconnect.                                                |
 
 More in [`docs/troubleshooting.md`](docs/troubleshooting.md).
 

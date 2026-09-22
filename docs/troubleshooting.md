@@ -78,8 +78,10 @@ when it is given.
 
 ### The "Local folder" backend is missing
 
-The directory picker exists in Chromium browsers (Chrome, Edge, Brave, Arc)
-only. Use IndexedDB, or a cloud backend, elsewhere.
+The File System Access directory picker it needs exists in desktop Chromium
+browsers (Chrome, Edge, Brave, Arc, Opera) only — no phone browser has it,
+and neither does Safari or Firefox. Settings says so in place of the option.
+Stay on **This device**, or connect a cloud backend, elsewhere.
 
 ### The folder asks to be reconnected
 

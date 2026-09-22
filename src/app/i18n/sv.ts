@@ -15,6 +15,7 @@ export const sv: Catalog = {
 
   nav: {
     today: "Idag",
+    diapers: "Blöjor",
     growth: "Tillväxt",
     food: "Mat",
     vaccines: "Vaccin",
@@ -84,20 +85,46 @@ export const sv: Catalog = {
 
   today: {
     title: "Idag",
-    diapers: "Blöjor",
-    last24: "Senaste dygnet",
-    wet: "{count} kiss",
-    dirty: "{count} bajs",
+    saveFailed:
+      "Kunde inte spara på den här enheten — kontrollera webbläsarens lagringsinställningar.",
+    diapersCard: "Blöjor",
+    foodCard: "Matregim",
+    growthCard: "Tillväxt",
+    vaccinesCard: "Nästa vaccination",
+    latestReading: "{value} den {date} · {z}",
+    noReadings: "Inga mätvärden än.",
+    nextDue: "{dose} — förväntades {date}",
+    nextUpcoming: "{dose} — {date}",
+    allGiven: "Alla programmets doser är noterade.",
+  },
+
+  quickLog: {
+    title: "Logga en blöja",
+    subtitle: "Tryck på vad blöjan innehöll. Tiden sparas nu.",
+  },
+
+  diapers: {
+    title: "Blöjor",
+    log: "Logga ett byte",
+    logHint:
+      "Tryck på vad blöjan innehöll. Tiden sparas åt dig, och samma tre knappar finns bakom + i toppraden från vilken skärm som helst.",
     pee: "Kiss",
     poo: "Bajs",
     both: "Båda",
     logged: "Loggat",
-    lastChange: "Senaste byte {time}",
-    todayLog: "Dagens byten",
+    removed: "Borttaget",
+    removeChange: "Ta bort det här bytet",
+    recent: "Senaste 7 dagarna",
+    recentHint:
+      "Det som loggats, senaste först. Ta bort en rad som blev en felaktig tryckning — räkningen följer med.",
+    dayToday: "Idag",
     noneToday: "Inget loggat idag.",
     noneYet: "Tryck på en knapp när du byter blöja — tiden sparas åt dig.",
-    removeChange: "Ta bort det här bytet",
-    removed: "Borttaget",
+    last24: "Senaste dygnet",
+    last24Line: "{wet} kiss och {dirty} bajs det senaste dygnet",
+    wet: "{count} kiss",
+    dirty: "{count} bajs",
+    lastChange: "Senaste byte {time}",
     chart: "Senaste 7 dagarna",
     chartDesc:
       "Kissblöjor och bajsblöjor per dag den senaste veckan. Ett byte med båda räknas i båda.",
@@ -117,24 +144,8 @@ export const sv: Catalog = {
       infant:
         "Från ungefär sex veckor blir blöjorna tyngre och färre — ungefär fem eller sex per dygn.",
       toddler:
-        "Efter ettårsdagen anger källorna inget antal; en liten barns blöja är torr längre.",
+        "Efter ettårsdagen anger källorna inget antal; ett litet barns blöja är torr längre.",
     },
-    saveFailed:
-      "Kunde inte spara på den här enheten — kontrollera webbläsarens lagringsinställningar.",
-    foodCard: "Matregim",
-    growthCard: "Tillväxt",
-    vaccinesCard: "Nästa vaccination",
-    view: "Visa",
-    latestReading: "{value} den {date} · {z}",
-    noReadings: "Inga mätvärden än.",
-    nextDue: "{dose} — förväntades {date}",
-    nextUpcoming: "{dose} — {date}",
-    allGiven: "Alla programmets doser är noterade.",
-  },
-
-  quickLog: {
-    title: "Logga en blöja",
-    subtitle: "Tryck på vad blöjan innehöll. Tiden sparas nu.",
   },
 
   growth: {
@@ -465,7 +476,7 @@ export const sv: Catalog = {
     },
     featureHint: {
       diapers:
-        "Enknappsloggen på Idag, plusknappen i toppraden och de senaste 24 timmarna mot normen för åldern.",
+        "Blöjfliken, plusknappen i toppraden och de senaste 24 timmarna mot normen för åldern.",
       growth:
         "Vikt, längd och huvudomfång på WHO-kurvorna, med trenden och prognosen.",
       food: "Den dagliga matregimen och mjölken, jämförda med rekommendationen för ålder och vikt.",
@@ -473,22 +484,41 @@ export const sv: Catalog = {
         "Det svenska barnvaccinationsprogrammet, vad som är givet och vad som står på tur.",
     },
     child: "Ditt barn",
-    childHint: "Namn, födelsedatum, kön och föräldrarnas längd.",
+    childBorn: "{date} · {age}",
+    childHeights: "Mamma {mother}, pappa {father}",
+    childHeightsMissing:
+      "Inte ifyllt — den förväntade vuxenlängden behöver båda.",
+    childMissing:
+      "Inget barn än. Fyll i födelsedatum och kön så börjar alla skärmar fungera.",
+    addChild: "Lägg till ditt barn",
     editChild: "Ändra",
     sync: "Var journalen finns",
     syncHint:
-      "Din journal finns i den här webbläsaren. Håll en andra kopia på enheten, i en mapp du väljer, eller i ditt eget molnkonto för att läsa den på en annan enhet.",
+      "Din journal sparas på den här enheten. Håll en andra kopia i en mapp du väljer, eller i ditt eget molnkonto, för att läsa den på en annan enhet också.",
     backend: "Lagring",
+    backendName: {
+      idb: "Den här enheten",
+      folder: "Lokal mapp",
+      dropbox: "Dropbox",
+      gdrive: "Google Drive",
+    },
+    backendHint: {
+      idb: "Sparas i den här webbläsarens egen lagring. Inget lämnar enheten, och inget här går att läsa från en annan.",
+      folder:
+        "En mapp på den här datorn, via webbläsarens filåtkomst. Journalen blir en fil du kan öppna, kopiera och säkerhetskopiera själv.",
+      dropbox:
+        "En fil i din egen Dropbox, i appens mapp. Logga in på en annan enhet för att läsa samma journal.",
+      gdrive:
+        "En fil i din egen Google Drive, i appens mapp. Logga in på en annan enhet för att läsa samma journal.",
+    },
+    folderUnavailable:
+      "Lokal mapp erbjuds inte här: det kräver webbläsarens mappväljare, som Chrome, Edge och Opera på dator har men ingen mobilwebbläsare.",
     disconnect: "Koppla från",
     connected: "Ansluten till {name}",
-    localOnly: "Bara den här enheten",
+    localOnly: "Bara på den här enheten",
     folderReconnect: "Återanslut till mappen",
     folderReconnectNeeded:
       "Webbläsaren behöver att du bekräftar åtkomsten till mappen igen.",
-    folderHint:
-      "En mapp på den här datorn, via webbläsarens filåtkomst (Chrome, Edge). Journalen blir en fil du kan öppna och säkerhetskopiera.",
-    idbHint:
-      "En andra kopia i webbläsarens IndexedDB — mer utrymme, och den behålls när webbläsaren rensar annan webbplatsdata.",
     saveNow: "Spara nu",
     reload: "Läs om från lagringen",
     data: "Dina data",
