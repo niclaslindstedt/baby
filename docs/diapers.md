@@ -7,10 +7,21 @@ are pinned in `tests/diapers_test.ts`.
 ## One tap
 
 A change is a kind — pee, poo or both — and the moment it was logged. That
-is the whole record: no size, no colour, no consistency. The Today screen
-counts them as **wet** (pee or both) and **dirty** (poo or both), the two
-numbers a child health nurse asks for, and a mistap is removed from today's
-list.
+is the whole record: no size, no colour, no consistency. They are counted as
+**wet** (pee or both) and **dirty** (poo or both), the two numbers a child
+health nurse asks for.
+
+The **Diapers** tab is where a change goes in: the three buttons, and the
+last seven days under them, newest day first and newest change first inside a
+day (`recentByDay`), so a mistap is one tap to remove. The window is bounded
+rather than the whole history — a mistap is noticed the same day or the next
+morning, and the diaper log is the one record here that grows by several rows
+a day. The top bar's **+** opens the same three buttons from any screen, and
+both write through the same `addDiaper` edit.
+
+What the counts _mean_ is on Today, behind the Diapers card: the rolling day,
+the floor it is read against, and the week as a chart. Nothing on the tab is
+derived.
 
 The day a change belongs to is the _local_ day it was logged on — a change at
 23:40 is part of that evening — and the week chart draws every day in its

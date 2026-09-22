@@ -116,7 +116,7 @@ This is a **frontend-only, local-first PWA** — there is no server. It is built
 on [`oss-framework`](https://github.com/niclaslindstedt/oss-framework), the
 same shared surface behind the sibling `meds`, `contacts`, `notes` and `cycle`
 apps, and its shell is the `meds` app's: a top bar with the app mark, the sync
-glyph, a `+` and a cog, four bottom-nav tabs a swipe moves between, and two
+glyph, a `+` and a cog, five bottom-nav tabs a swipe moves between, and two
 off-bar screens (the child profile and Settings).
 
 The framework owns the UI kit and the generic mechanics: modals, form
@@ -176,14 +176,15 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   eight-month-old (`demoData.ts`, pure, seeded PRNG, every date an offset
   from `today`), the in-memory `DocBackend` that serves it, and the
   never-persisted flag. Behind `import()`.
-- `src/app/TodayScreen.tsx`, `GrowthScreen.tsx`, `FoodScreen.tsx`,
-  `VaccinesScreen.tsx` — the four tabs; `ChildScreen.tsx` and
-  `SettingsScreen.tsx` — the two off-bar screens; `DiaperSheet.tsx` — the
+- `src/app/TodayScreen.tsx`, `DiapersScreen.tsx`, `GrowthScreen.tsx`,
+  `FoodScreen.tsx`, `VaccinesScreen.tsx` — the five tabs; `ChildScreen.tsx`
+  and `SettingsScreen.tsx` — the two off-bar screens; `DiaperSheet.tsx` — the
   sheet behind the top bar's `+`. `DiaperButtons.tsx` is the app's only
   diaper-logging control and every place that logs one renders it.
-- `src/app/ViewModal.tsx` and the three views it wraps — `GrowthModal.tsx`,
-  `FoodModal.tsx`, `VaccinesModal.tsx` — the read-only answers, opened from
-  Today's headline cards. See "Input on the tabs, answers on Today" below.
+- `src/app/ViewModal.tsx` and the four views it wraps — `DiapersModal.tsx`,
+  `GrowthModal.tsx`, `FoodModal.tsx`, `VaccinesModal.tsx` — the read-only
+  answers, opened from Today's headline cards. See "Input on the tabs,
+  answers on Today" below.
 - `src/app/GrowthChart.tsx`, `DiaperChart.tsx`, `DayCoverageChart.tsx` —
   hand-built from the framework's chart _primitives_ (`bandPath`, `linePath`,
   `areaPath`, `barPath`, `linearScale`, `niceTicks`), not its finished chart
@@ -198,11 +199,12 @@ framework's internals — only its published subpaths.
 
 ### Input on the tabs, answers on Today
 
-The four bottom-bar destinations are where a record goes **in** — a reading, a
-food, a dose marked given — and they carry no derived numbers. Everything the
-app _concludes_ is on Today, one tap behind a headline card, in a `ViewModal`:
-the growth curves, the day's food coverage, the vaccination card. Full screen
-on a phone, a card over a blurred page from `sm:` up.
+The four bottom-bar destinations beside Today are where a record goes **in** —
+a diaper, a reading, a food, a dose marked given — and they carry no derived
+numbers. Everything the app _concludes_ is on Today, one tap behind a headline
+card, in a `ViewModal`: the last 24 hours of diapers, the growth curves, the
+day's food coverage, the vaccination card. Full screen on a phone, a card over
+a blurred page from `sm:` up.
 
 Two rules follow. **A view never writes** — a modal that could edit would be a
 second write path for data the tab behind it owns. And **a stat never moves to
@@ -230,25 +232,26 @@ same PR.
 
 ## Where new code goes
 
-| Change                                 | Goes in                                                                                                                        |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| A new fact about the child or a record | Probably nowhere — see rule two. If it survives that: `src/app/types.ts` + `migrations.ts` (bump `DOC_VERSION`, append a step) |
-| A new derived number                   | The matching domain module (`growth.ts`, `nutrition.ts`, `diapers.ts`, `vaccines.ts`) with tests in `tests/<module>_test.ts`   |
-| A change to a recommendation or floor  | The same module, next to its citation, plus the matching `docs/*.md` topic                                                     |
-| A new programme dose or extra vaccine  | `src/app/vaccines.ts` (`PROGRAMME` / `EXTRAS`) + the group label in `i18n/en.ts` and `sv.ts`                                   |
-| A food preset                          | `src/app/data/foods.ts`                                                                                                        |
-| A new screen                           | `src/app/<Name>Screen.tsx` + a tab in `BottomNav.tsx`, or a button in `TopBar.tsx` if it is an action rather than a place      |
-| A new answer to show a parent          | A card on `TodayScreen.tsx`, or the matching `*Modal.tsx` behind it — never one of the four input tabs                         |
-| A new way to log a diaper              | Never a second write path — render `DiaperButtons` and write through `addDiaper`                                               |
-| A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                          |
-| A new feature switch                   | `FeatureId` in `useAppSettings.ts`, guards on the screens it owns, and `navTabs()` if it has a tab                             |
-| A new storage backend                  | The framework, if generic; `useSyncEngine.ts` wires adapters up, and `idbAdapter.ts` is the one app-local adapter              |
-| A change to what the demo shows        | `src/app/dev/demoData.ts` (offsets from `today`, never fixed dates)                                                            |
-| Any user-facing string                 | `src/app/i18n/en.ts` **and** `sv.ts`, never inline in a component                                                              |
-| A shared UI primitive                  | The framework, if it is domain-free; `src/app/ui.tsx` only for this app's layout pieces                                        |
-| Tests                                  | `tests/<module>_test.ts`                                                                                                       |
-| Docs                                   | `docs/` (references) and `docs/features/` (changelog-linked feature docs only)                                                 |
-| LLM prompt                             | `prompts/<name>/<major>_<minor>_<patch>.md` (see `prompts/README.md`) — none exist; the app makes no LLM calls                 |
+| Change                                 | Goes in                                                                                                                         |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| A new fact about the child or a record | Probably nowhere — see rule two. If it survives that: `src/app/types.ts` + `migrations.ts` (bump `DOC_VERSION`, append a step)  |
+| A new derived number                   | The matching domain module (`growth.ts`, `nutrition.ts`, `diapers.ts`, `vaccines.ts`) with tests in `tests/<module>_test.ts`    |
+| A change to a recommendation or floor  | The same module, next to its citation, plus the matching `docs/*.md` topic                                                      |
+| A new programme dose or extra vaccine  | `src/app/vaccines.ts` (`PROGRAMME` / `EXTRAS`) + the group label in `i18n/en.ts` and `sv.ts`                                    |
+| A food preset                          | `src/app/data/foods.ts`                                                                                                         |
+| A new screen                           | `src/app/<Name>Screen.tsx` + a tab in `BottomNav.tsx`, or a button in `TopBar.tsx` if it is an action rather than a place       |
+| A new way to keep the record           | `useSyncEngine.ts` (`SyncBackendId`, `AVAILABLE_BACKENDS`, the adapter) + `settings.backendName`/`backendHint` in both catalogs |
+| A new answer to show a parent          | A card on `TodayScreen.tsx`, or the matching `*Modal.tsx` behind it — never one of the four input tabs                          |
+| A new way to log a diaper              | Never a second write path — render `DiaperButtons` and write through `addDiaper`                                                |
+| A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                           |
+| A new feature switch                   | `FeatureId` in `useAppSettings.ts`, guards on the screens it owns, and `navTabs()` if it has a tab                              |
+| A new storage backend                  | The framework, if generic; `useSyncEngine.ts` wires adapters up, and `idbAdapter.ts` is the one app-local adapter               |
+| A change to what the demo shows        | `src/app/dev/demoData.ts` (offsets from `today`, never fixed dates)                                                             |
+| Any user-facing string                 | `src/app/i18n/en.ts` **and** `sv.ts`, never inline in a component                                                               |
+| A shared UI primitive                  | The framework, if it is domain-free; `src/app/ui.tsx` only for this app's layout pieces                                         |
+| Tests                                  | `tests/<module>_test.ts`                                                                                                        |
+| Docs                                   | `docs/` (references) and `docs/features/` (changelog-linked feature docs only)                                                  |
+| LLM prompt                             | `prompts/<name>/<major>_<minor>_<patch>.md` (see `prompts/README.md`) — none exist; the app makes no LLM calls                  |
 
 ## Test conventions
 
@@ -320,14 +323,15 @@ references live under `docs/` proper.
 - **Two themes only** — one light, one dark, plus "follow the device". The
   framework ships a dozen palettes; this app deliberately exposes none of
   them. Don't reintroduce the picker.
-- **The bottom nav is the navigation.** Four tabs, no sidebar, no drawer, and
-  they are _destinations_ in a fixed order a swipe moves along — minus the
-  ones whose tracker is switched off in Settings (`navTabs()` filters the
-  order; Today is never one of them). Things you do
-  and then leave — logging a diaper, editing the child, changing a setting —
-  belong on the top bar. The `+` opens a sheet rather than a screen so logging
-  a diaper never costs the chart someone had open.
-- **Logging is one code path.** Today and the sheet both render
+- **The bottom nav is the navigation.** Five tabs — Today plus one per
+  tracker, in `FEATURES` order — no sidebar, no drawer, and they are
+  _destinations_ in a fixed order a swipe moves along, minus the ones whose
+  tracker is switched off in Settings (`navTabs()` filters the order; Today
+  is never one of them). Things you do and then leave — editing the child,
+  changing a setting — belong on the top bar, and so does the `+`: it opens
+  a sheet rather than a screen so logging a diaper never costs the chart
+  someone had open.
+- **Logging is one code path.** The Diapers tab and the sheet both render
   `DiaperButtons` and both write through `addDiaper`.
 - **The service-worker contract** (cache id, `sw.js`, `version.json`,
   `precache-manifest.json`) is shared between `src/app/pwa.ts` and

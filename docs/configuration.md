@@ -25,9 +25,11 @@ injected at build time. There is no server-side half of the flow to protect.
 The declarations live in `src/vite-env.d.ts`; the consumers are
 `vite.config.ts` and `src/app/useSyncEngine.ts`.
 
-The **local folder** and **IndexedDB** backends need no configuration: the
-folder backend appears wherever the browser has the File System Access
-directory picker (Chromium browsers), and IndexedDB everywhere.
+**This device** and the **local folder** need no configuration. This device
+is the default and is always available; the folder backend appears wherever
+the browser has the File System Access directory picker — desktop Chrome,
+Edge and Opera — and is left off the list, with a line saying why, wherever
+it doesn't.
 
 ### Setting the cloud backends up
 
@@ -47,14 +49,14 @@ Everything under Settings persists to localStorage and applies immediately.
 Stored values fall back to defaults on read, so a hand-edited blob can't
 crash a screen.
 
-| Setting                | Default       | Range                                                           | Notes                                                                                                                                                                |
-| ---------------------- | ------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Theme                  | System        | light / dark / system                                           | Two palettes only, by design.                                                                                                                                        |
-| Language               | The browser's | Svenska / English                                               | Stored under `baby:language`.                                                                                                                                        |
-| Where the record lives | This device   | this device / IndexedDB / local folder / Dropbox / Google Drive | See [sync.md](sync.md). The folder option appears only in browsers with the directory picker.                                                                        |
-| Developer mode         | Off           | on / off                                                        | Reveals everything below it: demo data, log capture, the app log, and the raw document size.                                                                         |
-| Demo data              | Off           | on / off                                                        | Replaces your record with an invented eight-month-old. In memory only — never saved, never synced, gone on reload — so it is deliberately _not_ a persisted setting. |
-| Capture console output | Off           | on / off                                                        | Mirrors `console.*` into the in-app log buffer.                                                                                                                      |
+| Setting                | Default       | Range                                               | Notes                                                                                                                                                                |
+| ---------------------- | ------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Theme                  | System        | light / dark / system                               | Two palettes only, by design.                                                                                                                                        |
+| Language               | The browser's | Svenska / English                                   | Stored under `baby:language`.                                                                                                                                        |
+| Where the record lives | This device   | this device / local folder / Dropbox / Google Drive | See [sync.md](sync.md). This device is the browser's own IndexedDB. The folder option appears only in browsers with the directory picker.                            |
+| Developer mode         | Off           | on / off                                            | Reveals everything below it: demo data, log capture, the app log, and the raw document size.                                                                         |
+| Demo data              | Off           | on / off                                            | Replaces your record with an invented eight-month-old. In memory only — never saved, never synced, gone on reload — so it is deliberately _not_ a persisted setting. |
+| Capture console output | Off           | on / off                                            | Mirrors `console.*` into the in-app log buffer.                                                                                                                      |
 
 The child's profile — name, birth date, sex, the parents' heights — is not a
 setting: it lives in the document and is edited from **Settings → Your child**.
@@ -63,17 +65,17 @@ setting: it lives in the document and is edited from **Settings → Your child**
 
 Everything the app persists, all under one origin:
 
-| Key                                     | Holds                                                                          |
-| --------------------------------------- | ------------------------------------------------------------------------------ |
-| `baby:doc`                              | The document — the child and every record.                                     |
-| `baby:settings`                         | The settings above.                                                            |
-| `baby:logs`                             | The in-app log buffer.                                                         |
-| `baby:language`                         | The active UI language.                                                        |
-| `baby:sync:backend`                     | Which backend is selected (`local` / `idb` / `folder` / `dropbox` / `gdrive`). |
-| `baby:sync:dropbox`, `baby:sync:gdrive` | OAuth tokens for the connected cloud backend.                                  |
-| `oss:cache:<backend>:baby`              | The framework's offline mirror of the cloud copy.                              |
-| IndexedDB `baby:documents`              | The second copy of the document when the IndexedDB backend is selected.        |
-| IndexedDB `oss:folder-handles`          | The framework's stored grant for the picked local folder.                      |
+| Key                                     | Holds                                                                                                                 |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `baby:doc`                              | The document — the child and every record.                                                                            |
+| `baby:settings`                         | The settings above.                                                                                                   |
+| `baby:logs`                             | The in-app log buffer.                                                                                                |
+| `baby:language`                         | The active UI language.                                                                                               |
+| `baby:sync:backend`                     | Which backend is selected (`idb` / `folder` / `dropbox` / `gdrive`). A `local` left by an older build reads as `idb`. |
+| `baby:sync:dropbox`, `baby:sync:gdrive` | OAuth tokens for the connected cloud backend.                                                                         |
+| `oss:cache:<backend>:baby`              | The framework's offline mirror of the cloud copy.                                                                     |
+| IndexedDB `baby:documents`              | The durable copy of the document on this device.                                                                      |
+| IndexedDB `oss:folder-handles`          | The framework's stored grant for the picked local folder.                                                             |
 
 Clearing site data removes all of it. That is the whole uninstall procedure —
 there is nothing on a server to delete.

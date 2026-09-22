@@ -45,15 +45,18 @@ through them one at a time.
 
 ## Log a diaper
 
-On **Today**, tap **Pee**, **Poo** or **Both**. That is the whole flow — the
-time is recorded for you, the last 24 hours count up, and a mistap is removed
-from the list of today's changes. The **+** in the top bar opens the same
-three buttons as a sheet from any screen.
+Under **Diapers**, tap **Pee**, **Poo** or **Both**. That is the whole flow —
+the time is recorded for you, and the last seven days are listed under the
+buttons so a mistap is one tap to remove. The **+** in the top bar opens the
+same three buttons as a sheet from any screen, so a change never costs you
+the chart you had open.
 
-When the last 24 hours hold fewer wet diapers than a baby of that age usually
-produces, or the gap since the last dirty diaper is longer than usual for the
-age and feeding, Today says so — and says what to look at. See
-[`diapers.md`](diapers.md) for the floors and where they come from.
+Today's **Diapers** card carries the last 24 hours, and tapping it opens the
+week as a chart. When those 24 hours hold fewer wet diapers than a baby of
+that age usually produces, or the gap since the last dirty diaper is longer
+than usual for the age and feeding, the card warms and the view says what to
+look at. See [`diapers.md`](diapers.md) for the floors and where they come
+from.
 
 ## Add a reading
 
@@ -91,9 +94,10 @@ under **Outside the programme**. See [`vaccinations.md`](vaccinations.md).
 ## Track only what you use
 
 Everything is on out of the box, and **Settings → What you track** switches
-off what you don't. A switched-off tracker leaves the bottom bar — and, for
-diapers, takes the **+** and the buttons on Today with it — so an app opened
-only for the vaccination card is one tab deep. Nothing is deleted: the
+off what you don't. Each tracker has a tab of its own, and a switched-off one
+leaves the bottom bar — taking its card on Today with it, and, for diapers,
+the **+** as well — so an app opened only for the vaccination card is one tab
+deep. Nothing is deleted: the
 records stay, they keep syncing, and switching the tracker back on puts
 everything where you left it. The choice is per device, like the theme.
 

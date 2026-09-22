@@ -33,17 +33,27 @@ export const INPUT_CLASS =
 export const INPUT_INVALID_CLASS =
   "w-full max-w-full min-w-0 rounded-md border border-danger bg-surface px-3 py-2 text-sm text-fg-bright outline-none focus:border-danger";
 
-/** A card: the surface every screen is built from. */
+/** A card: the surface every screen is built from.
+ *
+ *  With `onClick` the whole card *is* the control — a `<button>` wearing the
+ *  same skin, rather than a card with a button parked in the corner. On a
+ *  phone that turns a 64×32 target into the width of the screen, which is
+ *  the difference between reaching for Today's answers and aiming at them.
+ *  The card's own text is the button's accessible name, so it needs no
+ *  label of its own. */
 export function Card({
   children,
   className = "",
   tone = "default",
+  onClick,
 }: {
   children: ReactNode;
   className?: string;
   /** `accent` for a card that carries good news, `warn` for one that asks
    *  for a look. */
   tone?: "default" | "accent" | "warn";
+  /** Makes the card a button that opens something. */
+  onClick?: () => void;
 }) {
   const skin =
     tone === "accent"
@@ -51,11 +61,19 @@ export function Card({
       : tone === "warn"
         ? "border-danger/40 bg-danger/10"
         : "border-line bg-surface-3";
-  return (
-    <div className={`rounded-2xl border p-4 ${skin} ${className}`}>
-      {children}
-    </div>
-  );
+  const base = `rounded-2xl border p-4 ${skin} ${className}`;
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className={`${base} w-full cursor-pointer text-left transition-colors hover:brightness-110 active:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
+      >
+        {children}
+      </button>
+    );
+  }
+  return <div className={base}>{children}</div>;
 }
 
 /** The small-caps heading a card opens with. */

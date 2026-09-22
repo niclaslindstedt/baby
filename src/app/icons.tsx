@@ -91,6 +91,27 @@ export function BabyIcon({ className }: IconProps) {
   );
 }
 
+/**
+ * A diaper, for the tab that logs them.
+ *
+ * The bottom bar's glyphs each name a *place*, and the place here is the
+ * diaper log as a whole — not one of the three things a diaper can hold, so
+ * not the droplet that already means "pee" on the buttons inside it.
+ *
+ * It is the garment worn: a straight waistband, the sides drawn in to a
+ * narrow crotch, and a rounded bottom. The pinch is the whole reason for
+ * that shape — a diaper drawn as a plain tapering front reads as a cup at
+ * 20px, which is one tab away from the Food bowl on the same bar.
+ */
+export function DiaperIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M3 5h18" />
+      <path d="M3 5v3c0 1.6.7 2.5 2.3 3.3 1.6.8 2.2 1.7 2.2 3.2 0 2.5 1.9 4 4.5 4s4.5-1.5 4.5-4c0-1.5.6-2.4 2.2-3.2C20.3 10.5 21 9.6 21 8V5" />
+    </Glyph>
+  );
+}
+
 /** A diaper change — a droplet. */
 export function DropIcon({ className }: IconProps) {
   return (

@@ -85,6 +85,37 @@ export function lastChange(data: AppData): DiaperChange | null {
   return sortedDiapers(data)[0] ?? null;
 }
 
+/** One day of the log, as the Diapers tab lists it. */
+export type DiaperDay = { day: DayKey; changes: DiaperChange[] };
+
+/**
+ * The log of the last `days` days, newest day first and newest change first
+ * within a day.
+ *
+ * Bounded rather than the whole history on purpose: the list exists so a
+ * mistap can be taken back, and a mistap is noticed the same day or the next
+ * morning — not in March. A day with nothing logged is left out, so the list
+ * stays as short as the week was quiet; `today` is the caller's to render
+ * whether or not it is in here, because an empty today is a prompt to tap
+ * rather than a gap.
+ */
+export function recentByDay(
+  data: AppData,
+  today: DayKey,
+  days: number,
+): DiaperDay[] {
+  const byDay = new Map<DayKey, DiaperChange[]>();
+  for (let i = 0; i < days; i++) byDay.set(addDays(today, -i), []);
+  // `sortedDiapers` is newest first, so each bucket comes out newest first
+  // without sorting again.
+  for (const change of sortedDiapers(data)) {
+    byDay.get(dayOfChange(change))?.push(change);
+  }
+  return [...byDay.entries()]
+    .filter(([, changes]) => changes.length > 0)
+    .map(([day, changes]) => ({ day, changes }));
+}
+
 // ── What a day should hold ──────────────────────────────────────────────────
 //
 // How many wet and dirty diapers a baby of a given age is expected to

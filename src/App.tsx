@@ -29,6 +29,7 @@ import {
 import { ChildScreen } from "./app/ChildScreen.tsx";
 import { demoBackendModule, useDemoData } from "./app/dev/useDemoData.ts";
 import { DiaperSheet } from "./app/DiaperSheet.tsx";
+import { DiapersScreen } from "./app/DiapersScreen.tsx";
 import { FoodScreen } from "./app/FoodScreen.tsx";
 import { GrowthScreen } from "./app/GrowthScreen.tsx";
 import { useT } from "./app/i18n/index.ts";
@@ -188,7 +189,7 @@ export function App() {
   const logDiaper = useCallback(
     (kind: DiaperKind) => {
       store.addDiaper({ id: newId(), kind, at: new Date().toISOString() });
-      notice(t("today.logged"));
+      notice(t("diapers.logged"));
     },
     [store, notice, t],
   );
@@ -213,9 +214,9 @@ export function App() {
         quickLogOpen={diaperOpen}
         showQuickLog={features.diapers}
         syncSlot={
-          sync.backend !== "local" ? (
+          sync.remote ? (
             <SyncStatus
-              providerName={sync.providerName}
+              providerName={t(`settings.backendName.${sync.backend}` as const)}
               status={sync.status}
               dirty={sync.dirty}
               offline={sync.offline}
@@ -241,10 +242,16 @@ export function App() {
               today={today}
               standards={standards}
               features={features}
-              onLogDiaper={logDiaper}
-              onRemoveDiaper={(id) => {
+            />
+          )}
+          {tab === "diapers" && hasChild && features.diapers && (
+            <DiapersScreen
+              data={store.data}
+              today={today}
+              onLog={logDiaper}
+              onRemove={(id) => {
                 store.removeDiaper(id);
-                notice(t("today.removed"));
+                notice(t("diapers.removed"));
               }}
             />
           )}
@@ -291,6 +298,7 @@ export function App() {
           {tab === "settings" && (
             <SettingsScreen
               settings={settings}
+              today={today}
               update={update}
               setFeature={setFeature}
               store={store}
@@ -342,7 +350,7 @@ export function App() {
 
       <SyncDetailsModal
         open={syncDetailsOpen}
-        providerName={sync.providerName}
+        providerName={t(`settings.backendName.${sync.backend}` as const)}
         backendKind={
           sync.backend === "dropbox" || sync.backend === "gdrive"
             ? "cloud"

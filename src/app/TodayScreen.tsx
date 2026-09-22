@@ -2,20 +2,13 @@
 import { useEffect, useMemo, useState } from "react";
 
 import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
-import { Button, CloseIcon } from "@niclaslindstedt/oss-framework/components";
+import { ChevronRightIcon } from "@niclaslindstedt/oss-framework/components";
 
 import { ageInDays } from "./age.ts";
 import { ageLabel, childName } from "./copy.ts";
-import { DiaperButtons } from "./DiaperButtons.tsx";
-import { DiaperChart } from "./DiaperChart.tsx";
+import { assessDiapers } from "./diapers.ts";
+import { DiapersModal } from "./DiapersModal.tsx";
 import {
-  assessDiapers,
-  changesOn,
-  dailyCounts,
-  lastChange,
-} from "./diapers.ts";
-import {
-  formatClock,
   formatCm,
   formatDay,
   formatDayYear,
@@ -24,12 +17,12 @@ import {
   formatZ,
 } from "./format.ts";
 import { readings, trend, type GrowthStandards } from "./growth.ts";
-import { AlertIcon, BowlIcon, GrowthIcon, SyringeIcon } from "./icons.tsx";
+import { BowlIcon, DiaperIcon, GrowthIcon, SyringeIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
 import { FoodModal } from "./FoodModal.tsx";
 import { GrowthModal } from "./GrowthModal.tsx";
 import { assess, outgrown, regimenApplies } from "./nutrition.ts";
-import { sortedMeasurements, type AppData, type DiaperKind } from "./types.ts";
+import { sortedMeasurements, type AppData } from "./types.ts";
 import type { Features } from "./useAppSettings.ts";
 import { Card, Heading } from "./ui.tsx";
 import { nextDose, timeline } from "./vaccines.ts";
@@ -37,47 +30,38 @@ import { VaccinesModal } from "./VaccinesModal.tsx";
 
 // The front page, and the only page that answers anything.
 //
-// The four tabs are where things go *in* — a reading, a food, a dose marked
-// given. What those things add up to is here: the child's age, the diaper log,
-// and the three headline answers, each of which opens its own view (see
+// The tabs are where things go *in* — a diaper, a reading, a food, a dose
+// marked given. What those things add up to is here: the child's age, and one
+// headline answer per tracker, each of which opens its own view (see
 // `ViewModal.tsx`) rather than sending the parent off to a tab. That split is
 // the whole shape of the app. A tab you navigate to is a place you then have
 // to navigate out of; a view you open over Today closes back onto the screen
 // you were already reading, which is the right cost for "let me look at the
 // curve for a second".
 //
-// The diaper buttons are the top of the screen because they are the reason it
-// is opened most often. Under them the last 24 hours as two numbers, and the
-// norm's verdict when a day looks thin.
+// The diaper buttons used to be the top of this screen, and are the Diapers
+// tab's now — the one place a diaper is logged from besides the top bar's
+// `+`, which is still a tap away from here and from everywhere else. What
+// Today keeps of them is the answer: the last 24 hours in a line, warm when
+// the day is thin.
 //
-// Every block below the age line belongs to a tracker, and a tracker a parent
-// has switched off in Settings takes its block with it — the diaper log and
-// its chart, or one of the three headline cards. The age line always stays:
-// with everything off, Today is the one true sentence the app can still say.
-
-const CHART_DAYS = 7;
+// Every card below the age line belongs to a tracker, and a tracker a parent
+// has switched off in Settings takes its card with it. The age line always
+// stays: with everything off, Today is the one true sentence the app can
+// still say.
 
 type Props = {
   data: AppData;
   today: DayKey;
   standards: GrowthStandards | null;
-  /** Which trackers are on. Each one owns a block of this screen. */
+  /** Which trackers are on. Each one owns a card of this screen. */
   features: Features;
-  onLogDiaper: (kind: DiaperKind) => void;
-  onRemoveDiaper: (id: string) => void;
 };
 
 /** Which headline answer is open over the screen, if any. */
-type View = "growth" | "food" | "vaccines";
+type View = "diapers" | "growth" | "food" | "vaccines";
 
-export function TodayScreen({
-  data,
-  today,
-  standards,
-  features,
-  onLogDiaper,
-  onRemoveDiaper,
-}: Props) {
+export function TodayScreen({ data, today, standards, features }: Props) {
   const t = useT();
   const lang = useLang();
   const locale = lang === "sv" ? "sv-SE" : "en-GB";
@@ -100,12 +84,6 @@ export function TodayScreen({
     () => assessDiapers(data, ageDays, now, breastfed),
     [data, ageDays, now, breastfed],
   );
-  const todays = useMemo(() => changesOn(data, today), [data, today]);
-  const series = useMemo(
-    () => dailyCounts(data, today, CHART_DAYS),
-    [data, today],
-  );
-  const last = lastChange(data);
 
   const food = useMemo(
     () => (standards ? assess(data, today, standards.weight) : null),
@@ -139,103 +117,27 @@ export function TodayScreen({
         </p>
       </Card>
 
-      {features.diapers && (
-        <Card>
-          <Heading>{t("today.diapers")}</Heading>
-          <div className="mt-3">
-            <DiaperButtons onLog={onLogDiaper} />
-          </div>
-          {diapers && (
-            <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm">
-              <span className="text-xs tracking-wide text-muted uppercase">
-                {t("today.last24")}
-              </span>
-              <span className="font-bold text-fg-bright tabular-nums">
-                {t("today.wet", { count: String(diapers.wet) })}
-              </span>
-              <span className="font-bold text-fg-bright tabular-nums">
-                {t("today.dirty", { count: String(diapers.dirty) })}
-              </span>
-              {last && (
-                <span className="text-xs text-muted">
-                  {t("today.lastChange", {
-                    time: formatClock(last.at, locale),
-                  })}
-                </span>
-              )}
-            </div>
-          )}
-          {diapers?.tooEarly && (
-            <p className="mt-2 text-xs text-muted">{t("today.noneYet")}</p>
-          )}
-          {diapers?.fewWet && (
-            <Notice
-              text={t("today.fewWet", {
-                wet: String(diapers.wet),
-                diapers:
-                  diapers.wet === 1
-                    ? t("today.diaper")
-                    : t("today.diapersPlural"),
-                min: String(diapers.norm.minWet),
-              })}
-              source={t(`today.norm.${diapers.norm.source}` as const)}
-            />
-          )}
-          {diapers?.longDirtyGap && diapers.dirtyGapHours !== null && (
-            <Notice
-              text={t("today.longGap", {
-                days: String(Math.floor(diapers.dirtyGapHours / 24)),
-              })}
-            />
-          )}
-        </Card>
-      )}
-
-      {features.diapers && todays.length > 0 && (
-        <Card>
-          <Heading>{t("today.todayLog")}</Heading>
-          <ul className="mt-2 flex flex-col gap-1">
-            {todays.map((change) => (
-              <li
-                key={change.id}
-                className="flex items-center justify-between gap-2 text-sm"
-              >
-                <span className="text-fg">
-                  <span className="mr-2 text-xs text-muted tabular-nums">
-                    {formatClock(change.at, locale)}
-                  </span>
-                  {t(`today.${change.kind}` as const)}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => onRemoveDiaper(change.id)}
-                  aria-label={t("today.removeChange")}
-                  title={t("today.removeChange")}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted hover:bg-surface-2 hover:text-fg"
-                >
-                  <CloseIcon className="h-4 w-4" />
-                </button>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      )}
-
-      {features.diapers && series.some((d) => d.total > 0) && (
-        <Card>
-          <Heading>{t("today.chart")}</Heading>
-          <div className="mt-2">
-            <DiaperChart
-              series={series}
-              labels={series.map((d) => formatDay(d.day, locale))}
-              ariaLabel={t("today.chart")}
-              desc={t("today.chartDesc")}
-            />
-          </div>
-        </Card>
-      )}
-
       {/* The headline answers — one per tracker that is on. */}
+      {features.diapers && (
+        <HeadlineCard
+          icon={<DiaperIcon className="h-4 w-4" />}
+          title={t("today.diapersCard")}
+          tone={
+            diapers && (diapers.fewWet || diapers.longDirtyGap)
+              ? "warn"
+              : "default"
+          }
+          onOpen={() => setView("diapers")}
+        >
+          {diapers === null || diapers.tooEarly
+            ? t("diapers.noneYet")
+            : t("diapers.last24Line", {
+                wet: String(diapers.wet),
+                dirty: String(diapers.dirty),
+              })}
+        </HeadlineCard>
+      )}
+
       {features.food && (
         <HeadlineCard
           icon={<BowlIcon className="h-4 w-4" />}
@@ -248,7 +150,6 @@ export function TodayScreen({
                 : "default"
           }
           onOpen={() => setView("food")}
-          openLabel={t("today.view")}
         >
           {food === null
             ? t("common.noData")
@@ -282,7 +183,6 @@ export function TodayScreen({
           icon={<GrowthIcon className="h-4 w-4" />}
           title={t("today.growthCard")}
           onOpen={() => setView("growth")}
-          openLabel={t("today.view")}
         >
           {latestMeasurement === null
             ? t("today.noReadings")
@@ -326,7 +226,6 @@ export function TodayScreen({
           title={t("today.vaccinesCard")}
           tone={next?.status === "due" ? "warn" : "default"}
           onOpen={() => setView("vaccines")}
-          openLabel={t("today.view")}
         >
           {next === null
             ? t("today.allGiven")
@@ -348,6 +247,13 @@ export function TodayScreen({
       {/* The views. Mounted here rather than in the shell because every one
           of them reads the same derivations this screen already summarises —
           the card is the headline and the modal is the rest of the sentence. */}
+      <DiapersModal
+        open={view === "diapers" && features.diapers}
+        onClose={() => setView(null)}
+        data={data}
+        today={today}
+        now={now}
+      />
       <GrowthModal
         open={view === "growth" && features.growth}
         onClose={() => setView(null)}
@@ -372,37 +278,30 @@ export function TodayScreen({
   );
 }
 
-/** A warning line under the diaper tally: the text, and the source of the
- *  floor it rests on. */
-function Notice({ text, source }: { text: string; source?: string }) {
-  return (
-    <div className="mt-3 flex gap-2 rounded-xl border border-danger/40 bg-danger/10 p-3 text-sm text-fg">
-      <AlertIcon className="mt-0.5 h-4 w-4 shrink-0 text-danger" />
-      <div>
-        <p>{text}</p>
-        {source && <p className="mt-1 text-xs text-muted">{source}</p>}
-      </div>
-    </div>
-  );
-}
-
+/**
+ * One answer, and the way into the rest of it.
+ *
+ * The whole card is the control — see `Card`'s `onClick`. It used to carry a
+ * **View** button in its corner, which said "this opens something" at the
+ * cost of being the only part of the card that did: everything the card is
+ * about sat outside the tap target. The chevron says the same thing and
+ * takes nothing, because the target is now the card.
+ */
 function HeadlineCard({
   icon,
   title,
   tone = "default",
   children,
   onOpen,
-  openLabel,
 }: {
   icon: React.ReactNode;
   title: string;
   tone?: "default" | "accent" | "warn";
   children: React.ReactNode;
   onOpen: () => void;
-  openLabel: string;
 }) {
   return (
-    <Card tone={tone}>
+    <Card tone={tone} onClick={onOpen}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="flex items-center gap-1.5 text-xs font-bold tracking-wide text-accent uppercase">
@@ -411,7 +310,10 @@ function HeadlineCard({
           </p>
           <p className="mt-1 text-sm text-fg">{children}</p>
         </div>
-        <Button onClick={onOpen}>{openLabel}</Button>
+        <ChevronRightIcon
+          aria-hidden="true"
+          className="mt-0.5 h-5 w-5 shrink-0 text-muted"
+        />
       </div>
     </Card>
   );

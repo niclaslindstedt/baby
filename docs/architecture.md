@@ -1,9 +1,10 @@
 # Architecture
 
 A frontend-only, local-first PWA. There is no server: the app is static files
-on GitHub Pages, and every byte of user data lives in the browser (plus, if
-the user connects one, a copy in a picked folder, in IndexedDB, or as a single
-JSON file in their own Dropbox or Google Drive).
+on GitHub Pages, and every byte of user data lives in the browser — by
+default in this device's own IndexedDB, and, if the user connects one, also
+in a picked folder or as a single JSON file in their own Dropbox or Google
+Drive.
 
 ## The stack
 
@@ -120,22 +121,25 @@ loads on demand.
 App.tsx
 ├── TopBar          the mark, the sync glyph, `+` (diaper sheet), ⚙ (Settings)
 ├── <main>          one scrolling region; the swipe is measured across it
-│   ├── TodayScreen     diaper buttons, last 24 h, today's log, week chart, headline cards
+│   ├── TodayScreen     the age line, then one headline card per tracker
+│   │   ├── DiapersModal    last 24 h against the floor for the age, the week chart
 │   │   ├── GrowthModal     indicator tabs, GrowthChart, trend, forecast, adult height
 │   │   ├── FoodModal       the verdict, DayCoverageChart, the target, the regimen, nutrients
 │   │   └── VaccinesModal   the card at a glance: visits, ticks, the count
+│   ├── DiapersScreen   DiaperButtons, then the last seven days of changes
 │   ├── GrowthScreen    the readings list, and MeasurementForm
 │   ├── FoodScreen      the regimen (FoodForm), then milk feeding
 │   ├── VaccinesScreen  the programme timeline, the extras, the record form
 │   ├── ChildScreen     first run, and Settings → Your child
 │   └── SettingsScreen
-├── BottomNav       Today · Growth · Food · Vaccines (minus the trackers that are off)
-├── DiaperSheet     the `+` sheet — the same DiaperButtons Today renders
+├── BottomNav       Today · Diapers · Growth · Food · Vaccines (minus the trackers that are off)
+├── DiaperSheet     the `+` sheet — the same DiaperButtons the Diapers tab renders
 └── SyncDetailsModal, ToastViewport, UpdateToast
 ```
 
-**Input on the tabs, answers on Today.** The four destinations are where a
-record goes in — a reading, a food, a dose marked given — and each of Today's
+**Input on the tabs, answers on Today.** The four destinations beside Today
+are where a record goes in — a change, a reading, a food, a dose marked given
+— and each of Today's
 headline cards opens the matching _view_ over the screen instead of
 navigating to it (`ViewModal.tsx`, which is the framework's `Modal` in its
 non-centred mode: full screen on a phone, a card over a blurred page from
@@ -153,9 +157,10 @@ and both write through `addDiaper`.
 **Trackers switch off.** Settings → What you track carries a switch per
 tracker — diapers, growth, food, vaccines — stored in `useAppSettings.ts`
 (`Features`, defaulting to all on, and only an explicit `false` reads as
-off). A switched-off tracker loses its tab (`navTabs()` filters `TABS`, so
-the order survives and the swipe closes over the gap), its card on Today,
-and — for diapers — the top bar's `+` and the sheet behind it. Today is
+off). Each of the four has a tab of its own, so a switched-off tracker loses
+it (`navTabs()` filters `TABS`, so the order survives and the swipe closes
+over the gap) along with its card on Today, and — for diapers — the top bar's
+`+` and the sheet behind it. Today is
 never one of them: it is the home screen, the tab the shell falls back to
 when the screen someone is on disappears under them, and with every tracker
 off it still says how old the child is.
