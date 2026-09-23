@@ -158,7 +158,8 @@ is no secret to protect), and leaving either unset simply hides that provider:
 | `VITE_BASE`               | Deploy base path (default `/`).                           |
 
 **This device** — the browser's own storage, and the default — and the local
-folder need nothing. See
+folder need nothing. The workflows read the variables above from repository
+secrets of the same names. See
 [`docs/configuration.md`](docs/configuration.md) for the details.
 
 ## Examples
