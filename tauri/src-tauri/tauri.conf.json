@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Baby",
+  "mainBinaryName": "baby",
+  "version": "../../package.json",
+  "identifier": "dev.local.baby",
+  "build": {
+    "frontendDist": "./placeholder"
+  },
+  "app": {
+    "windows": [],
+    "withGlobalTauri": false,
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["deb", "appimage", "app", "dmg", "nsis"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/256x256.png",
+      "icons/512x512.png",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "../webroot": "webroot"
+    },
+    "category": "Healthcare and Fitness",
+    "shortDescription": "a local-first baby health log",
+    "longDescription": "A local-first baby health and nutrition log: a daily food regimen, growth on standard curves, diapers and the Swedish vaccination timeline. Your records stay on your machine.",
+    "copyright": "Copyright © Niclas Lindstedt",
+    "macOS": {
+      "entitlements": "entitlements.mac.plist",
+      "minimumSystemVersion": "10.15"
+    }
+  }
+}
