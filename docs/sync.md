@@ -12,6 +12,7 @@ it too. There is no server in between.
 | **This device**  | The default, and where every install starts: a durable copy in the browser's own IndexedDB (`baby:documents`) — more room than localStorage, and kept when the browser trims other site data. Nothing leaves the device. | Nothing.                                                      |
 | **Local folder** | A directory you pick through the browser's File System Access API; the record becomes `baby.json`, a real file you can open, back up, or point another app at. The grant is stored and re-probed on boot.                | The browser's directory picker. Hidden where there isn't one. |
 | **Dropbox**      | `Apps/baby/baby.json` in your Dropbox.                                                                                                                                                                                   | `VITE_DROPBOX_APP_KEY` at build time.                         |
+| **iCloud Drive** | `baby.json` in the app's own iCloud container, shown in the Files app as **iCloud Drive → Baby**. Offered through a document-store host the App Store app installs (`src/app/cloudHost.ts`); absent in a browser.        | The App Store app, on a device signed in to iCloud.           |
 
 All four speak the framework's one `StorageAdapter` contract, so the engine
 (`src/app/useSyncEngine.ts`) is the same past the `create*Adapter` calls: it

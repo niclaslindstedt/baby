@@ -58,8 +58,8 @@ cannot inspect — often with a feeding diary that asks for every millilitre.
 
 This one has no account and no server. The record lives on your device, in
 your browser's own storage. If you want it on more than one device, you keep
-a copy in a folder you pick, or
-in **your own** Dropbox — a JSON file you can open and read.
+a copy in a folder you pick, in **your own** Dropbox — a JSON file you can
+open and read — or, in the App Store app, in **your own** iCloud Drive.
 Nothing else leaves the device: no analytics, no telemetry, no third-party
 requests at runtime. The growth standards, the food presets and the
 vaccination schedule are bundled with the app and read locally.

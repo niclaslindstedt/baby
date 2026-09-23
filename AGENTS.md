@@ -69,6 +69,26 @@ make check-seo     # build + assert the structural SEO/PWA signals
 make icons         # regenerate the PWA icons, favicon, and og image
 ```
 
+The phone wrapper in `native/` has a **dependency tree of its own** — `make
+install` does not touch it, and neither does `npm ci` at the root:
+
+```sh
+make native-install    # npm --prefix native install
+make native-bundle     # build the web app into native/assets/webroot.zip
+make native-typecheck  # the wrapper's own tsc
+make native-prebuild   # inspect what expo prebuild generates
+```
+
+It is a thin Expo shell for the App Store and Google Play: the built site in
+a `WebView`, served from a loopback origin, plus an iCloud Drive document
+store the page finds as a **capability** on `window` (`src/app/cloudHost.ts`)
+— nothing in `src/` asks whether it is native. The wrapper moves bytes; what
+is in them stays in `migrations.ts` and `merge.ts`. The iCloud container is
+pinned in `native/identifiers.js` and `native/modules/icloud-store/` (index.ts
+and its Swift twin), which must agree. See
+[`native/README.md`](native/README.md) and
+[`docs/features/native-app.md`](docs/features/native-app.md).
+
 The desktop shell in `tauri/` is a Rust project with its own toolchain; `make
 test` and `make lint` stop at its edge:
 
@@ -333,6 +353,7 @@ references live under `docs/` proper.
 | `vaccines.ts`                                    | `docs/vaccinations.md`, `docs/features/vaccinations.md`                                                        |
 | The document shape (`types.ts`, `migrations.ts`) | `docs/architecture.md`'s data shape, and a `migrations.ts` step                                                |
 | `useSyncEngine.ts`, `idbAdapter.ts`, `merge.ts`  | `docs/sync.md`, `docs/features/cloud-sync.md`                                                                  |
+| The phone wrapper (`native/`, `cloudHost.ts`)    | `native/README.md`, `native/RELEASING.md`, `docs/features/native-app.md`                                       |
 | A `VITE_*` variable                              | `docs/configuration.md`, `src/vite-env.d.ts`, `.env.example`, the README's Configuration table, the workflows  |
 | A screen's behaviour                             | The matching `docs/features/*.md` and the README's Usage table                                                 |
 | The navigation (nav or top bar)                  | `docs/architecture.md` and the README's Usage tables                                                           |
@@ -361,7 +382,8 @@ references live under `docs/` proper.
 - **The service-worker contract** (cache id, `sw.js`, `version.json`,
   `precache-manifest.json`) is shared between `src/app/pwa.ts` and
   `pwa-plugin.ts`; change them together.
-- **`public/icons/*` are generated** — edit `scripts/generate-icons.mjs` (and
+- **`public/icons/*`, `native/assets/*.png` and the desktop icons are
+  generated** — edit `scripts/generate-icons.mjs` (and
   the hand-written `public/icons/icon.svg` and `AppMarkIcon` to match) and
   rerun `make icons`.
 - **No dependency creep.** The framework, Preact, two fonts, and

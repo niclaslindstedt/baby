@@ -10,7 +10,10 @@ device can read it too:
   picker, which desktop Chrome, Edge and Opera have and no phone browser
   does, so it is offered only where it exists;
 - in your own **Dropbox** — a JSON file in a folder you
-  can see, so another device can read the same record.
+  can see, so another device can read the same record;
+- in your own **iCloud Drive** — in the App Store app only, with nothing to
+  sign in to: the record is a file in a **Baby** folder the Files app can
+  open, and every Apple device on the same account reads it.
 
 Two devices reconcile record by record — the later edit of a reading, a food
 or a vaccination wins, and diaper changes from both are kept — with no

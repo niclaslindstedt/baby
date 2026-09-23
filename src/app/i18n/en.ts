@@ -540,6 +540,10 @@ export const en = {
     sync: "Where the record lives",
     syncHint:
       "Your record is kept on this device. Keep a second copy in a folder you pick, or in your own cloud account, to read it on another device too.",
+    // The same sentence with iCloud in it, shown only where the app has a
+    // store to offer — the App Store build. A browser has none.
+    syncHintICloud:
+      "Your record is kept on this device. Keep a second copy in your own iCloud Drive, a folder you pick, or your own cloud account, to read it on another device too.",
     backend: "Backend",
     // The places the record can live. "This device" is the browser's own
     // storage: no account, no picker, nothing leaves the phone.
@@ -548,6 +552,7 @@ export const en = {
       folder: "Local folder",
       dropbox: "Dropbox",
       gdrive: "Dropbox",
+      icloud: "iCloud Drive",
     },
     backendHint: {
       idb: "Kept in this browser's own storage. Nothing leaves the device, and nothing here can be read from another one.",
@@ -557,6 +562,8 @@ export const en = {
         "A file in your own Dropbox, in the app's folder. Sign in on another device to read the same record.",
       gdrive:
         "A file in your own Dropbox, in the app's folder. Sign in on another device to read the same record.",
+      icloud:
+        "A file in your own iCloud Drive, in a Baby folder the Files app can open. Every Apple device signed in to the same account reads the same record.",
     },
     folderUnavailable:
       "A local folder isn't offered here: it needs the browser's directory picker, which desktop Chrome, Edge and Opera have and no phone browser does.",

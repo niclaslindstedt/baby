@@ -496,12 +496,17 @@ export const sv: Catalog = {
     sync: "Var journalen finns",
     syncHint:
       "Din journal sparas på den här enheten. Håll en andra kopia i en mapp du väljer, eller i ditt eget molnkonto, för att läsa den på en annan enhet också.",
+    // The same sentence with iCloud in it, shown only where the app has a
+    // store to offer — the App Store build. A browser has none.
+    syncHintICloud:
+      "Din journal sparas på den här enheten. Håll en andra kopia i din egen iCloud Drive, i en mapp du väljer, eller i ditt eget molnkonto, för att läsa den på en annan enhet också.",
     backend: "Lagring",
     backendName: {
       idb: "Den här enheten",
       folder: "Lokal mapp",
       dropbox: "Dropbox",
       gdrive: "Dropbox",
+      icloud: "iCloud Drive",
     },
     backendHint: {
       idb: "Sparas i den här webbläsarens egen lagring. Inget lämnar enheten, och inget här går att läsa från en annan.",
@@ -511,6 +516,8 @@ export const sv: Catalog = {
         "En fil i din egen Dropbox, i appens mapp. Logga in på en annan enhet för att läsa samma journal.",
       gdrive:
         "En fil i din egen Dropbox, i appens mapp. Logga in på en annan enhet för att läsa samma journal.",
+      icloud:
+        "En fil i din egen iCloud Drive, i en Baby-mapp som appen Filer kan öppna. Alla Apple-enheter inloggade på samma konto läser samma journal.",
     },
     folderUnavailable:
       "Lokal mapp erbjuds inte här: det kräver webbläsarens mappväljare, som Chrome, Edge och Opera på dator har men ingen mobilwebbläsare.",

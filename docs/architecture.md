@@ -3,8 +3,8 @@
 A frontend-only, local-first PWA. There is no server: the app is static files
 on GitHub Pages, and every byte of user data lives in the browser — by
 default in this device's own IndexedDB, and, if the user connects one, also
-in a picked folder or as a single JSON file in their own Dropbox or Google
-Drive.
+in a picked folder, as a single JSON file in their own Dropbox, or — in the
+App Store app — in their own iCloud Drive.
 
 ## The stack
 
