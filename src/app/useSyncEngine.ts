@@ -140,9 +140,7 @@ type DropboxTokens = { accessToken: string; refreshToken: string | null };
  * it.
  */
 export function parseBackend(raw: unknown): SyncBackendId {
-  return raw === "dropbox" || raw === "folder"
-    ? raw
-    : LOCAL_BACKEND;
+  return raw === "dropbox" || raw === "folder" ? raw : LOCAL_BACKEND;
 }
 
 function readBackend(): SyncBackendId {
@@ -289,12 +287,7 @@ export function useSyncEngine(
       });
     }
     return null;
-  }, [
-    backend,
-    folderHandle,
-    dropboxTokens,
-    markFolderPermissionLost,
-  ]);
+  }, [backend, folderHandle, dropboxTokens, markFolderPermissionLost]);
 
   const connected = adapter !== null;
 
@@ -539,7 +532,7 @@ export function useSyncEngine(
         return;
       }
       if (!DROPBOX_APP_KEY) throw new Error("Dropbox is not configured");
-        // Redirects away; `completeDropboxAuth` picks the flow up on return.
+      // Redirects away; `completeDropboxAuth` picks the flow up on return.
       await startDropboxAuth(DROPBOX_APP_KEY, syncLog);
     },
     [connectFolder],

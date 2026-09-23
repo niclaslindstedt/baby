@@ -151,11 +151,11 @@ The app needs no configuration to run. The build-time variables switch cloud
 backends on; both OAuth identifiers are public (the flows are PKCE, so there
 is no secret to protect), and leaving either unset simply hides that provider:
 
-| Variable                  | Effect                                                         |
-| ------------------------- | -------------------------------------------------------------- |
-| `VITE_DROPBOX_APP_KEY`    | Enables the Dropbox backend.                                   |
+| Variable                  | Effect                                                    |
+| ------------------------- | --------------------------------------------------------- |
+| `VITE_DROPBOX_APP_KEY`    | Enables the Dropbox backend.                              |
 | `VITE_DROPBOX_APP_FOLDER` | Folder name the document is filed under (default `baby`). |
-| `VITE_BASE`               | Deploy base path (default `/`).                                |
+| `VITE_BASE`               | Deploy base path (default `/`).                           |
 
 **This device** — the browser's own storage, and the default — and the local
 folder need nothing. See
