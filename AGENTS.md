@@ -82,7 +82,10 @@ make native-prebuild   # inspect what expo prebuild generates
 It is a thin Expo shell for the App Store and Google Play: the built site in
 a `WebView`, served from a loopback origin, plus an iCloud Drive document
 store the page finds as a **capability** on `window` (`src/app/cloudHost.ts`)
-— nothing in `src/` asks whether it is native. The wrapper moves bytes; what
+— nothing in `src/` asks whether it is native. The wrapper also offers Dropbox's
+sign-in an in-app authentication session at `window.__ossAuthSession`, which
+the framework's `getAuthSessionHost` looks for; a browser has none and keeps
+its redirect. The wrapper moves bytes; what
 is in them stays in `migrations.ts` and `merge.ts`. The iCloud container is
 pinned in `native/identifiers.js` and `native/modules/icloud-store/` (index.ts
 and its Swift twin), which must agree. See
@@ -395,6 +398,13 @@ references live under `docs/` proper.
   `native/app.config.js`): `se.agilator.baby` in a store build,
   `dev.local.baby` in a plain checkout. Reverse-DNS so no other app can claim
   it, and never committed as a literal — it follows `APP_BUNDLE_ID`.
+- **The auth-session bridge's names are the framework's**
+  (`AUTH_SESSION_HOST_PROPERTY`, `AUTH_SESSION_HOST_EVENT`), spelled again in
+  `native/src/authSessionBridge.ts`; `tests/native_auth_session_test.ts` pins
+  them. The phone app's Dropbox sign-in returns on `<scheme>://oauth` —
+  `se.agilator.baby://oauth` in a store build — and the Dropbox app must list that exact
+  URI, so changing the bundle id breaks phone sign-in until the App Console
+  follows.
 
 ## Website staleness
 
