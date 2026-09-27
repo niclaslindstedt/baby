@@ -16,20 +16,33 @@
 // timeline is there so the parent knows what the appointment is for and what
 // comes after it.
 //
-// Sources, as of September 2026:
-//   - Folkhälsomyndigheten, "Barnvaccinationsprogram" (table updated
-//     2026-04-16): 6 veckor · 3 månader · 5 månader · 12 månader · 18 månader
-//     · 5 år · årskurs 1–2 · årskurs 5 · årskurs 8–9.
-//   - 1177.se, "Vaccinationsprogrammet för barn" (2025-11-18).
-//   - Rotavirus: three oral doses at 6 weeks, 3 and 5 months (RotaTeq, the
-//     nationally procured product since September 2023).
+// Sources, as of September 2026. Each is an entry in `docs/references.json`,
+// cited by its `[ref:<id>]` tag — the verbatim quotes live there, and
+// `docs/vaccinations.md` is the prose account:
+//   - Folkhälsomyndigheten, "Barnvaccinationsprogram" (updated 16 April
+//     2026): 6 veckor · 3 månader · 5 månader · 12 månader · 18 månader
+//     · 5 år · årskurs 1–2 · årskurs 5 · årskurs 8–9, row by row
+//     [ref:fohm-barnvaccinationsprogram]; 1177's page for parents (2025-11-18)
+//     says the same [ref:1177-vaccinationsprogrammet-for-barn].
+//   - Rotavirus: two or three oral doses depending on the vaccine, the third
+//     at 5 months [ref:fohm-vaccination-mot-rotavirus]; RotaTeq, the
+//     three-dose one, is the nationally procured product since 1 September
+//     2023 [ref:region-stockholm-rotavirusvaccination].
 //   - Hepatit B: not formally in the national programme, but recommended by
-//     Folkhälsomyndigheten and offered free by every region as part of the
-//     hexavalent shot at 3, 5 and 12 months — so it is listed with the
-//     programme, where a parent will see it on the vaccination card.
-//   - Vattkoppor (varicella) joins the general programme on 1 January 2027
-//     for children born from 1 July 2025: two doses, with MPR at 18 months
-//     and in årskurs 1–2. Until then it is a self-paid extra from 12 months.
+//     Folkhälsomyndigheten and offered free by every region since 2016 as
+//     part of the hexavalent shot at 3, 5 and 12 months
+//     [ref:fohm-vaccination-mot-hepatit-b] [ref:rikshandboken-barnvaccinationsprogrammet]
+//     — so it is listed with the programme, where a parent will see it on
+//     the vaccination card.
+//   - HPV: two doses at least six months apart, from årskurs 5
+//     [ref:fohm-vaccination-mot-hpv].
+//   - Vattkoppor (varicella) joins the general programme in January 2027 for
+//     children born from 1 July 2025: two doses, at 18 months and in årskurs
+//     1–2 [ref:fohm-vaccination-mot-vattkoppor]
+//     [ref:fohm-vattkoppor-information-till-vardnadshavare]; the government
+//     dates it 1 January 2027, with a free catch-up for older children from
+//     1 March 2027 [ref:regeringen-2026-ikappvaccination-vattkoppor]. Until
+//     then it is a self-paid extra from 12 months [ref:1177-vattkoppor].
 //
 // Pure and clock-free: `today` is a parameter.
 
@@ -294,7 +307,7 @@ export type ExtraVaccine = {
     | "sixWeeks"
     | "sixMonths"
     | "twelveMonths"
-    | "oneYear"
+    | "twoYears"
     | "threeYears"
     | "season";
   /** Who it is for, as an i18n key. */
@@ -302,42 +315,56 @@ export type ExtraVaccine = {
 };
 
 export const EXTRAS: ExtraVaccine[] = [
+  // At six weeks for risk groups [ref:fohm-vaccination-mot-tuberkulos].
   {
     id: "bcg",
     diseases: ["tuberculosis"],
     typicalAge: "sixWeeks",
     offer: "riskGroup",
   },
+  // At birth, to the children of a mother with hepatitis B
+  // [ref:fohm-vaccination-mot-hepatit-b].
   {
     id: "hepb-birth",
     diseases: ["hepatitisB"],
     typicalAge: "birth",
     offer: "riskGroup",
   },
+  // Antibodies (nirsevimab) for babies born in the season, free in every
+  // region since autumn 2025 [ref:fohm-skydd-for-nyfodda-rsv]
+  // [ref:fohm-fragor-och-svar-profylax-rsv].
   { id: "rsv", diseases: ["rsv"], typicalAge: "birth", offer: "regional" },
+  // Risk groups from six months, each autumn [ref:fohm-vaccination-mot-influensa].
   {
     id: "influenza",
     diseases: ["influenza"],
     typicalAge: "season",
     offer: "riskGroup",
   },
+  // From twelve months, self-paid until the programme takes it up
+  // [ref:1177-vattkoppor] [ref:regeringen-2026-ikappvaccination-vattkoppor].
   {
     id: "varicella-extra",
     diseases: ["varicella"],
     typicalAge: "twelveMonths",
     offer: "programmeFrom2027",
   },
+  // From three years in the risk areas, usually self-paid
+  // [ref:fohm-vaccination-mot-tbe].
   { id: "tbe", diseases: ["tbe"], typicalAge: "threeYears", offer: "optional" },
+  // Risk groups; the youngest age any of the vaccines is approved for is six
+  // weeks [ref:fohm-vaccination-mot-meningokocker].
   {
     id: "meningococcal",
     diseases: ["meningococcus"],
     typicalAge: "sixWeeks",
     offer: "riskGroup",
   },
+  // Risk groups from two years [ref:fohm-2026-pneumokockvaccination-riskgrupper].
   {
     id: "pneumococcal-extra",
     diseases: ["pneumococcus"],
-    typicalAge: "oneYear",
+    typicalAge: "twoYears",
     offer: "riskGroup",
   },
 ];

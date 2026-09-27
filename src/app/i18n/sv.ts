@@ -154,9 +154,9 @@ export const sv: Catalog = {
     diapersPlural: "blöjor",
     norm: {
       firstDays:
-        "De första dagarna ökar antalet med mjölken: ungefär en kissblöja dag ett, två dag två, och så vidare.",
+        "De första dagarna ökar antalet med mjölken: ungefär en kissblöja dag ett, två dag två och tre eller fler dag tre och fyra.",
       newborn:
-        "Från ungefär dag fem räknar barnhälsovården med minst sex kissblöjor per dygn.",
+        "Från ungefär dag fem minst sex kissblöjor per dygn — samma antal som barnhälsovården räknar med.",
       infant:
         "Från ungefär sex veckor blir blöjorna tyngre och färre — ungefär fem eller sex per dygn.",
       toddler:
@@ -627,7 +627,7 @@ export const sv: Catalog = {
       sixWeeks: "från sex veckor",
       sixMonths: "från sex månader",
       twelveMonths: "från tolv månader",
-      oneYear: "från ett år",
+      twoYears: "från två år",
       threeYears: "från tre år",
       season: "varje höst, från sex månader",
     },
@@ -636,7 +636,7 @@ export const sv: Catalog = {
       regional: "erbjuds av regionerna",
       optional: "betalas själv",
       programmeFrom2027:
-        "i programmet från 2027 för barn födda från juli 2025; betalas själv dessförinnan",
+        "i programmet från 2027 för barn födda från juli 2025, med kostnadsfri ikappvaccination för äldre barn från mars 2027; betalas själv dessförinnan",
     },
     form: {
       title: "Notera en vaccination",

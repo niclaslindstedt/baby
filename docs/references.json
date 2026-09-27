@@ -1,6 +1,74 @@
 {
   "$comment": "Every source the app's numbers and claims rest on, keyed by the id code cites as [ref:<id>]. usedBy lists the files that cite each entry; tests/references_test.ts keeps it and the tags in step (OSS_SPEC.md §24). summary and topics are the app's own: the parent-facing line the Sources screen shows, in both languages, and the tracker it is listed under. See AGENTS.md, 'Every threshold cites its source'.",
   "references": {
+    "1177-amning": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Amning",
+      "container": "1177.se",
+      "year": 2024,
+      "url": "https://www.1177.se/barn--gravid/att-skota-ett-nyfott-barn/amning-och-flaskmatning/amning/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barnet kissar så att du får byta blöja minst sex gånger per dag. Blöjan är då genomblöt med kiss.",
+          "at": "Hur vet jag att barnet får i sig tillräckligt?"
+        },
+        {
+          "text": "Ett annat tecken på att barnet får i sig tillräckligt med mat under sin första vecka är att barnets bajs ändrar färg från svart till brunt till grönt till gult.",
+          "at": "Hur vet jag att barnet får i sig tillräckligt?"
+        }
+      ],
+      "supports": "The Swedish wet floor of six a day (DIAPER_NORMS, source `newborn`, minWet 6).",
+      "summary": {
+        "en": "How to tell that a breastfed baby is getting enough, including at least six wet diapers a day.",
+        "sv": "Hur du märker att ett ammat barn får i sig tillräckligt, bland annat minst sex blöta blöjor per dag."
+      },
+      "topics": ["diapers"],
+      "note": "Senast uppdaterad 2024-08-12. The page names no starting day for the six; 'from day five' comes from NHS and La Leche League.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "1177-barnets-kiss-och-bajs-forsta-veckan": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Bildspel: Barnets kiss och bajs första veckan efter förlossningen",
+      "container": "1177.se",
+      "year": 2022,
+      "url": "https://www.1177.se/sv-se-x-ll/barn--gravid/att-skota-ett-nyfott-barn/bildspel-barnets-kiss-och-bajs-forsta-veckan-efter-forlossningen/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "De flesta barn har kissat inom ett dygn efter förlossningen.",
+          "at": "bild 2"
+        },
+        {
+          "text": "Prata med en barnmorska på sjukhuset eller barnavårdscentralen, BVC, om ditt barn inte har kissat inom två dygn.",
+          "at": "bild 2"
+        },
+        {
+          "text": "Det första bajset är svart, svartgrönt eller mörkgrönt. Det brukar kallas barnbeck.",
+          "at": "bild 3"
+        },
+        {
+          "text": "Kontakta genast sjukhuset där du födda barnet om ditt barn inte bajsar inom två dagar.",
+          "at": "bild 3"
+        },
+        {
+          "text": "Kontakta barnavårdscentralen, BVC, eller ring telefonnummer 1177 om ditt barn inte bajsar gult inom en vecka.",
+          "at": "bild 6"
+        }
+      ],
+      "supports": "The meconium deadline — no stool within 48 hours of birth (maxDirtyGapHours 48 in the firstDays bands) — and the first wet diaper within the first day (minWet 1 on day one).",
+      "summary": {
+        "en": "When a newborn's first wee and first poo should have come, and when to call.",
+        "sv": "När ett nyfött barn bör ha kissat och bajsat första gången, och när du ska höra av dig."
+      },
+      "topics": ["diapers"],
+      "note": "Senast uppdaterad 2022-11-07. The canonical URL carries the /sv-se-x-ll/ prefix; the plain /barn--gravid/ path returns 404. The pages that link it call it 'Här kan du se bilder på hur barnets kiss och bajs ändrar färg den första veckan efter förlossningen'.",
+      "usedBy": ["src/app/diapers.ts"]
+    },
     "1177-barns-somn-i-olika-aldrar": {
       "evidence": "health-service",
       "organization": "1177 (Inera)",
@@ -33,6 +101,249 @@
       "note": "Senast uppdaterad 2026-05-04. The page cites no source for its ranges.",
       "usedBy": ["src/app/i18n/en.ts", "src/app/sleep.ts"]
     },
+    "1177-brostmjolksersattning-och-tillskottsnaring": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Bröstmjölksersättning och tillskottsnäring",
+      "container": "1177.se",
+      "year": 2026,
+      "url": "https://www.1177.se/barn--gravid/att-skota-ett-nyfott-barn/amning-och-flaskmatning/brostmjolksersattning-och-tillskottsnaring/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Du kan också titta på blöjan. Spädbarn som får tillräckligt med mat kissar ofta minst sex gånger per dag och urinen är ljusgul.",
+          "at": "Hur vet jag att barnet får i sig tillräckligt?"
+        },
+        {
+          "text": "Bajset hos barn som bara får ersättning är ofta fastare än hos barn som bara får bröstmjölk.",
+          "at": "Bajset hos barn som får bröstmjölksersättning eller tillskottsnäring"
+        },
+        {
+          "text": "Från sex månaders ålder kan barnet få tillskottsnäring tillsammans med vanlig mat. Tillskottsnäring innehåller bland annat extra järn."
+        },
+        {
+          "text": "Tillskottsnäring är anpassad för barn från 6 månader och innehåller mer järn än bröstmjölksersättning.",
+          "at": "Från sex månader"
+        }
+      ],
+      "supports": "The six-a-day wet floor for a formula-fed baby (the `newborn` band), and in nutrition.ts the age from which follow-on formula is sold and why it carries more iron (FOLLOW_ON_FORMULA_PER_100ML).",
+      "summary": {
+        "en": "Formula and follow-on formula: how to tell a bottle-fed baby is getting enough, and from what age follow-on formula is given.",
+        "sv": "Bröstmjölksersättning och tillskottsnäring: hur du märker att ett flaskmatat barn får tillräckligt och från vilken ålder tillskottsnäring ges."
+      },
+      "topics": ["diapers", "food"],
+      "note": "Senast uppdaterad 2026-06-11. Also cited in prose by src/app/nutrition.ts (the follow-on formula block).",
+      "usedBy": ["src/app/diapers.ts"]
+    },
+    "1177-det-nyfodda-barnets-kropp": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Det nyfödda barnets kropp – vanliga funderingar",
+      "container": "1177.se",
+      "year": 2023,
+      "url": "https://www.1177.se/barn--gravid/att-skota-ett-nyfott-barn/det-nyfodda-barnets-kropp-vanliga-funderingar/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "En del barn som ammas kan börja bajsa bara en gång i veckan. Ibland kan det gå upp till tio-tolv dagar eller längre mellan avföringarna. För barn som äter som de ska och mår bra gör det inget att det dröjer länge mellan avföringarna.",
+          "at": "Så bajsar barn efter någon vecka"
+        },
+        {
+          "text": "Barn som får bröstmjölksersättning bajsar oftast några gånger per dag, men det kan gå några dagar emellan. Det viktiga är hur barnet mår.",
+          "at": "Så bajsar barn efter någon vecka"
+        },
+        {
+          "text": "Barn som ammas brukar inte få förstoppning. Om de bajsar sällan blir det mindre vätska i bajset och det ser mer ut som salva.",
+          "at": "Trögt bajs eller förstoppning"
+        }
+      ],
+      "supports": "Why a breastfed baby's interval is not a signal on its own (BREASTFED_MAX_DIRTY_GAP_HOURS, applied from 42 days), and the formula-fed baby's gap of a few days.",
+      "summary": {
+        "en": "How often babies poo after the first weeks — a breastfed baby can go ten to twelve days or more without it meaning anything.",
+        "sv": "Hur ofta barn bajsar efter de första veckorna – ett ammat barn kan gå tio–tolv dagar eller längre utan att det betyder något."
+      },
+      "topics": ["diapers"],
+      "note": "Senast uppdaterad 2023-02-09. The page writes 'tio-tolv' with a hyphen. It puts the change 'efter en eller några veckor', not at six weeks.",
+      "usedBy": ["src/app/diapers.ts"]
+    },
+    "1177-forstoppning-hos-barn": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Förstoppning hos barn",
+      "container": "1177.se",
+      "year": 2025,
+      "url": "https://www.1177.se/sjukdomar--besvar/mage-och-tarm/diarre-forstoppning-och-blod-i-avforingen/forstoppning-hos-barn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barn kan ha ett eller flera av följande symtom när de har förstoppning:",
+          "at": "Symtom"
+        },
+        {
+          "text": "Barnet bajsar färre än tre gånger per vecka.",
+          "at": "Symtom"
+        },
+        {
+          "text": "Bajset är hårt och trögt.",
+          "at": "Symtom"
+        },
+        {
+          "text": "Barn som bara äter bröstmjölk bajsar ofta flera gånger om dagen och det är mycket ovanligt att de får förstoppning. Ibland kan barn som bara äter bröstmjölk bajsa mer sällan, till exempel bara någon gång per vecka. Men de är ändå inte förstoppade eftersom bajset är löst och barnet inte har besvär när hen bajsar.",
+          "at": "Bajs hos barn som får bröstmjölk eller bröstmjölksersättning"
+        },
+        {
+          "text": "Bajsets konsistens och utseende förändras när barn börjar äta annan mat än bröstmjölk och bröstmjölksersättning. Då brukar barn bajsa en till två gånger per dag.",
+          "at": "Bajs hos barn som äter vanlig mat"
+        }
+      ],
+      "supports": "The dirty-diaper gap once solids begin (maxDirtyGapHours 96 from 183 days, and for toddlers), and the long-gap copy pointing at hard stools rather than the count alone.",
+      "summary": {
+        "en": "What constipation looks like in a child, and how often babies poo once they eat ordinary food.",
+        "sv": "Hur förstoppning yttrar sig hos barn och hur ofta barn bajsar när de har börjat äta vanlig mat."
+      },
+      "topics": ["diapers"],
+      "note": "Senast uppdaterad 2025-05-26. Covers children up to 18. The symptoms are 'ett eller flera', not a joint definition of fewer than three a week *and* hard stools. The page was reached at /barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/forstoppning/; the URL given is its canonical one.",
+      "usedBy": ["src/app/diapers.ts"]
+    },
+    "1177-vaccinationsprogrammet-for-barn": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Vaccinationsprogrammet för barn",
+      "container": "1177.se",
+      "year": 2025,
+      "url": "https://www.1177.se/undersokning-behandling/vaccinationer/vaccinationsprogrammet-for-barn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vaccin mot rotavirus. Vaccinet ges som droppar i barnets mun.",
+          "at": "Vid sex veckor"
+        },
+        {
+          "text": "En spruta med vaccin mot difteri, stelkramp, kikhosta, polio, Hib och hepatit B.",
+          "at": "Vid 3 månader (the same at 5 and 12 månader)"
+        },
+        {
+          "text": "En spruta med vaccin mot mässling, påssjuka och röda hund.",
+          "at": "Vid 18 månader; I årskurs 1-2"
+        },
+        {
+          "text": "En spruta med vaccin mot difteri, stelkramp, kikhosta och polio.",
+          "at": "Vid 5 år"
+        },
+        {
+          "text": "I årskurs 5-6",
+          "at": "heading over the two HPV doses"
+        },
+        {
+          "text": "En spruta med vaccin mot difteri, stelkramp och kikhosta.",
+          "at": "I årskurs 8-9"
+        },
+        {
+          "text": "Barn som har ökad risk för att få tuberkulos blir erbjudna vaccin mot sjukdomen.",
+          "at": "Vid sex veckor"
+        },
+        {
+          "text": "En del barn erbjuds vaccin mot fler sjukdomar. Det är barn som tillhör vissa riskgrupper.",
+          "at": "section 'Ibland erbjuds extra vaccin' (tuberkulos, influensa, pneumokockinfektion, epidemisk hjärnhinneinflammation)"
+        }
+      ],
+      "supports": "The parent-facing version of the schedule: the BVC and school rows of PROGRAMME, BCG at six weeks for risk groups, the risk-group extras, and the 'some regions say 5–6' in the hpvGrade note.",
+      "summary": {
+        "en": "The childhood programme explained for parents: what happens at each visit and what the extra risk-group vaccines are.",
+        "sv": "Barnvaccinationsprogrammet förklarat för föräldrar: vad som händer vid varje besök och vilka de extra vaccinen för riskgrupper är."
+      },
+      "topics": ["vaccines"],
+      "note": "Senast uppdaterad 2025-11-18. 1177 counts twelve diseases (it includes hepatitis B); Folkhälsomyndigheten counts eleven in the programme proper. 1177 puts HPV in 'årskurs 5-6'; Folkhälsomyndigheten says årskurs 5.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "1177-vattkoppor": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Vattkoppor",
+      "container": "1177.se",
+      "year": 2024,
+      "url": "https://www.1177.se/sjukdomar--besvar/hud-har-och-naglar/infektioner-pa-huden/vattkoppor/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Du kan välja att vaccinera dig eller ditt barn om du betalar själv.",
+          "at": "section 'Du kan vaccinera dig om du betalar själv'"
+        },
+        {
+          "text": "Vaccinet kan ges till barn från tolv månaders ålder, samt till ungdomar och vuxna. I särskilda fall kan vaccinet ges till barn från nio månaders ålder."
+        },
+        {
+          "text": "Från 1 januari 2027 kommer vaccinet att ingå i det allmänna vaccinationsprogrammet i Sverige.",
+          "at": "section 'Del av vaccinationsprogrammet för barn 2027'"
+        }
+      ],
+      "supports": "Chickenpox as a self-paid extra from twelve months until the programme starts (EXTRAS varicella-extra: typicalAge twelveMonths, offer programmeFrom2027), and the start date 1 January 2027.",
+      "summary": {
+        "en": "Chickenpox vaccine is self-paid from twelve months until it joins the programme on 1 January 2027.",
+        "sv": "Vaccin mot vattkoppor betalar man själv, från tolv månader, tills det kommer in i programmet 1 januari 2027."
+      },
+      "topics": ["vaccines"],
+      "note": "The page says 'Senast uppdaterad 2024-05-28' although it carries the 2027 date, so the stamp lags the text.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "aap-infant-constipation": {
+      "evidence": "health-service",
+      "organization": "American Academy of Pediatrics (HealthyChildren.org)",
+      "title": "How Can I Tell If My Baby is Constipated?",
+      "container": "HealthyChildren.org",
+      "year": 2022,
+      "url": "https://www.healthychildren.org/English/ages-stages/baby/diapers-clothing/Pages/Infant-Constipation.aspx",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "A baby eating formula usually has a bowel movement at least once most days, but may go 1 to 2 days between bowel movements."
+        },
+        {
+          "text": "During the first month of life, stooling less than once a day might mean your newborn isn’t eating enough. However, breastfed infants may go several days or even a week between bowel movements, using every drop they eat to make more baby, not poop."
+        }
+      ],
+      "supports": "The formula-fed baby's gap of a day or two (maxDirtyGapHours 48 in the newborn band), and the breastfed baby's longer gaps.",
+      "summary": {
+        "en": "How often a baby on formula or breast milk usually poos, and when a gap is worth a look.",
+        "sv": "Hur ofta ett barn som får ersättning eller bröstmjölk brukar bajsa, och när ett uppehåll är värt att titta närmare på."
+      },
+      "topics": ["diapers"],
+      "note": "Last updated 5/12/2022. Adapted from Dad to Dad: Parenting Like a Pro (AAP 2012).",
+      "usedBy": ["src/app/diapers.ts"]
+    },
+    "fohm-2026-pneumokockvaccination-riskgrupper": {
+      "evidence": "guideline",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Rekommendationer om pneumokockvaccination till riskgrupper",
+      "container": "Folkhälsomyndigheten (art.nr 26190)",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/publikationer-och-material/publikationsarkiv/r/rekommendationer-om-pneumokockvaccination-/?pub=56914",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Personer 2 år eller äldre med vissa sjukdomar eller medicinska tillstånd, samt alla personer det år de fyller 65 år ska erbjudas vaccination enligt Folkhälsomyndighetens föreskrifter (HSLF-FS 2022:55) (tabell 1)."
+        },
+        {
+          "text": "Barn som ingår i riskgrupper rekommenderas vaccination med en dos av ett konjugatvaccin med minst 20 serotyper.",
+          "at": "section 'Barn (2–17 år)'"
+        }
+      ],
+      "supports": "The extra pneumococcal dose for risk groups (EXTRAS pneumococcal-extra, offer riskGroup) — and shows its age is two years, not one.",
+      "summary": {
+        "en": "Children with certain conditions are offered an extra pneumococcal vaccine from two years old.",
+        "sv": "Barn med vissa sjukdomar erbjuds ett extra vaccin mot pneumokocker från två års ålder."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 1 september 2026 (the September 2026 edition). The A–Ö page says the same: 'Vaccinationsprogrammet för riskgrupper mot pneumokocker omfattar personer 2 år eller äldre med vissa sjukdomar eller medicinska tillstånd.' (https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-pneumokockinfektion/).",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
     "fohm-2026-somnvanor": {
       "evidence": "health-service",
       "organization": "Folkhälsomyndigheten",
@@ -56,6 +367,384 @@
       "topics": ["sleep"],
       "note": "Published 9 April 2026. The PDF: https://www.folkhalsomyndigheten.se/contentassets/0255be040c2646f8a6de5d64f41b637f/framja-goda-somnvanor-bland-barn-och-unga.pdf",
       "usedBy": ["src/app/sleep.ts"]
+    },
+    "fohm-barnvaccinationsprogram": {
+      "evidence": "guideline",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Barnvaccinationsprogram",
+      "container": "folkhalsomyndigheten.se",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/nationella-vaccinationsprogram/barnvaccinationsprogram/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vaccin mot | 6 veckor | 3 månader | 5 månader | 12 månader | 18 månader | 5 år | Årskurs 1–2 | Årskurs 5 | Årskurs 8-9",
+          "at": "table 'Då ges vaccinationerna', header"
+        },
+        {
+          "text": "Rotavirus | Dos 1 | Dos 2 | Dos 3 (a) | – | – | – | – | – | –",
+          "at": "table, row Rotavirus"
+        },
+        {
+          "text": "Difteri | – | Dos 1 | Dos 2 | Dos 3 | – | Dos 4 | – | – | Dos 5",
+          "at": "table, row Difteri (Stelkramp and Kikhosta identical)"
+        },
+        {
+          "text": "Polio | – | Dos 1 | Dos 2 | Dos 3 | – | Dos 4 | – | – | –",
+          "at": "table, row Polio"
+        },
+        {
+          "text": "Hib (Haemophilus influenzae typ b) | – | Dos 1 | Dos 2 | Dos 3 | – | – | – | – | –",
+          "at": "table, row Hib"
+        },
+        {
+          "text": "Hepatit B | – | Dos 1 | Dos 2 | Dos 3 | – | – | – | – | –",
+          "at": "table, row Hepatit B"
+        },
+        {
+          "text": "Pneumokocker | – | Dos 1 | Dos 2 | Dos 3 | – | – | – | – | –",
+          "at": "table, row Pneumokocker"
+        },
+        {
+          "text": "Mässling, påssjuka, röda hund | – | – | – | – | Dos 1 | – | Dos 2 | – | –",
+          "at": "table, row MPR"
+        },
+        {
+          "text": "HPV (Humant papillomvirus) | – | – | – | – | – | – | – | Dos 1 och 2 | –",
+          "at": "table, row HPV"
+        },
+        {
+          "text": "(a) Gäller för vaccin mot rotavirus som ska ges i tre doser.",
+          "at": "table footnote"
+        },
+        {
+          "text": "Utöver det nationella vaccinationsprogrammet för barn erbjuds alla spädbarn också kostnadsfri vaccination mot hepatit B av regionerna, i regionala vaccinationsprogram",
+          "at": "section 'Sjukdomarna som alla barn får skydd mot'"
+        },
+        {
+          "text": "Folkhälsomyndigheten rekommenderar vaccination mot hepatit B till alla spädbarn. Utöver det nationella vaccinationsprogrammet för barn erbjuder därför regionerna kostnadsfri vaccination mot hepatit B, genom regionala vaccinationsprogram.",
+          "at": "section 'Vaccination mot hepatit B erbjuds alla spädbarn'"
+        },
+        {
+          "text": "Vaccin mot hepatit B ingår i ett kombinationsvaccin som ger skydd mot totalt sex sjukdomar: difteri, stelkramp, kikhosta, polio, Hib och hepatit B. Vaccinet ges vid 3, 5 och 12 månaders ålder.",
+          "at": "section 'Vaccination mot hepatit B erbjuds alla spädbarn'"
+        }
+      ],
+      "supports": "Every row of PROGRAMME in vaccines.ts: the nine ages (6 weeks … årskurs 8–9), which dose of which vaccine is given at each, polio ending at the 5-year dose (dtp-4) and dTp at årskurs 8–9 (dtp-5), the rotavirus third dose applying to the three-dose vaccine (note rotavirusThird), and hepatitis B in the hexavalent shot at 3, 5 and 12 months though offered regionally (note hepatitisBRegional).",
+      "summary": {
+        "en": "Sweden's childhood vaccination schedule: which vaccine is given at which age, from six weeks to school year 8–9.",
+        "sv": "Sveriges barnvaccinationsprogram: vilket vaccin som ges vid vilken ålder, från sex veckor till årskurs 8–9."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 16 april 2026. The same table as a PDF (created 2026-02-03): https://www.folkhalsomyndigheten.se/globalassets/smittskydd-sjukdomar/vaccinationer/vaccinationsschema-for-barnvaccinationsprogrammet.pdf. The table does not yet include varicella; the page says the programme protects against 'elva sjukdomar'. The legal text is HSLF-FS 2016:51 (consolidated through HSLF-FS 2020:25, no varicella amendment published as of the access date).",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "fohm-fragor-och-svar-profylax-rsv": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Frågor och svar om profylax mot RSV-infektion för barn",
+      "container": "folkhalsomyndigheten.se",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/rekommendationer-om-vaccination/rekommendationer-om-vaccination-under-graviditet-och-skydd-for-nyfodda/fragor-och-svar-om-profylax-mot-rsv-infektion-for-barn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Under höst - och vintersäsongen 2025/2026 erbjöds monoklonala antikroppar mot RS-virus alla barn födda från den 10 september 2025 till och med den 17 maj 2026. Under säsongen 2026/2027 kommer monoklonala antikroppar erbjudas till barn födda från och med den 10 september 2026.",
+          "at": "'Vilka barn erbjuds monoklonala antikroppar mot RS-virus efter födseln?' (uppdaterad 14 juli 2026)"
+        },
+        {
+          "text": "Beyfortus (nirsevimab) för prevention av sjukdom orsakad av respiratoriskt syncytialvirus (RSV",
+          "at": "same answer, the link to its treatment guidance"
+        }
+      ],
+      "supports": "The name of the RSV extra (nirsevimab) and which newborns get it (EXTRAS rsv).",
+      "summary": {
+        "en": "Which newborns get the RSV antibody nirsevimab each season.",
+        "sv": "Vilka nyfödda som får antikroppen nirsevimab mot RS-virus varje säsong."
+      },
+      "topics": ["vaccines"],
+      "note": "Page uppdaterad 19 maj 2026; the answer quoted uppdaterad 14 juli 2026.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-skydd-for-nyfodda-rsv": {
+      "evidence": "guideline",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Rekommendationer om vaccination under graviditet och skydd för nyfödda",
+      "container": "folkhalsomyndigheten.se",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/rekommendationer-om-vaccination/rekommendationer-om-vaccination-under-graviditet-och-skydd-for-nyfodda/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Antikroppar mot RS-virus erbjuds alla barn som föds mellan september och RS-virussäsongens slut, vilket vanligtvis är april. Det är för att RS-virus sprids som mest under hösten, vintern och tidig vår. Antikropparna ges på BB efter förlossningen.",
+          "at": "section 'Antikroppar mot RS-virus för nyfödda'"
+        },
+        {
+          "text": "Behandlingen är kostnadsfri och erbjuds i alla regioner sedan hösten 2025.",
+          "at": "section 'Antikroppar mot RS-virus för nyfödda'"
+        }
+      ],
+      "supports": "The RSV antibody extra offered by the regions to newborns in season (EXTRAS rsv, typicalAge birth, offer regional), and the 'since 2025' in docs/vaccinations.md.",
+      "summary": {
+        "en": "Babies born between September and April are offered free RSV antibodies at the maternity ward, in every region since autumn 2025.",
+        "sv": "Barn som föds mellan september och april erbjuds kostnadsfria antikroppar mot RS-virus på BB, i alla regioner sedan hösten 2025."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 31 juli 2026. It is an antibody, not a vaccine; the page calls it 'behandlingen'.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-hepatit-b": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot hepatit B",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-hepatit-b/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Folkhälsomyndigheten rekommenderar att alla spädbarn erbjuds vaccination mot hepatit B. Sedan 2016 erbjuds vaccin mot hepatit B kostnadsfritt till alla spädbarn inom regionala vaccinationsprogram."
+        },
+        {
+          "text": "Detta gäller inte minst för de barn som föds av en hepatit B-infekterad mor. Dessa barn vaccineras vid födseln och ibland, beroende på moderns smittsamhetsgrad, får de också immunglobulin."
+        }
+      ],
+      "supports": "Hepatitis B listed with the programme though offered regionally (the hepatitisBRegional note, hepatitisB in dtp-1…dtp-3), and the birth dose for babies of infected mothers (EXTRAS hepb-birth, typicalAge birth).",
+      "summary": {
+        "en": "Why hepatitis B is in the baby's first injections, and who gets a dose at birth.",
+        "sv": "Varför hepatit B ingår i spädbarnets första sprutor, och vilka som får en dos vid födseln."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 15 januari 2026.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-hpv": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot HPV",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2025,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-hpv/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Alla barn erbjuds HPV-vaccin i årskurs 5 genom barnvaccinationsprogrammet."
+        },
+        {
+          "text": "Barn erbjuds två doser HPV-vaccin med minst sex månaders intervall genom barnvaccinationsprogrammet. Detta gäller från årskurs 5 till och med 17 års ålder.",
+          "at": "section 'Dosering och intervall'"
+        }
+      ],
+      "supports": "The two HPV rows (hpv-1, hpv-2) in årskurs 5 and the hpvGrade note's 'two doses at least six months apart'.",
+      "summary": {
+        "en": "The HPV vaccine at school: two doses, at least six months apart, from school year 5.",
+        "sv": "HPV-vaccinet i skolan: två doser med minst sex månaders mellanrum, från årskurs 5."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 6 november 2025. Still two doses for children in the programme; no change to one dose.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-influensa": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot influensa",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-influensa/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vaccinationsinsats mot influensa äger rum en gång per år. Nästa insats startar 2 november 2026."
+        },
+        {
+          "text": "Vaccination mot influensa rekommenderas till barn från 6 månader med ökad risk för allvarlig sjukdom i influensa, enligt riskgruppslistan ovan.",
+          "at": "section 'Särskilda rekommendationer för barn'"
+        },
+        {
+          "text": "Alla regioner erbjuder gratis influensavaccination till gravida, personer som är 65 år eller äldre och övriga riskgrupper."
+        }
+      ],
+      "supports": "The influenza extra for risk groups, each season from six months (EXTRAS influenza, typicalAge season, offer riskGroup).",
+      "summary": {
+        "en": "Children at risk from six months old are offered a flu vaccine every year, free of charge.",
+        "sv": "Barn i riskgrupp erbjuds från sex månaders ålder influensavaccin varje år, kostnadsfritt."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 24 september 2026. The 2026 campaign starts 2 November — late autumn, so 'each autumn' holds.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-meningokocker": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot meningokocker",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-meningokocker/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "vaccin mot grupp B-meningokocker för barn från 2 månaders respektive 10 års ålder (beroende av vaccin) och vuxna",
+          "at": "section 'Vaccin'"
+        },
+        {
+          "text": "vaccin mot grupperna A, C, Y och W för barn från 6 veckors respektive 2 års ålder (beroende av vaccin) och vuxna.",
+          "at": "section 'Vaccin'"
+        },
+        {
+          "text": "Vaccination rekommenderas till personer med sjukdomstillstånd som medför en ökad risk att insjukna i invasiv meningokockinfektion."
+        }
+      ],
+      "supports": "The meningococcal extra for risk groups (EXTRAS meningococcal, offer riskGroup) and its earliest age, six weeks (typicalAge sixWeeks) — the youngest age a vaccine is licensed for.",
+      "summary": {
+        "en": "Meningococcal vaccines are for children with conditions that raise the risk, and can be given from six weeks.",
+        "sv": "Vaccin mot meningokocker är till för barn med sjukdomar som ökar risken, och kan ges från sex veckors ålder."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 18 mars 2026. Six weeks is the licensed lower age of one ACWY vaccine, not a scheduled dose; MenB vaccines start at two months. The detailed risk-group recommendations (2016, updated 2018) give no age.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-rotavirus": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot rotavirus",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2025,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-rotavirus/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Det finns två vacciner mot rotavirus, båda innehåller levande försvagade virusstammar och ges som lösning i munnen. Det ena vaccinet ges i två doser och det andra i tre doser."
+        },
+        {
+          "text": "Vaccinet ges inom det allmänna vaccinationsprogrammet för barn vid 6 veckor och 3 månaders ålder. Om man använder det vaccin som ges i tre doser ges den tredje dosen vid 5 månaders ålder."
+        },
+        {
+          "text": "Den första dosen ska ges före 12 veckors ålder, den andra dosen före 16 veckors ålder och den tredje dosen före 32 veckors ålder."
+        }
+      ],
+      "supports": "The rotavirus rows (rota-1 at 6 weeks, rota-2 at 3 months, rota-3 at 5 months), their oral route, and the note that the third dose belongs to the three-dose vaccine (rotavirusThird).",
+      "summary": {
+        "en": "When the rotavirus drops are given, and why there is a third dose with one of the two vaccines.",
+        "sv": "När rotavirusdropparna ges, och varför det finns en tredje dos med ett av de två vaccinen."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 12 december 2025. The page does not name which vaccine is currently procured; see region-stockholm-rotavirusvaccination and rikshandboken-vaccin-mot-rotavirus.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-tbe": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot TBE",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-tbe/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vuxna och barn från tre års ålder som riskerar att bli fästingbitna i de områden där förekomsten av TBE är måttlig eller hög, det vill säga riskområde 1."
+        },
+        {
+          "text": "TBE-vaccinationerna ingår inte i ett nationellt program och betalas som regel av individen själv. Ibland betalar regionerna en del av kostnaden."
+        }
+      ],
+      "supports": "The TBE extra: from three years, in risk areas, self-paid (EXTRAS tbe, typicalAge threeYears, offer optional).",
+      "summary": {
+        "en": "TBE vaccine is recommended from three years old where tick-borne encephalitis is common, and is usually self-paid.",
+        "sv": "Vaccin mot TBE rekommenderas från tre års ålder där TBE är vanligt, och betalas oftast av en själv."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 22 september 2026. Folkhälsomyndigheten's first national TBE recommendations, published 5 May 2026. The vaccines themselves are licensed from one year (not stated on this page); the recommendation is from three.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-tuberkulos": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot tuberkulos",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-tuberkulos/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Från och med maj 2025 ingår vaccination mot tuberkulos i det särskilda vaccinationsprogrammet för personer som ingår i riskgrupper."
+        },
+        {
+          "text": "barn som har en förälder eller annan hushållskontakt med ursprung i ett land med ökad eller hög förekomst av tuberkulos."
+        },
+        {
+          "text": "Vaccination erbjuds vid 6 veckors ålder. Barn som hör till riskgruppen och inte blivit vaccinerade vid 6 veckors ålder erbjuds vaccination upp till 6 års ålder."
+        }
+      ],
+      "supports": "The BCG extra for risk groups from six weeks (EXTRAS bcg, typicalAge sixWeeks, offer riskGroup).",
+      "summary": {
+        "en": "Who is offered the tuberculosis (BCG) vaccine, and that it is given at six weeks.",
+        "sv": "Vilka som erbjuds vaccin mot tuberkulos (BCG), och att det ges vid sex veckors ålder."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 22 januari 2026. Since May 2025 BCG is in the national special programme for risk groups, not only a recommendation.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-vattkoppor": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot vattkoppor",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-vattkoppor/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barn från 12 månaders ålder och vuxna kan vaccineras mot vattkoppor. Det behövs två doser med minst fyra veckors mellanrum för att säkerställa skydd mot vattkoppor. Vaccin kan under särskilda omständigheter ges från 9 månaders ålder."
+        },
+        {
+          "text": "Under 2027 införs vaccination mot vattkoppor i det allmänna vaccinationsprogrammet för barn. Vårdnadshavare får information från sin BVC när det är aktuellt. Barn födda från och med den 1 juli 2025 kommer att erbjudas sin första dos vid 18 månaders ålder och sin andra dos i årskurs 1-2 i skolan. Äldre barn, upp till 18 år, kommer att erbjudas ikappvaccination mot vattkoppor med start våren 2027."
+        }
+      ],
+      "supports": "The varicella rows (var-1 at 18 months, var-2 in årskurs 1–2) and their cohort (born2025 = 2025-07-01, bornFrom), and the self-paid extra from twelve months before then (EXTRAS varicella-extra, typicalAge twelveMonths).",
+      "summary": {
+        "en": "Chickenpox vaccine joins the programme in 2027 for children born from 1 July 2025: at 18 months and in school year 1–2.",
+        "sv": "Vaccin mot vattkoppor kommer in i programmet 2027 för barn födda från och med 1 juli 2025: vid 18 månader och i årskurs 1–2."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 26 juni 2026. This page says 'Under 2027'; the exact day (1 January 2027) is on the guardians' page (fohm-vattkoppor-information-till-vardnadshavare), the government's press release (regeringen-2026-ikappvaccination-vattkoppor) and 1177 (1177-vattkoppor).",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vattkoppor-information-till-vardnadshavare": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Information till vårdnadshavare om vaccination mot vattkoppor för barn",
+      "container": "folkhalsomyndigheten.se",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-vattkoppor/information-till-vardnadshavare-om-vaccination-mot-vattkoppor-for-barn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vaccinationen ges två gånger. På så sätt blir skyddet gott och långvarigt. Ditt barn erbjuds första vaccinationen mot vattkoppor vid 18 månaders ålder. Den andra dosen ges när barnet går i årskurs 1–2."
+        },
+        {
+          "text": "Vaccination mot vattkoppor ingår i det allmänna vaccinationsprogrammet för barn från och med januari 2027."
+        }
+      ],
+      "supports": "The start of the varicella rows (varicellaStart = 2027-01-01, the from field) and their two ages (var-1, var-2).",
+      "summary": {
+        "en": "What parents are told about the chickenpox vaccine: two doses, at 18 months and in school year 1–2, from January 2027.",
+        "sv": "Vad föräldrar får veta om vaccinet mot vattkoppor: två doser, vid 18 månader och i årskurs 1–2, från januari 2027."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 26 juni 2026.",
+      "usedBy": ["src/app/vaccines.ts"]
     },
     "galland-2012": {
       "evidence": "systematic-review",
@@ -297,6 +986,150 @@
       "topics": ["sleep"],
       "usedBy": ["src/app/i18n/en.ts"]
     },
+    "lll-is-baby-getting-enough": {
+      "evidence": "health-service",
+      "organization": "La Leche League International",
+      "title": "Signs Baby Isn't Getting Enough Breastmilk",
+      "container": "llli.org",
+      "year": 2026,
+      "url": "https://llli.org/breastfeeding-info/is-baby-getting-enough/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "By day two look for two wet diapers (nappies) over 24 hours, days three and four look for three or more wet diapers each 24 hours. By the time your baby is five days old, wet diapers should be more frequent, usually six or more over 24 hours.",
+          "at": "Signs that my baby is well fed"
+        },
+        {
+          "text": "Baby should have 3-4 stools every day by four days of age.",
+          "at": "Signs that my baby is well fed"
+        }
+      ],
+      "supports": "The first-days ramp (minWet 2 on day two, 3 on day three) and the step to six on day five (the `newborn` band from fromDays 4).",
+      "summary": {
+        "en": "How many wet diapers to look for in a breastfed baby's first five days.",
+        "sv": "Hur många blöta blöjor man kan vänta sig under ett ammat barns fem första dagar."
+      },
+      "topics": ["diapers"],
+      "note": "No date on the page; the year is when it was read. llli.org answers plain HTTP clients with 403, so the text was read through a fetching tool that returned the page body. Says three or more on day four, not four.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "lll-poop-and-pee": {
+      "evidence": "health-service",
+      "organization": "La Leche League International",
+      "title": "Poop and Pee in the Exclusively Breastfed Baby",
+      "container": "llli.org",
+      "year": 2024,
+      "url": "https://llli.org/poop-and-pee/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "In the first and second days of life, it is typical for babies to wet only one or two diapers per day since they are drinking small amounts of the early milk.",
+          "at": "The First Week"
+        },
+        {
+          "text": "Most babies, after the first week, have at least three to five soft mild-smelling bowel movements every 24 hours, until they are about five to six weeks old.",
+          "at": "The First Six Weeks"
+        },
+        {
+          "text": "During weeks five and six, poo nappies may reduce to one to two stools per day.",
+          "at": "The First Six Weeks"
+        },
+        {
+          "text": "Occasionally, some healthy babies will have only one bowel movement every few days. When bowel movements are less frequent, they should be soft, yellow, easy to pass, and quite profuse in volume.",
+          "at": "After Six Weeks"
+        },
+        {
+          "text": "Constipation is defined as passing hard, dry, pebbly infrequent bowel movements that are painful for the baby.",
+          "at": "After Six Weeks"
+        },
+        {
+          "text": "After about six weeks of age, your baby may wet only five to six diapers per day. These diapers should be much wetter and heavier than those of a younger baby.",
+          "at": "After Six Weeks"
+        }
+      ],
+      "supports": "The infant band's wet floor of five from 42 days (DIAPER_NORMS, source `infant`), day one's minWet 1, and why the gap alone is not a signal after six weeks (maxDirtyGapHours null from 42 days).",
+      "summary": {
+        "en": "How many wet and dirty diapers a breastfed baby has in the first weeks and after six weeks, when the diapers get fewer and heavier.",
+        "sv": "Hur många blöta och bajsiga blöjor ett ammat barn har de första veckorna och efter sex veckor, när blöjorna blir färre och tyngre."
+      },
+      "topics": ["diapers"],
+      "note": "Published January 2018, revised September 2024. llli.org answers plain HTTP clients with 403, so the text was read through a fetching tool that returned the page body; the quotes are from that copy.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "nhs-how-to-change-your-babys-nappy": {
+      "evidence": "health-service",
+      "organization": "NHS (England)",
+      "title": "How to change your baby's nappy",
+      "container": "nhs.uk",
+      "year": 2024,
+      "url": "https://www.nhs.uk/baby/caring-for-a-newborn/how-to-change-your-babys-nappy/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Your baby's first poo is called meconium. This is sticky and greenish-black.",
+          "at": "What baby poo looks like"
+        },
+        {
+          "text": "Some babies may do this kind of poo during or after birth, or some time in the first 48 hours.",
+          "at": "What baby poo looks like"
+        },
+        {
+          "text": "Babies do 2 or more poos a day in the first week of life. This goes down to an average of 2 a day by the time they're 1 year old.",
+          "at": "How often should my baby do a poo?"
+        },
+        {
+          "text": "Newborn babies who are breastfed may poo at each feed in the early weeks, then, after about 6 weeks, not have a poo for several days.",
+          "at": "How often should my baby do a poo?"
+        },
+        {
+          "text": "Formula-fed babies may poo up to 5 times a day when newborn, but after a few months this can go down to once a day.",
+          "at": "How often should my baby do a poo?"
+        },
+        {
+          "text": "Your baby isn't constipated as long as their poos are soft, even if they haven't done one for a few days.",
+          "at": "How often should my baby do a poo?"
+        }
+      ],
+      "supports": "The 48-hour meconium deadline in the firstDays bands (maxDirtyGapHours 48), the breastfed baby's long gaps after about six weeks (BREASTFED_MAX_DIRTY_GAP_HOURS, applied from 42 days), and the long-gap copy pointing at the stool's softness rather than the count.",
+      "summary": {
+        "en": "When a newborn's first poo comes, and how often babies poo as they grow.",
+        "sv": "När ett nyfött barns första bajs kommer och hur ofta barn bajsar när de växer."
+      },
+      "topics": ["diapers"],
+      "note": "Page last reviewed 27 August 2024.",
+      "usedBy": ["src/app/diapers.ts"]
+    },
+    "nhs-is-my-baby-getting-enough-milk": {
+      "evidence": "health-service",
+      "organization": "NHS (England)",
+      "title": "Breastfeeding: is my baby getting enough milk?",
+      "container": "nhs.uk",
+      "year": 2026,
+      "url": "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding-problems/enough-milk/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "From day 5 onwards, wet nappies should start to become more frequent, with at least 6 heavy, wet nappies every 24 hours. In the first 48 hours, your baby is likely to have only 2 or 3 wet nappies.",
+          "at": "Other signs your baby is feeding well"
+        },
+        {
+          "text": "From the fourth day, they should do at least 2 soft, yellow poos the size of a £2 coin every day for the first few weeks.",
+          "at": "Other signs your baby is feeding well"
+        }
+      ],
+      "supports": "The wet floor of six from day five (DIAPER_NORMS, the `newborn` band from fromDays 4), and the first-days ramp in so far as two or three wet nappies over the first 48 hours matches minWet 1 then 2. The two-stools-a-day expectation behind the newborn band's dirty-diaper check (maxDirtyGapHours 48 is looser than it).",
+      "summary": {
+        "en": "How many wet and dirty nappies a breastfed baby usually has in the first days and weeks.",
+        "sv": "Hur många blöta och bajsiga blöjor ett ammat barn brukar ha de första dagarna och veckorna."
+      },
+      "topics": ["diapers"],
+      "note": "Page last reviewed 30 April 2026. The page gives no count for days 3 and 4, and 'the first few weeks', not six weeks, for the two stools a day. It gives a count, not a maximum gap. It links Unicef UK's checklist for more guidance.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
     "paruthi-2016": {
       "evidence": "consensus",
       "authors": [
@@ -338,6 +1171,161 @@
       },
       "topics": ["sleep"],
       "usedBy": ["src/app/sleep.ts"]
+    },
+    "regeringen-2026-ikappvaccination-vattkoppor": {
+      "evidence": "guideline",
+      "organization": "Regeringskansliet, Socialdepartementet",
+      "title": "Ikappvaccination ska ge fler barn skydd mot vattkoppor",
+      "container": "regeringen.se, pressmeddelande",
+      "year": 2026,
+      "url": "https://www.regeringen.se/pressmeddelanden/2026/06/ikappvaccination-ska-ge-fler-barn-skydd-mot-vattkoppor/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Från den 1 januari 2027 kommer vaccination mot vattkoppor att erbjudas i det nationella allmänna vaccinationsprogrammet för barn. Den 1 mars 2027 påbörjas även en särskild insats för att erbjuda vaccination till barn som inte redan har haft vattkoppor – en ikappvaccinationsinsats."
+        },
+        {
+          "text": "Vaccinet kommer att erbjudas alla barn i två doser, vid 18 månader samt 7–8 års ålder."
+        },
+        {
+          "text": "I detta fall handlar det om barn födda före 1 juli 2025 till och med 17 års ålder som inte är immuna mot vattkoppor och som inte omfattas av det nationella allmänna vaccinationsprogrammet för barn."
+        }
+      ],
+      "supports": "The day the varicella rows start (varicellaStart = 2027-01-01) and the cohort boundary (born2025 = 2025-07-01).",
+      "summary": {
+        "en": "The government's decision: chickenpox vaccine in the programme from 1 January 2027, with a catch-up for older children from March 2027.",
+        "sv": "Regeringens besked: vaccin mot vattkoppor i programmet från 1 januari 2027, med ikappvaccination för äldre barn från mars 2027."
+      },
+      "topics": ["vaccines"],
+      "note": "Published 18 June 2026. The regulation itself: on 31 July 2026 the government amended smittskyddsförordningen (2004:255) to include varicella in the programme, in force 1 November 2026 (press release 'Vaccination mot vattkoppor blir kostnadsfritt för alla barn', https://www.regeringen.se/pressmeddelanden/2026/07/vaccination-mot-vattkoppor-blir-kostnadsfritt-for-alla-barn/: 'Förordningsändringarna träder i kraft den 1 november 2026.'). The same June release also calls the catch-up 'barn i åldern 5 – 17 år'. Folkhälsomyndigheten's föreskrift (HSLF-FS 2016:51) has not yet been amended for varicella as of the access date.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "region-stockholm-rotavirusvaccination": {
+      "evidence": "health-service",
+      "organization": "Region Stockholm, Barnhälsovårdsenheten",
+      "title": "Rotavirusvaccination, information till vårdgivare",
+      "container": "Kunskapsstöd för vårdgivare",
+      "year": 2026,
+      "url": "https://kunskapsstodforvardgivare.se/omraden/barn--och-ungdomars-halsa/riktlinjer-for-bvc/barnhalsovarden/regionala-riktlinjer/vaccination/rotavirusvaccination-information-till-vardgivare",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Det finns idag två vacciner mot rotavirus, Rotarix (ges i två-dos) och RotaTeq (ges i tre-dos). Från 1 september 2023 är det tre-dos vaccinet RotaTeq som är upphandlat i Sverige.",
+          "at": "section 'Rotarix och RotaTeq'"
+        },
+        {
+          "text": "Dos nr 3 erbjuds minst fyra veckor efter dos 2, och ges företrädelsevis i samband med övriga 5-månadersvacciner.",
+          "at": "section 'Ålder vid vaccination och intervall mellan doser för RotaTeq'"
+        }
+      ],
+      "supports": "The claim in vaccines.ts's header and the rotavirusThird note that RotaTeq, the three-dose vaccine, has been the procured product since September 2023.",
+      "summary": {
+        "en": "Why a Swedish baby gets three rotavirus doses: the three-dose vaccine has been the one bought for Sweden since September 2023.",
+        "sv": "Varför ett barn i Sverige får tre doser rotavirusvaccin: det är tredosvaccinet som har upphandlats sedan september 2023."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterat juli 2026. A regional guideline (Region Stockholm), not a national one; no Folkhälsomyndigheten page found that states the procurement date. Folkhälsomyndigheten's parent leaflet 'Bra att veta om vaccination mot rotavirus' (published 1 September 2023, art.nr 23174) switched to three doses at 6 weeks, 3 and 5 months, which is consistent.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "rikshandboken-amningsstunden": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Skapa goda förutsättningar för amningsstunden",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2025,
+      "url": "https://www.rikshandboken-bhv.se/amning-och-nutrition/framja-amning---oversikt/skapa-goda-forutsattningar-for-amningsstunden/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Så här kan föräldrarna se att barnet får i sig tillräckligt vid amningen de första veckorna:"
+        },
+        {
+          "text": "Barnet kissar ljust minst 6 gånger varje dygn och bajsar flera gånger varje dygn."
+        }
+      ],
+      "supports": "The Swedish wet floor of six a day in the first weeks (DIAPER_NORMS, source `newborn`).",
+      "summary": {
+        "en": "How parents can see that a breastfed baby is getting enough in the first weeks, in Swedish child health care's handbook.",
+        "sv": "Hur föräldrar kan se att ett ammat barn får i sig tillräckligt de första veckorna, enligt barnhälsovårdens handbok."
+      },
+      "topics": ["diapers"],
+      "note": "Godkänd 2025-04-01. Manusförfattare Elisabeth Hjärtmyr. Gives no starting day and no end to 'de första veckorna'.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "rikshandboken-barnvaccinationsprogrammet": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Barnvaccinationsprogrammet",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2025,
+      "url": "https://www.rikshandboken-bhv.se/vaccination/vaccinationer-pa-bvc/barnvaccinationsprogrammet/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Sedan 2016 erbjuder samtliga regioner kostnadsfri vaccination mot hepatit B till alla spädbarn inom ramen för regionala vaccinationsprogram.",
+          "at": "footnote to the Vaccinationsschema table"
+        },
+        {
+          "text": "Alla spädbarn som tillhör riskgrupp rekommenderas BCG-vaccination vid 6 veckors ålder.",
+          "at": "section 'Tuberkulosvaccin (BCG)'"
+        },
+        {
+          "text": "Nyfödda barn till födande förälder med smittsam hepatit B (HBs-ag positiv) vaccineras enligt särskild rutin.",
+          "at": "section 'Hepatit B-vaccin till barn till födande förälder med hepatit B'"
+        },
+        {
+          "text": "Vid vaccination mot difteri, stelkramp och kikhosta bör dos 1–4 ges som fulldosvaccin (DTP) och dos 5 med reducerad antigenhalt (dTp).",
+          "at": "section 'Doser, ålder och intervall'"
+        },
+        {
+          "text": "Tidpunkten för vaccination utgår från ett barns födelsedatum, även om barnet är för tidigt fött.",
+          "at": "section 'Doser, ålder och intervall'"
+        }
+      ],
+      "supports": "The same schedule as child health care works to; hepatitis B offered free by every region (hepatitisBRegional); the BCG extra at six weeks (EXTRAS bcg) and the hepatitis B birth dose for risk groups (EXTRAS hepb-birth); and dueDate counting from the birth date, preterm or not.",
+      "summary": {
+        "en": "The schedule as child health centres use it, and the extra doses offered to babies at particular risk.",
+        "sv": "Schemat så som BVC använder det, och de extra doser som erbjuds barn med särskild risk."
+      },
+      "topics": ["vaccines"],
+      "note": "Godkänd 2025-12-12.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "rikshandboken-forstoppning": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Förstoppning",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2022,
+      "url": "https://www.rikshandboken-bhv.se/somatik/buk---oversikt/forstoppning/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barn som ammas kan ha avföring efter varje måltid, men det kan också gå 10–14 dagar mellan avföringarna, ibland längre än så.",
+          "at": "Avföringsfrekvens"
+        },
+        {
+          "text": "Så länge barnet mår bra är avföringsfrekvensen inte ett problem och behöver vare sig utredas eller behandlas.",
+          "at": "Avföringsfrekvens"
+        },
+        {
+          "text": "Då barnen börjar äta annan kost än bröstmjölk brukar avföringsfrekvensen stegvis närma sig förväntad avföringsfrekvens under första året, det vill säga allt från 4–6 avföringar per dag till en avföring varannan dag.",
+          "at": "Avföringsfrekvens"
+        }
+      ],
+      "supports": "The fourteen-day gap for a breastfed baby (BREASTFED_MAX_DIRTY_GAP_HOURS = 14 * 24), and the tighter gap once other food begins (maxDirtyGapHours 96 from 183 days).",
+      "summary": {
+        "en": "How long a breastfed baby can go between stools, and how often children poo once they eat other food, in Swedish child health care's handbook.",
+        "sv": "Hur länge ett ammat barn kan gå mellan avföringarna och hur ofta barn bajsar när de äter annan mat, enligt barnhälsovårdens handbok."
+      },
+      "topics": ["diapers"],
+      "note": "Godkänd 2022-10-19. Manusförfattare Henrik Arnell (Astrid Lindgrens Barnsjukhus). The 10–14 days carries no age qualifier.",
+      "usedBy": ["src/app/diapers.ts"]
     },
     "rikshandboken-framja-god-somn": {
       "evidence": "health-service",
@@ -465,6 +1453,46 @@
       "topics": ["sleep"],
       "note": "The page shows no date; the year is when it was read.",
       "usedBy": ["src/app/sleep.ts"]
+    },
+    "unicef-uk-breastfeeding-checklist": {
+      "evidence": "health-service",
+      "organization": "Unicef UK Baby Friendly Initiative",
+      "title": "How can I tell that breastfeeding is going well?",
+      "container": "unicef.org.uk (mothers' breastfeeding checklist, PDF)",
+      "year": 2016,
+      "url": "https://www.unicef.org.uk/babyfriendly/wp-content/uploads/sites/2/2016/10/mothers_breastfeeding_checklist.pdf",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "1-2 days old 1-2 or more per day",
+          "at": "p. 2, 'Nappies' table, wet nappies"
+        },
+        {
+          "text": "3-4 days old 3 or more per day",
+          "at": "p. 2, 'Nappies' table, wet nappies"
+        },
+        {
+          "text": "5-6 days old 5 or more Heavy wet",
+          "at": "p. 2, 'Nappies' table, wet nappies"
+        },
+        {
+          "text": "7 days to 28 days old 6 or more heavy wet",
+          "at": "p. 2, 'Nappies' table, wet nappies"
+        },
+        {
+          "text": "1 or more dark green/black ‘tar like’ called meconium",
+          "at": "p. 2, 'Nappies' table, dirty nappies, 1-2 days old"
+        }
+      ],
+      "supports": "The one source found with a wet-nappy count for each day of the first week — the day-by-day check on the firstDays ramp (minWet 1, 2, 3, 4) and the day-five step to six.",
+      "summary": {
+        "en": "The UK's day-by-day checklist of wet and dirty nappies in a breastfed baby's first four weeks.",
+        "sv": "Brittisk checklista dag för dag över blöta och bajsiga blöjor under ett ammat barns fyra första veckor."
+      },
+      "topics": ["diapers"],
+      "note": "Linked from NHS's 'is my baby getting enough milk?' page. The PDF carries no date; the upload path says October 2016. Table cells are quoted as the PDF's text layer reads them. Not currently cited by the code — proposed as the source for the ramp.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
     },
     "who-2019-under5": {
       "evidence": "guideline",

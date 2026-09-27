@@ -186,10 +186,15 @@ export const en = {
     diapersPlural: "diapers",
     // Which source the floor comes from, said once under the tally.
     norm: {
+      // The ramp [ref:unicef-uk-breastfeeding-checklist]
+      // [ref:lll-is-baby-getting-enough].
       firstDays:
-        "In the first days the count rises with the milk: about one wet diaper on day one, two on day two, and so on.",
+        "In the first days the count rises with the milk: about one wet diaper on day one, two on day two, and three or more on days three and four.",
+      // Six from day five [ref:nhs-is-my-baby-getting-enough-milk], the
+      // Swedish count too [ref:1177-amning] [ref:rikshandboken-amningsstunden].
       newborn:
-        "From about day five, Swedish child health care expects at least six wet diapers a day.",
+        "From about day five, at least six wet diapers a day — the count Swedish child health care uses too.",
+      // [ref:lll-poop-and-pee]
       infant:
         "From about six weeks the diapers are heavier and fewer — about five or six a day.",
       toddler:
@@ -661,10 +666,15 @@ export const en = {
       varicella: "Chickenpox",
     },
     note: {
+      // [ref:fohm-barnvaccinationsprogram], RotaTeq since 1 September 2023
+      // [ref:region-stockholm-rotavirusvaccination].
       rotavirusThird:
         "The third dose applies to the three-dose vaccine (RotaTeq, the national product since 2023).",
+      // [ref:fohm-vaccination-mot-hepatit-b]
       hepatitisBRegional:
         "Hepatitis B is offered free by every region as part of the same injection, though not formally in the national programme.",
+      // [ref:fohm-vaccination-mot-hpv]; 1177 says "årskurs 5-6"
+      // [ref:1177-vaccinationsprogrammet-for-barn].
       hpvGrade:
         "Two doses at least six months apart, in school year 5 (some regions say 5–6).",
     },
@@ -689,7 +699,7 @@ export const en = {
       sixWeeks: "from six weeks",
       sixMonths: "from six months",
       twelveMonths: "from twelve months",
-      oneYear: "from one year",
+      twoYears: "from two years",
       threeYears: "from three years",
       season: "each autumn, from six months",
     },
@@ -697,8 +707,9 @@ export const en = {
       riskGroup: "risk groups",
       regional: "offered by the regions",
       optional: "self-paid",
+      // [ref:regeringen-2026-ikappvaccination-vattkoppor]
       programmeFrom2027:
-        "in the programme from 2027 for children born from July 2025; self-paid before",
+        "in the programme from 2027 for children born from July 2025, with a free catch-up for older children from March 2027; self-paid before",
     },
     form: {
       title: "Record a vaccination",

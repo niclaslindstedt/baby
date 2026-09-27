@@ -87,7 +87,8 @@ describe("diapers", () => {
 describe("norms", () => {
   it("ramp through the first days and settle at the Swedish floor", () => {
     expect(normFor(0)?.minWet).toBe(1);
-    expect(normFor(3)?.minWet).toBe(4);
+    expect(normFor(2)?.minWet).toBe(3);
+    expect(normFor(3)?.minWet).toBe(3);
     expect(normFor(10)?.minWet).toBe(6);
     expect(normFor(100)?.minWet).toBe(5);
     expect(normFor(400)?.minWet).toBe(4);
@@ -122,10 +123,18 @@ describe("norms", () => {
     const older = assessDiapers(data, 200, now, false)!;
     expect(older.dirtyGapLimitHours).toBe(96);
     expect(older.longDirtyGap).toBe(true);
-    // Breastfed: the gap is not a signal until two weeks.
-    const breastfed = assessDiapers(data, 200, now, true)!;
+    // Breastfed, between six weeks and six months: the gap is not a signal
+    // until two weeks.
+    const breastfed = assessDiapers(data, 100, now, true)!;
     expect(breastfed.dirtyGapLimitHours).toBe(14 * 24);
     expect(breastfed.longDirtyGap).toBe(false);
+    // Once solids begin the stool pattern moves toward one every other day,
+    // and a breastfed child's gap is read like any other.
+    const onSolids = assessDiapers(data, 200, now, true)!;
+    expect(onSolids.dirtyGapLimitHours).toBe(96);
+    expect(onSolids.longDirtyGap).toBe(true);
+    // Before six weeks the newborn's 48 hours hold, breastfed or not.
+    expect(assessDiapers(data, 30, now, true)!.dirtyGapLimitHours).toBe(48);
   });
 
   it("stay quiet on an empty log", () => {

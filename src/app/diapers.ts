@@ -124,27 +124,49 @@ export function recentByDay(
 // deliberately the cautious end of what the sources allow: a warning here is
 // "worth a look", never a diagnosis.
 //
-// Wet diapers. The first days ramp with the milk — one on day one, two on day
-// two, three on day three, four on day four (NHS, La Leche League, AAP) —
-// and from day five the Swedish floor applies: "minst sex gånger per dag"
-// (1177, both the breastfeeding and the formula page; Rikshandboken: "kissar
-// ljust minst 6 gånger varje dygn"). From about six weeks the diapers get
-// heavier and fewer, five to six a day (La Leche League; AAP calls fewer
-// than six a dehydration sign in infants), and the app's floor drops to
-// five. Past the first birthday the sources give no count — a toddler's
-// bladder holds more and the diaper is dry for longer — so the floor is a
-// soft four, and the copy says so.
+// Every source is an entry in `docs/references.json`, cited by its
+// `[ref:<id>]` tag; the verbatim quotes live there, and `docs/diapers.md` is
+// the prose account.
 //
-// Dirty diapers. Newborns should pass meconium within two days (1177), then
-// at least two soft yellow stools a day through the first six weeks for a
-// breastfed baby (NHS); a formula-fed baby about one a day (AAP), with a gap
-// of a couple of days acceptable (1177). After six weeks a breastfed baby's
-// interval is *not* a signal on its own — 1177: "tio–tolv dagar eller
-// längre", Rikshandboken: "10–14 dagar" — so the app only mentions a gap
-// beyond fourteen days. From solids on, 1177's constipation definition is
-// fewer than three a week with hard stools; the app flags four stool-free
-// days, and the copy points at the stool's consistency rather than at the
-// count alone.
+// Wet diapers. The first days ramp with the milk: one or two on each of the
+// first two days, three or more on days three and four — Unicef UK's
+// breastfeeding checklist, which the NHS page links, gives exactly that table
+// [ref:unicef-uk-breastfeeding-checklist], and La Leche League the same ramp
+// ("By day two look for two wet diapers … days three and four look for three
+// or more") [ref:lll-is-baby-getting-enough]; 1177 expects the first pee
+// within a day [ref:1177-barnets-kiss-och-bajs-forsta-veckan]. From day five,
+// six or more (NHS: "From day 5 onwards … at least 6 heavy, wet nappies every
+// 24 hours" [ref:nhs-is-my-baby-getting-enough-milk]; La Leche League the
+// same). Six is also the Swedish count, though it names no starting day:
+// "minst sex gånger per dag" (1177 on breastfeeding [ref:1177-amning] and on
+// formula [ref:1177-brostmjolksersattning-och-tillskottsnaring]),
+// "kissar ljust minst 6 gånger varje dygn" for the first weeks
+// (Rikshandboken [ref:rikshandboken-amningsstunden]). From about six weeks
+// the diapers get heavier and fewer — "After about six weeks of age, your
+// baby may wet only five to six diapers per day" [ref:lll-poop-and-pee] — and
+// the app's floor drops to five. Past the first birthday the sources give no
+// count — a toddler's bladder holds more and the diaper is dry for longer —
+// so the floor is a soft four, the app's own, and the copy says so.
+//
+// Dirty diapers. A newborn should pass meconium within two days ("om ditt
+// barn inte bajsar inom två dagar" [ref:1177-barnets-kiss-och-bajs-forsta-veckan]).
+// Through the first six weeks the sources give counts rather than a gap — at
+// least two a day from the fourth day for a breastfed baby
+// [ref:nhs-is-my-baby-getting-enough-milk], and in the first month "stooling
+// less than once a day might mean your newborn isn't eating enough", while a
+// formula-fed baby "may go 1 to 2 days between bowel movements"
+// [ref:aap-infant-constipation] — so the app's 48 hours is the cautious gap
+// those counts allow, not a quoted one. After about six weeks a breastfed
+// baby may "not have a poo for several days" [ref:nhs-how-to-change-your-babys-nappy],
+// and the interval is *not* a signal on its own: 1177 "tio-tolv dagar eller
+// längre" [ref:1177-det-nyfodda-barnets-kropp], Rikshandboken "10–14 dagar"
+// [ref:rikshandboken-forstoppning] — so for a breastfed baby the app only
+// mentions a gap beyond fourteen days, until solids begin. Once the child
+// eats other food, Rikshandboken's pattern moves toward "en avföring varannan
+// dag" [ref:rikshandboken-forstoppning], and among 1177's signs of
+// constipation are fewer than three stools a week or hard ones
+// [ref:1177-forstoppning-hos-barn]; the app flags four stool-free days, and
+// the copy points at the stool's consistency rather than at the count alone.
 //
 // The window is the *last 24 hours*, not the calendar day: a calendar day is
 // only complete at midnight, and "two wet diapers so far today" at ten in
@@ -192,7 +214,7 @@ export const DIAPER_NORMS: DiaperNorm[] = [
   {
     fromDays: 3,
     toDays: 4,
-    minWet: 4,
+    minWet: 3,
     maxDirtyGapHours: 48,
     source: "firstDays",
   },
@@ -227,8 +249,16 @@ export const DIAPER_NORMS: DiaperNorm[] = [
 ];
 
 /** The dirty-diaper interval beyond which even a breastfed baby's gap is
- *  mentioned: Rikshandboken's "10–14 dagar". */
+ *  mentioned: Rikshandboken's "10–14 dagar" [ref:rikshandboken-forstoppning]. */
 export const BREASTFED_MAX_DIRTY_GAP_HOURS = 14 * 24;
+
+/** The ages, in days, over which a breastfed baby's gap is widened to
+ *  `BREASTFED_MAX_DIRTY_GAP_HOURS`: from six weeks, when the interval stops
+ *  being a signal [ref:nhs-how-to-change-your-babys-nappy], until six months,
+ *  when solids begin and the pattern moves toward "en avföring varannan dag"
+ *  [ref:rikshandboken-forstoppning]. */
+export const BREASTFED_GAP_FROM_DAYS = 42;
+export const BREASTFED_GAP_TO_DAYS = 183;
 
 /** The norm for an age. Null before birth. */
 export function normFor(ageDays: number): DiaperNorm | null {
@@ -294,9 +324,9 @@ export type DiaperAssessment = {
 /**
  * Read the last 24 hours against the norm.
  *
- * `breastfed` widens the dirty-diaper gap to two weeks after six weeks of
- * age, where the Swedish sources say a breastfed baby's interval is not a
- * signal on its own.
+ * `breastfed` widens the dirty-diaper gap to two weeks from six weeks of
+ * age until solids begin at six months, where the Swedish sources say a
+ * breastfed baby's interval is not a signal on its own.
  */
 export function assessDiapers(
   data: AppData,
@@ -314,7 +344,11 @@ export function assessDiapers(
   // screen can soften the copy when the whole log is empty.
   const tooEarly = !anyLogged;
   let limit = norm.maxDirtyGapHours;
-  if (breastfed && ageDays >= 42) {
+  if (
+    breastfed &&
+    ageDays >= BREASTFED_GAP_FROM_DAYS &&
+    ageDays < BREASTFED_GAP_TO_DAYS
+  ) {
     limit = Math.max(limit ?? 0, BREASTFED_MAX_DIRTY_GAP_HOURS);
   }
   return {
