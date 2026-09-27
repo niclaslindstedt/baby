@@ -3,7 +3,8 @@
 Baby is a PWA first: open it in a browser, add it to the home screen, and it
 is an app. `native/` is the other way in — the same web app, wrapped thinly
 enough to ship through the **App Store** and **Google Play**, and in exchange
-for that wrapper it gains one thing the browser cannot give it: **iCloud**.
+for that wrapper it gains what the browser cannot give it: the whole app
+inside the download, and a Dropbox sign-in in a sheet over the app.
 
 ## What the wrapper is
 
@@ -22,36 +23,13 @@ history.
 
 There is **no native UI**. Everything you see is the web app, unchanged.
 
-## iCloud
+## No iCloud
 
-**Settings → Where the record lives** offers **iCloud Drive** beside the local
-folder and Dropbox, and only in the app — a browser has no way to reach a
-device's iCloud, so on the website the option is simply not there.
-
-Choosing it is all there is to it. There is no account to connect and no
-window to grant anything in: the container belongs to the iCloud account the
-phone is already signed into. From then on the record — one file,
-`baby.json` — is kept in the app's own iCloud folder, and every device signed
-into the same account merges the same way two Dropbox devices do: record by
-record, the later edit winning, diaper changes from both kept (see
-[`../sync.md`](../sync.md)).
-
-The file lives under **Files → iCloud Drive → Baby**, where you can open it,
-copy it out, or delete it. That is deliberate: this is your child's record,
-and a copy you cannot see is a copy you do not control.
-
-Two things it will tell you rather than guess about:
-
-- **iCloud is signed out.** The app says so and offers to reconnect instead of
-  failing quietly; signing in happens in iOS Settings, and the app re-checks
-  every time you come back to it.
-- **The file is in iCloud but has not arrived yet.** Another device wrote it a
-  moment ago and the bytes are still coming down. The app waits, and if they
-  do not arrive it keeps working from the copy on this device and says it is
-  offline — it never treats a file it could not read as an empty one.
-
-Android has no iCloud, so there the app is the web app served from inside the
-download, with Dropbox as before.
+The app does not offer iCloud, on purpose. This is your child's health
+record, and App Store guideline 5.1.3(ii) says apps may not store personal
+health information in iCloud. **Settings → Where the record lives** offers
+this device and your own Dropbox — the same as the website — and the record
+never goes anywhere else.
 
 ## Dropbox
 
@@ -66,9 +44,9 @@ comes back is a one-time code the app trades for access to its own folder.
 Two rules, and they are what keep the app and the website the same product:
 
 - **Nothing in `src/` knows the wrapper exists.** The web app does not check
-  whether it is native. It looks for a document-store _capability_ on
-  `window` (`src/app/cloudHost.ts`) and offers the backend when one answers —
-  which is why the browser shows no native-shaped hole.
+  whether it is native. It looks for a sign-in _capability_ on `window`
+  (`window.__ossAuthSession`) and uses it when one is there — which is why
+  the browser shows no native-shaped hole.
 - **The wrapper decides nothing about the record.** It moves bytes. What a
   feed, a weighing or a vaccination is, and how two copies reconcile, are the
   web app's, in `migrations.ts` and `merge.ts`. A second copy of that in Swift

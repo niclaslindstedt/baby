@@ -1,9 +1,9 @@
 # The native wrapper
 
 A **thin** Expo / React Native shell around the baby log, so it can ship to
-the App Store and Google Play — and so it can do the two things a PWA cannot:
-run entirely from inside its own download, and keep the document in the
-reader's own **iCloud**.
+the App Store and Google Play — and so it can do what a PWA cannot: run
+entirely from inside its own download, and sign in to the parent's own
+Dropbox in a system sheet over the app.
 
 Thin is the design, not an aspiration. The wrapper:
 
@@ -18,9 +18,6 @@ Thin is the design, not an aspiration. The wrapper:
   from the phone's light or dark setting (`barStyleFor` in `src/injected.ts`);
   off-origin links go to the system browser, and Android's back button drives
   the WebView's history;
-- offers the page an **iCloud document store** (`src/icloudBridge.ts` →
-  `src/icloud.ts` → `modules/icloud-store`), which the app's own sync engine
-  drives exactly as it drives Dropbox and the picked folder.
 - opens Dropbox's sign-in in an **authentication session** when the page asks
   for one (`src/authSessionBridge.ts` → `src/authSession.ts` →
   `expo-web-browser`) — see [Signing in to Dropbox](#signing-in-to-dropbox).
@@ -28,15 +25,18 @@ Thin is the design, not an aspiration. The wrapper:
 That is the entire list, and it is deliberately not empty: **App Store
 guideline 4.2 rejects a build that is only a viewer for a website**, so the
 wrapper has to do things the browser cannot. The self-contained bundle and
-iCloud are those things. Adding a third is allowed; adding one that makes
-`src/` aware of this wrapper is not.
+the sign-in sheet are those things. Adding another is allowed; adding one that
+makes `src/` aware of this wrapper is not.
 
-**Nothing in the repo's `src/` knows this exists.** iCloud, which the web app
-has to _offer_ in its storage picker, works without breaking that rule: the
-app looks for a document-store **capability** on `window`
-(`src/app/cloudHost.ts`) and this installs one, so a browser — which has none
-— simply does not show the backend. The app never asks what it is running
-inside.
+**There is no iCloud, on purpose.** App Store guideline 5.1.3(ii) says apps
+"may not store personal health information in iCloud", and the record is a
+child's health data. It stays on the device, or in the parent's own Dropbox
+when they connect it. Do not add an iCloud store, CloudKit, or an iCloud
+entitlement to this wrapper.
+
+**Nothing in the repo's `src/` knows this exists.** The app looks for
+**capabilities** on `window` — the sign-in sheet is one — so a browser, which
+has none, keeps its own flow. The app never asks what it is running inside.
 
 The wrapper also decides nothing about the baby log. It moves bytes: a file
 in, a file out. What a feed, a weighing or a diaper change is, and how two
@@ -50,13 +50,9 @@ devices' edits reconcile, are the web app's, in `src/app/migrations.ts` and
 | `App.tsx`                  | The whole app: a WebView, a spinner, and a failure screen.                                                  |
 | `src/local-server.ts`      | Unpacks `assets/webroot.zip` and serves it on a **fixed** loopback port.                                    |
 | `src/injected.ts`          | The theme reporter injected into the page, the status-bar style it drives, and the service-worker teardown. |
-| `src/icloudBridge.ts`      | **Pure.** The injected store host, and the request/response plumbing. Tested from the root.                 |
-| `src/icloudWire.ts`        | **Import-free.** The shapes that cross the bridge, and nothing else.                                        |
-| `src/icloud.ts`            | Answers a store request through the native module, and maps a failure to its kind.                          |
 | `src/authSessionBridge.ts` | **Pure.** The injected sign-in provider (`window.__ossAuthSession`) and its plumbing. Tested from the root. |
 | `src/authSession.ts`       | Opens one sign-in in an authentication session (`expo-web-browser`) and hands back where it ended.          |
-| `src/scriptText.ts`        | **Import-free.** Splicing text safely into an injected script; shared by both bridges.                      |
-| `modules/icloud-store/`    | A local Expo module: list / read / write / remove inside the app's iCloud container.                        |
+| `src/scriptText.ts`        | **Import-free.** Splicing text safely into an injected script.                                              |
 | `scripts/bundle-web.mjs`   | Builds the web app and packs `dist/` into `assets/webroot.zip`.                                             |
 
 `ios/` and `android/` are **prebuild output**: regenerated from `app.config.js`
@@ -90,46 +86,6 @@ only — a store build must never do this):
 EXPO_PUBLIC_BABY_URL=https://baby.niclaslindstedt.se/preview/ npm run ios
 ```
 
-## iCloud
-
-One file, `baby.json`, in the app's own iCloud container, under `Documents`
-— which `app.config.js` publishes to the **Files app** as a folder called
-**Baby**, so the parent can open, copy and delete the file holding their
-child's record. A health log that synced to a place its owner could not see
-would be a worse answer than not syncing at all.
-
-It appears in **Settings → Where the record lives** beside the local folder and
-Dropbox, and
-there is no OAuth: the container belongs to the device's iCloud account, so
-"connecting" is choosing it. Signing in and out of iCloud happens in iOS
-Settings, which is why the app re-asks whether the store is usable every time
-the page is shown again.
-
-### How the bytes get there
-
-```
-the app's sync engine (src/app/useSyncEngine.ts)
-   │  a StorageAdapter over the host — src/app/cloudHost.ts
-   ▼
-window.__babyCloudHost           — installed by src/icloudBridge.ts
-   │  postMessage ⇅ injectJavaScript
-   ▼
-App.tsx → src/icloud.ts → modules/icloud-store
-   │
-   ▼
-iCloud.se.agilator.baby/Documents/baby.json
-```
-
-The four operations are the framework's `FileStore` — `list`, `read`, `write`,
-`remove` — which is what lets the document go through the app's ordinary
-per-record merge with no iCloud-shaped special case anywhere in `src/`.
-
-**The container id is pinned in two places that must agree**:
-`identifiers.js` (read by `app.config.js` for all three iCloud entitlements and
-the Files-app declaration) and `modules/icloud-store/index.ts` with its Swift
-twin. Changing it after release strands every document already synced
-under the old one.
-
 ## Signing in to Dropbox
 
 The page's own Dropbox sign-in is a redirect: consent at dropbox.com, then
@@ -160,7 +116,7 @@ App.tsx → src/authSession.ts → WebBrowser.openAuthSessionAsync(url, "se.agil
 the page checks the state, trades the code (same verifier, same redirect URI)
 ```
 
-As with iCloud, the page asks for a **capability**, not for this wrapper: the
+The page asks for a **capability**, not for this wrapper: the
 host lives at `window.__ossAuthSession`, a name the framework owns
 (`AUTH_SESSION_HOST_PROPERTY`), so the website — which has no host — keeps its
 redirect flow and the desktop app keeps its loopback one. The wrapper never
@@ -193,10 +149,6 @@ Other off-origin links are unchanged: they still leave for the system browser.
   stable across app updates, so a worker registered by an older build would
   keep answering from its precache after a store update had already unpacked
   the new one.
-- **A file iCloud has listed is not a file iCloud has downloaded.** The Swift
-  side waits for the bytes and reports a timeout as a failure, never as an
-  empty document — because an empty document is a valid one, and the app
-  would merge it as such and push over what was really there.
 
 ## Releasing
 

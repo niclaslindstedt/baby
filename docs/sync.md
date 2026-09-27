@@ -12,9 +12,8 @@ it too. There is no server in between.
 | **This device**  | The default, and where every install starts: a durable copy in the browser's own IndexedDB (`baby:documents`) — more room than localStorage, and kept when the browser trims other site data. Nothing leaves the device. | Nothing.                                                      |
 | **Local folder** | A directory you pick through the browser's File System Access API; the record becomes `baby.json`, a real file you can open, back up, or point another app at. The grant is stored and re-probed on boot.                | The browser's directory picker. Hidden where there isn't one. |
 | **Dropbox**      | `Apps/baby/baby.json` in your Dropbox.                                                                                                                                                                                   | `VITE_DROPBOX_APP_KEY` at build time.                         |
-| **iCloud Drive** | `baby.json` in the app's own iCloud container, shown in the Files app as **iCloud Drive → Baby**. Offered through a document-store host the App Store app installs (`src/app/cloudHost.ts`); absent in a browser.        | The App Store app, on a device signed in to iCloud.           |
 
-All four speak the framework's one `StorageAdapter` contract, so the engine
+All three speak the framework's one `StorageAdapter` contract, so the engine
 (`src/app/useSyncEngine.ts`) is the same past the `create*Adapter` calls: it
 pulls the backend's copy on connect, pushes the document after a short
 debounce on every edit, and refuses a push whose base revision has moved.
@@ -22,7 +21,7 @@ The IndexedDB adapter is the one app-local one (`src/app/idbAdapter.ts`); it
 keeps a revision counter beside the text so two tabs cannot write over each
 other.
 
-Only the last three are _sync_ in the sense the top bar's glyph means —
+Only the last two are _sync_ in the sense the top bar's glyph means —
 somewhere the record could also be read from. On **This device** there is no
 glyph: there is nothing to watch the status of.
 
@@ -42,6 +41,14 @@ second copy, so they are one choice now, backed by IndexedDB. A stored
 `local` reads as this device on the next boot; the document is untouched by
 that, and the first pull finds an empty IndexedDB and pushes the localStorage
 copy into it.
+
+### No iCloud
+
+There is no iCloud backend, on purpose: App Store guideline 5.1.3(ii) says
+apps "may not store personal health information in iCloud", and the record is
+a child's health data. A pre-release phone build offered iCloud Drive; a
+stored `icloud` from it reads as this device (`parseBackend`). No released
+build ever wrote to iCloud, so there is nothing there to migrate.
 
 **Disconnecting** removes the credentials or the folder grant and comes back
 to this device. The record stays here, and the copy already on the backend is

@@ -165,6 +165,21 @@ describe("the review notes are true of the build", () => {
     expect(NOTES).toMatch(/webroot\.zip/);
   });
 
+  it("is right that nothing goes to iCloud", () => {
+    // Guideline 5.1.3(ii): apps "may not store personal health information in
+    // iCloud", and the record is a child's. No entitlement, no container.
+    const config = read("native", "app.config.js")
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/^\s*\/\/.*$/gm, "");
+    expect(config).not.toMatch(/icloud|ubiquity/i);
+  });
+
+  itAuthored("says so", () => {
+    expect(NOTES).toMatch(
+      /never goes to iCloud|none of it ever goes to iCloud/i,
+    );
+  });
+
   it("is right that nothing is sold", () => {
     const pkg = read("native", "package.json");
     expect(pkg).not.toMatch(/StoreKit|expo-in-app-purchases|react-native-iap/);

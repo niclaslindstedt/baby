@@ -80,15 +80,14 @@ make native-prebuild   # inspect what expo prebuild generates
 ```
 
 It is a thin Expo shell for the App Store and Google Play: the built site in
-a `WebView`, served from a loopback origin, plus an iCloud Drive document
-store the page finds as a **capability** on `window` (`src/app/cloudHost.ts`)
-— nothing in `src/` asks whether it is native. The wrapper also offers Dropbox's
-sign-in an in-app authentication session at `window.__ossAuthSession`, which
-the framework's `getAuthSessionHost` looks for; a browser has none and keeps
-its redirect. The wrapper moves bytes; what
-is in them stays in `migrations.ts` and `merge.ts`. The iCloud container is
-pinned in `native/identifiers.js` and `native/modules/icloud-store/` (index.ts
-and its Swift twin), which must agree. See
+a `WebView`, served from a loopback origin — nothing in `src/` asks whether
+it is native. The wrapper offers Dropbox's sign-in an in-app authentication
+session at `window.__ossAuthSession`, a **capability** the framework's
+`getAuthSessionHost` looks for; a browser has none and keeps its redirect.
+There is **no iCloud, on purpose**: App Store guideline 5.1.3(ii) keeps
+personal health information out of it, so the child's record stays on the
+device or in the parent's own Dropbox. Do not add an iCloud store, CloudKit
+or an iCloud entitlement. See
 [`native/README.md`](native/README.md) and
 [`docs/features/native-app.md`](docs/features/native-app.md).
 

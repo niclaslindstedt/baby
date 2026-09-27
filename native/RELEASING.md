@@ -49,18 +49,10 @@ For submission, fill in the placeholders in `eas.json` →
 
 ### 4. iOS capabilities
 
-The app declares one iCloud container, `iCloud.se.agilator.baby`.
-Before the first store build, in the Apple Developer portal:
-
-1. **Certificates, Identifiers & Profiles → Identifiers → iCloud Containers**
-   — create the container with exactly that identifier.
-2. **Identifiers → the app's App ID → iCloud** — enable the capability and
-   tick that container.
-
-An entitlement the App ID does not carry fails code signing, and — worse — a
-container that signs but was never created resolves to nil at runtime: the app
-builds, installs, launches, and reports iCloud as unavailable with nothing in
-the log to say why.
+None. The app declares no entitlements, and in particular **no iCloud**: App
+Store guideline 5.1.3(ii) says apps "may not store personal health information
+in iCloud", and the record is a child's health data. Leave the iCloud
+capability off the App ID in the Apple Developer portal.
 
 ### 5. Dropbox
 
@@ -113,10 +105,8 @@ build without it launches to a blank screen.
 - [ ] `EXPO_PUBLIC_BABY_URL` is **unset** — a build that streams the website
       is the exact shape App Store guideline 4.2 rejects.
 - [ ] The version in the root `package.json` is the one you mean to ship.
-- [ ] On a real device signed into iCloud: **Settings → Where the record lives → iCloud
-      Drive**, log a feed, and see `baby.json` appear under **Files → iCloud
-      Drive → Baby**. Then sign out of iCloud and confirm the app says so
-      rather than losing the entry.
+- [ ] **Settings → Where the record lives** offers This device and Dropbox,
+      and no iCloud Drive.
 - [ ] Settings → Where the record lives → Dropbox opens Dropbox in a sheet over the app (not in
       Safari), and approving closes the sheet and connects. Closing the sheet
       instead leaves nothing connected and shows no error.

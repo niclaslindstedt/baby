@@ -33,12 +33,6 @@ import type {
   SyncLocation,
 } from "@niclaslindstedt/oss-framework/sync";
 
-import {
-  createCloudHostAdapter,
-  getCloudHost,
-  useCloudHost,
-  type CloudHost,
-} from "./cloudHost.ts";
 import { createIdbDocAdapter } from "./idbAdapter.ts";
 import { logStore } from "./log.ts";
 import { mergeDocs } from "./merge.ts";
@@ -52,7 +46,7 @@ import type { DocStore } from "./useDocStore.ts";
 // (debounced on the store's edit counter) and pulls the backend's copy on
 // mount.
 //
-// Four backends beyond the working copy, all behind the framework's one
+// Three backends beyond the working copy, all behind the framework's one
 // `StorageAdapter` contract, so the code below is backend-agnostic past the
 // `create*Adapter` calls:
 //
@@ -70,14 +64,14 @@ import type { DocStore } from "./useDocStore.ts";
 //     the picker doesn't exist rather than offered and then failing.
 //   - **Dropbox** — the user's own cloud account, so a second device can read
 //     the same document.
-//   - **iCloud Drive** — the one with no OAuth at all: a folder the operating
-//     system keeps in step, offered by whichever host the app happens to be
-//     running in (`cloudHost.ts`). Nothing here asks whether that host exists
-//     because the app is native — it asks whether a document store was
-//     offered, which is why the picker's options are a reading (`available`)
-//     rather than a constant.
 //
-// Only the last three are *sync* in the sense the top bar's glyph means —
+// There is deliberately no iCloud. App Store guideline 5.1.3(ii) says apps
+// "may not store personal health information in iCloud", and this record is
+// a child's health data: it stays on the device or in the parent's own
+// Dropbox. A choice stored by a pre-release build falls back to this device
+// (see `parseBackend`).
+//
+// Only the last two are *sync* in the sense the top bar's glyph means —
 // somewhere the record could also be read from. `remote` is that question,
 // and it is why a plain install carries no glyph.
 //
@@ -88,7 +82,7 @@ import type { DocStore } from "./useDocStore.ts";
 
 const syncLog = logStore.createLogger("sync");
 
-export type SyncBackendId = "idb" | "folder" | "dropbox" | "icloud";
+export type SyncBackendId = "idb" | "folder" | "dropbox";
 
 /** Where a record lives until the parent says otherwise: this device, in the
  *  browser's IndexedDB. Everything else is a copy somewhere the record could
@@ -133,23 +127,15 @@ export const PROVIDER_NAMES: Record<SyncBackendId, string> = {
   idb: "This device",
   folder: "Local folder",
   dropbox: "Dropbox",
-  icloud: "iCloud Drive",
 };
 
-/** Which backends this build can offer without asking anything of its host —
- *  a provider with no client id configured, or a picker the browser lacks, is
- *  hidden entirely. iCloud is not here: whether it can be offered is a
- *  question about the host, answered per render by `useCloudHost` (see
- *  `available`). */
+/** Which backends this build can offer — a provider with no client id
+ *  configured, or a picker the browser lacks, is hidden entirely. */
 export const AVAILABLE_BACKENDS: SyncBackendId[] = [
   "idb",
   ...(FOLDER_BACKEND_AVAILABLE ? (["folder"] as const) : []),
   ...(DROPBOX_APP_KEY ? (["dropbox"] as const) : []),
 ];
-
-/** The document's folder on a host-offered store, as the reader would find it
- *  in the Files app: the app's own iCloud folder, named after the app. */
-const ICLOUD_FOLDER = "iCloud Drive/Baby";
 
 type DropboxTokens = { accessToken: string; refreshToken: string | null };
 
@@ -164,11 +150,14 @@ type DropboxTokens = { accessToken: string; refreshToken: string | null };
  * untouched by that — `useDocStore` writes localStorage whatever the backend
  * is, so the first pull finds an empty IndexedDB and pushes that copy into
  * it.
+ *
+ * The same holds for a stored `"icloud"`, left by a pre-release phone build
+ * that offered iCloud Drive. The app keeps a child's health data out of
+ * iCloud (App Store guideline 5.1.3(ii)), so that choice reads as this device;
+ * no released build ever wrote it, so there is no copy there to bring back.
  */
 export function parseBackend(raw: unknown): SyncBackendId {
-  return raw === "dropbox" || raw === "folder" || raw === "icloud"
-    ? raw
-    : LOCAL_BACKEND;
+  return raw === "dropbox" || raw === "folder" ? raw : LOCAL_BACKEND;
 }
 
 function readBackend(): SyncBackendId {
@@ -220,9 +209,7 @@ export type SyncEngine = {
   /** The backend is unreachable and we're on the on-device copy. */
   offline: boolean;
   location: SyncLocation;
-  /** Which backends the picker may offer right now. A reading rather than a
-   *  constant because iCloud depends on the host the app is running in — see
-   *  `cloudHost.ts`. */
+  /** Which backends the picker may offer in this build. */
   available: SyncBackendId[];
   /** Start the connect flow for a backend, or drop back to local-only. */
   connect: (backend: SyncBackendId) => Promise<void>;
@@ -248,11 +235,6 @@ export function useSyncEngine(
   paused = false,
 ): SyncEngine {
   const [backend, setBackendState] = useState<SyncBackendId>(readBackend);
-  // The document store this app's host offers, if any. Null on the website,
-  // null on a platform with no iCloud, and null until the host has answered —
-  // so the picker gains the option when there is something behind it and not
-  // a moment before.
-  const cloudHost: CloudHost | null = useCloudHost();
   const [dropboxTokens, setDropboxTokens] = useState<DropboxTokens | null>(
     readDropboxTokens,
   );
@@ -323,27 +305,8 @@ export function useSyncEngine(
         key: localCacheKey("dropbox", "baby"),
       });
     }
-    if (backend === "icloud" && cloudHost) {
-      // No credentials and no OAuth: the container belongs to the device's
-      // iCloud account, so "connecting" is choosing it and nothing else.
-      const cloud = createCloudHostAdapter(cloudHost, {
-        label: PROVIDER_NAMES.icloud,
-        fileName: CLOUD_FILE_NAME,
-        saveDebounceMs: SAVE_DEBOUNCE_MS,
-      });
-      return withLocalCache(cloud, {
-        storage: localStorage,
-        key: localCacheKey("icloud", "baby"),
-      });
-    }
     return null;
-  }, [
-    backend,
-    folderHandle,
-    dropboxTokens,
-    cloudHost,
-    markFolderPermissionLost,
-  ]);
+  }, [backend, folderHandle, dropboxTokens, markFolderPermissionLost]);
 
   const connected = adapter !== null;
 
@@ -592,17 +555,6 @@ export function useSyncEngine(
         await connectFolder();
         return;
       }
-      if (next === "icloud") {
-        // Nothing to authorise and nothing to store but the choice. A host
-        // that has gone away between the picker being drawn and the press
-        // landing is the one failure worth naming, because the alternative is
-        // a backend that silently never syncs.
-        if (!getCloudHost()) throw new Error("iCloud is not available here");
-        writeBackend("icloud");
-        setBackendState("icloud");
-        syncLog.info("icloud: connected");
-        return;
-      }
       if (!DROPBOX_APP_KEY) throw new Error("Dropbox is not configured");
       // In the phone app the redirect would land in the system browser, not
       // in the app, so a host that offers an authentication session is asked
@@ -707,7 +659,6 @@ export function useSyncEngine(
     if (backend === "folder") {
       return `${folderHandle?.name ?? "…"}/${CLOUD_FILE_NAME}`;
     }
-    if (backend === "icloud") return `${ICLOUD_FOLDER}/${CLOUD_FILE_NAME}`;
     return `IndexedDB · ${IDB_DB_NAME}`;
   })();
 
@@ -721,13 +672,7 @@ export function useSyncEngine(
     dirty,
     offline,
     location: { path },
-    // The stored choice is always offered even when its host has gone — a
-    // segmented control whose value is not one of its options draws as
-    // nothing selected, which would read as "your record is nowhere".
-    available:
-      cloudHost || backend === "icloud"
-        ? [...AVAILABLE_BACKENDS, "icloud"]
-        : AVAILABLE_BACKENDS,
+    available: AVAILABLE_BACKENDS,
     connect,
     disconnect,
     saveNow,

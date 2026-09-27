@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 // Splicing text into a script the wrapper injects.
 //
-// Import-free on purpose: the bridges that use it are exercised from the root
-// test suite, which has no `expo` installed (see `icloudWire.ts`).
+// Import-free on purpose: the bridge that uses it (`authSessionBridge.ts`) is
+// exercised from the root test suite, which has no `expo` installed — and a
+// root `tsc` over `tests/` would fail on any import that reaches it.
 
 /**
  * A JavaScript string literal holding `text`, safe to splice into a script.

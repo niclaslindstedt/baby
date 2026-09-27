@@ -143,9 +143,8 @@ tauri-clean:
 # --- the native wrapper (native/) -------------------------------------------
 #
 # A thin Expo/React Native shell that bundles this web app and serves it in a
-# WebView, plus the iCloud Drive storage backend. It has its OWN dependency
-# tree — `make install` at the root does not touch it — so every target here
-# reaches in with `--prefix`. Release builds run on EAS and are triggered by
+# WebView. It has its OWN dependency tree — `make install` at the root does
+# not touch it — so every target here reaches in with `--prefix`. Release builds run on EAS and are triggered by
 # dispatching .github/workflows/native.yml; see native/RELEASING.md.
 
 native-install:

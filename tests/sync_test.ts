@@ -26,6 +26,13 @@ describe("parseBackend", () => {
     expect(LOCAL_BACKEND).toBe("idb");
   });
 
+  it("reads a stored iCloud choice as this device", () => {
+    // A pre-release phone build offered iCloud Drive. The app keeps a child's
+    // health data out of iCloud (App Store guideline 5.1.3(ii)), so that
+    // choice lands on this device — never on a backend that no longer exists.
+    expect(parseBackend("icloud")).toBe(LOCAL_BACKEND);
+  });
+
   it("falls back to this device for anything unreadable", () => {
     // Never a backend the build can't serve, and never nothing: a picker
     // with no value selected is worse than the one choice that always works.
@@ -52,6 +59,10 @@ describe("AVAILABLE_BACKENDS", () => {
   it("hides a cloud provider this build has no client id for", () => {
     // The test environment configures none, so none is offered.
     expect(AVAILABLE_BACKENDS).not.toContain("dropbox");
+  });
+
+  it("never offers iCloud", () => {
+    expect(AVAILABLE_BACKENDS as string[]).not.toContain("icloud");
   });
 
   it("no longer answers for the retired Drive backend", () => {

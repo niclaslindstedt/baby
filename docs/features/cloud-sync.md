@@ -10,10 +10,11 @@ device can read it too:
   picker, which desktop Chrome, Edge and Opera have and no phone browser
   does, so it is offered only where it exists;
 - in your own **Dropbox** — a JSON file in a folder you
-  can see, so another device can read the same record;
-- in your own **iCloud Drive** — in the App Store app only, with nothing to
-  sign in to: the record is a file in a **Baby** folder the Files app can
-  open, and every Apple device on the same account reads it.
+  can see, so another device can read the same record.
+
+There is no iCloud option, on purpose. This is your child's health record,
+and App Store guideline 5.1.3(ii) says apps may not store personal health
+information in iCloud: it stays on your device, or in your own Dropbox.
 
 Two devices reconcile record by record — the later edit of a reading, a food
 or a vaccination wins, and diaper changes from both are kept — with no
