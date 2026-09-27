@@ -283,7 +283,7 @@ export function buildDemoData(now: Date): AppData {
   const list: Omit<Food, "updatedAt">[] = [
     {
       id: "demo-f-porridge",
-      name: "Baby porridge, fortified",
+      name: "Baby cereal, fortified",
       amount: 120,
       unit: "g",
       per100: preset("porridge"),

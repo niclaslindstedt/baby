@@ -153,7 +153,7 @@ export const en = {
     logHint:
       "Tap what the diaper held. The time is recorded for you, and the same three buttons sit behind the + in the top bar from any screen.",
     pee: "Pee",
-    poo: "Poo",
+    poo: "Poop",
     both: "Both",
     logged: "Logged",
     removed: "Removed",
@@ -367,7 +367,7 @@ export const en = {
     // [ref:galland-2012].
     band: {
       newborn:
-        "Newborns sleep round the clock in short stretches. A day–night rhythm usually appears between two and four months, when the nights start to lengthen.",
+        "Newborns sleep around the clock in short stretches. A day–night rhythm usually appears between two and four months, when the nights start to lengthen.",
       infant:
         "1177 says most children of 4–11 months sleep 9–10 hours at night and 3–6 hours during the day.",
       toddler:
@@ -382,8 +382,8 @@ export const en = {
       littleLong:
         "The 30-day average is a little over the recommendation, but within what most children of this age are observed to sleep.",
       short:
-        "The 30-day average is under what 19 in 20 children of this age sleep. Check first that the naps are logged — a day with only the night entered reads short. If it is right, it is worth mentioning at BVC: a reason to look, not a verdict.",
-      long: "The 30-day average is over what 19 in 20 children of this age sleep. Worth mentioning at BVC if {name} is also hard to wake or unusually drowsy: a reason to look, not a verdict.",
+        "The 30-day average is under what 19 in 20 children of this age sleep. Check first that the naps are logged — a day with only the night entered reads short. If it is right, it is worth mentioning at the child health center: a reason to look, not a verdict.",
+      long: "The 30-day average is over what 19 in 20 children of this age sleep. Worth mentioning at the child health center if {name} is also hard to wake or unusually drowsy: a reason to look, not a verdict.",
       tooEarly:
         "A week of logged days is needed before the average is read against the recommendation.",
     },
@@ -511,13 +511,13 @@ export const en = {
     none: "Neither",
     formulaType: "Which formula",
     formulaInfant: "Infant formula",
-    formulaFollowOn: "Follow-on formula",
+    formulaFollowOn: "Follow-up formula",
     // Follow-on formula from six months, with more iron
     // [ref:1177-brostmjolksersattning-och-tillskottsnaring]; infant formula
     // the whole first year [ref:livsmedelsverket-spadbarn]; 0.4 against
     // 1.0 mg per 100 ml [ref:semper-babysemp-1] [ref:semper-babysemp-2].
     formulaTypeHint:
-      "Follow-on formula (tillskottsnäring) is sold from six months and carries about two and a half times the iron of infant formula, so which one is in the bottle moves the iron figure below. Infant formula is fine for the whole first year — say what {name} actually gets, not what the age suggests.",
+      "Follow-up formula (tillskottsnäring) is sold from six months and carries about two and a half times the iron of infant formula, so which one is in the bottle moves the iron figure below. Infant formula is fine for the whole first year — say what {name} actually gets, not what the age suggests.",
     formulaMl: "Amount per day (ml)",
     // [ref:rikshandboken-d-vitamin] [ref:1177-barnets-mat-upp-till-ett-ar]
     dDrops:
@@ -600,7 +600,7 @@ export const en = {
       addTitle: "New food",
       editTitle: "Edit food",
       name: "Name",
-      namePlaceholder: "e.g. Fortified porridge",
+      namePlaceholder: "e.g. Fortified baby cereal",
       presets: "Common foods",
       presetsHint:
         "Tap one to fill in typical values from Livsmedelsverket's food database; adjust to the label if it differs.",
@@ -653,7 +653,7 @@ export const en = {
       weeks: "{count} weeks",
       months: "{count} months",
       years: "{count} years",
-      school: "School year {grade}",
+      school: "Grade {grade}",
     },
     where: {
       bvc: "at the child health center",
@@ -666,7 +666,7 @@ export const en = {
       dtpBooster: "Diphtheria, tetanus, whooping cough",
       pneumococcal: "Pneumococcal",
       rotavirus: "Rotavirus",
-      mpr: "Measles, mumps, rubella (MPR)",
+      mpr: "Measles, mumps, rubella (MMR)",
       hpv: "HPV",
       varicella: "Chickenpox",
     },
@@ -678,7 +678,7 @@ export const en = {
       dtpBooster: "DTP",
       pneumococcal: "Pneumococcal",
       rotavirus: "Rotavirus",
-      mpr: "MPR",
+      mpr: "MMR",
       hpv: "HPV",
       varicella: "Chickenpox",
     },
@@ -693,7 +693,7 @@ export const en = {
       // [ref:fohm-vaccination-mot-hpv]; 1177 says "årskurs 5-6"
       // [ref:1177-vaccinationsprogrammet-for-barn].
       hpvGrade:
-        "Two doses at least six months apart, in school year 5 (some regions say 5–6).",
+        "Two doses at least six months apart, in grade 5 (some regions say 5–6).",
     },
     markGiven: "Mark as given",
     extras: "Outside the program",
@@ -718,7 +718,7 @@ export const en = {
       twelveMonths: "from twelve months",
       twoYears: "from two years",
       threeYears: "from three years",
-      season: "each autumn, from six months",
+      season: "each fall, from six months",
     },
     offer: {
       riskGroup: "risk groups",
@@ -877,7 +877,7 @@ export const en = {
       consensus: "Consensus statement",
       "systematic-review": "Systematic review",
       "meta-analysis": "Meta-analysis",
-      "randomized-trial": "Randomised trial",
+      "randomized-trial": "Randomized trial",
       cohort: "Cohort study",
       "clinical-study": "Clinical study",
       review: "Review",

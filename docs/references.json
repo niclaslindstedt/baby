@@ -62,7 +62,7 @@
       ],
       "supports": "The meconium deadline — no stool within 48 hours of birth (maxDirtyGapHours 48 in the firstDays bands) — and the first wet diaper within the first day (minWet 1 on day one).",
       "summary": {
-        "en": "When a newborn's first wee and first poo should have come, and when to call.",
+        "en": "When a newborn's first pee and first poop should have come, and when to call.",
         "sv": "När ett nyfött barn bör ha kissat och bajsat första gången, och när du ska höra av dig."
       },
       "topics": ["diapers"],
@@ -177,7 +177,7 @@
       ],
       "supports": "Six wet diapers a day on formula (the diaper floor from day five), and that follow-on formula is for children from six months and carries more iron than infant formula (FOLLOW_ON_FORMULA_PER_100ML, the formula-type hint).",
       "summary": {
-        "en": "How many wet diapers a formula-fed baby usually has, and that follow-on formula is for babies from six months and carries more iron.",
+        "en": "How many wet diapers a formula-fed baby usually has, and that follow-up formula is for babies from six months and carries more iron.",
         "sv": "Hur många kissblöjor ett barn som får ersättning brukar ha, och att tillskottsnäring är till för barn från sex månader och innehåller mer järn."
       },
       "topics": ["diapers", "food"],
@@ -213,7 +213,7 @@
       ],
       "supports": "Why a breastfed baby's interval is not a signal on its own (BREASTFED_MAX_DIRTY_GAP_HOURS, applied from 42 days), and the formula-fed baby's gap of a few days.",
       "summary": {
-        "en": "How often babies poo after the first weeks — a breastfed baby can go ten to twelve days or more without it meaning anything.",
+        "en": "How often babies poop after the first weeks — a breastfed baby can go ten to twelve days or more without it meaning anything.",
         "sv": "Hur ofta barn bajsar efter de första veckorna – ett ammat barn kan gå tio–tolv dagar eller längre utan att det betyder något."
       },
       "topics": ["diapers"],
@@ -253,7 +253,7 @@
       ],
       "supports": "The dirty-diaper gap once solids begin (maxDirtyGapHours 96 from 183 days, and for toddlers), and the long-gap copy pointing at hard stools rather than the count alone.",
       "summary": {
-        "en": "What constipation looks like in a child, and how often babies poo once they eat ordinary food.",
+        "en": "What constipation looks like in a child, and how often babies poop once they eat ordinary food.",
         "sv": "Hur förstoppning yttrar sig hos barn och hur ofta barn bajsar när de har börjat äta vanlig mat."
       },
       "topics": ["diapers"],
@@ -305,7 +305,7 @@
       ],
       "supports": "The parent-facing version of the schedule: the BVC and school rows of PROGRAMME, BCG at six weeks for risk groups, the risk-group extras, and the 'some regions say 5–6' in the hpvGrade note.",
       "summary": {
-        "en": "The childhood programme explained for parents: what happens at each visit and what the extra risk-group vaccines are.",
+        "en": "The childhood program explained for parents: what happens at each visit and what the extra risk-group vaccines are.",
         "sv": "Barnvaccinationsprogrammet förklarat för föräldrar: vad som händer vid varje besök och vilka de extra vaccinen för riskgrupper är."
       },
       "topics": ["vaccines"],
@@ -336,7 +336,7 @@
       ],
       "supports": "Chickenpox as a self-paid extra from twelve months until the programme starts (EXTRAS varicella-extra: typicalAge twelveMonths, offer programmeFrom2027), and the start date 1 January 2027.",
       "summary": {
-        "en": "Chickenpox vaccine is self-paid from twelve months until it joins the programme on 1 January 2027.",
+        "en": "Chickenpox vaccine is self-paid from twelve months until it joins the program on 1 January 2027.",
         "sv": "Vaccin mot vattkoppor betalar man själv, från tolv månader, tills det kommer in i programmet 1 januari 2027."
       },
       "topics": ["vaccines"],
@@ -362,7 +362,7 @@
       ],
       "supports": "The formula-fed baby's gap of a day or two (maxDirtyGapHours 48 in the newborn band), and the breastfed baby's longer gaps.",
       "summary": {
-        "en": "How often a baby on formula or breast milk usually poos, and when a gap is worth a look.",
+        "en": "How often a baby on formula or breast milk usually poops, and when a gap is worth a look.",
         "sv": "Hur ofta ett barn som får ersättning eller bröstmjölk brukar bajsa, och när ett uppehåll är värt att titta närmare på."
       },
       "topics": ["diapers"],
@@ -611,7 +611,7 @@
       ],
       "supports": "The iron floors that separate infant formula (0.3 mg/100 kcal) from follow-on formula (0.6 mg/100 kcal), and the DHA minimum of 20 mg/100 kcal behind dhaG in INFANT_FORMULA_PER_100ML (13.2 mg at 66 kcal) and FOLLOW_ON_FORMULA_PER_100ML (13.8 mg at 69 kcal), and the 'formula' preset in data/foods.ts.",
       "summary": {
-        "en": "The EU law that sets what infant formula and follow-on formula must contain, including their minimum iron and DHA.",
+        "en": "The EU law that sets what infant formula and follow-up formula must contain, including their minimum iron and DHA.",
         "sv": "EU-lagen som bestämmer vad modersmjölksersättning och tillskottsnäring måste innehålla, bland annat lägsta mängd järn och DHA."
       },
       "topics": ["food"],
@@ -779,7 +779,7 @@
       ],
       "supports": "Every row of PROGRAMME in vaccines.ts: the nine ages (6 weeks … årskurs 8–9), which dose of which vaccine is given at each, polio ending at the 5-year dose (dtp-4) and dTp at årskurs 8–9 (dtp-5), the rotavirus third dose applying to the three-dose vaccine (note rotavirusThird), and hepatitis B in the hexavalent shot at 3, 5 and 12 months though offered regionally (note hepatitisBRegional).",
       "summary": {
-        "en": "Sweden's childhood vaccination schedule: which vaccine is given at which age, from six weeks to school year 8–9.",
+        "en": "Sweden's childhood vaccination schedule: which vaccine is given at which age, from six weeks to grade 8–9.",
         "sv": "Sveriges barnvaccinationsprogram: vilket vaccin som ges vid vilken ålder, från sex veckor till årskurs 8–9."
       },
       "topics": ["vaccines"],
@@ -835,7 +835,7 @@
       ],
       "supports": "The RSV antibody extra offered by the regions to newborns in season (EXTRAS rsv, typicalAge birth, offer regional), and the 'since 2025' in docs/vaccinations.md.",
       "summary": {
-        "en": "Babies born between September and April are offered free RSV antibodies at the maternity ward, in every region since autumn 2025.",
+        "en": "Babies born between September and April are offered free RSV antibodies at the maternity ward, in every region since fall 2025.",
         "sv": "Barn som föds mellan september och april erbjuds kostnadsfria antikroppar mot RS-virus på BB, i alla regioner sedan hösten 2025."
       },
       "topics": ["vaccines"],
@@ -888,7 +888,7 @@
       ],
       "supports": "The two HPV rows (hpv-1, hpv-2) in årskurs 5 and the hpvGrade note's 'two doses at least six months apart'.",
       "summary": {
-        "en": "The HPV vaccine at school: two doses, at least six months apart, from school year 5.",
+        "en": "The HPV vaccine at school: two doses, at least six months apart, from grade 5.",
         "sv": "HPV-vaccinet i skolan: två doser med minst sex månaders mellanrum, från årskurs 5."
       },
       "topics": ["vaccines"],
@@ -1059,7 +1059,7 @@
       ],
       "supports": "The varicella rows (var-1 at 18 months, var-2 in årskurs 1–2) and their cohort (born2025 = 2025-07-01, bornFrom), and the self-paid extra from twelve months before then (EXTRAS varicella-extra, typicalAge twelveMonths).",
       "summary": {
-        "en": "Chickenpox vaccine joins the programme in 2027 for children born from 1 July 2025: at 18 months and in school year 1–2.",
+        "en": "Chickenpox vaccine joins the program in 2027 for children born from 1 July 2025: at 18 months and in grade 1–2.",
         "sv": "Vaccin mot vattkoppor kommer in i programmet 2027 för barn födda från och med 1 juli 2025: vid 18 månader och i årskurs 1–2."
       },
       "topics": ["vaccines"],
@@ -1085,7 +1085,7 @@
       ],
       "supports": "The start of the varicella rows (varicellaStart = 2027-01-01, the from field) and their two ages (var-1, var-2).",
       "summary": {
-        "en": "What parents are told about the chickenpox vaccine: two doses, at 18 months and in school year 1–2, from January 2027.",
+        "en": "What parents are told about the chickenpox vaccine: two doses, at 18 months and in grade 1–2, from January 2027.",
         "sv": "Vad föräldrar får veta om vaccinet mot vattkoppor: två doser, vid 18 månader och i årskurs 1–2, från januari 2027."
       },
       "topics": ["vaccines"],
@@ -1607,7 +1607,7 @@
       ],
       "supports": "The 48-hour meconium deadline in the firstDays bands (maxDirtyGapHours 48), the breastfed baby's long gaps after about six weeks (BREASTFED_MAX_DIRTY_GAP_HOURS, applied from 42 days), and the long-gap copy pointing at the stool's softness rather than the count.",
       "summary": {
-        "en": "When a newborn's first poo comes, and how often babies poo as they grow.",
+        "en": "When a newborn's first poop comes, and how often babies poop as they grow.",
         "sv": "När ett nyfött barns första bajs kommer och hur ofta barn bajsar när de växer."
       },
       "topics": ["diapers"],
@@ -1635,7 +1635,7 @@
       ],
       "supports": "The wet floor of six from day five (DIAPER_NORMS, the `newborn` band from fromDays 4), and the first-days ramp in so far as two or three wet nappies over the first 48 hours matches minWet 1 then 2. The two-stools-a-day expectation behind the newborn band's dirty-diaper check (maxDirtyGapHours 48 is looser than it).",
       "summary": {
-        "en": "How many wet and dirty nappies a breastfed baby usually has in the first days and weeks.",
+        "en": "How many wet and dirty diapers a breastfed baby usually has in the first days and weeks.",
         "sv": "Hur många blöta och bajsiga blöjor ett ammat barn brukar ha de första dagarna och veckorna."
       },
       "topics": ["diapers"],
@@ -1737,7 +1737,7 @@
       ],
       "supports": "The day the varicella rows start (varicellaStart = 2027-01-01) and the cohort boundary (born2025 = 2025-07-01).",
       "summary": {
-        "en": "The government's decision: chickenpox vaccine in the programme from 1 January 2027, with a catch-up for older children from March 2027.",
+        "en": "The government's decision: chickenpox vaccine in the program from 1 January 2027, with a catch-up for older children from March 2027.",
         "sv": "Regeringens besked: vaccin mot vattkoppor i programmet från 1 januari 2027, med ikappvaccination för äldre barn från mars 2027."
       },
       "topics": ["vaccines"],
@@ -1867,7 +1867,7 @@
       ],
       "supports": "The same schedule as child health care works to; hepatitis B offered free by every region (hepatitisBRegional); the BCG extra at six weeks (EXTRAS bcg) and the hepatitis B birth dose for risk groups (EXTRAS hepb-birth); and dueDate counting from the birth date, preterm or not.",
       "summary": {
-        "en": "The schedule as child health centres use it, and the extra doses offered to babies at particular risk.",
+        "en": "The schedule as child health centers use it, and the extra doses offered to babies at particular risk.",
         "sv": "Schemat så som BVC använder det, och de extra doser som erbjuds barn med särskild risk."
       },
       "topics": ["vaccines"],
@@ -1931,7 +1931,7 @@
       ],
       "supports": "The fourteen-day gap for a breastfed baby (BREASTFED_MAX_DIRTY_GAP_HOURS = 14 * 24), and the tighter gap once other food begins (maxDirtyGapHours 96 from 183 days).",
       "summary": {
-        "en": "How long a breastfed baby can go between stools, and how often children poo once they eat other food, in Swedish child health care's handbook.",
+        "en": "How long a breastfed baby can go between stools, and how often children poop once they eat other food, in Swedish child health care's handbook.",
         "sv": "Hur länge ett ammat barn kan gå mellan avföringarna och hur ofta barn bajsar när de äter annan mat, enligt barnhälsovårdens handbok."
       },
       "topics": ["diapers"],
@@ -2037,7 +2037,7 @@
       ],
       "supports": "The 'Swedish tins print 14 mg' DHA remark beside INFANT_FORMULA_PER_100ML, and docs/nutrition.md's 'Semper BabySemp 1 and 2' comparison (iron 0.4 vs 1.0 mg).",
       "summary": {
-        "en": "The label of a typical Swedish infant formula, for comparison with the follow-on formula.",
+        "en": "The label of a typical Swedish infant formula, for comparison with the follow-up formula.",
         "sv": "Innehållsdeklarationen för en typisk svensk modersmjölksersättning, som jämförelse med tillskottsnäringen."
       },
       "topics": ["food"],
@@ -2072,7 +2072,7 @@
       ],
       "supports": "FOLLOW_ON_FORMULA_PER_100ML in nutrition.ts and the 'follow-on-formula' preset in data/foods.ts: 69 kcal, iron 1.0 mg, vitamin D 1.5 µg, fat 3.4 g (saturated 1.2, monounsaturated 1.3, polyunsaturated 0.6), linoleic acid 0.52 g, ALA 57 mg, DHA 14 mg per 100 ml.",
       "summary": {
-        "en": "The label of a typical Swedish follow-on formula, which the app uses when a parent says the bottle holds follow-on formula.",
+        "en": "The label of a typical Swedish follow-up formula, which the app uses when a parent says the bottle holds follow-up formula.",
         "sv": "Innehållsdeklarationen för en typisk svensk tillskottsnäring, som appen använder när en förälder anger att flaskan innehåller tillskottsnäring."
       },
       "topics": ["food"],
@@ -2297,7 +2297,7 @@
       ],
       "supports": "The one source found with a wet-nappy count for each day of the first week — the day-by-day check on the firstDays ramp (minWet 1, 2, 3, 4) and the day-five step to six.",
       "summary": {
-        "en": "The UK's day-by-day checklist of wet and dirty nappies in a breastfed baby's first four weeks.",
+        "en": "The UK's day-by-day checklist of wet and dirty diapers in a breastfed baby's first four weeks.",
         "sv": "Brittisk checklista dag för dag över blöta och bajsiga blöjor under ett ammat barns fyra första veckor."
       },
       "topics": ["diapers"],

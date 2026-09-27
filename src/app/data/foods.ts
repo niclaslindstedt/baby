@@ -44,7 +44,7 @@ export const FOOD_PRESETS: FoodPreset[] = [
     id: "porridge",
     name: {
       sv: "Barngröt, fullkorn, berikad",
-      en: "Fortified whole-grain baby porridge",
+      en: "Fortified whole-grain baby cereal",
     },
     unit: "g",
     typicalAmount: 150,
@@ -143,7 +143,7 @@ export const FOOD_PRESETS: FoodPreset[] = [
   },
   {
     id: "rapeseed-oil",
-    name: { sv: "Rapsolja", en: "Rapeseed oil" },
+    name: { sv: "Rapsolja", en: "Canola oil" },
     unit: "g",
     typicalAmount: 5,
     per100: {
@@ -182,7 +182,7 @@ export const FOOD_PRESETS: FoodPreset[] = [
   // in the regimen, and for anyone whose brand differs from the typical one.
   {
     id: "follow-on-formula",
-    name: { sv: "Tillskottsnäring", en: "Follow-on formula" },
+    name: { sv: "Tillskottsnäring", en: "Follow-up formula" },
     unit: "ml",
     typicalAmount: 200,
     per100: {
