@@ -55,7 +55,9 @@ health care quotes. Copy must not imply medical authority: a reading outside
 the band is "a reason to look, not a verdict", a thin diaper day names the
 sign to look for, and the disclaimer in Settings exists for this reason and
 must not be quietly dropped. Every threshold in the code cites its source in
-a comment.
+a comment — and, in the modules moved over so far (`sleep.ts`), with a
+`[ref:<id>]` tag into `docs/references.json` (see "Every threshold cites its
+source" below).
 
 ## Build and test commands
 
@@ -297,13 +299,29 @@ one of them is a change to a claim the app makes to a parent: keep the
 citation next to the value, and update `docs/` (see the sync table) in the
 same PR.
 
+**The references registry.** `docs/references.json` is the one list of every
+source the app's numbers and claims rest on, keyed by a stable id: authors or
+organization, title, where it was published, the DOI / URL / ISBN, the
+language, the kind of evidence (`guideline`, `consensus`,
+`systematic-review`, `cohort`, `review`, `clinical-study`, or
+`health-service` for practitioner guidance), the verbatim quotes the numbers
+were taken from, what the app uses it for, and `usedBy` — the files that cite
+it. Code cites an entry with a `[ref:<id>]` tag in the comment beside the
+number (a claim in a catalog string gets its tag in a comment above the
+key). `tests/references_test.ts` fails on a tag with no entry, an entry
+nothing cites, or a `usedBy` that doesn't match the tags. A new source means
+an entry and a tag in the same change; a module whose comments still cite
+in prose alone (`growth.ts`, `nutrition.ts`, `diapers.ts`, `vaccines.ts`)
+moves over when it is next touched, the goal being every module in the
+registry.
+
 ## Where new code goes
 
 | Change                                 | Goes in                                                                                                                                  |
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | A new fact about the child or a record | Probably nowhere — see rule two. If it survives that: `src/app/types.ts` + `migrations.ts` (bump `DOC_VERSION`, append a step)           |
 | A new derived number                   | The matching domain module (`growth.ts`, `nutrition.ts`, `diapers.ts`, `sleep.ts`, `vaccines.ts`) with tests in `tests/<module>_test.ts` |
-| A change to a recommendation or floor  | The same module, next to its citation, plus the matching `docs/*.md` topic                                                               |
+| A change to a recommendation or floor  | The same module, next to its `[ref:<id>]` citation, plus the entry in `docs/references.json` and the matching `docs/*.md` topic          |
 | A new programme dose or extra vaccine  | `src/app/vaccines.ts` (`PROGRAMME` / `EXTRAS`) + the group label in `i18n/en.ts` and `sv.ts`                                             |
 | A food preset                          | `src/app/data/foods.ts`                                                                                                                  |
 | A new screen                           | `src/app/<Name>Screen.tsx` + a tab in `BottomNav.tsx`, or a button in `TopBar.tsx` if it is an action rather than a place                |
@@ -374,7 +392,8 @@ references live under `docs/` proper.
 | `growth.ts` or `data/whoGrowth.ts`               | `docs/growth.md`, `docs/features/growth.md`, and the README's Examples block if the output shape moved         |
 | `nutrition.ts` or `data/foods.ts`                | `docs/nutrition.md`, `docs/features/food.md`                                                                   |
 | `diapers.ts`                                     | `docs/diapers.md`, `docs/features/diapers.md`                                                                  |
-| `sleep.ts`                                       | `docs/sleep.md`, `docs/features/sleep.md`                                                                      |
+| `sleep.ts`                                       | `docs/sleep.md`, `docs/features/sleep.md`, and `docs/references.json` for any source added or dropped          |
+| A `[ref:<id>]` tag anywhere                      | `docs/references.json` — the entry, its quotes, and its `usedBy`                                               |
 | `vaccines.ts`                                    | `docs/vaccinations.md`, `docs/features/vaccinations.md`                                                        |
 | The document shape (`types.ts`, `migrations.ts`) | `docs/architecture.md`'s data shape, and a `migrations.ts` step                                                |
 | `useSyncEngine.ts`, `idbAdapter.ts`, `merge.ts`  | `docs/sync.md`, `docs/features/cloud-sync.md`                                                                  |

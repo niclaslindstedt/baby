@@ -157,6 +157,13 @@ South Wales:
 | 12–18 months        | 4–6 h                | Karitane, _Sleep Needs Guide for Infants 0 to 3 Years_ (2016)                         |
 | 18 months – 3 years | 5–7 h                | Karitane, same guide                                                                  |
 
+The two rows past the first birthday are the weakest in the table. Karitane
+has since replaced the 2016 guide with a _Flexible Daily Routine_ that gives
+the same awake times up to nine months and stops at a year ("up for longer
+during the day"), and the 2016 guide now survives only as a copy on a
+third-party site. No service we found publishes a newer table for 1–3 years,
+so the 2016 bands stand until one does.
+
 From three there is no suggestion: half of three-year-olds no longer nap at
 all (Iglowstein et al. 2003, _Pediatrics_ 111(2):302–307: "At the age of 3
 years, 50.4% of the children still napped"), and most stop between three and
@@ -211,8 +218,14 @@ weeks, Kennaway et al. 1992, _J Clin Endocrinol Metab_ 75(2):367–369).
 
 ## Sources
 
+Every source below is an entry in [`references.json`](references.json) — with
+the verbatim quotes the numbers were taken from, the kind of evidence, the URL
+or DOI, and the files that cite it — and the code points at it with a
+`[ref:<id>]` tag beside the number.
+
 - World Health Organization. _Guidelines on physical activity, sedentary
   behaviour and sleep for children under 5 years of age._ Geneva: WHO; 2019.
+  ISBN 9789241550536. https://iris.who.int/handle/10665/311664
 - Paruthi S, et al. Recommended amount of sleep for pediatric populations: a
   consensus statement of the American Academy of Sleep Medicine. _J Clin Sleep
   Med._ 2016;12(6):785–786. doi:10.5664/jcsm.5866
@@ -233,9 +246,16 @@ weeks, Kennaway et al. 1992, _J Clin Endocrinol Metab_ 75(2):367–369).
 - Kennaway DJ, Stamp GE, Goble FC. Development of melatonin production in
   infants and the impact of prematurity. _J Clin Endocrinol Metab._
   1992;75(2):367–369. doi:10.1210/jcem.75.2.1639937
-- Tresillian Family Care Centres (NSW Health): "Newborn sleep",
-  "3 to 5 months", "6 to 8 months" and "9 to 12 months" routines.
-  tresillian.org.au
-- Karitane. _Sleep Needs Guide for Infants 0 to 3 Years._ May 2016 (FAM002).
-- 1177, "Barns sömn i olika åldrar"; Rikshandboken barnhälsovård, "Främja god
-  sömn"; Folkhälsomyndigheten, "God sömn för barn och unga".
+- Tresillian Family Care Centres (NSW Health): "Newborn Sleep" and "Baby Awake
+  Windows & Routines" for 3 to 5, 6 to 8 and 9 to 12 months.
+  https://www.tresillian.org.au/newborn/sleep/,
+  https://www.tresillian.org.au/baby/routines/
+- Karitane. _Sleep Needs Guide for Infants 0 to 3 Years._ May 2016 (FAM002);
+  and its successor, _Flexible Daily Routine_ (2025),
+  https://karitane.com.au/newborn/infant-routines/
+- 1177, "Barns sömn i olika åldrar" (updated 2026-05-04).
+  https://www.1177.se/barn--gravid/att-ta-hand-om-barn/barns-somn/barns-somn-i-olika-aldrar/
+- Rikshandboken barnhälsovård, "Främja god sömn" (approved 2025-11-04).
+  https://www.rikshandboken-bhv.se/halsosamtal/framja-god-somn/
+- Folkhälsomyndigheten. _Främja goda sömnvanor bland barn och unga_ (2026,
+  art.nr 26026).

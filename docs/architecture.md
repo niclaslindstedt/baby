@@ -112,6 +112,18 @@ validates every field on the way in, drops what it can't read, and never
 throws on a shape problem. A schema change bumps `DOC_VERSION` and appends a
 step; existing steps are never edited.
 
+## Where the numbers come from
+
+Every threshold, band and recommendation the app compares a record with is a
+claim made to a parent, so each one names its source. `docs/references.json`
+is the registry of those sources — authors, title, journal or publisher,
+DOI / URL / ISBN, the kind of evidence, the verbatim quotes the numbers were
+taken from, what the app uses each for, and which files cite it — and code
+points into it with a `[ref:<id>]` tag in the comment beside the number.
+`tests/references_test.ts` keeps the two in step both ways. `sleep.ts` is the
+first module cited this way; the others still cite in prose and move over as
+they are touched.
+
 ## What loads when
 
 Everything on the entry path is downloaded before the user sees anything, so

@@ -1,0 +1,420 @@
+{
+  "$comment": "Every source the app's numbers and claims rest on, keyed by the id code cites as [ref:<id>]. usedBy lists the files that cite each entry; tests/references_test.ts keeps it and the tags in step. See AGENTS.md, 'Every threshold cites its source'.",
+  "references": {
+    "1177-barns-somn-i-olika-aldrar": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Barns sömn i olika åldrar",
+      "container": "1177.se",
+      "year": 2026,
+      "url": "https://www.1177.se/barn--gravid/att-ta-hand-om-barn/barns-somn/barns-somn-i-olika-aldrar/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Så här mycket sover de flesta barn i olika åldrar: 0–3 månader: 14–18 timmar per dygn. 4–11 månader: 12–16 timmar per dygn. 1–2 år: 10–16 timmar per dygn. 3–5 år: 10-14 timmar per dygn."
+        },
+        {
+          "text": "De flesta barn i åldern 4–11 månader sover upp till 16 timmar per dygn. De sover 9–10 timmar på natten och 3–6 timmar på dagen."
+        },
+        {
+          "text": "När ett nyfött barn har varit vaket i en till två timmar på dagen brukar det vara dags att sova igen."
+        },
+        {
+          "text": "Efter ungefär 2 till 4 månader brukar barnet sova längre perioder på natten och vara vaken mer på dagen."
+        }
+      ],
+      "supports": "The Swedish picture beside the WHO range, the newborn's one-to-two-hour wake window, the 4–11 months night/day split, and the day–night rhythm between two and four months.",
+      "note": "Senast uppdaterad 2026-05-04. The page cites no source for its ranges.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/sleep.ts"]
+    },
+    "fohm-2026-somnvanor": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Främja goda sömnvanor bland barn och unga",
+      "container": "Folkhälsomyndigheten (art.nr 26026)",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/publikationer-och-material/publikationsarkiv/f/framja-goda-somnvanor-bland-barn-och-unga/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barn 4–11 månader: Sömnbehov 12–16 timmar, varav 3–6 timmar på dagen.",
+          "at": "p. 7"
+        }
+      ],
+      "supports": "The same ranges as 1177, from the public health agency.",
+      "note": "Published 9 April 2026. The PDF: https://www.folkhalsomyndigheten.se/contentassets/0255be040c2646f8a6de5d64f41b637f/framja-goda-somnvanor-bland-barn-och-unga.pdf",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "galland-2012": {
+      "evidence": "systematic-review",
+      "authors": ["Galland BC", "Taylor BJ", "Elder DE", "Herbison P"],
+      "title": "Normal sleep patterns in infants and children: a systematic review of observational studies",
+      "container": "Sleep Medicine Reviews",
+      "year": 2012,
+      "volume": "16",
+      "issue": "3",
+      "pages": "213–222",
+      "doi": "10.1016/j.smrv.2011.06.001",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "0–2 months 14.6 (9.3–20.0); ≈3 months 13.6 (9.4–17.8); ≈6 months 12.9 (8.8–17.0); ≈9 months 12.6 (9.4–15.8); ≈12 months 12.9 (10.1–15.8); 1–2 years 12.6 (10.0–15.2); 2–3 years 12.0 (9.7–14.2); 4–5 years 11.5 (9.1–13.9)",
+          "at": "table 2, sleep duration in hours per 24 h, mean (mean ±1.96 SD)"
+        },
+        {
+          "text": "Night wakings: 0–2 months 1.7 (0–3.4); 3–6 months 0.8 (0–3.0); 7–11 months 1.1 (0–3.1); 1–2 years 0.7 (0–2.5)",
+          "at": "table 3"
+        },
+        {
+          "text": "Longest sleep period (h): 0–5 months 5.7 (1.8–9.6); 6–24 months 8.3 (3.0–13.7)",
+          "at": "table 3"
+        },
+        {
+          "text": "most children discontinue daytime napping between 3 and 5 years of age"
+        }
+      ],
+      "supports": "What children are observed to sleep at each age (OBSERVED_SLEEP), the sixteen-hour cap on one sleep (STALE_SLEEP_HOURS), night wakings being common, and the nap dropped between three and five.",
+      "note": "The abstract gives 'all infants' as 12.8 (9.7–15.9) where table 2 gives 12.7 (9.0–16.3); the app uses the table's age rows only. There is no 3–4 years row.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/sleep.ts"]
+    },
+    "grigg-damberger-2016": {
+      "evidence": "review",
+      "authors": ["Grigg-Damberger MM"],
+      "title": "The Visual Scoring of Sleep in Infants 0 to 2 Months of Age",
+      "container": "Journal of Clinical Sleep Medicine",
+      "year": 2016,
+      "volume": "12",
+      "issue": "3",
+      "pages": "429–445",
+      "doi": "10.5664/jcsm.5600",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4773630/",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "Sleep cycles in healthy infants at term typically last a mean of 50–60 min (range, 30–70 min)… At 43–48 w CA, sleep cycles average 60 min."
+        }
+      ],
+      "supports": "A nap under 45 minutes has not finished one sleep cycle; two hours or more has been through two (SHORT_NAP_MINUTES, LONG_NAP_MINUTES).",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "hirshkowitz-2015": {
+      "evidence": "consensus",
+      "authors": [
+        "Hirshkowitz M",
+        "Whiton K",
+        "Albert SM",
+        "Alessi C",
+        "Bruni O",
+        "DonCarlos L",
+        "Hazen N",
+        "Herman J",
+        "Katz ES",
+        "Kheirandish-Gozal L",
+        "Neubauer DN",
+        "O'Donnell AE",
+        "Ohayon M",
+        "Peever J",
+        "Rawding R",
+        "Sachdeva RC",
+        "Setters B",
+        "Vitiello MV",
+        "Ware JC",
+        "Adams Hillard PJ"
+      ],
+      "title": "National Sleep Foundation's sleep time duration recommendations: methodology and results summary",
+      "container": "Sleep Health",
+      "year": 2015,
+      "volume": "1",
+      "issue": "1",
+      "pages": "40–43",
+      "doi": "10.1016/j.sleh.2014.12.010",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "newborns (14–17 hours), infants (12–15 hours), toddlers (11–14 hours), preschoolers (10–13 hours)",
+          "at": "abstract, results"
+        }
+      ],
+      "supports": "The 14–17 hours for 0–3 months that the WHO adopted and the AASM declined to set.",
+      "note": "The NSF's wider 'may be appropriate' bands could not be checked against the paper, so the app does not use them; Galland et al. 2012's observed range stands in.",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "iglowstein-2003": {
+      "evidence": "cohort",
+      "authors": ["Iglowstein I", "Jenni OG", "Molinari L", "Largo RH"],
+      "title": "Sleep duration from infancy to adolescence: reference values and generational trends",
+      "container": "Pediatrics",
+      "year": 2003,
+      "volume": "111",
+      "issue": "2",
+      "pages": "302–307",
+      "doi": "10.1542/peds.111.2.302",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "At 18 months of age, there was a significant change from 2 or more naps to only 1 nap per day."
+        },
+        {
+          "text": "At the age of 3 years, 50.4% of the children still napped."
+        },
+        {
+          "text": "9 months: total 13.9 ± 1.7 h, night 11.2 ± 1.0 h, day 2.8 ± 1.2 h",
+          "at": "table 1"
+        }
+      ],
+      "supports": "One nap from about 18 months, no wake-window suggestion from three, and the demo baby's night and day split.",
+      "usedBy": [
+        "src/app/dev/demoData.ts",
+        "src/app/i18n/en.ts",
+        "src/app/sleep.ts"
+      ]
+    },
+    "jenni-lebourgeois-2006": {
+      "evidence": "review",
+      "authors": ["Jenni OG", "LeBourgeois MK"],
+      "title": "Understanding sleep–wake behavior and sleep disorders in children: the value of a model",
+      "container": "Current Opinion in Psychiatry",
+      "year": 2006,
+      "volume": "19",
+      "issue": "3",
+      "pages": "282–287",
+      "doi": "10.1097/01.yco.0000218599.32969.03",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "sleep pressure accumulates more slowly with increasing age… enabling children to be awake for consolidated periods during the day"
+        }
+      ],
+      "supports": "The physiology behind wake windows (the two-process model), and the reasoning that a short nap brings the next sleep sooner. The halfway adjustment for nap length is the app's own rule, not a measured one.",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "karitane-2016": {
+      "evidence": "health-service",
+      "organization": "Karitane (NSW)",
+      "title": "Sleep Needs Guide for Infants 0 to 3 Years",
+      "container": "Karitane, FAM002",
+      "year": 2016,
+      "url": "https://www.pcit-toddlers.org/forms-handouts/60_Appendix_C_Sleep_Needs_Guide_for_Infants_0_to_3_Years_Karitane.pdf",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "12–18 months: 4–6 hours; 18 months–3 years: 5–7 hours",
+          "at": "column 'Awake (feed & play)'"
+        }
+      ],
+      "supports": "Wake windows from the first birthday to three years (WAKE_WINDOWS).",
+      "note": "Updated May 2016. Superseded on Karitane's own site by the Flexible Daily Routine (karitane-flexible-routine), which stops at twelve months; the 2016 guide survives only as a copy on a third-party site. It is used because no service we found publishes a newer table past the first birthday.",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "karitane-flexible-routine": {
+      "evidence": "health-service",
+      "organization": "Karitane (NSW)",
+      "title": "Flexible Daily Routine",
+      "container": "karitane.com.au",
+      "year": 2025,
+      "url": "https://karitane.com.au/wp-content/uploads/2025/01/K048_DailyFlexibleRoutine_Digital.pdf",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "0–6 wk 1 hour; 6 wk–3 mo 1–1½ hours; 3–4½ mo 1½–2 hours; 4½–6 mo 2–2½ hours; 6–9 mo 2–3 hours; 9–12 mo 3 hours; 12 mo onwards: up for longer during the day",
+          "at": "column 'Feed-play time'"
+        }
+      ],
+      "supports": "That Karitane's current guidance agrees with the 2016 guide to nine months and gives no table past twelve.",
+      "note": "Linked from https://karitane.com.au/newborn/infant-routines/. Undated; the upload path says January 2025.",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "kennaway-1992": {
+      "evidence": "clinical-study",
+      "authors": ["Kennaway DJ", "Stamp GE", "Goble FC"],
+      "title": "Development of melatonin production in infants and the impact of prematurity",
+      "container": "Journal of Clinical Endocrinology & Metabolism",
+      "year": 1992,
+      "volume": "75",
+      "issue": "2",
+      "pages": "367–369",
+      "doi": "10.1210/jcem.75.2.1639937",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "little evidence of rhythmic 6-sulfatoxymelatonin excretion before 9 to 12 weeks of age in full-term infants"
+        }
+      ],
+      "supports": "The newborn note that a day–night rhythm appears between two and four months.",
+      "usedBy": ["src/app/i18n/en.ts"]
+    },
+    "paruthi-2016": {
+      "evidence": "consensus",
+      "authors": [
+        "Paruthi S",
+        "Brooks LJ",
+        "D'Ambrosio C",
+        "Hall WA",
+        "Kotagal S",
+        "Lloyd RM",
+        "Malow BA",
+        "Maski K",
+        "Nichols C",
+        "Quan SF",
+        "Rosen CL",
+        "Troester MM",
+        "Wise MS"
+      ],
+      "title": "Recommended Amount of Sleep for Pediatric Populations: A Consensus Statement of the American Academy of Sleep Medicine",
+      "container": "Journal of Clinical Sleep Medicine",
+      "year": 2016,
+      "volume": "12",
+      "issue": "6",
+      "pages": "785–786",
+      "doi": "10.5664/jcsm.5866",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4877308/",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "Infants 4 months to 12 months should sleep 12 to 16 hours per 24 hours (including naps) on a regular basis to promote optimal health."
+        },
+        {
+          "text": "Recommendations for infants younger than 4 months are not included due to the wide range of normal variation in duration and patterns of sleep, and insufficient evidence for associations with health outcomes."
+        }
+      ],
+      "supports": "Agreement with the WHO from four months, the 10–13 hours carried to the sixth birthday (3–5 years), and why there is no AASM figure under four months.",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "rikshandboken-framja-god-somn": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Främja god sömn",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2025,
+      "url": "https://www.rikshandboken-bhv.se/halsosamtal/framja-god-somn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Spädbarn har sömncykler som är ungefär 50 minuter långa, lite kortare för de yngsta barnen, och lite längre för barn på ett år och äldre."
+        },
+        {
+          "text": "Barn mellan 1–5 år behöver 11–14 timmar sömn dagligen, med stora individuella skillnader."
+        }
+      ],
+      "supports": "The infant sleep cycle behind the short-nap threshold, in Swedish child health care's own words.",
+      "note": "Godkänd 2025-11-04.",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "tresillian-3-to-5-months": {
+      "evidence": "health-service",
+      "organization": "Tresillian Family Care Centres (NSW Health)",
+      "title": "Baby Awake Windows & Routines 3 to 5 Months",
+      "container": "tresillian.org.au",
+      "year": 2026,
+      "url": "https://www.tresillian.org.au/baby/routines/3-to-5-months/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "The average awake window for a 3 month old is 1.5 - 2 hours whereas an average awake window for a 5 month old is 2 - 3 hours."
+        }
+      ],
+      "supports": "Wake windows from twelve weeks to six months, turning at four months (WAKE_WINDOWS).",
+      "note": "The page shows no date; the year is when it was read.",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "tresillian-6-to-8-months": {
+      "evidence": "health-service",
+      "organization": "Tresillian Family Care Centres (NSW Health)",
+      "title": "Baby Awake Windows & Routines 6 to 8 Months",
+      "container": "tresillian.org.au",
+      "year": 2026,
+      "url": "https://www.tresillian.org.au/baby/routines/6-to-8-months/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "2 - 3 hours",
+          "at": "awake window, 6 to 8 months"
+        }
+      ],
+      "supports": "Wake windows from six to nine months (WAKE_WINDOWS).",
+      "note": "The page shows no date; the year is when it was read.",
+      "usedBy": ["src/app/dev/demoData.ts", "src/app/sleep.ts"]
+    },
+    "tresillian-9-to-12-months": {
+      "evidence": "health-service",
+      "organization": "Tresillian Family Care Centres (NSW Health)",
+      "title": "Baby Awake Windows & Routines 9 to 12 Months",
+      "container": "tresillian.org.au",
+      "year": 2026,
+      "url": "https://www.tresillian.org.au/baby/routines/9-to-12-months/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "around 2.5 - 3.5 hours",
+          "at": "9–10 months"
+        },
+        {
+          "text": "around 3 - 4 hours",
+          "at": "11–12 months"
+        }
+      ],
+      "supports": "Wake windows from nine months to the first birthday (WAKE_WINDOWS).",
+      "note": "The page shows no date; the year is when it was read.",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "tresillian-newborn-sleep": {
+      "evidence": "health-service",
+      "organization": "Tresillian Family Care Centres (NSW Health)",
+      "title": "Newborn Sleep",
+      "container": "tresillian.org.au",
+      "year": 2026,
+      "url": "https://www.tresillian.org.au/newborn/sleep/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Newborn to 6 week wake window: 1 to 2 hours"
+        },
+        {
+          "text": "6 to 12 week wake window: 1 - 2.5 hours"
+        }
+      ],
+      "supports": "Wake windows from birth to twelve weeks (WAKE_WINDOWS).",
+      "note": "The page shows no date; the year is when it was read.",
+      "usedBy": ["src/app/sleep.ts"]
+    },
+    "who-2019-under5": {
+      "evidence": "guideline",
+      "organization": "World Health Organization",
+      "title": "Guidelines on physical activity, sedentary behaviour and sleep for children under 5 years of age",
+      "container": "World Health Organization, Geneva",
+      "year": 2019,
+      "isbn": "9789241550536",
+      "url": "https://iris.who.int/handle/10665/311664",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "should have 14–17 hours (0–3 months of age) or 12–16 hours (4–11 months of age) of good quality sleep, including naps",
+          "at": "p. 22, infants (less than 1 year)"
+        },
+        {
+          "text": "should have 11–14 hours of good quality sleep, including naps, with regular sleep and wake-up times",
+          "at": "p. 22, children 1–2 years"
+        },
+        {
+          "text": "should have 10–13 hours of good quality sleep, which may include a nap, with regular sleep and wake-up times",
+          "at": "p. 22, children 3–4 years"
+        },
+        {
+          "text": "Strong recommendations, very low quality evidence",
+          "at": "p. 22"
+        }
+      ],
+      "supports": "The recommended hours of sleep per 24 hours, naps included, for each age band (SLEEP_RECOMMENDATIONS).",
+      "usedBy": ["src/app/sleep.ts"]
+    }
+  }
+}

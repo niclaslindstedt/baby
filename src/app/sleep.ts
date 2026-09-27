@@ -6,22 +6,28 @@
 // against the recommendation for the age, and when the next sleep is likely
 // to suit. Pure and clock-free: `now` is always a parameter.
 //
-// Three families of numbers, and the sources behind each (the full notes,
-// with quotes, are in `docs/sleep.md`):
+// Three families of numbers, and the sources behind each. Every source is an
+// entry in `docs/references.json`, cited here by its `[ref:<id>]` tag — the
+// full record, the verbatim quotes and what each one is used for live there,
+// and `tests/references_test.ts` keeps the two in step; `docs/sleep.md` is
+// the prose account:
 //
 //   - How much a child should sleep in 24 hours, naps included. The
 //     recommended range is the WHO's (Guidelines on physical activity,
 //     sedentary behaviour and sleep for children under 5 years of age, 2019:
 //     "14–17 hours (0–3 months of age) or 12–16 hours (4–11 months of age) of
 //     good quality sleep, including naps"; 11–14 hours at 1–2 years; 10–13 at
-//     3–4), which the American Academy of Sleep Medicine's consensus repeats
-//     from four months (Paruthi et al. 2016, J Clin Sleep Med 12(6):785–786).
-//     A recommendation is not a description, though, and many healthy
-//     children sleep outside it — 1177 gives "de flesta barn" 14–18 hours at
-//     0–3 months and 10–16 at 1–2 years. So the app also carries what
+//     3–4) [ref:who-2019-under5], which the American Academy of Sleep
+//     Medicine's consensus repeats from four months (Paruthi et al. 2016, J
+//     Clin Sleep Med 12(6):785–786) [ref:paruthi-2016]. A recommendation is
+//     not a description, though, and many healthy children sleep outside it
+//     — 1177 gives "de flesta barn" 14–18 hours at 0–3 months and 10–16 at
+//     1–2 years [ref:1177-barns-somn-i-olika-aldrar], and Folkhälsomyndigheten
+//     the same ranges [ref:fohm-2026-somnvanor]. So the app also carries what
 //     children are actually observed to sleep: the pooled means and 95 %
 //     ranges (±1.96 SD) of Galland et al. 2012 (Sleep Med Rev 16(3):213–222,
-//     table 2), a systematic review of 34 observational studies. An average
+//     table 2) [ref:galland-2012], a systematic review of 34 observational
+//     studies. An average
 //     outside the recommendation but inside that range is common; one
 //     outside both is worth a mention at BVC — or is a logging gap.
 //
@@ -29,17 +35,19 @@
 //     There is no peer-reviewed table of these: the physiology is the
 //     two-process model, in which sleep pressure builds faster the younger
 //     the child (Jenni & LeBourgeois 2006, Curr Opin Psychiatry
-//     19(3):282–287), and the numbers are the published guidance of the
-//     child and family health services of New South Wales — Tresillian's
-//     age pages up to a year, Karitane's Sleep Needs Guide (2016) after it —
-//     with 1177's "en till två timmar" for a newborn agreeing. So the app
+//     19(3):282–287) [ref:jenni-lebourgeois-2006], and the numbers are the
+//     published guidance of the child and family health services of New
+//     South Wales — Tresillian's age pages up to a year, Karitane's Sleep
+//     Needs Guide (2016) after it (see `WAKE_WINDOWS`) — with 1177's "en till
+//     två timmar" for a newborn agreeing [ref:1177-barns-somn-i-olika-aldrar]. So the app
 //     treats the band as a prior and the child's own recent days as the
 //     evidence: see `nextSleep`.
 //
 //   - What counts as a short nap. "Sleep cycles in healthy infants at term
 //     typically last a mean of 50–60 min (range, 30–70 min)" (Grigg-Damberger
-//     2016, J Clin Sleep Med 12(3):429–445); Rikshandboken: "Spädbarn har
-//     sömncykler som är ungefär 50 minuter långa". A nap under 45 minutes has
+//     2016, J Clin Sleep Med 12(3):429–445) [ref:grigg-damberger-2016];
+//     Rikshandboken: "Spädbarn har sömncykler som är ungefär 50 minuter
+//     långa" [ref:rikshandboken-framja-god-somn]. A nap under 45 minutes has
 //     not finished its first cycle, and one of two hours or more has been
 //     through two.
 //
@@ -81,7 +89,8 @@ const months = (n: number) => Math.round(n * DAYS_PER_MONTH);
  * How long an open sleep may run before it is read as a forgotten "woke up"
  * rather than a sleep. Sixteen hours is past any single sleep the sources
  * describe — Galland et al. 2012 (table 3) put the longest sleep period at
- * 6–24 months at 8.3 hours, with 13.7 as the upper limit of its 95 % range —
+ * 6–24 months at 8.3 hours, with 13.7 as the upper limit of its 95 % range
+ * [ref:galland-2012] —
  * and short enough that the next day's Today card stops claiming the child
  * has slept since yesterday evening.
  */
@@ -452,9 +461,11 @@ export type SleepRecommendation = {
 
 /**
  * WHO 2019, p. 22: 14–17 hours at 0–3 months, 12–16 hours at 4–11 months,
- * 11–14 hours at 1–2 years, 10–13 hours at 3–4 years. The last band is
- * carried to the sixth birthday with the AASM's 3–5 years, which says the
- * same 10–13. Past six the app says nothing: it follows a baby, and the
+ * 11–14 hours at 1–2 years, 10–13 hours at 3–4 years [ref:who-2019-under5].
+ * The 0–3 months figure is the National Sleep Foundation's recommended range
+ * [ref:hirshkowitz-2015], which the AASM declined to set a number for. The
+ * last band is carried to the sixth birthday with the AASM's 3–5 years,
+ * which says the same 10–13 [ref:paruthi-2016]. Past six the app says nothing: it follows a baby, and the
  * school-age figures are a different conversation.
  */
 export const SLEEP_RECOMMENDATIONS: SleepRecommendation[] = [
@@ -488,7 +499,7 @@ export type ObservedSleep = {
  * 0–2 months 14.6 (9.3–20.0), ≈3 months 13.6 (9.4–17.8), ≈6 months 12.9
  * (8.8–17.0), ≈9 months 12.6 (9.4–15.8), ≈12 months 12.9 (10.1–15.8), 1–2
  * years 12.6 (10.0–15.2), 2–3 years 12.0 (9.7–14.2), 4–5 years 11.5
- * (9.1–13.9). Each row is used from halfway after the age before it to
+ * (9.1–13.9) [ref:galland-2012]. Each row is used from halfway after the age before it to
  * halfway before the age after it; the review has no 3–4 years row, so the
  * turn from its 2–3 to its 4–5 years is at three and a half.
  */
@@ -584,22 +595,28 @@ export type WakeWindow = {
  * Tresillian's (Tresillian Family Care Centres, NSW Health, tresillian.org.au):
  *
  *   - "Newborn to 6 week wake window: 1 to 2 hours", "6 to 12 week wake
- *     window: 1 - 2.5 hours" (/newborn/sleep/);
+ *     window: 1 - 2.5 hours" [ref:tresillian-newborn-sleep];
  *   - "The average awake window for a 3 month old is 1.5 - 2 hours whereas an
  *     average awake window for a 5 month old is 2 - 3 hours"
- *     (/baby/routines/3-to-5-months/) — the app turns at four months;
- *   - 6–8 months "2 - 3 hours" (/baby/routines/6-to-8-months/);
+ *     [ref:tresillian-3-to-5-months] — the app turns at four months;
+ *   - 6–8 months "2 - 3 hours" [ref:tresillian-6-to-8-months];
  *   - 9–10 months "around 2.5 - 3.5 hours", 11–12 months "around 3 - 4
- *     hours" (/baby/routines/9-to-12-months/).
+ *     hours" [ref:tresillian-9-to-12-months].
  *
  * From a year they are Karitane's Sleep Needs Guide for Infants 0 to 3 Years
  * (May 2016, FAM002), column "Awake (feed & play)": 12–18 months 4–6 hours,
- * 18 months–3 years 5–7 hours — by when the sleep is one afternoon nap
- * (Iglowstein et al. 2003, Pediatrics 111(2):302–307: "At 18 months of age,
- * there was a significant change from 2 or more naps to only 1 nap per
- * day"). From three the wake window stops being a useful unit — half of
- * three-year-olds no longer nap at all (Iglowstein: "At the age of 3 years,
- * 50.4% of the children still napped") — and the app stops suggesting times.
+ * 18 months–3 years 5–7 hours [ref:karitane-2016]. Karitane has since
+ * replaced that guide with a Flexible Daily Routine that agrees with it to
+ * nine months and stops at a year ("up for longer during the day")
+ * [ref:karitane-flexible-routine]; no service we found publishes a newer
+ * table past the first birthday, so the 2016 bands stand until one does. By
+ * then the sleep is one
+ * afternoon nap (Iglowstein et al. 2003, Pediatrics 111(2):302–307: "At 18
+ * months of age, there was a significant change from 2 or more naps to only
+ * 1 nap per day" [ref:iglowstein-2003]). From three the wake window stops
+ * being a useful unit — half of three-year-olds no longer nap at all
+ * (Iglowstein: "At the age of 3 years, 50.4% of the children still napped")
+ * — and the app stops suggesting times.
  */
 export const WAKE_WINDOWS: WakeWindow[] = [
   { fromDays: 0, toDays: 42, min: 60, max: 120 },

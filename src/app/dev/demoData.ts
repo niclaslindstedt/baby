@@ -177,8 +177,9 @@ function wakeUp(offset: number): number {
  * A seven-and-a-half-month-old on three naps — a short morning nap, a long
  * one at midday and a catnap late in the afternoon — and a night from about
  * seven to six: some 11 hours at night and 3 by day, Iglowstein et al.'s
- * nine-month means (11.2 and 2.8 hours), and every wake window inside the
- * 2–3 hours Tresillian gives for 6–8 months. On a night with a change in the
+ * nine-month means (11.2 and 2.8 hours) [ref:iglowstein-2003], and every wake
+ * window inside the 2–3 hours Tresillian gives for 6–8 months
+ * [ref:tresillian-6-to-8-months]. On a night with a change in the
  * small hours (see `dayOfChanges`), the night is logged in two halves around
  * it, the way a parent who taps "woke up" for a feed and "night" again after
  * would log it.

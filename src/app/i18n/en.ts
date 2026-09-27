@@ -269,6 +269,8 @@ export const en = {
       "{name} usually goes down for the night around {time}, which is within reach from here — so the next sleep is the night.",
     overdue:
       "The suggested time has passed. Tired signs — yawning, rubbing eyes, staring, fussing — say more than the clock.",
+    // Galland et al. 2012, table 3: 1.7 night wakings at 0–2 months, still
+    // 0.7 at 1–2 years [ref:galland-2012].
     nightWakingNote:
       "Waking in the night is common through the first years. The next sleep is the rest of the night, so no time is suggested.",
     suggestionHint:
@@ -290,6 +292,12 @@ export const en = {
     avgNone: "Nothing logged yet.",
     recommended:
       "The WHO recommends {low}–{high} hours in 24 hours at this age, naps included. Children observed in studies sleep {mean} hours on average, and 19 in 20 between {obsLow} and {obsHigh}.",
+    // One sentence per age band, each a source's own claim: the day–night
+    // rhythm and the 4–11 months split from 1177
+    // [ref:1177-barns-somn-i-olika-aldrar], with the melatonin rhythm
+    // appearing at 9–12 weeks [ref:kennaway-1992]; two naps to one at 18
+    // months [ref:iglowstein-2003]; the nap dropped between three and five
+    // [ref:galland-2012].
     band: {
       newborn:
         "Newborns sleep round the clock in short stretches. A day–night rhythm usually appears between two and four months, when the nights start to lengthen.",
