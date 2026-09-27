@@ -3,7 +3,9 @@
 // month of age, 0–60 months, for the three measurements the app records.
 //
 // GENERATED from the WHO's published monthly z-score tables — do not edit by
-// hand. Source files (World Health Organization, "Child growth standards"):
+// hand. Source files (World Health Organization, "Child growth standards"
+// [ref:who-child-growth-standards]; the methods are [ref:who-2006] for weight
+// and length/height and [ref:who-2007] for head circumference):
 //   https://www.who.int/tools/child-growth-standards/standards/weight-for-age
 //   https://www.who.int/tools/child-growth-standards/standards/length-height-for-age
 //   https://www.who.int/tools/child-growth-standards/standards/head-circumference-for-age
@@ -19,12 +21,18 @@
 //
 // Why the WHO standards and not the Swedish reference. Swedish child health
 // care (BVC) plots on the Swedish reference (Wikland et al. 2002, Göteborg
-// 1974 cohort) with WHO 0–5 as the alternative in electronic records, and
-// Rikshandboken notes that in practice the differences during the BVC years
-// are small and that what matters is the movement across channels over time
-// (see `docs/growth.md`). The Swedish reference's SD tables are not published
-// in any form this app could bundle; the WHO standards are, so they are what
-// the curves here are drawn from. Rides in its own chunk behind `import()`.
+// 1974 cohort [ref:wikland-2002]) with WHO 0–5 as the alternative in
+// electronic records, and Rikshandboken notes that in practice the
+// differences during the BVC years are small and that what matters is the
+// movement across channels over time
+// [ref:rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser] (see
+// `docs/growth.md`). The exception is head circumference: the same page does
+// not recommend the WHO's head curves for Northern European children, whose
+// heads — the larger ones most of all — they fit poorly, and the Growth view
+// says so under that chart. The Swedish reference's SD tables are not
+// published in any form this app could bundle; the WHO standards are, so they
+// are what the curves here are drawn from. Rides in its own chunk behind
+// `import()`.
 
 import type { Sex } from "../types.ts";
 

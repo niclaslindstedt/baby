@@ -76,29 +76,25 @@ describe("the references, as the Sources screen lists them", () => {
     );
     const ranks = list.map((r) => evidenceRank(r.evidence));
     expect(ranks).toEqual([...ranks].sort((a, b) => a - b));
-    // The WHO guideline leads; the health services' pages come last.
-    expect(list[0]!.id).toBe("who-2019-under5");
+    // A guideline leads; the health services' pages come last.
+    expect(list[0]!.evidence).toBe("guideline");
     expect(list.at(-1)!.evidence).toBe("health-service");
   });
 
   it("ranks within a kind by who published it, then when", () => {
     const consensus = list.filter((r) => r.evidence === "consensus");
     expect(consensus.map((r) => r.id)).toEqual([
+      "efsa-nda-2013",
+      "fao-who-unu-2004",
       "hirshkowitz-2015",
       "paruthi-2016",
     ]);
   });
 
-  it("groups by tracker in the bar's order, and names the trackers still to come", () => {
+  it("groups by tracker in the bar's order, with every tracker listed", () => {
     const groups = byTopic(list, FEATURES);
-    expect(groups.map((g) => g.topic)).toEqual(["sleep"]);
-    expect(groups[0]!.refs).toHaveLength(list.length);
-    expect(unlistedTopics(list, FEATURES)).toEqual([
-      "diapers",
-      "growth",
-      "food",
-      "vaccines",
-    ]);
+    expect(groups.map((g) => g.topic)).toEqual([...FEATURES]);
+    expect(unlistedTopics(list, FEATURES)).toEqual([]);
   });
 
   it("cites a paper by its authors and journal, and links its DOI", () => {

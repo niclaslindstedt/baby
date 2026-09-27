@@ -74,6 +74,13 @@ describe("kcalPerKg / breastMilkEnergyShare", () => {
     expect(kcalPerKg(7, "male")).toBe(79);
     expect(kcalPerKg(10, "female")).toBe(79);
     expect(kcalPerKg(18, "male")).toBeCloseTo(82.4);
+    // Table 3.2's last month: boys 81, girls 79.
+    expect(kcalPerKg(10.5, "male")).toBe(80);
+    expect(kcalPerKg(11.5, "male")).toBe(81);
+    expect(kcalPerKg(11.5, "female")).toBe(79);
+    // Tables 4.2 and 4.3's 3–4 year row, held past the fourth birthday.
+    expect(kcalPerKg(40, "male")).toBeCloseTo(79.7);
+    expect(kcalPerKg(50, "female")).toBeCloseTo(76.5);
     expect(breastMilkEnergyShare(7)).toBe(0.77);
     expect(breastMilkEnergyShare(10)).toBe(0.63);
     expect(breastMilkEnergyShare(15)).toBe(0.44);
@@ -117,6 +124,27 @@ describe("requirements", () => {
     expect(after.fatE).toEqual({ min: 30, max: 40 });
     expect(before.saturatedMaxE).toBeNull();
     expect(after.saturatedMaxE).toBe(10);
+  });
+
+  it("move the fatty acid floors and DHA with NNR2023 and EFSA's age bands", () => {
+    const data = docWith([]); // born 2026-01-01
+    const at = (day: Parameters<typeof requirements>[1]) =>
+      requirements(data, day, WEIGHT_FOR_AGE)!;
+    // Under six WHO months (182.6 days): no DHA figure yet; from six,
+    // EFSA's 100 mg.
+    expect(at("2026-06-15").dhaMg).toBeNull();
+    expect(at("2026-07-05").dhaMg).toBe(100);
+    const infant = at("2026-12-01");
+    expect([infant.omega6MinE, infant.omega3MinE]).toEqual([4, 1]);
+    const toddler = at("2027-02-01");
+    expect([toddler.omega6MinE, toddler.omega3MinE]).toEqual([3, 0.5]);
+    expect(at("2027-12-15").dhaMg).toBe(100);
+    // Two years: omega-3 back to 1 E%, omega-6 the 2.5 E% that NNR2023's
+    // LA + ALA ≥ 3 E% (≥ 0.5 of it ALA) leaves, and no DHA figure.
+    const two = at("2028-01-15");
+    expect([two.omega6MinE, two.omega3MinE]).toEqual([2.5, 1]);
+    expect(two.fatE).toEqual({ min: 25, max: 40 });
+    expect(two.dhaMg).toBeNull();
   });
 
   it("are null before birth", () => {

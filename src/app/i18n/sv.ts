@@ -154,9 +154,9 @@ export const sv: Catalog = {
     diapersPlural: "blöjor",
     norm: {
       firstDays:
-        "De första dagarna ökar antalet med mjölken: ungefär en kissblöja dag ett, två dag två, och så vidare.",
+        "De första dagarna ökar antalet med mjölken: ungefär en kissblöja dag ett, två dag två och tre eller fler dag tre och fyra.",
       newborn:
-        "Från ungefär dag fem räknar barnhälsovården med minst sex kissblöjor per dygn.",
+        "Från ungefär dag fem minst sex kissblöjor per dygn — samma antal som barnhälsovården räknar med.",
       infant:
         "Från ungefär sex veckor blir blöjorna tyngre och färre — ungefär fem eller sex per dygn.",
       toddler:
@@ -404,6 +404,8 @@ export const sv: Catalog = {
     projectionHintNoParents:
       "Från den nuvarande längdkanalen ({z}), viktad till {share} eftersom längden i den här åldern bara löst förutsäger slutlängden, och resten dragen mot genomsnittet. Lägg in båda föräldrarnas längd för att förankra den.",
     projectionMissing: "Lägg in ett längdmått för att beräkna en slutlängd.",
+    headCaveat:
+      "Barnhälsovården använder inte WHO:s kurvor för huvudomfång: de stämmer dåligt med barn i Nordeuropa, särskilt med dem som har större huvudomfång. Läs kanalen här med det i åtanke — BVC:s egen kurva är den som gäller.",
     outOfRange:
       "Standarden täcker de första fem åren; senare mätvärden listas men placeras inte.",
     form: {
@@ -470,7 +472,7 @@ export const sv: Catalog = {
       "Ingen vikt sparad än, så WHO:s medianvikt för åldern får duga. Lägg in ett mätvärde under Tillväxt för en siffra som är {name}s egen.",
     nutrients: "Resten",
     nutrientsHint:
-      "Jämfört med de nordiska näringsrekommendationerna 2023 för den här åldern. Ett näringsämne som inget livsmedel anger är okänt — räknas aldrig som noll.",
+      "Jämfört med de nordiska näringsrekommendationerna 2023 för den här åldern, och DHA med EU:s livsmedelssäkerhetsmyndighets. Ett näringsämne som inget livsmedel anger är okänt — räknas aldrig som noll.",
     nutrientsBreastNote:
       "Bröstmjölk mäts inte, så det den bidrar med räknas inte nedan. För järn spelar det liten roll — bröstmjölk innehåller nästan inget, vilket är skälet till att maten tar över vid ungefär sex månader.",
     nutrient: {
@@ -627,7 +629,7 @@ export const sv: Catalog = {
       sixWeeks: "från sex veckor",
       sixMonths: "från sex månader",
       twelveMonths: "från tolv månader",
-      oneYear: "från ett år",
+      twoYears: "från två år",
       threeYears: "från tre år",
       season: "varje höst, från sex månader",
     },
@@ -636,7 +638,7 @@ export const sv: Catalog = {
       regional: "erbjuds av regionerna",
       optional: "betalas själv",
       programmeFrom2027:
-        "i programmet från 2027 för barn födda från juli 2025; betalas själv dessförinnan",
+        "i programmet från 2027 för barn födda från juli 2025, med kostnadsfri ikappvaccination för äldre barn från mars 2027; betalas själv dessförinnan",
     },
     form: {
       title: "Notera en vaccination",

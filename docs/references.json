@@ -1,6 +1,114 @@
 {
   "$comment": "Every source the app's numbers and claims rest on, keyed by the id code cites as [ref:<id>]. usedBy lists the files that cite each entry; tests/references_test.ts keeps it and the tags in step (OSS_SPEC.md §24). summary and topics are the app's own: the parent-facing line the Sources screen shows, in both languages, and the tracker it is listed under. See AGENTS.md, 'Every threshold cites its source'.",
   "references": {
+    "1177-amning": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Amning",
+      "container": "1177.se",
+      "year": 2024,
+      "url": "https://www.1177.se/barn--gravid/att-skota-ett-nyfott-barn/amning-och-flaskmatning/amning/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barnet kissar så att du får byta blöja minst sex gånger per dag. Blöjan är då genomblöt med kiss.",
+          "at": "Hur vet jag att barnet får i sig tillräckligt?"
+        },
+        {
+          "text": "Ett annat tecken på att barnet får i sig tillräckligt med mat under sin första vecka är att barnets bajs ändrar färg från svart till brunt till grönt till gult.",
+          "at": "Hur vet jag att barnet får i sig tillräckligt?"
+        }
+      ],
+      "supports": "The Swedish wet floor of six a day (DIAPER_NORMS, source `newborn`, minWet 6).",
+      "summary": {
+        "en": "How to tell that a breastfed baby is getting enough, including at least six wet diapers a day.",
+        "sv": "Hur du märker att ett ammat barn får i sig tillräckligt, bland annat minst sex blöta blöjor per dag."
+      },
+      "topics": ["diapers"],
+      "note": "Senast uppdaterad 2024-08-12. The page names no starting day for the six; 'from day five' comes from NHS and La Leche League.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "1177-barnets-kiss-och-bajs-forsta-veckan": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Bildspel: Barnets kiss och bajs första veckan efter förlossningen",
+      "container": "1177.se",
+      "year": 2022,
+      "url": "https://www.1177.se/sv-se-x-ll/barn--gravid/att-skota-ett-nyfott-barn/bildspel-barnets-kiss-och-bajs-forsta-veckan-efter-forlossningen/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "De flesta barn har kissat inom ett dygn efter förlossningen.",
+          "at": "bild 2"
+        },
+        {
+          "text": "Prata med en barnmorska på sjukhuset eller barnavårdscentralen, BVC, om ditt barn inte har kissat inom två dygn.",
+          "at": "bild 2"
+        },
+        {
+          "text": "Det första bajset är svart, svartgrönt eller mörkgrönt. Det brukar kallas barnbeck.",
+          "at": "bild 3"
+        },
+        {
+          "text": "Kontakta genast sjukhuset där du födda barnet om ditt barn inte bajsar inom två dagar.",
+          "at": "bild 3"
+        },
+        {
+          "text": "Kontakta barnavårdscentralen, BVC, eller ring telefonnummer 1177 om ditt barn inte bajsar gult inom en vecka.",
+          "at": "bild 6"
+        }
+      ],
+      "supports": "The meconium deadline — no stool within 48 hours of birth (maxDirtyGapHours 48 in the firstDays bands) — and the first wet diaper within the first day (minWet 1 on day one).",
+      "summary": {
+        "en": "When a newborn's first wee and first poo should have come, and when to call.",
+        "sv": "När ett nyfött barn bör ha kissat och bajsat första gången, och när du ska höra av dig."
+      },
+      "topics": ["diapers"],
+      "note": "Senast uppdaterad 2022-11-07. The canonical URL carries the /sv-se-x-ll/ prefix; the plain /barn--gravid/ path returns 404. The pages that link it call it 'Här kan du se bilder på hur barnets kiss och bajs ändrar färg den första veckan efter förlossningen'.",
+      "usedBy": ["src/app/diapers.ts"]
+    },
+    "1177-barnets-mat-upp-till-ett-ar": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Barnets mat och dryck upp till ett år",
+      "container": "1177.se",
+      "year": 2025,
+      "url": "https://www.1177.se/barn--gravid/att-ta-hand-om-barn/mat-och-dryck-for-barn/barnets-mat-upp-till-ett-ar/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barn behöver få D-droppar från att de är cirka en vecka gamla."
+        },
+        {
+          "text": "Barn behöver få D-droppar tills de är två år. En del barn behöver det ännu längre.",
+          "at": "D-droppar och extra fett i maten"
+        },
+        {
+          "text": "Barnet kan få börja med pyttesmå smakprover vid fyra månaders ålder. Det gäller om hen visar intresse för maten som familjen äter."
+        },
+        {
+          "text": "Barnet behöver mer näring och energi vid sex månader. Då är det dags att börja med smakportioner."
+        },
+        {
+          "text": "Lägg extra fett i maten om den är hemlagad, om det inte redan ingår fett i maträtten. Till exempel en tesked rapsolja per portion"
+        },
+        {
+          "text": "Barn som äter varierad mat behöver inga kosttillskott förutom D-droppar. Små barn kan få för mycket av vissa näringsämnen exempelvis vitaminer om de får extra tillskott, vilket kan vara skadligt. Ge därför inte andra tillskott än D-droppar till barn utan att rådgöra med BVC först.",
+          "at": "Undvik kosttillskott för barn"
+        }
+      ],
+      "supports": "The D-drops line's 'from about one week until two years' (food.dDrops), tastes from four months and the regimen from six (TASTES_FROM_DAYS, COMPLEMENTARY_FROM_DAYS), the teaspoon of rapeseed oil, and why DHA is informational (no supplement but D-drops).",
+      "summary": {
+        "en": "When to start D-drops and solid food, and why small children need no supplement other than D-drops.",
+        "sv": "När D-droppar och vanlig mat börjar, och varför små barn inte behöver andra tillskott än D-droppar."
+      },
+      "topics": ["food"],
+      "note": "Senast uppdaterad 2025-09-16; fact-checked by a Livsmedelsverket nutritionist.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
     "1177-barns-somn-i-olika-aldrar": {
       "evidence": "health-service",
       "organization": "1177 (Inera)",
@@ -33,6 +141,555 @@
       "note": "Senast uppdaterad 2026-05-04. The page cites no source for its ranges.",
       "usedBy": ["src/app/i18n/en.ts", "src/app/sleep.ts"]
     },
+    "1177-brostmjolksersattning-och-tillskottsnaring": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Bröstmjölksersättning och tillskottsnäring",
+      "container": "1177.se",
+      "year": 2026,
+      "url": "https://www.1177.se/barn--gravid/att-skota-ett-nyfott-barn/amning-och-flaskmatning/brostmjolksersattning-och-tillskottsnaring/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Du kan också titta på blöjan. Spädbarn som får tillräckligt med mat kissar ofta minst sex gånger per dag och urinen är ljusgul.",
+          "at": "Hur vet jag att barnet får i sig tillräckligt?"
+        },
+        {
+          "text": "Bajset hos barn som bara får ersättning är ofta fastare än hos barn som bara får bröstmjölk.",
+          "at": "Bajset hos barn som får bröstmjölksersättning eller tillskottsnäring"
+        },
+        {
+          "text": "Från sex månaders ålder kan barnet få tillskottsnäring tillsammans med vanlig mat. Tillskottsnäring innehåller bland annat extra järn."
+        },
+        {
+          "text": "Tillskottsnäring är anpassad för barn från 6 månader och innehåller mer järn än bröstmjölksersättning.",
+          "at": "Från sex månader"
+        },
+        {
+          "text": "När du har börjat ge barnet vanlig mat kan du fortsätta att komplettera med antingen bröstmjölksersättning eller tillskottsnäring.",
+          "at": "Från sex månader"
+        },
+        {
+          "text": "Tillskottsnäring är anpassad för barn från 6 månader och innehåller mer järn än bröstmjölksersättning. Om barnet inte får så mycket järnberikad mat, till exempel gröt eller välling, kan tillskottsnäring vara ett alternativ.",
+          "at": "Från sex månader"
+        }
+      ],
+      "supports": "Six wet diapers a day on formula (the diaper floor from day five), and that follow-on formula is for children from six months and carries more iron than infant formula (FOLLOW_ON_FORMULA_PER_100ML, the formula-type hint).",
+      "summary": {
+        "en": "How many wet diapers a formula-fed baby usually has, and that follow-on formula is for babies from six months and carries more iron.",
+        "sv": "Hur många kissblöjor ett barn som får ersättning brukar ha, och att tillskottsnäring är till för barn från sex månader och innehåller mer järn."
+      },
+      "topics": ["diapers", "food"],
+      "note": "Senast uppdaterad 2026-06-11. Also cited in prose by src/app/nutrition.ts (the follow-on formula block).",
+      "usedBy": [
+        "src/app/diapers.ts",
+        "src/app/i18n/en.ts",
+        "src/app/nutrition.ts"
+      ]
+    },
+    "1177-det-nyfodda-barnets-kropp": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Det nyfödda barnets kropp – vanliga funderingar",
+      "container": "1177.se",
+      "year": 2023,
+      "url": "https://www.1177.se/barn--gravid/att-skota-ett-nyfott-barn/det-nyfodda-barnets-kropp-vanliga-funderingar/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "En del barn som ammas kan börja bajsa bara en gång i veckan. Ibland kan det gå upp till tio-tolv dagar eller längre mellan avföringarna. För barn som äter som de ska och mår bra gör det inget att det dröjer länge mellan avföringarna.",
+          "at": "Så bajsar barn efter någon vecka"
+        },
+        {
+          "text": "Barn som får bröstmjölksersättning bajsar oftast några gånger per dag, men det kan gå några dagar emellan. Det viktiga är hur barnet mår.",
+          "at": "Så bajsar barn efter någon vecka"
+        },
+        {
+          "text": "Barn som ammas brukar inte få förstoppning. Om de bajsar sällan blir det mindre vätska i bajset och det ser mer ut som salva.",
+          "at": "Trögt bajs eller förstoppning"
+        }
+      ],
+      "supports": "Why a breastfed baby's interval is not a signal on its own (BREASTFED_MAX_DIRTY_GAP_HOURS, applied from 42 days), and the formula-fed baby's gap of a few days.",
+      "summary": {
+        "en": "How often babies poo after the first weeks — a breastfed baby can go ten to twelve days or more without it meaning anything.",
+        "sv": "Hur ofta barn bajsar efter de första veckorna – ett ammat barn kan gå tio–tolv dagar eller längre utan att det betyder något."
+      },
+      "topics": ["diapers"],
+      "note": "Senast uppdaterad 2023-02-09. The page writes 'tio-tolv' with a hyphen. It puts the change 'efter en eller några veckor', not at six weeks.",
+      "usedBy": ["src/app/diapers.ts"]
+    },
+    "1177-forstoppning-hos-barn": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Förstoppning hos barn",
+      "container": "1177.se",
+      "year": 2025,
+      "url": "https://www.1177.se/sjukdomar--besvar/mage-och-tarm/diarre-forstoppning-och-blod-i-avforingen/forstoppning-hos-barn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barn kan ha ett eller flera av följande symtom när de har förstoppning:",
+          "at": "Symtom"
+        },
+        {
+          "text": "Barnet bajsar färre än tre gånger per vecka.",
+          "at": "Symtom"
+        },
+        {
+          "text": "Bajset är hårt och trögt.",
+          "at": "Symtom"
+        },
+        {
+          "text": "Barn som bara äter bröstmjölk bajsar ofta flera gånger om dagen och det är mycket ovanligt att de får förstoppning. Ibland kan barn som bara äter bröstmjölk bajsa mer sällan, till exempel bara någon gång per vecka. Men de är ändå inte förstoppade eftersom bajset är löst och barnet inte har besvär när hen bajsar.",
+          "at": "Bajs hos barn som får bröstmjölk eller bröstmjölksersättning"
+        },
+        {
+          "text": "Bajsets konsistens och utseende förändras när barn börjar äta annan mat än bröstmjölk och bröstmjölksersättning. Då brukar barn bajsa en till två gånger per dag.",
+          "at": "Bajs hos barn som äter vanlig mat"
+        }
+      ],
+      "supports": "The dirty-diaper gap once solids begin (maxDirtyGapHours 96 from 183 days, and for toddlers), and the long-gap copy pointing at hard stools rather than the count alone.",
+      "summary": {
+        "en": "What constipation looks like in a child, and how often babies poo once they eat ordinary food.",
+        "sv": "Hur förstoppning yttrar sig hos barn och hur ofta barn bajsar när de har börjat äta vanlig mat."
+      },
+      "topics": ["diapers"],
+      "note": "Senast uppdaterad 2025-05-26. Covers children up to 18. The symptoms are 'ett eller flera', not a joint definition of fewer than three a week *and* hard stools. The page was reached at /barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/forstoppning/; the URL given is its canonical one.",
+      "usedBy": ["src/app/diapers.ts"]
+    },
+    "1177-vaccinationsprogrammet-for-barn": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Vaccinationsprogrammet för barn",
+      "container": "1177.se",
+      "year": 2025,
+      "url": "https://www.1177.se/undersokning-behandling/vaccinationer/vaccinationsprogrammet-for-barn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vaccin mot rotavirus. Vaccinet ges som droppar i barnets mun.",
+          "at": "Vid sex veckor"
+        },
+        {
+          "text": "En spruta med vaccin mot difteri, stelkramp, kikhosta, polio, Hib och hepatit B.",
+          "at": "Vid 3 månader (the same at 5 and 12 månader)"
+        },
+        {
+          "text": "En spruta med vaccin mot mässling, påssjuka och röda hund.",
+          "at": "Vid 18 månader; I årskurs 1-2"
+        },
+        {
+          "text": "En spruta med vaccin mot difteri, stelkramp, kikhosta och polio.",
+          "at": "Vid 5 år"
+        },
+        {
+          "text": "I årskurs 5-6",
+          "at": "heading over the two HPV doses"
+        },
+        {
+          "text": "En spruta med vaccin mot difteri, stelkramp och kikhosta.",
+          "at": "I årskurs 8-9"
+        },
+        {
+          "text": "Barn som har ökad risk för att få tuberkulos blir erbjudna vaccin mot sjukdomen.",
+          "at": "Vid sex veckor"
+        },
+        {
+          "text": "En del barn erbjuds vaccin mot fler sjukdomar. Det är barn som tillhör vissa riskgrupper.",
+          "at": "section 'Ibland erbjuds extra vaccin' (tuberkulos, influensa, pneumokockinfektion, epidemisk hjärnhinneinflammation)"
+        }
+      ],
+      "supports": "The parent-facing version of the schedule: the BVC and school rows of PROGRAMME, BCG at six weeks for risk groups, the risk-group extras, and the 'some regions say 5–6' in the hpvGrade note.",
+      "summary": {
+        "en": "The childhood programme explained for parents: what happens at each visit and what the extra risk-group vaccines are.",
+        "sv": "Barnvaccinationsprogrammet förklarat för föräldrar: vad som händer vid varje besök och vilka de extra vaccinen för riskgrupper är."
+      },
+      "topics": ["vaccines"],
+      "note": "Senast uppdaterad 2025-11-18. 1177 counts twelve diseases (it includes hepatitis B); Folkhälsomyndigheten counts eleven in the programme proper. 1177 puts HPV in 'årskurs 5-6'; Folkhälsomyndigheten says årskurs 5.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "1177-vattkoppor": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Vattkoppor",
+      "container": "1177.se",
+      "year": 2024,
+      "url": "https://www.1177.se/sjukdomar--besvar/hud-har-och-naglar/infektioner-pa-huden/vattkoppor/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Du kan välja att vaccinera dig eller ditt barn om du betalar själv.",
+          "at": "section 'Du kan vaccinera dig om du betalar själv'"
+        },
+        {
+          "text": "Vaccinet kan ges till barn från tolv månaders ålder, samt till ungdomar och vuxna. I särskilda fall kan vaccinet ges till barn från nio månaders ålder."
+        },
+        {
+          "text": "Från 1 januari 2027 kommer vaccinet att ingå i det allmänna vaccinationsprogrammet i Sverige.",
+          "at": "section 'Del av vaccinationsprogrammet för barn 2027'"
+        }
+      ],
+      "supports": "Chickenpox as a self-paid extra from twelve months until the programme starts (EXTRAS varicella-extra: typicalAge twelveMonths, offer programmeFrom2027), and the start date 1 January 2027.",
+      "summary": {
+        "en": "Chickenpox vaccine is self-paid from twelve months until it joins the programme on 1 January 2027.",
+        "sv": "Vaccin mot vattkoppor betalar man själv, från tolv månader, tills det kommer in i programmet 1 januari 2027."
+      },
+      "topics": ["vaccines"],
+      "note": "The page says 'Senast uppdaterad 2024-05-28' although it carries the 2027 date, so the stamp lags the text.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "aap-infant-constipation": {
+      "evidence": "health-service",
+      "organization": "American Academy of Pediatrics (HealthyChildren.org)",
+      "title": "How Can I Tell If My Baby is Constipated?",
+      "container": "HealthyChildren.org",
+      "year": 2022,
+      "url": "https://www.healthychildren.org/English/ages-stages/baby/diapers-clothing/Pages/Infant-Constipation.aspx",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "A baby eating formula usually has a bowel movement at least once most days, but may go 1 to 2 days between bowel movements."
+        },
+        {
+          "text": "During the first month of life, stooling less than once a day might mean your newborn isn’t eating enough. However, breastfed infants may go several days or even a week between bowel movements, using every drop they eat to make more baby, not poop."
+        }
+      ],
+      "supports": "The formula-fed baby's gap of a day or two (maxDirtyGapHours 48 in the newborn band), and the breastfed baby's longer gaps.",
+      "summary": {
+        "en": "How often a baby on formula or breast milk usually poos, and when a gap is worth a look.",
+        "sv": "Hur ofta ett barn som får ersättning eller bröstmjölk brukar bajsa, och när ett uppehåll är värt att titta närmare på."
+      },
+      "topics": ["diapers"],
+      "note": "Last updated 5/12/2022. Adapted from Dad to Dad: Parenting Like a Pro (AAP 2012).",
+      "usedBy": ["src/app/diapers.ts"]
+    },
+    "albertsson-wikland-2020": {
+      "evidence": "cohort",
+      "authors": [
+        "Albertsson-Wikland K",
+        "Niklasson A",
+        "Holmgren A",
+        "Gelander L",
+        "Nierop AFM"
+      ],
+      "title": "A new Swedish reference for total and prepubertal height",
+      "container": "Acta Paediatrica",
+      "year": 2020,
+      "volume": "109",
+      "issue": "4",
+      "pages": "754–763",
+      "doi": "10.1111/apa.15129",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7154623/",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "Mean adult height was 168.6 cm for girls and 182.0 cm for boys; the sex‐difference in height was 13.4 cm.",
+          "at": "Results, 3.1"
+        },
+        {
+          "text": "Adult height, cm | 763 | 168.56 | 168.11‐169.02 | 6.40",
+          "at": "table 1A, girls (N, mean, 95% CI, SD)"
+        },
+        {
+          "text": "Adult height, cm | 809 | 182.0 | 181.6‐182.5 | 6.42",
+          "at": "table 1B, boys (N, mean, 95% CI, SD)"
+        }
+      ],
+      "supports": "The Swedish adult height, mean and SD per sex (men 182.0 ± 6.42 cm, women 168.56 ± 6.40 cm), the projected adult height is expressed on (ADULT_HEIGHT, adultHeightProjection).",
+      "summary": {
+        "en": "The newest Swedish height reference: how tall Swedish adults become on average, and how much they vary.",
+        "sv": "Den senaste svenska längdreferensen: hur långa svenska vuxna blir i genomsnitt och hur mycket de varierar."
+      },
+      "topics": ["growth"],
+      "note": "Open access. Table rows are copied cell by cell from the PMC HTML table; '|' separates cells. Proposed, not yet cited by the code.",
+      "usedBy": ["src/app/growth.ts", "src/app/i18n/en.ts"]
+    },
+    "blomhoff-2023": {
+      "evidence": "guideline",
+      "authors": [
+        "Blomhoff R",
+        "Andersen R",
+        "Arnesen EK",
+        "Christensen JJ",
+        "Eneroth H",
+        "Erkkola M",
+        "Gudanaviciene I",
+        "Halldorsson TI",
+        "Høyer-Lund A",
+        "Lemming EW",
+        "Meltzer HM",
+        "Pitsi T",
+        "Schwab U",
+        "Siksna I",
+        "Thorsdottir I",
+        "Trolle E"
+      ],
+      "title": "Nordic Nutrition Recommendations 2023: integrating environmental aspects",
+      "container": "Nordic Council of Ministers, Copenhagen (Nord 2023:003)",
+      "year": 2023,
+      "doi": "10.6027/nord2023-003",
+      "isbn": "9789289375337",
+      "url": "https://pub.norden.org/nord2023-003/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "RI for minerals – all life-stage groups … Age group Calcium mg Iron mg Zinc mg Copper µg … 7-11 mo 310 10 3.0 220 … 1-3 y 450 7 4.5 340 … 4-6 y 800 7 5.8 400",
+          "at": "Table 14, p. 71 (footnote markers omitted)"
+        },
+        {
+          "text": "RI for vitamins – all life-stage groups … Vitamin A RE Vitamin D µg … 7-11 mo 250 10 … 1-3 y 300 10",
+          "at": "Table 12, p. 69"
+        },
+        {
+          "text": "From 1-2 weeks of age, infants should receive 10 µg vitamin D3 per day as a supplement.",
+          "at": "Table 12, footnote 3, p. 69"
+        },
+        {
+          "text": "6–11 months … Fat 30–45 … 12–23 months … Fat 30–40",
+          "at": "Box 4, recommended intake of fat, carbohydrates and proteins, E%, p. 62"
+        },
+        {
+          "text": "n-6 fatty acids should contribute at least 4 % of the total energy intake (E%) for children 6–11 months and 3 E % for children 12–23 months of age. n-3 fatty acids should contribute at least 1 E% for children 6–11 months and 0.5 E% for children 12–23 months.",
+          "at": "Box 3, p. 61"
+        },
+        {
+          "text": "From 12 months, the recommendation on saturated and trans fatty acids for older children and adults should be used.",
+          "at": "Box 3, p. 61"
+        },
+        {
+          "text": "N-3 fatty acids should provide at least 1 E%. … Intake of saturated fatty acids should be limited to less than 10 E%. … The total fat recommendation is 25–40 E% … Linoleic (n-6) and alpha-linolenic (n-3) acids are essential fatty acids and should contribute at least 3 E%, including at least 0.5 E% as alpha-linolenic acid.",
+          "at": "Box 5, age groups 2 years and older, p. 63"
+        },
+        {
+          "text": "Reference values for estimated average daily energy requirements per kg body weight for children 6-12 months, assuming partial breastfeeding. … Age, months … kJ/kg body weight BOYS GIRLS 6 339 342 12 337 333",
+          "at": "Table 9, p. 59"
+        },
+        {
+          "text": "1-3 y 13.6 3.3 4.6",
+          "at": "Table 10, p. 59 (reference weight kg, REE MJ/d, estimated energy requirement MJ/d)"
+        },
+        {
+          "text": "the estimated daily energy requirement (per kg body weight) for infants was based upon the approach of FAO/WHO/UNU (Table 3).",
+          "at": "Appendix 4, p. 338"
+        },
+        {
+          "text": "1-3 y 13.6 789 1099",
+          "at": "Appendix 4, Table 7, p. 341 (reference weight kg, BEE kcal/d, estimated energy requirement kcal/d)"
+        },
+        {
+          "text": "Exclusive breastfeeding for about 6 months is advised, with continued breastfeeding parallel to giving complementary foods from that age until 12 months of age, or longer if it suits mother and child.",
+          "at": "p. 61"
+        },
+        {
+          "text": "Giving various complementary foods of the correct consistence for age, from about 6 months of age (not before 4 months), stimulate the child’s development and learning to eat a variable diet.",
+          "at": "Complementary feeding summary, p. 193"
+        }
+      ],
+      "supports": "The iron target (10 mg under 12 months, 7 mg after), vitamin D 10 µg, the total-fat ranges by age (fatE), saturated fat under 10 E% from 12 months (saturatedMaxE), the n-6 and n-3 floors (omega6MinE, omega3MinE), and the ≈81 kcal/kg 1–3 year energy reference in kcalPerKg — all in requirements().",
+      "summary": {
+        "en": "The Nordic recommendations the food view compares against: iron, vitamin D, fat and the essential fatty acids for each age.",
+        "sv": "De nordiska näringsrekommendationer som matvyn jämför med: järn, D-vitamin, fett och de livsnödvändiga fettsyrorna för varje ålder."
+      },
+      "topics": ["food"],
+      "note": "Page numbers are the printed ones in the PDF (https://pub.norden.org/nord2023-003/nord2023-003.pdf; the PDF's colophon lists updates up to 7.3.2025). The minerals table labels the infant row '7-11 mo'; the iron background paper (domellof-sjoberg-2024) defines it as 6.0–11.9 months. Table 9's infant energy figures (339/342 kJ/kg at 6 months ≈ 81.0/81.7 kcal; 337/333 at 12 months ≈ 80.5/79.6 kcal) are NNR's own, 'adapted from Cloetens & Ellegård', not the FAO/WHO/UNU rows verbatim. 4.6 MJ / 13.6 kg (Table 10) = 1099 kcal / 13.6 kg ≈ 80.8 kcal/kg for 1–3 years. The main report does not state the NNR2012 iron values.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
+    "domellof-sjoberg-2024": {
+      "evidence": "review",
+      "authors": ["Domellöf M", "Sjöberg A"],
+      "title": "Iron – a background article for the Nordic Nutrition Recommendations 2023",
+      "container": "Food & Nutrition Research",
+      "year": 2024,
+      "volume": "68",
+      "doi": "10.29219/fnr.v68.10451",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10870973/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "During this period, iron is transferred from hemoglobin to iron stores, making the infant self-sufficient with regard to iron until the infant has doubled his or her birth weight, which occurs at about 6 months of age in a term, normal-birth-weight infant. Thus, exclusive breast-feeding during this period will meet iron requirements despite the low concentration of iron in breast milk (0.3 mg/L).",
+          "at": "Iron needs for growth"
+        },
+        {
+          "text": "For 6–12 months, based on an estimated average requirement of absorbed iron of 0.74 mg/day and 10% bioavailability, the calculated average iron requirement is 7.4 mg/day. Assuming a CV of 15 %, this results in a tentative RI of 9.6 mg/day. The NNR2012 did not specify iron recommendations for this age range.",
+          "at": "Infants and toddlers"
+        },
+        {
+          "text": "For 1–3 years, similar factorial calculations result in a tentative RI of 7 mg/day, which is slightly lower than the NNR2012 (8 mg/day) but equal to the EFSA recommendation.",
+          "at": "Infants and toddlers"
+        },
+        {
+          "text": "a 6.0–11.9 months. b 1.0–3.9 years, 4.0–6.9 years, 7.0–10.9 years etc. … aa 2–5 years",
+          "at": "Table 4, footnotes (the NNR 2012 RI column shows 8 for 1–3 years with footnote aa, and nothing for 6–12 months)"
+        }
+      ],
+      "supports": "Why iron is the nutrient that changes at six months — the stores a term baby is born with last until about then — and that breast milk carries little iron (FOLLOW_ON_FORMULA_PER_100ML comment, food.nutrientsBreastNote); the ages the 10 mg and 7 mg iron targets cover.",
+      "summary": {
+        "en": "Why iron matters from six months: the stores a baby is born with last until about then, and breast milk carries little.",
+        "sv": "Varför järn blir viktigt från sex månader: förråden barnet föds med räcker ungefär dit, och bröstmjölk innehåller lite järn."
+      },
+      "topics": ["food"],
+      "note": "Published 8 February 2024, article 10451. Read via Europe PMC full text. This paper contradicts the code's claim that NNR2023's 10 mg for infants was 'raised from the 8 mg of NNR2012': it says NNR2012 gave no infant figure, and its NNR2012 column puts 8 mg against 2–5 years. NNR2012 itself could not be fetched (norden.diva-portal.org reset the connection; pub.norden.org/nord2014-002 returned 404).",
+      "usedBy": ["src/app/nutrition.ts"]
+    },
+    "efsa-nda-2013": {
+      "evidence": "consensus",
+      "organization": "EFSA Panel on Dietetic Products, Nutrition and Allergies (NDA)",
+      "title": "Scientific Opinion on nutrient requirements and dietary intakes of infants and young children in the European Union",
+      "container": "EFSA Journal",
+      "year": 2013,
+      "volume": "11",
+      "issue": "10",
+      "pages": "3408",
+      "doi": "10.2903/j.efsa.2013.3408",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "DHA can be considered a conditionally essential fatty acid for infants, and an AI of 100 mg per day was set for 7- to 24-month-old infants and young children in the Panel‘s previous Opinion (EFSA NDA Panel, 2010f).",
+          "at": "section 4.3, p. 17"
+        },
+        {
+          "text": "The AI of 100 mg DHA per day for infants older than six months of age and young children below the age of 24 months derived previously by the Panel was based on intervention studies with DHA-enriched formula or complementary foods from age 1.5 to 12 months in formerly and continuing breast-fed infants and which was found to be effective for visual function",
+          "at": "section 4.3, 6 to < 36 months, p. 19"
+        },
+        {
+          "text": "Age (months) Total fat (E%) LA (E%) ALA (E%) DHA (mg/day) DHA + EPA (mg/day) ARA (mg/day) 0 to < 6 50–55 4 0.5 100 – 140 6 to < 12 40 4 0.5 100 – – 12 to < 24 35–40 4 0.5 100 – – 24 to < 36 35–40 4 0.5 – 250 –",
+          "at": "Table 4, p. 19"
+        }
+      ],
+      "supports": "The 100 mg/day DHA line (dhaMg in requirements()), shown for information.",
+      "summary": {
+        "en": "The amount of DHA, an omega-3 fat, considered enough for a child from six months to two years.",
+        "sv": "Den mängd DHA, ett omega-3-fett, som anses räcka för ett barn från sex månader till två år."
+      },
+      "topics": ["food"],
+      "note": "Wiley and efsa.europa.eu answered with a bot challenge; the text was read from the open copy in the University of Milan repository (https://air.unimi.it/handle/2434/257720, file 3408.pdf). The band is 6 to < 24 months (Table 4); from 24 months the Panel gives DHA + EPA 250 mg instead.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
+    "eu-2016-127": {
+      "evidence": "guideline",
+      "organization": "European Commission",
+      "title": "Commission Delegated Regulation (EU) 2016/127 of 25 September 2015 supplementing Regulation (EU) No 609/2013 of the European Parliament and of the Council as regards the specific compositional and information requirements for infant formula and follow-on formula and as regards requirements on information relating to infant and young child feeding",
+      "container": "Official Journal of the European Union, L 25, 2.2.2016, p. 1",
+      "year": 2016,
+      "url": "https://eur-lex.europa.eu/eli/reg_del/2016/127/oj",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "10. MINERAL SUBSTANCES 10.1. Infant formula manufactured from cows' milk or goats' milk proteins or protein hydrolysates … Per 100 kJ … Per 100 kcal … Iron (mg) 0,07 0,31 0,3 1,3",
+          "at": "Annex I, point 10.1 (minimum and maximum per 100 kJ, then per 100 kcal)"
+        },
+        {
+          "text": "8. MINERAL SUBSTANCES 8.1. Follow-on formula manufactured from cows' milk or goats' milk proteins or protein hydrolysates … Iron (mg) 0,14 0,48 0,6 2",
+          "at": "Annex II, point 8.1"
+        },
+        {
+          "text": "5.6. Docosahexaenoic acid Minimum Maximum 4,8 mg/100 kJ 12 mg/100 kJ (20 mg/100 kcal) (50 mg/100 kcal)",
+          "at": "Annex I, point 5.6 (infant formula)"
+        },
+        {
+          "text": "4.6. Docosahexaenoic acid Minimum Maximum 4,8 mg/100 kJ 12 mg/100 kJ (20 mg/100 kcal) (50 mg/100 kcal)",
+          "at": "Annex II, point 4.6 (follow-on formula)"
+        },
+        {
+          "text": "Vitamin D (μg) 0,48 0,72 2 3",
+          "at": "Annex I, point 11 and Annex II, point 9 (same values)"
+        },
+        {
+          "text": "It shall apply from 22 February 2020, except in respect of infant formula and follow-on formula manufactured from protein hydrolysates, to which it shall apply from 22 February 2021.",
+          "at": "Article 13"
+        }
+      ],
+      "supports": "The iron floors that separate infant formula (0.3 mg/100 kcal) from follow-on formula (0.6 mg/100 kcal), and the DHA minimum of 20 mg/100 kcal behind dhaG in INFANT_FORMULA_PER_100ML (13.2 mg at 66 kcal) and FOLLOW_ON_FORMULA_PER_100ML (13.8 mg at 69 kcal), and the 'formula' preset in data/foods.ts.",
+      "summary": {
+        "en": "The EU law that sets what infant formula and follow-on formula must contain, including their minimum iron and DHA.",
+        "sv": "EU-lagen som bestämmer vad modersmjölksersättning och tillskottsnäring måste innehålla, bland annat lägsta mängd järn och DHA."
+      },
+      "topics": ["food"],
+      "note": "Law, not a recommendation; the evidence vocabulary has no closer kind than 'guideline'. EUR-Lex served an empty bot-challenge response, so the original Official Journal text (English XHTML) was read from the Publications Office (https://publications.europa.eu/resource/celex/32016R0127). Later amendments in the consolidated version were not checked. The regulation's primary unit is per 100 kJ; the per-100 kcal figures are in parentheses (DHA) or the second pair of columns (minerals). Soya-based formula has higher iron floors: 0,45 mg/100 kcal (Annex I 10.2) and 0,9 mg/100 kcal (Annex II 8.2).",
+      "usedBy": ["src/app/data/foods.ts", "src/app/nutrition.ts"]
+    },
+    "fao-who-unu-2004": {
+      "evidence": "consensus",
+      "organization": "FAO/WHO/UNU Joint Expert Consultation",
+      "title": "Human energy requirements: report of a Joint FAO/WHO/UNU Expert Consultation, Rome, 17–24 October 2001",
+      "container": "FAO Food and Nutrition Technical Report Series 1, Rome",
+      "year": 2004,
+      "isbn": "9251052123",
+      "url": "https://www.fao.org/4/y5686e/y5686e00.htm",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Boys … 4-5 81; 5-6 81; 6-7 79; 7-8 79; 8-9 79; 9-10 80; 10-11 80; 11-12 81. Girls … 4-5 83; 5-6 82; 6-7 78; 7-8 78; 8-9 78; 9-10 79; 10-11 79; 11-12 79",
+          "at": "Chapter 3, Table 3.2 'Energy requirements of infants during the first year of life', age in months, daily energy requirement kcal/kg/d"
+        },
+        {
+          "text": "Table 3.2 shows the average energy requirements of infants from one to 12 months of age, combining the needs of breastfed and formula-fed infants.",
+          "at": "Chapter 3, section 3.4"
+        },
+        {
+          "text": "1-2 11.5 … 345 82.4 1.43; 2-3 13.5 … 350 83.6 1.45",
+          "at": "Chapter 4, Table 4.2 (boys), age years, weight kg … daily energy requirement kJ/kg/d, kcal/kg/d, PAL"
+        },
+        {
+          "text": "1-2 10.8 … 335 80.1 1.42; 2-3 13.0 … 337 80.6 1.42",
+          "at": "Chapter 4, Table 4.3 (girls), same columns"
+        },
+        {
+          "text": "3-4 15.7 … 334 79.7",
+          "at": "Chapter 4, Table 4.2 (boys), for comparison with the code's 81 from 36 months"
+        },
+        {
+          "text": "3-4 15.1 … 320 76.5",
+          "at": "Chapter 4, Table 4.3 (girls), for comparison with the code's 81 from 36 months"
+        }
+      ],
+      "supports": "kcalPerKg: 79/78 kcal/kg at 6–8 months and 80/79 at 9–11 months (Table 3.2), 82.4/80.1 at 12–23 months and 83.6/80.6 at 24–35 months (Tables 4.2/4.3), boys/girls.",
+      "summary": {
+        "en": "How much energy a baby or toddler needs per kilogram of body weight, which sets the day's calorie estimate.",
+        "sv": "Hur mycket energi ett spädbarn eller småbarn behöver per kilo kroppsvikt, vilket ger dagens uppskattade kaloribehov."
+      },
+      "topics": ["food"],
+      "note": "Chapter 3 is https://www.fao.org/4/y5686e/y5686e05.htm, chapter 4 https://www.fao.org/4/y5686e/y5686e06.htm. The code's '< 6 months' row (81/82) matches only the 5–6 month row (and boys' 4–5); the 0–4 month rows are 113–82 (boys) and 107–84 (girls). The boys' 11–12 month row is 81, not the 80 the code uses for all of 9–11 months. Table 4.5/4.6 give the same 1–3 year figures rounded (82, 84 / 80, 81).",
+      "usedBy": ["src/app/nutrition.ts"]
+    },
+    "fohm-2026-pneumokockvaccination-riskgrupper": {
+      "evidence": "guideline",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Rekommendationer om pneumokockvaccination till riskgrupper",
+      "container": "Folkhälsomyndigheten (art.nr 26190)",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/publikationer-och-material/publikationsarkiv/r/rekommendationer-om-pneumokockvaccination-/?pub=56914",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Personer 2 år eller äldre med vissa sjukdomar eller medicinska tillstånd, samt alla personer det år de fyller 65 år ska erbjudas vaccination enligt Folkhälsomyndighetens föreskrifter (HSLF-FS 2022:55) (tabell 1)."
+        },
+        {
+          "text": "Barn som ingår i riskgrupper rekommenderas vaccination med en dos av ett konjugatvaccin med minst 20 serotyper.",
+          "at": "section 'Barn (2–17 år)'"
+        }
+      ],
+      "supports": "The extra pneumococcal dose for risk groups (EXTRAS pneumococcal-extra, offer riskGroup) — and shows its age is two years, not one.",
+      "summary": {
+        "en": "Children with certain conditions are offered an extra pneumococcal vaccine from two years old.",
+        "sv": "Barn med vissa sjukdomar erbjuds ett extra vaccin mot pneumokocker från två års ålder."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 1 september 2026 (the September 2026 edition). The A–Ö page says the same: 'Vaccinationsprogrammet för riskgrupper mot pneumokocker omfattar personer 2 år eller äldre med vissa sjukdomar eller medicinska tillstånd.' (https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-pneumokockinfektion/).",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
     "fohm-2026-somnvanor": {
       "evidence": "health-service",
       "organization": "Folkhälsomyndigheten",
@@ -56,6 +713,384 @@
       "topics": ["sleep"],
       "note": "Published 9 April 2026. The PDF: https://www.folkhalsomyndigheten.se/contentassets/0255be040c2646f8a6de5d64f41b637f/framja-goda-somnvanor-bland-barn-och-unga.pdf",
       "usedBy": ["src/app/sleep.ts"]
+    },
+    "fohm-barnvaccinationsprogram": {
+      "evidence": "guideline",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Barnvaccinationsprogram",
+      "container": "folkhalsomyndigheten.se",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/nationella-vaccinationsprogram/barnvaccinationsprogram/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vaccin mot | 6 veckor | 3 månader | 5 månader | 12 månader | 18 månader | 5 år | Årskurs 1–2 | Årskurs 5 | Årskurs 8-9",
+          "at": "table 'Då ges vaccinationerna', header"
+        },
+        {
+          "text": "Rotavirus | Dos 1 | Dos 2 | Dos 3 (a) | – | – | – | – | – | –",
+          "at": "table, row Rotavirus"
+        },
+        {
+          "text": "Difteri | – | Dos 1 | Dos 2 | Dos 3 | – | Dos 4 | – | – | Dos 5",
+          "at": "table, row Difteri (Stelkramp and Kikhosta identical)"
+        },
+        {
+          "text": "Polio | – | Dos 1 | Dos 2 | Dos 3 | – | Dos 4 | – | – | –",
+          "at": "table, row Polio"
+        },
+        {
+          "text": "Hib (Haemophilus influenzae typ b) | – | Dos 1 | Dos 2 | Dos 3 | – | – | – | – | –",
+          "at": "table, row Hib"
+        },
+        {
+          "text": "Hepatit B | – | Dos 1 | Dos 2 | Dos 3 | – | – | – | – | –",
+          "at": "table, row Hepatit B"
+        },
+        {
+          "text": "Pneumokocker | – | Dos 1 | Dos 2 | Dos 3 | – | – | – | – | –",
+          "at": "table, row Pneumokocker"
+        },
+        {
+          "text": "Mässling, påssjuka, röda hund | – | – | – | – | Dos 1 | – | Dos 2 | – | –",
+          "at": "table, row MPR"
+        },
+        {
+          "text": "HPV (Humant papillomvirus) | – | – | – | – | – | – | – | Dos 1 och 2 | –",
+          "at": "table, row HPV"
+        },
+        {
+          "text": "(a) Gäller för vaccin mot rotavirus som ska ges i tre doser.",
+          "at": "table footnote"
+        },
+        {
+          "text": "Utöver det nationella vaccinationsprogrammet för barn erbjuds alla spädbarn också kostnadsfri vaccination mot hepatit B av regionerna, i regionala vaccinationsprogram",
+          "at": "section 'Sjukdomarna som alla barn får skydd mot'"
+        },
+        {
+          "text": "Folkhälsomyndigheten rekommenderar vaccination mot hepatit B till alla spädbarn. Utöver det nationella vaccinationsprogrammet för barn erbjuder därför regionerna kostnadsfri vaccination mot hepatit B, genom regionala vaccinationsprogram.",
+          "at": "section 'Vaccination mot hepatit B erbjuds alla spädbarn'"
+        },
+        {
+          "text": "Vaccin mot hepatit B ingår i ett kombinationsvaccin som ger skydd mot totalt sex sjukdomar: difteri, stelkramp, kikhosta, polio, Hib och hepatit B. Vaccinet ges vid 3, 5 och 12 månaders ålder.",
+          "at": "section 'Vaccination mot hepatit B erbjuds alla spädbarn'"
+        }
+      ],
+      "supports": "Every row of PROGRAMME in vaccines.ts: the nine ages (6 weeks … årskurs 8–9), which dose of which vaccine is given at each, polio ending at the 5-year dose (dtp-4) and dTp at årskurs 8–9 (dtp-5), the rotavirus third dose applying to the three-dose vaccine (note rotavirusThird), and hepatitis B in the hexavalent shot at 3, 5 and 12 months though offered regionally (note hepatitisBRegional).",
+      "summary": {
+        "en": "Sweden's childhood vaccination schedule: which vaccine is given at which age, from six weeks to school year 8–9.",
+        "sv": "Sveriges barnvaccinationsprogram: vilket vaccin som ges vid vilken ålder, från sex veckor till årskurs 8–9."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 16 april 2026. The same table as a PDF (created 2026-02-03): https://www.folkhalsomyndigheten.se/globalassets/smittskydd-sjukdomar/vaccinationer/vaccinationsschema-for-barnvaccinationsprogrammet.pdf. The table does not yet include varicella; the page says the programme protects against 'elva sjukdomar'. The legal text is HSLF-FS 2016:51 (consolidated through HSLF-FS 2020:25, no varicella amendment published as of the access date).",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "fohm-fragor-och-svar-profylax-rsv": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Frågor och svar om profylax mot RSV-infektion för barn",
+      "container": "folkhalsomyndigheten.se",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/rekommendationer-om-vaccination/rekommendationer-om-vaccination-under-graviditet-och-skydd-for-nyfodda/fragor-och-svar-om-profylax-mot-rsv-infektion-for-barn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Under höst - och vintersäsongen 2025/2026 erbjöds monoklonala antikroppar mot RS-virus alla barn födda från den 10 september 2025 till och med den 17 maj 2026. Under säsongen 2026/2027 kommer monoklonala antikroppar erbjudas till barn födda från och med den 10 september 2026.",
+          "at": "'Vilka barn erbjuds monoklonala antikroppar mot RS-virus efter födseln?' (uppdaterad 14 juli 2026)"
+        },
+        {
+          "text": "Beyfortus (nirsevimab) för prevention av sjukdom orsakad av respiratoriskt syncytialvirus (RSV",
+          "at": "same answer, the link to its treatment guidance"
+        }
+      ],
+      "supports": "The name of the RSV extra (nirsevimab) and which newborns get it (EXTRAS rsv).",
+      "summary": {
+        "en": "Which newborns get the RSV antibody nirsevimab each season.",
+        "sv": "Vilka nyfödda som får antikroppen nirsevimab mot RS-virus varje säsong."
+      },
+      "topics": ["vaccines"],
+      "note": "Page uppdaterad 19 maj 2026; the answer quoted uppdaterad 14 juli 2026.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-skydd-for-nyfodda-rsv": {
+      "evidence": "guideline",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Rekommendationer om vaccination under graviditet och skydd för nyfödda",
+      "container": "folkhalsomyndigheten.se",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/rekommendationer-om-vaccination/rekommendationer-om-vaccination-under-graviditet-och-skydd-for-nyfodda/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Antikroppar mot RS-virus erbjuds alla barn som föds mellan september och RS-virussäsongens slut, vilket vanligtvis är april. Det är för att RS-virus sprids som mest under hösten, vintern och tidig vår. Antikropparna ges på BB efter förlossningen.",
+          "at": "section 'Antikroppar mot RS-virus för nyfödda'"
+        },
+        {
+          "text": "Behandlingen är kostnadsfri och erbjuds i alla regioner sedan hösten 2025.",
+          "at": "section 'Antikroppar mot RS-virus för nyfödda'"
+        }
+      ],
+      "supports": "The RSV antibody extra offered by the regions to newborns in season (EXTRAS rsv, typicalAge birth, offer regional), and the 'since 2025' in docs/vaccinations.md.",
+      "summary": {
+        "en": "Babies born between September and April are offered free RSV antibodies at the maternity ward, in every region since autumn 2025.",
+        "sv": "Barn som föds mellan september och april erbjuds kostnadsfria antikroppar mot RS-virus på BB, i alla regioner sedan hösten 2025."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 31 juli 2026. It is an antibody, not a vaccine; the page calls it 'behandlingen'.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-hepatit-b": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot hepatit B",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-hepatit-b/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Folkhälsomyndigheten rekommenderar att alla spädbarn erbjuds vaccination mot hepatit B. Sedan 2016 erbjuds vaccin mot hepatit B kostnadsfritt till alla spädbarn inom regionala vaccinationsprogram."
+        },
+        {
+          "text": "Detta gäller inte minst för de barn som föds av en hepatit B-infekterad mor. Dessa barn vaccineras vid födseln och ibland, beroende på moderns smittsamhetsgrad, får de också immunglobulin."
+        }
+      ],
+      "supports": "Hepatitis B listed with the programme though offered regionally (the hepatitisBRegional note, hepatitisB in dtp-1…dtp-3), and the birth dose for babies of infected mothers (EXTRAS hepb-birth, typicalAge birth).",
+      "summary": {
+        "en": "Why hepatitis B is in the baby's first injections, and who gets a dose at birth.",
+        "sv": "Varför hepatit B ingår i spädbarnets första sprutor, och vilka som får en dos vid födseln."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 15 januari 2026.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-hpv": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot HPV",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2025,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-hpv/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Alla barn erbjuds HPV-vaccin i årskurs 5 genom barnvaccinationsprogrammet."
+        },
+        {
+          "text": "Barn erbjuds två doser HPV-vaccin med minst sex månaders intervall genom barnvaccinationsprogrammet. Detta gäller från årskurs 5 till och med 17 års ålder.",
+          "at": "section 'Dosering och intervall'"
+        }
+      ],
+      "supports": "The two HPV rows (hpv-1, hpv-2) in årskurs 5 and the hpvGrade note's 'two doses at least six months apart'.",
+      "summary": {
+        "en": "The HPV vaccine at school: two doses, at least six months apart, from school year 5.",
+        "sv": "HPV-vaccinet i skolan: två doser med minst sex månaders mellanrum, från årskurs 5."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 6 november 2025. Still two doses for children in the programme; no change to one dose.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-influensa": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot influensa",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-influensa/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vaccinationsinsats mot influensa äger rum en gång per år. Nästa insats startar 2 november 2026."
+        },
+        {
+          "text": "Vaccination mot influensa rekommenderas till barn från 6 månader med ökad risk för allvarlig sjukdom i influensa, enligt riskgruppslistan ovan.",
+          "at": "section 'Särskilda rekommendationer för barn'"
+        },
+        {
+          "text": "Alla regioner erbjuder gratis influensavaccination till gravida, personer som är 65 år eller äldre och övriga riskgrupper."
+        }
+      ],
+      "supports": "The influenza extra for risk groups, each season from six months (EXTRAS influenza, typicalAge season, offer riskGroup).",
+      "summary": {
+        "en": "Children at risk from six months old are offered a flu vaccine every year, free of charge.",
+        "sv": "Barn i riskgrupp erbjuds från sex månaders ålder influensavaccin varje år, kostnadsfritt."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 24 september 2026. The 2026 campaign starts 2 November — late autumn, so 'each autumn' holds.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-meningokocker": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot meningokocker",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-meningokocker/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "vaccin mot grupp B-meningokocker för barn från 2 månaders respektive 10 års ålder (beroende av vaccin) och vuxna",
+          "at": "section 'Vaccin'"
+        },
+        {
+          "text": "vaccin mot grupperna A, C, Y och W för barn från 6 veckors respektive 2 års ålder (beroende av vaccin) och vuxna.",
+          "at": "section 'Vaccin'"
+        },
+        {
+          "text": "Vaccination rekommenderas till personer med sjukdomstillstånd som medför en ökad risk att insjukna i invasiv meningokockinfektion."
+        }
+      ],
+      "supports": "The meningococcal extra for risk groups (EXTRAS meningococcal, offer riskGroup) and its earliest age, six weeks (typicalAge sixWeeks) — the youngest age a vaccine is licensed for.",
+      "summary": {
+        "en": "Meningococcal vaccines are for children with conditions that raise the risk, and can be given from six weeks.",
+        "sv": "Vaccin mot meningokocker är till för barn med sjukdomar som ökar risken, och kan ges från sex veckors ålder."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 18 mars 2026. Six weeks is the licensed lower age of one ACWY vaccine, not a scheduled dose; MenB vaccines start at two months. The detailed risk-group recommendations (2016, updated 2018) give no age.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-rotavirus": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot rotavirus",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2025,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-rotavirus/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Det finns två vacciner mot rotavirus, båda innehåller levande försvagade virusstammar och ges som lösning i munnen. Det ena vaccinet ges i två doser och det andra i tre doser."
+        },
+        {
+          "text": "Vaccinet ges inom det allmänna vaccinationsprogrammet för barn vid 6 veckor och 3 månaders ålder. Om man använder det vaccin som ges i tre doser ges den tredje dosen vid 5 månaders ålder."
+        },
+        {
+          "text": "Den första dosen ska ges före 12 veckors ålder, den andra dosen före 16 veckors ålder och den tredje dosen före 32 veckors ålder."
+        }
+      ],
+      "supports": "The rotavirus rows (rota-1 at 6 weeks, rota-2 at 3 months, rota-3 at 5 months), their oral route, and the note that the third dose belongs to the three-dose vaccine (rotavirusThird).",
+      "summary": {
+        "en": "When the rotavirus drops are given, and why there is a third dose with one of the two vaccines.",
+        "sv": "När rotavirusdropparna ges, och varför det finns en tredje dos med ett av de två vaccinen."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 12 december 2025. The page does not name which vaccine is currently procured; see region-stockholm-rotavirusvaccination and rikshandboken-vaccin-mot-rotavirus.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-tbe": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot TBE",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-tbe/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vuxna och barn från tre års ålder som riskerar att bli fästingbitna i de områden där förekomsten av TBE är måttlig eller hög, det vill säga riskområde 1."
+        },
+        {
+          "text": "TBE-vaccinationerna ingår inte i ett nationellt program och betalas som regel av individen själv. Ibland betalar regionerna en del av kostnaden."
+        }
+      ],
+      "supports": "The TBE extra: from three years, in risk areas, self-paid (EXTRAS tbe, typicalAge threeYears, offer optional).",
+      "summary": {
+        "en": "TBE vaccine is recommended from three years old where tick-borne encephalitis is common, and is usually self-paid.",
+        "sv": "Vaccin mot TBE rekommenderas från tre års ålder där TBE är vanligt, och betalas oftast av en själv."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 22 september 2026. Folkhälsomyndigheten's first national TBE recommendations, published 5 May 2026. The vaccines themselves are licensed from one year (not stated on this page); the recommendation is from three.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-tuberkulos": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot tuberkulos",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-tuberkulos/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Från och med maj 2025 ingår vaccination mot tuberkulos i det särskilda vaccinationsprogrammet för personer som ingår i riskgrupper."
+        },
+        {
+          "text": "barn som har en förälder eller annan hushållskontakt med ursprung i ett land med ökad eller hög förekomst av tuberkulos."
+        },
+        {
+          "text": "Vaccination erbjuds vid 6 veckors ålder. Barn som hör till riskgruppen och inte blivit vaccinerade vid 6 veckors ålder erbjuds vaccination upp till 6 års ålder."
+        }
+      ],
+      "supports": "The BCG extra for risk groups from six weeks (EXTRAS bcg, typicalAge sixWeeks, offer riskGroup).",
+      "summary": {
+        "en": "Who is offered the tuberculosis (BCG) vaccine, and that it is given at six weeks.",
+        "sv": "Vilka som erbjuds vaccin mot tuberkulos (BCG), och att det ges vid sex veckors ålder."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 22 januari 2026. Since May 2025 BCG is in the national special programme for risk groups, not only a recommendation.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vaccination-mot-vattkoppor": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Vaccination mot vattkoppor",
+      "container": "folkhalsomyndigheten.se, Vaccinationer A–Ö",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-vattkoppor/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barn från 12 månaders ålder och vuxna kan vaccineras mot vattkoppor. Det behövs två doser med minst fyra veckors mellanrum för att säkerställa skydd mot vattkoppor. Vaccin kan under särskilda omständigheter ges från 9 månaders ålder."
+        },
+        {
+          "text": "Under 2027 införs vaccination mot vattkoppor i det allmänna vaccinationsprogrammet för barn. Vårdnadshavare får information från sin BVC när det är aktuellt. Barn födda från och med den 1 juli 2025 kommer att erbjudas sin första dos vid 18 månaders ålder och sin andra dos i årskurs 1-2 i skolan. Äldre barn, upp till 18 år, kommer att erbjudas ikappvaccination mot vattkoppor med start våren 2027."
+        }
+      ],
+      "supports": "The varicella rows (var-1 at 18 months, var-2 in årskurs 1–2) and their cohort (born2025 = 2025-07-01, bornFrom), and the self-paid extra from twelve months before then (EXTRAS varicella-extra, typicalAge twelveMonths).",
+      "summary": {
+        "en": "Chickenpox vaccine joins the programme in 2027 for children born from 1 July 2025: at 18 months and in school year 1–2.",
+        "sv": "Vaccin mot vattkoppor kommer in i programmet 2027 för barn födda från och med 1 juli 2025: vid 18 månader och i årskurs 1–2."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 26 juni 2026. This page says 'Under 2027'; the exact day (1 January 2027) is on the guardians' page (fohm-vattkoppor-information-till-vardnadshavare), the government's press release (regeringen-2026-ikappvaccination-vattkoppor) and 1177 (1177-vattkoppor).",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "fohm-vattkoppor-information-till-vardnadshavare": {
+      "evidence": "health-service",
+      "organization": "Folkhälsomyndigheten",
+      "title": "Information till vårdnadshavare om vaccination mot vattkoppor för barn",
+      "container": "folkhalsomyndigheten.se",
+      "year": 2026,
+      "url": "https://www.folkhalsomyndigheten.se/vara-amnesomraden/vaccinationer/vaccinationer-a-o/vaccination-mot-vattkoppor/information-till-vardnadshavare-om-vaccination-mot-vattkoppor-for-barn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vaccinationen ges två gånger. På så sätt blir skyddet gott och långvarigt. Ditt barn erbjuds första vaccinationen mot vattkoppor vid 18 månaders ålder. Den andra dosen ges när barnet går i årskurs 1–2."
+        },
+        {
+          "text": "Vaccination mot vattkoppor ingår i det allmänna vaccinationsprogrammet för barn från och med januari 2027."
+        }
+      ],
+      "supports": "The start of the varicella rows (varicellaStart = 2027-01-01, the from field) and their two ages (var-1, var-2).",
+      "summary": {
+        "en": "What parents are told about the chickenpox vaccine: two doses, at 18 months and in school year 1–2, from January 2027.",
+        "sv": "Vad föräldrar får veta om vaccinet mot vattkoppor: två doser, vid 18 månader och i årskurs 1–2, från januari 2027."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterad 26 juni 2026.",
+      "usedBy": ["src/app/vaccines.ts"]
     },
     "galland-2012": {
       "evidence": "systematic-review",
@@ -297,6 +1332,347 @@
       "topics": ["sleep"],
       "usedBy": ["src/app/i18n/en.ts"]
     },
+    "livsmedelsverket-d-vitamin": {
+      "evidence": "health-service",
+      "organization": "Livsmedelsverket",
+      "title": "D-vitamin",
+      "container": "livsmedelsverket.se",
+      "year": 2025,
+      "url": "https://www.livsmedelsverket.se/livsmedel-och-innehall/naringsamne/vitaminer-och-antioxidanter/d-vitamin/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Spädbarn 7–11 mån* | 10 mikrogram | Barn 1–17 år | 10 mikrogram",
+          "at": "Hur mycket D-vitamin behöver vi få i oss? (rekommenderat intag per dag)"
+        },
+        {
+          "text": "*Helamning rekommenderas som näring för spädbarn under de första sex månaderna. Men från 1–2 veckors ålder bör alla spädbarn få 10 mikrogram vitamin D3 per dag som tillskott.",
+          "at": "table footnote"
+        },
+        {
+          "text": "Alla barn under 2 år | 10 mikrogram",
+          "at": "Vissa behöver ta tillskott av D-vitamin (rekommenderat tillskott per dag)"
+        }
+      ],
+      "supports": "vitaminDUg = 10 in requirements(), and the D-drops line (food.dDrops): 10 µg a day as a supplement until two years.",
+      "summary": {
+        "en": "The Swedish vitamin D advice: 10 micrograms a day, and D-drops for every child under two.",
+        "sv": "Livsmedelsverkets råd om D-vitamin: 10 mikrogram om dagen och D-droppar till alla barn under två år."
+      },
+      "topics": ["food"],
+      "note": "Senast granskad 2025-11-11. Livsmedelsverket says from 1–2 weeks of age and gives the dose in micrograms, not drops; the five drops are Rikshandboken's (rikshandboken-d-vitamin).",
+      "usedBy": ["src/app/nutrition.ts"]
+    },
+    "livsmedelsverket-livsmedelsdatabasen": {
+      "evidence": "dataset",
+      "organization": "Livsmedelsverket",
+      "title": "Livsmedelsdatabasen",
+      "container": "Livsmedelsverkets Livsmedelsdatabas version 2026-07-01",
+      "year": 2026,
+      "url": "https://soknaringsinnehall.livsmedelsverket.se/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Livsmedelsverkets Livsmedelsdatabas version 2026-07-01. När uppgifterna används, får data inte förändras.",
+          "at": "soknaringsinnehall.livsmedelsverket.se, 'Använd gärna uppgifterna'"
+        },
+        {
+          "text": "Modersmjölksersättning: Energi (kcal) 66 kcal; Järn, Fe 0.4 mg; Vitamin D 1.37 µg; Fett, totalt 3.5 g; Summa mättade fettsyror 1.1 g; Summa enkelomättade fettsyror 1.6 g; Summa fleromättade fettsyror 0.6 g; Linolsyra C18:2 0.6 g; Linolensyra C18:3 0.1 g; DHA (C22:6) 0.0 g",
+          "at": "livsmedel 6552, per 100 g ätlig del (API version 2026-06-29T02:04:51)"
+        },
+        {
+          "text": "Barngröt ätf. naturell fullkorn osötad berikad: Energi (kcal) 104 kcal; Järn, Fe 1.7 mg; Vitamin D 1.79 µg; Fett, totalt 3.7 g; Summa mättade fettsyror 0.7 g; Summa enkelomättade fettsyror 1.7 g; Summa fleromättade fettsyror 1.1 g; Linolsyra C18:2 0.9 g; Linolensyra C18:3 0.2 g",
+          "at": "livsmedel 6263, per 100 g"
+        },
+        {
+          "text": "Välling för barn drickf. fullkorn osötad berikad: Energi (kcal) 59 kcal; Järn, Fe 1.1 mg; Vitamin D 0.96 µg; Fett, totalt 1.9 g; Summa mättade fettsyror 0.4 g; Summa enkelomättade fettsyror 0.8 g; Summa fleromättade fettsyror 0.6 g; Linolsyra C18:2 0.5 g; Linolensyra C18:3 0.1 g",
+          "at": "livsmedel 6257, per 100 g"
+        },
+        {
+          "text": "Ägg kokt: Energi (kcal) 136 kcal; Järn, Fe 1.8 mg; Vitamin D 1.92 µg; Fett, totalt 9.8 g; Summa mättade fettsyror 2.6 g; Summa enkelomättade fettsyror 3.9 g; Summa fleromättade fettsyror 1.5 g; Linolsyra C18:2 1.2 g; Arakidonsyra C20:4 0.1 g; Linolensyra C18:3 0.1 g; EPA (C20:5) 0.0 g; DPA (C22:5) 0.0 g; DHA (C22:6) 0.1 g",
+          "at": "livsmedel 2205, per 100 g"
+        },
+        {
+          "text": "Lax kokt m. salt: Energi (kcal) 246 kcal; Järn, Fe 0.2 mg; Vitamin D 6.91 µg; Fett, totalt 16.6 g; Summa mättade fettsyror 2.2 g; Summa enkelomättade fettsyror 7.9 g; Summa fleromättade fettsyror 4.8 g; Linolsyra C18:2 2.1 g; Arakidonsyra C20:4 0.2 g; Linolensyra C18:3 0.9 g; EPA (C20:5) 0.4 g; DPA (C22:5) 0.2 g; DHA (C22:6) 0.7 g",
+          "at": "livsmedel 1317, per 100 g"
+        },
+        {
+          "text": "Banan: Energi (kcal) 95 kcal; Järn, Fe 0.0 mg; Vitamin D 0.0 µg; Fett, totalt 0.1 g",
+          "at": "livsmedel 553, per 100 g"
+        },
+        {
+          "text": "Avokado: Energi (kcal) 197 kcal; Järn, Fe 0.3 mg; Vitamin D 0.0 µg; Fett, totalt 19.6 g; Summa mättade fettsyror 3.4 g; Summa enkelomättade fettsyror 12.7 g; Summa fleromättade fettsyror 2.6 g; Linolsyra C18:2 2.4 g; Linolensyra C18:3 0.2 g",
+          "at": "livsmedel 320, per 100 g"
+        },
+        {
+          "text": "Rapsolja: Energi (kcal) 884 kcal; Järn, Fe 0.0 mg; Fett, totalt 100.0 g; Summa mättade fettsyror 7.1 g; Summa enkelomättade fettsyror 61.3 g; Summa fleromättade fettsyror 27.4 g; Linolsyra C18:2 18.8 g; Linolensyra C18:3 8.5 g",
+          "at": "livsmedel 2189, per 100 g"
+        }
+      ],
+      "supports": "The food presets in data/foods.ts (porridge 6263, välling 6257, egg 2205, salmon 1317, banana 553, avocado 320, rapeseed oil 2189, infant formula 6552) and INFANT_FORMULA_PER_100ML in nutrition.ts.",
+      "summary": {
+        "en": "The Swedish food composition database behind the typical values the food form fills in.",
+        "sv": "Livsmedelsverkets livsmedelsdatabas, som de typiska värdena i matformuläret kommer från."
+      },
+      "topics": ["food"],
+      "note": "Values read from the open API (https://dataportal.livsmedelsverket.se/livsmedel/api/v1/livsmedel/<nummer>/naringsvarden?sprak=1); each item's own version stamp is 2026-06-29, while the site's citation line is 'version 2026-07-01'. All values are per 100 g ätlig del, including the formula the code reads per 100 ml. The formula's DHA 0.0 g carries the comment 'Mean value of Nan Pro1, BabySemp1 and Hipp Combiotic 1' (product information, rounded to 0.1 g). The database gives no omega-3/omega-6 sums; the presets' omega3G/omega6G are sums of the listed fatty acids. CC BY 4.0.",
+      "usedBy": ["src/app/data/foods.ts", "src/app/nutrition.ts"]
+    },
+    "livsmedelsverket-spadbarn": {
+      "evidence": "health-service",
+      "organization": "Livsmedelsverket",
+      "title": "Spädbarn",
+      "container": "livsmedelsverket.se",
+      "year": 2026,
+      "url": "https://www.livsmedelsverket.se/matvanor-halsa--miljo/kostrad/barn-och-ungdomar/spadbarn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vid cirka sex månader är det dags att börja vänja barnet att äta vanlig mat.",
+          "at": "Från cirka sex månader"
+        },
+        {
+          "text": "Tidigast från fyra månaders ålder kan du låta barnet få smaka små prov av vanlig mat, så länge det är så små mängder att de inte konkurrerar med amningen.",
+          "at": "Pyttesmå smakprov – smaksensationer"
+        },
+        {
+          "text": "Du kan till exempel ta lite av din egen mat, motsvarande ungefär ett kryddmått, med en sked eller på fingret och låta barnet få lite på tungan.",
+          "at": "Pyttesmå smakprov – smaksensationer"
+        },
+        {
+          "text": "Det går också bra att fortsätta med modersmjölksersättning under hela första året.",
+          "at": "Hur länge ska man fortsätta amma eller ge ersättning?"
+        },
+        {
+          "text": "Barn under två år behöver lite fetare mat än vuxna, eftersom de växer så fort. Till hemlagad mat är det lagom med en tesked flytande margarin eller olja, gärna rapsolja, per portion, om det inte redan ingår fett i maträtten. Sammanlagt bör det inte bli mer än en matsked extra fett per dag.",
+          "at": "Lunch och middag"
+        },
+        {
+          "text": "Därför behöver alla barn tillskott med D-droppar varje dag under de första två åren.",
+          "at": "D-droppar"
+        },
+        {
+          "text": "Det är svårt att nå upp till det rekommenderade järnintaget utan att använda järnberikade produkter. I Sverige berikas barngröt och välling med järn.",
+          "at": "Lunch och middag"
+        }
+      ],
+      "supports": "COMPLEMENTARY_FROM_DAYS (about six months) and TASTES_FROM_DAYS (tiny tastes from four months) in nutrition.ts, the food.milkOnly/food.tastes copy, the advice that infant formula may be used for the whole first year (food.formulaTypeHint; why the app never infers follow-on formula from age), and the rapeseed-oil preset and fat advice.",
+      "summary": {
+        "en": "When solid food starts, why tiny tastes from four months are fine, that infant formula can be used all year, and how much extra fat a small child's food needs.",
+        "sv": "När vanlig mat börjar, varför pyttesmå smakprov från fyra månader går bra, att modersmjölksersättning kan ges hela första året och hur mycket extra fett små barns mat behöver."
+      },
+      "topics": ["food"],
+      "note": "Senast granskad 2026-02-12. Livsmedelsverket calls the four-month tastes 'smakprov' / 'smaksensationer'; 'smakportioner' start at about six months — the app's sv copy already follows this.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
+    "lll-is-baby-getting-enough": {
+      "evidence": "health-service",
+      "organization": "La Leche League International",
+      "title": "Signs Baby Isn't Getting Enough Breastmilk",
+      "container": "llli.org",
+      "year": 2026,
+      "url": "https://llli.org/breastfeeding-info/is-baby-getting-enough/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "By day two look for two wet diapers (nappies) over 24 hours, days three and four look for three or more wet diapers each 24 hours. By the time your baby is five days old, wet diapers should be more frequent, usually six or more over 24 hours.",
+          "at": "Signs that my baby is well fed"
+        },
+        {
+          "text": "Baby should have 3-4 stools every day by four days of age.",
+          "at": "Signs that my baby is well fed"
+        }
+      ],
+      "supports": "The first-days ramp (minWet 2 on day two, 3 on day three) and the step to six on day five (the `newborn` band from fromDays 4).",
+      "summary": {
+        "en": "How many wet diapers to look for in a breastfed baby's first five days.",
+        "sv": "Hur många blöta blöjor man kan vänta sig under ett ammat barns fem första dagar."
+      },
+      "topics": ["diapers"],
+      "note": "No date on the page; the year is when it was read. llli.org answers plain HTTP clients with 403, so the text was read through a fetching tool that returned the page body. Says three or more on day four, not four.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "lll-poop-and-pee": {
+      "evidence": "health-service",
+      "organization": "La Leche League International",
+      "title": "Poop and Pee in the Exclusively Breastfed Baby",
+      "container": "llli.org",
+      "year": 2024,
+      "url": "https://llli.org/poop-and-pee/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "In the first and second days of life, it is typical for babies to wet only one or two diapers per day since they are drinking small amounts of the early milk.",
+          "at": "The First Week"
+        },
+        {
+          "text": "Most babies, after the first week, have at least three to five soft mild-smelling bowel movements every 24 hours, until they are about five to six weeks old.",
+          "at": "The First Six Weeks"
+        },
+        {
+          "text": "During weeks five and six, poo nappies may reduce to one to two stools per day.",
+          "at": "The First Six Weeks"
+        },
+        {
+          "text": "Occasionally, some healthy babies will have only one bowel movement every few days. When bowel movements are less frequent, they should be soft, yellow, easy to pass, and quite profuse in volume.",
+          "at": "After Six Weeks"
+        },
+        {
+          "text": "Constipation is defined as passing hard, dry, pebbly infrequent bowel movements that are painful for the baby.",
+          "at": "After Six Weeks"
+        },
+        {
+          "text": "After about six weeks of age, your baby may wet only five to six diapers per day. These diapers should be much wetter and heavier than those of a younger baby.",
+          "at": "After Six Weeks"
+        }
+      ],
+      "supports": "The infant band's wet floor of five from 42 days (DIAPER_NORMS, source `infant`), day one's minWet 1, and why the gap alone is not a signal after six weeks (maxDirtyGapHours null from 42 days).",
+      "summary": {
+        "en": "How many wet and dirty diapers a breastfed baby has in the first weeks and after six weeks, when the diapers get fewer and heavier.",
+        "sv": "Hur många blöta och bajsiga blöjor ett ammat barn har de första veckorna och efter sex veckor, när blöjorna blir färre och tyngre."
+      },
+      "topics": ["diapers"],
+      "note": "Published January 2018, revised September 2024. llli.org answers plain HTTP clients with 403, so the text was read through a fetching tool that returned the page body; the quotes are from that copy.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "luo-1998": {
+      "evidence": "cohort",
+      "authors": ["Luo ZC", "Albertsson-Wikland K", "Karlberg J"],
+      "title": "Target height as predicted by parental heights in a population-based study",
+      "container": "Pediatric Research",
+      "year": 1998,
+      "volume": "44",
+      "issue": "4",
+      "pages": "563–571",
+      "doi": "10.1203/00006450-199810000-00016",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "A simple linear function of midparental height (x) was proposed to estimate target height (y): y = 45.99 + 0.78x (boys), y = 37.85+0.75x (girls), with a 95% predicted interval of about ±10 cm.",
+          "at": "abstract"
+        },
+        {
+          "text": "The model may underestimate the potential stature by about 2 cm for children with midparental height below -2 SDS, or 163 cm. In comparison, the Tanner method may lead to a 6-cm error in underestimating target height for these children.",
+          "at": "abstract"
+        }
+      ],
+      "supports": "The mid-parental target height (targetHeight: boys 45.99 + 0.78·x, girls 37.85 + 0.75·x) and its ±10 cm 95% interval (TARGET_HEIGHT_INTERVAL_CM), and the target the adult-height projection regresses toward (adultHeightProjection).",
+      "summary": {
+        "en": "The formula for the expected adult height from both parents' heights, and why the range around it is about ±10 cm.",
+        "sv": "Formeln för förväntad vuxenlängd utifrån båda föräldrarnas längd, och varför spannet runt den är ungefär ±10 cm."
+      },
+      "topics": ["growth"],
+      "note": "Only the abstract was read (nature.com/articles/pr1998502); the full text is paywalled. n = 2402, Swedish population-based.",
+      "usedBy": ["src/app/growth.ts", "src/app/i18n/en.ts"]
+    },
+    "nhs-how-to-change-your-babys-nappy": {
+      "evidence": "health-service",
+      "organization": "NHS (England)",
+      "title": "How to change your baby's nappy",
+      "container": "nhs.uk",
+      "year": 2024,
+      "url": "https://www.nhs.uk/baby/caring-for-a-newborn/how-to-change-your-babys-nappy/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Your baby's first poo is called meconium. This is sticky and greenish-black.",
+          "at": "What baby poo looks like"
+        },
+        {
+          "text": "Some babies may do this kind of poo during or after birth, or some time in the first 48 hours.",
+          "at": "What baby poo looks like"
+        },
+        {
+          "text": "Babies do 2 or more poos a day in the first week of life. This goes down to an average of 2 a day by the time they're 1 year old.",
+          "at": "How often should my baby do a poo?"
+        },
+        {
+          "text": "Newborn babies who are breastfed may poo at each feed in the early weeks, then, after about 6 weeks, not have a poo for several days.",
+          "at": "How often should my baby do a poo?"
+        },
+        {
+          "text": "Formula-fed babies may poo up to 5 times a day when newborn, but after a few months this can go down to once a day.",
+          "at": "How often should my baby do a poo?"
+        },
+        {
+          "text": "Your baby isn't constipated as long as their poos are soft, even if they haven't done one for a few days.",
+          "at": "How often should my baby do a poo?"
+        }
+      ],
+      "supports": "The 48-hour meconium deadline in the firstDays bands (maxDirtyGapHours 48), the breastfed baby's long gaps after about six weeks (BREASTFED_MAX_DIRTY_GAP_HOURS, applied from 42 days), and the long-gap copy pointing at the stool's softness rather than the count.",
+      "summary": {
+        "en": "When a newborn's first poo comes, and how often babies poo as they grow.",
+        "sv": "När ett nyfött barns första bajs kommer och hur ofta barn bajsar när de växer."
+      },
+      "topics": ["diapers"],
+      "note": "Page last reviewed 27 August 2024.",
+      "usedBy": ["src/app/diapers.ts"]
+    },
+    "nhs-is-my-baby-getting-enough-milk": {
+      "evidence": "health-service",
+      "organization": "NHS (England)",
+      "title": "Breastfeeding: is my baby getting enough milk?",
+      "container": "nhs.uk",
+      "year": 2026,
+      "url": "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding-problems/enough-milk/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "From day 5 onwards, wet nappies should start to become more frequent, with at least 6 heavy, wet nappies every 24 hours. In the first 48 hours, your baby is likely to have only 2 or 3 wet nappies.",
+          "at": "Other signs your baby is feeding well"
+        },
+        {
+          "text": "From the fourth day, they should do at least 2 soft, yellow poos the size of a £2 coin every day for the first few weeks.",
+          "at": "Other signs your baby is feeding well"
+        }
+      ],
+      "supports": "The wet floor of six from day five (DIAPER_NORMS, the `newborn` band from fromDays 4), and the first-days ramp in so far as two or three wet nappies over the first 48 hours matches minWet 1 then 2. The two-stools-a-day expectation behind the newborn band's dirty-diaper check (maxDirtyGapHours 48 is looser than it).",
+      "summary": {
+        "en": "How many wet and dirty nappies a breastfed baby usually has in the first days and weeks.",
+        "sv": "Hur många blöta och bajsiga blöjor ett ammat barn brukar ha de första dagarna och veckorna."
+      },
+      "topics": ["diapers"],
+      "note": "Page last reviewed 30 April 2026. The page gives no count for days 3 and 4, and 'the first few weeks', not six weeks, for the two stools a day. It gives a count, not a maximum gap. It links Unicef UK's checklist for more guidance.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "ong-2000": {
+      "evidence": "cohort",
+      "authors": ["Ong KK", "Ahmed ML", "Emmett PM", "Preece MA", "Dunger DB"],
+      "title": "Association between postnatal catch-up growth and obesity in childhood: prospective cohort study",
+      "container": "BMJ",
+      "year": 2000,
+      "volume": "320",
+      "issue": "7240",
+      "pages": "967–971",
+      "doi": "10.1136/bmj.320.7240.967",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC27335/",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "A gain in SD score for weight between zero and two years that was greater than 0.67 SD scores was taken to indicate clinically significant catch-up growth, as 0.67 SD scores represent the width of each percentile band on standard growth charts—that is, second to ninth percentile, ninth to 25th, 25th to 50th, and so on.",
+          "at": "Subjects and methods"
+        },
+        {
+          "text": "Similarly, a decrease in SD scores for weight by more than 0.67 SD scores indicated catch-down growth.",
+          "at": "Subjects and methods"
+        }
+      ],
+      "supports": "The two-thirds of an SD a child must move before the trend reads 'moving up' or 'moving down' (TREND_THRESHOLD_Z = 0.67, trend).",
+      "summary": {
+        "en": "Why a move of two-thirds of a standard deviation counts as a real change of channel rather than noise.",
+        "sv": "Varför en förflyttning på två tredjedels standardavvikelse räknas som ett verkligt kanalbyte och inte som brus."
+      },
+      "topics": ["growth"],
+      "note": "The abstract quote is from Europe PMC (the '30. 7%' spacing is theirs). The methods sentences were read from the PMC full text. The 0.67 is the spacing of the UK 1990 nine-centile chart lines (2nd, 9th, 25th, 50th …), not of a chart drawn in whole-SD lines.",
+      "usedBy": ["src/app/growth.ts", "src/app/i18n/en.ts"]
+    },
     "paruthi-2016": {
       "evidence": "consensus",
       "authors": [
@@ -339,6 +1715,229 @@
       "topics": ["sleep"],
       "usedBy": ["src/app/sleep.ts"]
     },
+    "regeringen-2026-ikappvaccination-vattkoppor": {
+      "evidence": "guideline",
+      "organization": "Regeringskansliet, Socialdepartementet",
+      "title": "Ikappvaccination ska ge fler barn skydd mot vattkoppor",
+      "container": "regeringen.se, pressmeddelande",
+      "year": 2026,
+      "url": "https://www.regeringen.se/pressmeddelanden/2026/06/ikappvaccination-ska-ge-fler-barn-skydd-mot-vattkoppor/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Från den 1 januari 2027 kommer vaccination mot vattkoppor att erbjudas i det nationella allmänna vaccinationsprogrammet för barn. Den 1 mars 2027 påbörjas även en särskild insats för att erbjuda vaccination till barn som inte redan har haft vattkoppor – en ikappvaccinationsinsats."
+        },
+        {
+          "text": "Vaccinet kommer att erbjudas alla barn i två doser, vid 18 månader samt 7–8 års ålder."
+        },
+        {
+          "text": "I detta fall handlar det om barn födda före 1 juli 2025 till och med 17 års ålder som inte är immuna mot vattkoppor och som inte omfattas av det nationella allmänna vaccinationsprogrammet för barn."
+        }
+      ],
+      "supports": "The day the varicella rows start (varicellaStart = 2027-01-01) and the cohort boundary (born2025 = 2025-07-01).",
+      "summary": {
+        "en": "The government's decision: chickenpox vaccine in the programme from 1 January 2027, with a catch-up for older children from March 2027.",
+        "sv": "Regeringens besked: vaccin mot vattkoppor i programmet från 1 januari 2027, med ikappvaccination för äldre barn från mars 2027."
+      },
+      "topics": ["vaccines"],
+      "note": "Published 18 June 2026. The regulation itself: on 31 July 2026 the government amended smittskyddsförordningen (2004:255) to include varicella in the programme, in force 1 November 2026 (press release 'Vaccination mot vattkoppor blir kostnadsfritt för alla barn', https://www.regeringen.se/pressmeddelanden/2026/07/vaccination-mot-vattkoppor-blir-kostnadsfritt-for-alla-barn/: 'Förordningsändringarna träder i kraft den 1 november 2026.'). The same June release also calls the catch-up 'barn i åldern 5 – 17 år'. Folkhälsomyndigheten's föreskrift (HSLF-FS 2016:51) has not yet been amended for varicella as of the access date.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "region-stockholm-rotavirusvaccination": {
+      "evidence": "health-service",
+      "organization": "Region Stockholm, Barnhälsovårdsenheten",
+      "title": "Rotavirusvaccination, information till vårdgivare",
+      "container": "Kunskapsstöd för vårdgivare",
+      "year": 2026,
+      "url": "https://kunskapsstodforvardgivare.se/omraden/barn--och-ungdomars-halsa/riktlinjer-for-bvc/barnhalsovarden/regionala-riktlinjer/vaccination/rotavirusvaccination-information-till-vardgivare",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Det finns idag två vacciner mot rotavirus, Rotarix (ges i två-dos) och RotaTeq (ges i tre-dos). Från 1 september 2023 är det tre-dos vaccinet RotaTeq som är upphandlat i Sverige.",
+          "at": "section 'Rotarix och RotaTeq'"
+        },
+        {
+          "text": "Dos nr 3 erbjuds minst fyra veckor efter dos 2, och ges företrädelsevis i samband med övriga 5-månadersvacciner.",
+          "at": "section 'Ålder vid vaccination och intervall mellan doser för RotaTeq'"
+        }
+      ],
+      "supports": "The claim in vaccines.ts's header and the rotavirusThird note that RotaTeq, the three-dose vaccine, has been the procured product since September 2023.",
+      "summary": {
+        "en": "Why a Swedish baby gets three rotavirus doses: the three-dose vaccine has been the one bought for Sweden since September 2023.",
+        "sv": "Varför ett barn i Sverige får tre doser rotavirusvaccin: det är tredosvaccinet som har upphandlats sedan september 2023."
+      },
+      "topics": ["vaccines"],
+      "note": "Uppdaterat juli 2026. A regional guideline (Region Stockholm), not a national one; no Folkhälsomyndigheten page found that states the procurement date. Folkhälsomyndigheten's parent leaflet 'Bra att veta om vaccination mot rotavirus' (published 1 September 2023, art.nr 23174) switched to three doses at 6 weeks, 3 and 5 months, which is consistent.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/vaccines.ts"]
+    },
+    "rikshandboken-amningsstunden": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Skapa goda förutsättningar för amningsstunden",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2025,
+      "url": "https://www.rikshandboken-bhv.se/amning-och-nutrition/framja-amning---oversikt/skapa-goda-forutsattningar-for-amningsstunden/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Så här kan föräldrarna se att barnet får i sig tillräckligt vid amningen de första veckorna:"
+        },
+        {
+          "text": "Barnet kissar ljust minst 6 gånger varje dygn och bajsar flera gånger varje dygn."
+        }
+      ],
+      "supports": "The Swedish wet floor of six a day in the first weeks (DIAPER_NORMS, source `newborn`).",
+      "summary": {
+        "en": "How parents can see that a breastfed baby is getting enough in the first weeks, in Swedish child health care's handbook.",
+        "sv": "Hur föräldrar kan se att ett ammat barn får i sig tillräckligt de första veckorna, enligt barnhälsovårdens handbok."
+      },
+      "topics": ["diapers"],
+      "note": "Godkänd 2025-04-01. Manusförfattare Elisabeth Hjärtmyr. Gives no starting day and no end to 'de första veckorna'.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "rikshandboken-avvikande-langdtillvaxt": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Avvikande längdtillväxt",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2023,
+      "url": "https://www.rikshandboken-bhv.se/halsobesok/halsoundersokning/tillvaxt/avvikande-langdtillvaxt/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Kriteriet för avvikelse är att barnets längd ligger utanför ±1,5 SDS i förhållande till medelföräldralängden.",
+          "at": "Avvikelse i förhållande till medelföräldralängd"
+        },
+        {
+          "text": "Kortvuxenhet mot ärftlighet … Längd SDS <-1.5 SD jämfört med medelföräldralängd",
+          "at": "Kriterier för remittering eller utredning, table"
+        },
+        {
+          "text": "Vi talar om att barnet tappar eller klättrar en kanal och här betyder kanal just linjerna i kurvan.",
+          "at": "Avvikelser i tillväxthastighet för längd"
+        },
+        {
+          "text": "Maximala avvikelser i vikt- och längplacering på kurvan i SD-score (95% konfidensintervall) … Per 3 mån … Per 6 mån … Per 12 mån … 0-3 mån 1,8 … 3-6 mån 1,2 … 6-9 mån 1,0 … 9-12 mån 0,75 … 12-18 mån 1,0 … 18-24 mån 0,75 … 2-4 år 0,75 … 4-7 år 0,5",
+          "at": "Kriterier för remittering eller utredning, table (flattened from the page)"
+        }
+      ],
+      "supports": "docs/growth.md's ±1.5 SD target-height referral criterion, and what a channel is in Swedish child health care (TREND_THRESHOLD_Z, the trend copy).",
+      "summary": {
+        "en": "When child health care looks closer at a child's length: when it is far from what the parents' heights predict, or has moved too far across the channels in a few months.",
+        "sv": "När barnhälsovården tittar närmare på ett barns längd: när den ligger långt från vad föräldrarnas längd förutsäger, eller har rört sig för långt mellan kanalerna på några månader."
+      },
+      "topics": ["growth"],
+      "note": "Godkänd 2023-01-31. The table is flattened in the page text; rows 0–12 months read as per 3 months, 12–24 months per 6 months, 2–7 years per 12 months.",
+      "usedBy": ["src/app/growth.ts"]
+    },
+    "rikshandboken-barnvaccinationsprogrammet": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Barnvaccinationsprogrammet",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2025,
+      "url": "https://www.rikshandboken-bhv.se/vaccination/vaccinationer-pa-bvc/barnvaccinationsprogrammet/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Sedan 2016 erbjuder samtliga regioner kostnadsfri vaccination mot hepatit B till alla spädbarn inom ramen för regionala vaccinationsprogram.",
+          "at": "footnote to the Vaccinationsschema table"
+        },
+        {
+          "text": "Alla spädbarn som tillhör riskgrupp rekommenderas BCG-vaccination vid 6 veckors ålder.",
+          "at": "section 'Tuberkulosvaccin (BCG)'"
+        },
+        {
+          "text": "Nyfödda barn till födande förälder med smittsam hepatit B (HBs-ag positiv) vaccineras enligt särskild rutin.",
+          "at": "section 'Hepatit B-vaccin till barn till födande förälder med hepatit B'"
+        },
+        {
+          "text": "Vid vaccination mot difteri, stelkramp och kikhosta bör dos 1–4 ges som fulldosvaccin (DTP) och dos 5 med reducerad antigenhalt (dTp).",
+          "at": "section 'Doser, ålder och intervall'"
+        },
+        {
+          "text": "Tidpunkten för vaccination utgår från ett barns födelsedatum, även om barnet är för tidigt fött.",
+          "at": "section 'Doser, ålder och intervall'"
+        }
+      ],
+      "supports": "The same schedule as child health care works to; hepatitis B offered free by every region (hepatitisBRegional); the BCG extra at six weeks (EXTRAS bcg) and the hepatitis B birth dose for risk groups (EXTRAS hepb-birth); and dueDate counting from the birth date, preterm or not.",
+      "summary": {
+        "en": "The schedule as child health centres use it, and the extra doses offered to babies at particular risk.",
+        "sv": "Schemat så som BVC använder det, och de extra doser som erbjuds barn med särskild risk."
+      },
+      "topics": ["vaccines"],
+      "note": "Godkänd 2025-12-12.",
+      "usedBy": ["src/app/vaccines.ts"]
+    },
+    "rikshandboken-d-vitamin": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "D-vitamin",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2023,
+      "url": "https://www.rikshandboken-bhv.se/amning-och-nutrition/mat-och-dryck---oversikt/d-vitamin/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Alla barn från 1 veckas ålder och upp till 2 år rekommenderas tillskott med 5 droppar D-vitamin (D3) dagligen, i vatten- eller oljelösning (400 IE = 10 mikrogram vitamin D).",
+          "at": "D-vitamin i form av D-droppar, För alla"
+        },
+        {
+          "text": "Mängden 5 droppar per dag gäller de läkemedelsklassade preparaten (D vitamin 80 IE/ml) och kan vara annorlunda om kosttillskott används.",
+          "at": "Val av D-droppar"
+        },
+        {
+          "text": "Livsmedelsverket anser dock att det är enklast är att ge rådet om 5 D-droppar (10µg) till alla barn oavsett om det får bröstmjölk eller BME.",
+          "at": "D-droppar till barn som får bröstmjölksersättning"
+        }
+      ],
+      "supports": "The 'five drops, 10 µg a day, from about one week until two years' in food.dDrops, and why the drops are asked about regardless of formula.",
+      "summary": {
+        "en": "Swedish child health care's D-drop advice: five drops, 10 micrograms, every day from one week to two years.",
+        "sv": "Barnhälsovårdens råd om D-droppar: fem droppar, 10 mikrogram, varje dag från en veckas ålder till två år."
+      },
+      "topics": ["food"],
+      "note": "Godkänd 2023-06-20. Five drops is for the medicine-classified drops used in Swedish child health care; the page says the count can differ for dietary-supplement drops. '80 IE/ml' is as printed (five drops of 80 IE each would make 400 IE, so it presumably means per drop).",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
+    "rikshandboken-forstoppning": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Förstoppning",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2022,
+      "url": "https://www.rikshandboken-bhv.se/somatik/buk---oversikt/forstoppning/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barn som ammas kan ha avföring efter varje måltid, men det kan också gå 10–14 dagar mellan avföringarna, ibland längre än så.",
+          "at": "Avföringsfrekvens"
+        },
+        {
+          "text": "Så länge barnet mår bra är avföringsfrekvensen inte ett problem och behöver vare sig utredas eller behandlas.",
+          "at": "Avföringsfrekvens"
+        },
+        {
+          "text": "Då barnen börjar äta annan kost än bröstmjölk brukar avföringsfrekvensen stegvis närma sig förväntad avföringsfrekvens under första året, det vill säga allt från 4–6 avföringar per dag till en avföring varannan dag.",
+          "at": "Avföringsfrekvens"
+        }
+      ],
+      "supports": "The fourteen-day gap for a breastfed baby (BREASTFED_MAX_DIRTY_GAP_HOURS = 14 * 24), and the tighter gap once other food begins (maxDirtyGapHours 96 from 183 days).",
+      "summary": {
+        "en": "How long a breastfed baby can go between stools, and how often children poo once they eat other food, in Swedish child health care's handbook.",
+        "sv": "Hur länge ett ammat barn kan gå mellan avföringarna och hur ofta barn bajsar när de äter annan mat, enligt barnhälsovårdens handbok."
+      },
+      "topics": ["diapers"],
+      "note": "Godkänd 2022-10-19. Manusförfattare Henrik Arnell (Astrid Lindgrens Barnsjukhus). The 10–14 days carries no age qualifier.",
+      "usedBy": ["src/app/diapers.ts"]
+    },
     "rikshandboken-framja-god-somn": {
       "evidence": "health-service",
       "organization": "Rikshandboken barnhälsovård (Inera)",
@@ -364,6 +1963,205 @@
       "topics": ["sleep"],
       "note": "Godkänd 2025-11-04.",
       "usedBy": ["src/app/sleep.ts"]
+    },
+    "rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Tillväxtkurvor och tillväxtreferenser",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2022,
+      "url": "https://www.rikshandboken-bhv.se/halsobesok/halsoundersokning/tillvaxt/tillvaxtkurvor-och-tillvaxtreferenser/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "För att kunna se barnets tillväxt i förhållande till föräldrarnas längder används ett nomogram för medelföräldralängd, se figur 3, beräknat utifrån formeln pojkar cm = 45,99 + 0,78x, flickor cm = 37,85 + 0,75x, x =längd cm mor + far/2.",
+          "at": "Medelföräldralängd"
+        },
+        {
+          "text": "Den äldre metoden, som finns i andra referenser, använder den enklare formeln där man beräknar ett barns mållängd genom att räkna ut medelföräldralängden och sedan dra ifrån 6,5 cm om det är en flicka eller addera den summan för en pojke.",
+          "at": "Medelföräldralängd"
+        },
+        {
+          "text": "De tillväxtreferenser som används i Sverige har SD-kurvor med linjer för medelvärdet samt 1, 2 och 3 SD under och ovan medelvärdet. Dessa linjer kan benämnas SD-kanaler eller vanligen tillväxtkanaler.",
+          "at": "Om normalfördelning och standarddeviationer"
+        },
+        {
+          "text": "År 2011 rekommenderade NEXT-gruppen att alla elektroniska journalsystem skall innehålla minst en av de två svenska referenserna samt WHO:s referens.",
+          "at": "Olika tillväxtreferenser i Sverige"
+        },
+        {
+          "text": "I det praktiska arbetet är skillnaderna inte så stora under BVC-åren mellan de olika kurvreferenserna. Det är, oavsett kurvreferens, förflyttningar på kurvan över tid, \"vandringar i kanaler\", som är av betydelse vid bedömning av tillväxt.",
+          "at": "Skillnader mellan olika tillväxtreferenser"
+        },
+        {
+          "text": "WHO har också tagit fram kurvor för huvudomfång, men dessa visar sig inte överensstämma med klinisk verklighet i Nordeuropeiska länder. Särskilt stor skillnad ses bland barn med större huvudomfång, varför WHO:s kurvor för huvudomfång inte rekommenderas.",
+          "at": "WHO:S kurvor för huvudomfång rekommenderas inte"
+        }
+      ],
+      "supports": "That BVC uses the Luo 1998 formula (targetHeight) and that the older parents' mean ± 6.5 cm rule is the one it replaced; that Swedish charts are drawn in SD channels; that WHO is the alternative reference in Swedish records; and that in the BVC years the references differ little and movement across channels is what matters (data/whoGrowth.ts header, trend).",
+      "summary": {
+        "en": "How Swedish child health care reads growth curves: in SD channels, against the parents' heights, and by how the child moves across the channels over time.",
+        "sv": "Hur barnhälsovården läser tillväxtkurvor: i SD-kanaler, mot föräldrarnas längd och utifrån hur barnet rör sig mellan kanalerna över tid."
+      },
+      "topics": ["growth"],
+      "note": "Godkänd 2022-08-08. The page advises against the WHO head circumference curves for Nordic children — see the report.",
+      "usedBy": [
+        "src/app/data/whoGrowth.ts",
+        "src/app/growth.ts",
+        "src/app/i18n/en.ts"
+      ]
+    },
+    "semper-babysemp-1": {
+      "evidence": "dataset",
+      "organization": "Semper (Hero Group)",
+      "title": "BabySemp 1 800 g — näringsvärde",
+      "container": "semper.se",
+      "year": 2026,
+      "url": "https://www.semper.se/barnmat/produkter/modersmjolksersattning/babysemp-1-800g-0",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "100 ml blandning ger Energi | 276 kJ (66 kcal) | Fett | 3,5 g | – varav mättat fett | 1,3 g | – varav enkelomättat fett | 1,4 g | – varav fleromättat fett | 0,6 g | Linolsyra | 530 mg | a-linolensyra | 59 mg | Dokosahexaensyra (DHA) | 14 mg",
+          "at": "Näringsvärde"
+        },
+        {
+          "text": "Vitamin D | 1,5 μg",
+          "at": "Näringsvärde, per 100 ml"
+        },
+        {
+          "text": "Järn | 0,40 mg",
+          "at": "Näringsvärde, per 100 ml"
+        }
+      ],
+      "supports": "The 'Swedish tins print 14 mg' DHA remark beside INFANT_FORMULA_PER_100ML, and docs/nutrition.md's 'Semper BabySemp 1 and 2' comparison (iron 0.4 vs 1.0 mg).",
+      "summary": {
+        "en": "The label of a typical Swedish infant formula, for comparison with the follow-on formula.",
+        "sv": "Innehållsdeklarationen för en typisk svensk modersmjölksersättning, som jämförelse med tillskottsnäringen."
+      },
+      "topics": ["food"],
+      "note": "Optional — the app's infant-formula figures come from Livsmedelsdatabasen 6552, not this label. The label's vitamin D (1.5 µg) and saturated fat (1.3 g) differ from the database's 1.37 µg and 1.1 g.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
+    "semper-babysemp-2": {
+      "evidence": "dataset",
+      "organization": "Semper (Hero Group)",
+      "title": "BabySemp 2 800 g — näringsvärde",
+      "container": "semper.se",
+      "year": 2026,
+      "url": "https://www.semper.se/barnmat/produkter/tillskottsnaring/babysemp-2-800g",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Närdingsvärde 100 ml blandning ger Energi | 291 kJ (69 kcal | Fett | 3,4 g | – varav mättat fett | 1,2 g | – varav enkelomättat fett | 1,3 g | – varav fleromättat fett | 0,6 g | Linolsyra | 520 mg | a-linolensyra | 57 mg | Dokosahexaensyra (DHA) | 14 mg | Arakidonsyra (ARA) | 3,5 mg",
+          "at": "Näringsvärde"
+        },
+        {
+          "text": "Vitamin D | 1,5 μg",
+          "at": "Näringsvärde, per 100 ml"
+        },
+        {
+          "text": "Järn | 1,0 mg",
+          "at": "Näringsvärde, per 100 ml"
+        },
+        {
+          "text": "BabySemp 2 är en tillskottsnäring baserad på mjölk och är lämplig endast för barn över 6 månaders ålder."
+        }
+      ],
+      "supports": "FOLLOW_ON_FORMULA_PER_100ML in nutrition.ts and the 'follow-on-formula' preset in data/foods.ts: 69 kcal, iron 1.0 mg, vitamin D 1.5 µg, fat 3.4 g (saturated 1.2, monounsaturated 1.3, polyunsaturated 0.6), linoleic acid 0.52 g, ALA 57 mg, DHA 14 mg per 100 ml.",
+      "summary": {
+        "en": "The label of a typical Swedish follow-on formula, which the app uses when a parent says the bottle holds follow-on formula.",
+        "sv": "Innehållsdeklarationen för en typisk svensk tillskottsnäring, som appen använder när en förälder anger att flaskan innehåller tillskottsnäring."
+      },
+      "topics": ["food"],
+      "note": "The page shows no date. 'Närdingsvärde' and the missing ')' after 69 kcal are as printed. The code's dhaG 0.0138 is the EU minimum at 69 kcal, not the label's 14 mg — a rounding-level difference. Rikshandboken's formula table (tabell-brostmjolksersattningar-inkl-neo-230901.pdf) lists BabySemp 2 at 69 kcal, 1 mg iron and 1,5 µg vitamin D per 100 ml, which agrees.",
+      "usedBy": [
+        "src/app/data/foods.ts",
+        "src/app/i18n/en.ts",
+        "src/app/nutrition.ts"
+      ]
+    },
+    "semper-babysemp-3": {
+      "evidence": "dataset",
+      "organization": "Semper (Hero Group)",
+      "title": "BabySemp 3 mjölkdryck 800 g — näringsvärde",
+      "container": "semper.se",
+      "year": 2026,
+      "url": "https://www.semper.se/barnmat/produkter/mjolkdryck/babysemp-3-800g",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Näringsvärde per 100 ml blandning Energi | 267 kJ (64 kcal) | Fett | 2,8 g | – varav mättat fett | 0,5 g | – varav enkel omättat fett | 1,5 g | – varav fleromättat fett | 0,6 g",
+          "at": "Näringsvärde"
+        },
+        {
+          "text": "Vitamin D | 1,6 μg (23%*)",
+          "at": "Näringsvärde"
+        },
+        {
+          "text": "Järn | 1,2 mg",
+          "at": "Näringsvärde"
+        },
+        {
+          "text": "0,56 g mjölkfett, 3,9 mg DHA, 80 mg ALA och 0,55 g LA per 100 ml blandning."
+        }
+      ],
+      "supports": "The 'toddler-milk' preset in data/foods.ts (64 kcal, iron 1.2 mg, vitamin D 1.6 µg, fat 2.8 g, polyunsaturated 0.6 g, ALA 0.08 g, DHA 0.0039 g, LA 0.55 g).",
+      "summary": {
+        "en": "The label of a typical Swedish milk drink for children from one year.",
+        "sv": "Innehållsdeklarationen för en typisk svensk mjölkdryck för barn från ett år."
+      },
+      "topics": ["food"],
+      "note": "The preset's saturated (0.9 g) and monounsaturated (1.2 g) fat do not match this label (0.5 g and 1.5 g); everything else matches.",
+      "usedBy": ["src/app/data/foods.ts"]
+    },
+    "tanner-1956": {
+      "evidence": "cohort",
+      "authors": [
+        "Tanner JM",
+        "Healy MJR",
+        "Lockhart RD",
+        "MacKenzie JD",
+        "Whitehouse RH"
+      ],
+      "title": "Aberdeen growth study. I. The prediction of adult body measurements from measurements taken each year from birth to 5 years",
+      "container": "Archives of Disease in Childhood",
+      "year": 1956,
+      "volume": "31",
+      "issue": "159",
+      "pages": "372–381",
+      "doi": "10.1136/adc.31.159.372",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2011938/",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "Supine length, male … Adult 0·25 0·65 0·79 0·80 0·81 0·77",
+          "at": "p. 374, table 3A, correlation of adult length with length at 0, 1, 2, 3, 4, 5 years"
+        },
+        {
+          "text": "Supine length, female … Adult 0·29 0·70 0·74 0·78 0·82 0·81",
+          "at": "p. 374, table 3A, correlation of adult length with length at 0, 1, 2, 3, 4, 5 years"
+        },
+        {
+          "text": "Consider first supine length, the top line: there is a steep rise in adult correlation from birth to 1 year and a lesser but distinct rise from 1 to 2. After this the rise becomes quite small and the adult/5-year correlation is actually slightly below the adult/4-year correlation.",
+          "at": "p. 376"
+        },
+        {
+          "text": "Evidently birth measurements are very much less of a guide to future developments than are measurements taken at 1 year of age.",
+          "at": "p. 376"
+        }
+      ],
+      "supports": "The correlation between length at an age and adult height that the projected adult height keeps of the child's channel (HEIGHT_SDS_CORRELATION, heightCorrelationAt, adultHeightProjection).",
+      "summary": {
+        "en": "How closely a child's length at each age up to five predicts their adult height — loosely at birth, much more closely from one or two years.",
+        "sv": "Hur väl ett barns längd vid varje ålder upp till fem år förutsäger vuxenlängden – svagt vid födseln, betydligt bättre från ett eller två års ålder."
+      },
+      "topics": ["growth"],
+      "note": "Read from the scanned pages on PMC. Small sample: 42 men and 38 women born 1923–1927 in Aberdeen. Lengths at 4 and 5 years and in adulthood were measured standing and converted to supine.",
+      "usedBy": ["src/app/growth.ts", "src/app/i18n/en.ts"]
     },
     "tresillian-3-to-5-months": {
       "evidence": "health-service",
@@ -466,6 +2264,128 @@
       "note": "The page shows no date; the year is when it was read.",
       "usedBy": ["src/app/sleep.ts"]
     },
+    "unicef-uk-breastfeeding-checklist": {
+      "evidence": "health-service",
+      "organization": "Unicef UK Baby Friendly Initiative",
+      "title": "How can I tell that breastfeeding is going well?",
+      "container": "unicef.org.uk (mothers' breastfeeding checklist, PDF)",
+      "year": 2016,
+      "url": "https://www.unicef.org.uk/babyfriendly/wp-content/uploads/sites/2/2016/10/mothers_breastfeeding_checklist.pdf",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "1-2 days old 1-2 or more per day",
+          "at": "p. 2, 'Nappies' table, wet nappies"
+        },
+        {
+          "text": "3-4 days old 3 or more per day",
+          "at": "p. 2, 'Nappies' table, wet nappies"
+        },
+        {
+          "text": "5-6 days old 5 or more Heavy wet",
+          "at": "p. 2, 'Nappies' table, wet nappies"
+        },
+        {
+          "text": "7 days to 28 days old 6 or more heavy wet",
+          "at": "p. 2, 'Nappies' table, wet nappies"
+        },
+        {
+          "text": "1 or more dark green/black ‘tar like’ called meconium",
+          "at": "p. 2, 'Nappies' table, dirty nappies, 1-2 days old"
+        }
+      ],
+      "supports": "The one source found with a wet-nappy count for each day of the first week — the day-by-day check on the firstDays ramp (minWet 1, 2, 3, 4) and the day-five step to six.",
+      "summary": {
+        "en": "The UK's day-by-day checklist of wet and dirty nappies in a breastfed baby's first four weeks.",
+        "sv": "Brittisk checklista dag för dag över blöta och bajsiga blöjor under ett ammat barns fyra första veckor."
+      },
+      "topics": ["diapers"],
+      "note": "Linked from NHS's 'is my baby getting enough milk?' page. The PDF carries no date; the upload path says October 2016. Table cells are quoted as the PDF's text layer reads them. Not currently cited by the code — proposed as the source for the ramp.",
+      "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "who-2006": {
+      "evidence": "dataset",
+      "organization": "WHO Multicentre Growth Reference Study Group (World Health Organization)",
+      "title": "WHO Child Growth Standards: Length/height-for-age, weight-for-age, weight-for-length, weight-for-height and body mass index-for-age: Methods and development",
+      "container": "World Health Organization, Geneva",
+      "year": 2006,
+      "isbn": "924154693X",
+      "url": "https://iris.who.int/handle/10665/43413",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Since a standard defines how children should grow, deviations from the pattern it describes are evidence of abnormal growth. A reference, on the other hand, does not provide as sound a basis for such value judgments, although in practice references often are mistakenly used as standards.",
+          "at": "p. 1, Introduction"
+        },
+        {
+          "text": "The initial phase of the expert group's work documented the deficiencies of the reference and led to a plan for developing new growth charts that would show how children should grow in all countries rather than merely describing how they grew at a particular time and place.",
+          "at": "p. 1, Introduction"
+        },
+        {
+          "text": "The standard for linear growth has a part based on length (length-for-age, 0 to 24 months) and another on height (height-for-age, 2 to 5 years).",
+          "at": "p. xviii, Executive summary"
+        },
+        {
+          "text": "The average difference between the two measurements in this set of 1625 children was 0.73 cm. To fit a single model for the whole age range, 0.7 cm was therefore added to the cross-sectional height values before merging them with the longitudinal sample's length data. After the model was fitted, the median curve was shifted back downwards by 0.7 cm for ages above two years, and the coefficient of variation curve adjusted to the new median values to construct the height-for-age growth curves.",
+          "at": "p. xviii, Executive summary"
+        },
+        {
+          "text": "For all indicators, the tabulated fitted values of Box-Cox power, median and coefficient of variation corresponding to age (or length/height) t are denoted by L(t), M(t) and S(t), respectively.",
+          "at": "p. 301, section 7"
+        },
+        {
+          "text": "The following procedure is recommended to calculate a z-score for an individual child with measurement y at age (or length/height) t: 1. Calculate z_ind = ([y / M(t)]^L(t) − 1) / (S(t)L(t))",
+          "at": "p. 302, section 7 (the equation is typeset; transcribed here from the page)"
+        },
+        {
+          "text": "A restricted application of the LMS method was thus used for the construction of the WHO weight-based indicators, limiting the Box-Cox normal distribution to the interval corresponding to z-scores where empirical data were available (i.e. between -3 SD and 3 SD).",
+          "at": "p. 302, section 7"
+        }
+      ],
+      "supports": "The weight-for-age and length/height-for-age LMS tables in data/whoGrowth.ts (WEIGHT_FOR_AGE, LENGTH_FOR_AGE), the z-score and its inverse (zScore, valueAtZ), the SD channel curves (curveAtZ), recumbent length to 24 months and standing height after with the 0.7 cm step, and the prescriptive 'how children should grow' framing in docs/growth.md. Weight-for-age also gives the reference weight behind the food energy target (nutrition.ts via lmsAt).",
+      "summary": {
+        "en": "The WHO growth curves for weight and length that every reading is placed on — drawn from healthy, breastfed children in six countries to show how children grow in good conditions.",
+        "sv": "WHO:s tillväxtkurvor för vikt och längd som varje mätning placeras på – framtagna från friska, ammade barn i sex länder för att visa hur barn växer under goda förhållanden."
+      },
+      "topics": ["growth", "food"],
+      "note": "PDF: https://iris.who.int/server/api/core/bitstreams/b9a488f7-c337-4c75-a254-8a7d11846f8c/content (coordinating team: Mercedes de Onis et al.). The weight-based z-score has a second step the app does not apply: beyond ±3 SD the WHO replaces the LMS tail with a linear one (z*_ind, p. 302).",
+      "usedBy": [
+        "src/app/data/whoGrowth.ts",
+        "src/app/growth.ts",
+        "src/app/nutrition.ts"
+      ]
+    },
+    "who-2007": {
+      "evidence": "dataset",
+      "organization": "WHO Multicentre Growth Reference Study Group (World Health Organization)",
+      "title": "WHO Child Growth Standards: Head circumference-for-age, arm circumference-for-age, triceps skinfold-for-age and subscapular skinfold-for-age: Methods and development",
+      "container": "World Health Organization, Geneva",
+      "year": 2007,
+      "isbn": "9789241547185",
+      "url": "https://iris.who.int/handle/10665/43706",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Since a standard defines how children should grow, deviations from the pattern it describes are evidence of abnormal growth.",
+          "at": "p. 1, Introduction"
+        },
+        {
+          "text": "For this indicator, L(t) is equal to 1, simplifying the Box-Cox normal distribution used in the LMS method (Cole and Green, 1992) to the normal distribution.",
+          "at": "p. 209, section 7, 'Centiles and z-scores for head circumference-for-age'"
+        }
+      ],
+      "supports": "The head-circumference-for-age LMS table in data/whoGrowth.ts (HEAD_FOR_AGE) and the head circumference view of the Growth chart.",
+      "summary": {
+        "en": "The WHO growth curves for head circumference — which Swedish child health care does not use, and the app says so.",
+        "sv": "WHO:s tillväxtkurvor för huvudomfång — som barnhälsovården inte använder, vilket appen säger."
+      },
+      "topics": ["growth"],
+      "note": "PDF: https://iris.who.int/server/api/core/bitstreams/0c57f82c-feec-4211-9cf5-7467b94a8e20/content. Rikshandboken (rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser) does not recommend the WHO head circumference curves for Nordic children.",
+      "usedBy": ["src/app/data/whoGrowth.ts", "src/app/growth.ts"]
+    },
     "who-2019-under5": {
       "evidence": "guideline",
       "organization": "World Health Organization",
@@ -500,6 +2420,102 @@
       },
       "topics": ["sleep"],
       "usedBy": ["src/app/i18n/en.ts", "src/app/sleep.ts"]
+    },
+    "who-2023-complementary-feeding": {
+      "evidence": "guideline",
+      "organization": "World Health Organization",
+      "title": "WHO Guideline for complementary feeding of infants and young children 6–23 months of age",
+      "container": "World Health Organization, Geneva",
+      "year": 2023,
+      "isbn": "9789240081864",
+      "url": "https://iris.who.int/handle/10665/373358",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "A recent systematic review reported that, on average, breastfed children 6–8 months, 9–11 months, and 12–23 months of age received 77%, 63%, and 44% of their energy from breast milk, respectively (52).",
+          "at": "section 3.1.2, pp. 11–12"
+        },
+        {
+          "text": "Breastfeeding should continue up to 2 years or beyond (strong, very low certainty evidence).",
+          "at": "Recommendation 1, section 3.1.1, p. 11"
+        }
+      ],
+      "supports": "breastMilkEnergyShare: 0.77 at 6–8 months, 0.63 at 9–11 and 0.44 at 12–23 — the part of a breastfed child's day the regimen is not held to. The 0.15 for 24–35 months is not from this guideline.",
+      "summary": {
+        "en": "How much of a breastfed child's energy is expected to come from breast milk at each age, and so how much food has to cover.",
+        "sv": "Hur stor del av ett ammat barns energi som väntas komma från bröstmjölk i varje ålder, och alltså hur mycket maten behöver täcka."
+      },
+      "topics": ["food"],
+      "note": "Reference (52) is Rios-Leyvraz M, Yao Q. The Volume of Breast Milk Intake in Infants and Young Children: A Systematic Review and Meta-Analysis. Breastfeed Med 2023;18(3):188–197, doi 10.1089/bfm.2022.0281, which covers 0–3 years; its abstract gives no energy share past 23 months. The guideline's scope stops at 23 months.",
+      "usedBy": ["src/app/nutrition.ts"]
+    },
+    "who-child-growth-standards": {
+      "evidence": "dataset",
+      "organization": "World Health Organization",
+      "title": "Child growth standards: weight-for-age, length/height-for-age, head circumference-for-age (tables and expanded tables)",
+      "container": "who.int",
+      "year": 2006,
+      "url": "https://www.who.int/tools/child-growth-standards/standards",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "The tables provided for constructing curves are in days for age-based indicators. To convert this scale to months in producing the charts, the correct conversion is 1 month = 30.4375 days",
+          "at": "Instructions for the expanded tables, note 2"
+        },
+        {
+          "text": "Length/height-for-age charts present discontinuity between 730 and 731 days, as the measurement changes from recumbent length to standing height at the age of two years.",
+          "at": "Instructions for the expanded tables, note 1"
+        },
+        {
+          "text": "The age-based indicator tables extend to one day before 61 completed months, i.e., to 1856 days (equivalent to 60.98 months) to accommodate up to 60 completed months.",
+          "at": "Instructions for the expanded tables, note 3"
+        }
+      ],
+      "supports": "The WHO's month of 30.4375 days (DAYS_PER_MONTH in age.ts), which every WHO-indexed age in the app is converted with, and the monthly LMS files data/whoGrowth.ts is generated from (wfa_*_0-to-5-years_zscores.xlsx, lhfa_*_0-to-2-years / 2-to-5-years_zscores.xlsx, hcfa-*-0-5-zscores.xlsx).",
+      "summary": {
+        "en": "The WHO's published growth tables, and its rule that a month is 30.4375 days.",
+        "sv": "WHO:s publicerade tillväxttabeller och deras regel att en månad är 30,4375 dagar."
+      },
+      "topics": ["growth", "food"],
+      "note": "Instructions sheet: https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/indicators/instructions-en.pdf. The WHO Anthro for PC manual v3.2.2 (2011), §3.2.1, says the same: 'one month (365.25 divided by 12 [months]) is equal to 30.4375 days' (https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/software/anthro-pc-manual-v322.pdf). All 366 monthly rows in data/whoGrowth.ts were checked against the current xlsx files and match exactly.",
+      "usedBy": ["src/app/age.ts", "src/app/data/whoGrowth.ts"]
+    },
+    "wikland-2002": {
+      "evidence": "cohort",
+      "authors": [
+        "Albertsson Wikland K",
+        "Luo ZC",
+        "Niklasson A",
+        "Karlberg J"
+      ],
+      "title": "Swedish population-based longitudinal reference values from birth to 18 years of age for height, weight and head circumference",
+      "container": "Acta Paediatrica",
+      "year": 2002,
+      "volume": "91",
+      "issue": "7",
+      "pages": "739–754",
+      "doi": "10.1111/j.1651-2227.2002.tb03322.x",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "For instance, at 18 y of age, the updated height and weight reference values are 180.4 cm for males and 167.7 cm for females, i.e. 1.9 cm taller and 5.7 kg heavier for males and 2.3 cm taller and 3.4 kg heavier for females compared with the previous reference values.",
+          "at": "abstract"
+        },
+        {
+          "text": "The data came from a large longitudinal growth study on 3650 full-term healthy Swedish children who were born between 1973 and 1975.",
+          "at": "abstract"
+        }
+      ],
+      "supports": "The Swedish reference BVC plots on (the 'Göteborg 1974' cohort), named where the app explains why it draws the WHO standards instead.",
+      "summary": {
+        "en": "The Swedish growth reference child health care plots on, beside the WHO curves the app draws.",
+        "sv": "Den svenska tillväxtreferens barnhälsovården använder, vid sidan av WHO:s kurvor som appen ritar."
+      },
+      "topics": ["growth"],
+      "note": "Only the abstract was read (PubMed 12200898); the full text is paywalled. PubMed lists the legacy DOI 10.1080/08035250213216, which Crossref no longer resolves; the Wiley DOI above does. The SDs 6.6 and 6.0 in ADULT_HEIGHT could not be checked against this paper.",
+      "usedBy": ["src/app/data/whoGrowth.ts"]
     }
   }
 }

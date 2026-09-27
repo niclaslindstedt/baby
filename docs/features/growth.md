@@ -9,7 +9,10 @@ weight, length and head circumference.
 
 There the readings sit on the WHO growth standard for your child's sex, drawn
 the way Swedish child health care draws its curves: a median and the ±1 and ±2
-SD channels.
+SD channels. Head circumference is drawn on the WHO standard too, with a line
+saying that Swedish child health care does not use the WHO's head curves —
+they fit children in Northern Europe poorly — so the child health centre's
+own curve is the one to go by.
 
 The **trend** is the headline, not the single reading. Your child following
 the same channel over months is what the curve is for; a move across a

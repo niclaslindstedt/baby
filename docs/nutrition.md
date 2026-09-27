@@ -34,8 +34,9 @@ intake through feeding frequency and duration, and there is no honest number
 to put on it from the outside. For a breastfed child the regimen is held to
 the **complementary need**: the share of the day's energy food is expected to
 cover at that age. WHO's 2023 complementary-feeding guideline puts breast milk
-at 77% of energy at 6–8 months, 63% at 9–11 and 44% at 12–23 months; the app
-uses 15% for the third year and nothing after.
+at 77% of energy at 6–8 months, 63% at 9–11 and 44% at 12–23 months; the
+guideline stops at two, and the 15% the app uses for the third year (and
+nothing after) is its own extrapolation, not a quoted figure.
 
 **Formula is measurable**, so a formula-fed child's typical daily millilitres
 are part of the regimen and the target is the whole day.
@@ -56,8 +57,9 @@ Food screen asks which one is in the bottle:
 | Omega-3 (ALA + DHA)      | 0.1 g          | 0.071 g           |
 | DHA                      | 13.2 mg        | 13.8 mg           |
 
-Iron is the whole reason the second product exists: the fetal iron stores
-start to run out at around six months. Commission Delegated Regulation (EU)
+Iron is the whole reason the second product exists: a term baby is
+self-sufficient in iron until about six months (the NNR2023 iron background
+paper, Domellöf & Sjöberg 2024). Commission Delegated Regulation (EU)
 2016/127 floors infant formula at 0.3 mg iron per 100 kcal (Annex I) and
 follow-on formula at 0.6 mg (Annex II), and on the Swedish shelf the printed
 figures are 0.4 and 1.0 mg per 100 ml — roughly two and a half times. Reading
@@ -103,16 +105,16 @@ are listed.
 
 ## The targets
 
-| Nutrient      | 6–11 months          | 12–23 months       | From 2 years | Source                                                                                         |
-| ------------- | -------------------- | ------------------ | ------------ | ---------------------------------------------------------------------------------------------- |
-| Energy        | ≈79–81 kcal/kg/day   | ≈80–82 kcal/kg/day | ≈81 kcal/kg  | NNR2023 (adopting FAO/WHO/UNU 2004), with the FAO table's small sex difference                 |
-| Iron          | 10 mg                | 7 mg               | 7 mg         | NNR2023 RI (raised from 8 mg and lowered from 8 mg respectively vs NNR2012)                    |
-| Vitamin D     | 10 µg                | 10 µg              | 10 µg        | NNR2023; the Swedish D-drops (5 drops = 10 µg, from ~1 week to 2 years) supply it on their own |
-| Total fat     | 30–45 E%             | 30–40 E%           | 25–40 E%     | NNR2023                                                                                        |
-| Saturated fat | not set              | < 10 E%            | < 10 E%      | NNR2023 ("from 12 months use the adult recommendation")                                        |
-| Omega-6 (LA)  | ≥ 4 E%               | ≥ 3 E%             | ≥ 3 E%       | NNR2023                                                                                        |
-| Omega-3       | ≥ 1 E%               | ≥ 0.5 E%           | ≥ 0.5 E%     | NNR2023                                                                                        |
-| DHA           | 100 mg (7–24 months) | 100 mg             | —            | EFSA adequate intake; informational — Livsmedelsverket recommends no supplement                |
+| Nutrient      | 6–11 months        | 12–23 months       | From 2 years                                | Source                                                                                                                         |
+| ------------- | ------------------ | ------------------ | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Energy        | ≈78–81 kcal/kg/day | ≈80–82 kcal/kg/day | ≈81–84 (2–3 y), then ≈77–80 (the 3–4 y row) | FAO/WHO/UNU 2004 by month and year, with its small sex difference; NNR2023 follows the same approach                           |
+| Iron          | 10 mg              | 7 mg               | 7 mg                                        | NNR2023 RI (the infant band is 6.0–11.9 months)                                                                                |
+| Vitamin D     | 10 µg              | 10 µg              | 10 µg                                       | NNR2023; the Swedish D-drops (5 drops = 10 µg, from ~1 week to 2 years, Rikshandboken) supply it on their own                  |
+| Total fat     | 30–45 E%           | 30–40 E%           | 25–40 E%                                    | NNR2023                                                                                                                        |
+| Saturated fat | not set            | < 10 E%            | < 10 E%                                     | NNR2023 ("From 12 months, the recommendation on saturated and trans fatty acids for older children and adults should be used") |
+| Omega-6       | ≥ 4 E%             | ≥ 3 E%             | ≥ 2.5 E%                                    | NNR2023; from two it sets LA + ALA ≥ 3 E% with ≥ 0.5 E% ALA, which leaves 2.5 for omega-6                                      |
+| Omega-3       | ≥ 1 E%             | ≥ 0.5 E%           | ≥ 1 E%                                      | NNR2023                                                                                                                        |
+| DHA           | 100 mg             | 100 mg             | —                                           | EFSA adequate intake, 6–23 months; informational — no supplement beside the D-drops (1177)                                     |
 
 Energy rests on the child's **latest recorded weight**; without one, the WHO
 median weight for age stands in and the screen says so. The fat shares are
@@ -172,8 +174,21 @@ decision to the parent and BVC.
 ## Presets
 
 The food form's **Common foods** chips fill a row with typical values from
-Livsmedelsverket's food database (version 2026-06-29): fortified whole-grain
+Livsmedelsverket's food database (version 2026-07-01): fortified whole-grain
 baby porridge and välling, boiled egg, boiled salmon, banana, avocado,
 rapeseed oil, infant formula, follow-on formula and toddler milk drink. They
 are a typing aid — adjust to the label
 if it differs — and a bundled chunk, never a lookup service.
+
+## Sources
+
+Every source above is an entry in [`references.json`](references.json), cited
+in the code by its `[ref:<id>]` tag and listed for parents under Settings →
+About, with the words the numbers were taken from: the Nordic Nutrition
+Recommendations 2023 and their iron background paper, FAO/WHO/UNU 2004's
+energy requirements, the WHO's 2023 complementary feeding guideline, EFSA's
+2013 opinion on infants' and young children's nutrient requirements,
+Commission Delegated Regulation (EU) 2016/127, Livsmedelsverket's advice on
+infants and vitamin D and its food database, 1177's pages on formula and on a
+child's food in the first year, Rikshandboken's page on vitamin D, and the
+declarations of the Semper formulas the milk figures are taken from.

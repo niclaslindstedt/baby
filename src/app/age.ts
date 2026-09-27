@@ -14,7 +14,8 @@ import {
   type DayKey,
 } from "@niclaslindstedt/oss-framework/calendar";
 
-/** The WHO's month: the mean length of a calendar month in days. */
+/** The WHO's month: the mean length of a calendar month in days — "1 month
+ *  = 30.4375 days" [ref:who-child-growth-standards]. */
 export const DAYS_PER_MONTH = 30.4375;
 
 /** Whole days since birth. Negative before the birth date — a document with

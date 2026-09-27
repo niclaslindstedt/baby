@@ -186,10 +186,15 @@ export const en = {
     diapersPlural: "diapers",
     // Which source the floor comes from, said once under the tally.
     norm: {
+      // The ramp [ref:unicef-uk-breastfeeding-checklist]
+      // [ref:lll-is-baby-getting-enough].
       firstDays:
-        "In the first days the count rises with the milk: about one wet diaper on day one, two on day two, and so on.",
+        "In the first days the count rises with the milk: about one wet diaper on day one, two on day two, and three or more on days three and four.",
+      // Six from day five [ref:nhs-is-my-baby-getting-enough-milk], the
+      // Swedish count too [ref:1177-amning] [ref:rikshandboken-amningsstunden].
       newborn:
-        "From about day five, Swedish child health care expects at least six wet diapers a day.",
+        "From about day five, at least six wet diapers a day — the count Swedish child health care uses too.",
+      // [ref:lll-poop-and-pee]
       infant:
         "From about six weeks the diapers are heavier and fewer — about five or six a day.",
       toddler:
@@ -437,6 +442,7 @@ export const en = {
       "One reading so far. The trend — whether {name} keeps following the same channel — is what matters, and it needs a few readings some weeks apart.",
     trendSteady:
       "Following the channel: {z} now, {delta} over the last {days} days.",
+    // Two-thirds of an SD, the catch-up threshold [ref:ong-2000].
     trendUp:
       "Moving up across the channels: {z} now, {delta} over the last {days} days. Crossing a channel is worth mentioning at the next visit.",
     trendDown:
@@ -449,17 +455,25 @@ export const en = {
     forecastAt: "By {date}: about {value} (likely {low}–{high})",
     target: "Expected adult height",
     targetValue: "About {cm} — roughly {low} to {high}.",
+    // [ref:luo-1998] [ref:rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser]
     targetHint:
       "From both parents' heights, with the formula Swedish child health care uses (Luo, Albertsson-Wikland & Karlberg 1998). The range is wide because it is: about ±10 cm for 19 children in 20.",
     targetMissing:
       "Add both parents' heights under Your child to see the expected adult height.",
     projection: "Projected adult height from {name}'s own growth",
     projectionValue: "About {cm} — likely {low} to {high}.",
+    // How much of the channel is kept [ref:tanner-1956], on the Swedish
+    // adult reference [ref:albertsson-wikland-2020].
     projectionHint:
       "From the current length channel ({z}), kept at {share} of its weight because length at this age only loosely predicts adult height, and regressed the rest of the way toward the parents' target. A fun estimate with honest bars, not a prognosis.",
     projectionHintNoParents:
       "From the current length channel ({z}), kept at {share} of its weight because length at this age only loosely predicts adult height, and regressed the rest of the way toward the average. Add both parents' heights to anchor it.",
     projectionMissing: "Add a length reading to project an adult height.",
+    // Under the head circumference chart: BVC does not recommend the WHO's
+    // head curves for Northern European children
+    // [ref:rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser].
+    headCaveat:
+      "Swedish child health care does not use the WHO curves for head circumference: they fit children in Northern Europe poorly, those with larger heads most of all. Read the channel here with that in mind — the child health center's own curve is the one to go by.",
     outOfRange:
       "The standards cover the first five years; later readings are listed but not placed.",
     form: {
@@ -480,7 +494,9 @@ export const en = {
 
   food: {
     title: "Food",
-    // Before six months the screen stays out of the way, and says why.
+    // Before six months the screen stays out of the way, and says why:
+    // solid food at about six months, tiny tastes from four
+    // [ref:livsmedelsverket-spadbarn].
     milkOnly:
       "Before about four months, breast milk or formula is everything {name} needs, and there is nothing to track here. The regimen starts at about six months, when solid foods are introduced.",
     tastes:
@@ -496,9 +512,14 @@ export const en = {
     formulaType: "Which formula",
     formulaInfant: "Infant formula",
     formulaFollowOn: "Follow-on formula",
+    // Follow-on formula from six months, with more iron
+    // [ref:1177-brostmjolksersattning-och-tillskottsnaring]; infant formula
+    // the whole first year [ref:livsmedelsverket-spadbarn]; 0.4 against
+    // 1.0 mg per 100 ml [ref:semper-babysemp-1] [ref:semper-babysemp-2].
     formulaTypeHint:
       "Follow-on formula (tillskottsnäring) is sold from six months and carries about two and a half times the iron of infant formula, so which one is in the bottle moves the iron figure below. Infant formula is fine for the whole first year — say what {name} actually gets, not what the age suggests.",
     formulaMl: "Amount per day (ml)",
+    // [ref:rikshandboken-d-vitamin] [ref:1177-barnets-mat-upp-till-ett-ar]
     dDrops:
       "The D-drops — five drops, 10 µg a day, from about one week until two years — cover vitamin D on their own. The vitamin D figure in the food view is what the food adds on top of them.",
     // The regimen list.
@@ -528,8 +549,9 @@ export const en = {
     weightReference:
       "No weight recorded yet, so the WHO median weight for age stands in. Add a reading under Growth for a figure that is {name}'s own.",
     nutrients: "The rest",
+    // [ref:blomhoff-2023], and DHA against [ref:efsa-nda-2013].
     nutrientsHint:
-      "Compared against the Nordic Nutrition Recommendations 2023 for this age. A nutrient no food states is unknown — never read as zero.",
+      "Compared against the Nordic Nutrition Recommendations 2023 for this age, and DHA against the EU food safety authority's. A nutrient no food states is unknown — never read as zero.",
     nutrientsBreastNote:
       "Breast milk is not measured, so what it contributes is not counted below. For iron that changes little — breast milk carries almost none, which is why food takes over at around six months.",
     nutrient: {
@@ -661,10 +683,15 @@ export const en = {
       varicella: "Chickenpox",
     },
     note: {
+      // [ref:fohm-barnvaccinationsprogram], RotaTeq since 1 September 2023
+      // [ref:region-stockholm-rotavirusvaccination].
       rotavirusThird:
         "The third dose applies to the three-dose vaccine (RotaTeq, the national product since 2023).",
+      // [ref:fohm-vaccination-mot-hepatit-b]
       hepatitisBRegional:
         "Hepatitis B is offered free by every region as part of the same injection, though not formally in the national program.",
+      // [ref:fohm-vaccination-mot-hpv]; 1177 says "årskurs 5-6"
+      // [ref:1177-vaccinationsprogrammet-for-barn].
       hpvGrade:
         "Two doses at least six months apart, in school year 5 (some regions say 5–6).",
     },
@@ -689,7 +716,7 @@ export const en = {
       sixWeeks: "from six weeks",
       sixMonths: "from six months",
       twelveMonths: "from twelve months",
-      oneYear: "from one year",
+      twoYears: "from two years",
       threeYears: "from three years",
       season: "each autumn, from six months",
     },
@@ -697,8 +724,9 @@ export const en = {
       riskGroup: "risk groups",
       regional: "offered by the regions",
       optional: "self-paid",
+      // [ref:regeringen-2026-ikappvaccination-vattkoppor]
       programmeFrom2027:
-        "in the program from 2027 for children born from July 2025; self-paid before",
+        "in the program from 2027 for children born from July 2025, with a free catch-up for older children from March 2027; self-paid before",
     },
     form: {
       title: "Record a vaccination",

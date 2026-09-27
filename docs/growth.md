@@ -16,6 +16,12 @@ standard as the alternative in electronic records; Rikshandboken notes that
 the differences during the BVC years are small in practice, and that what
 matters is movement across the channels over time.
 
+The exception is **head circumference**. The same Rikshandboken page does not
+recommend the WHO's head curves for Northern European children — they fit
+poorly, above all for children with larger heads — so the head chart carries
+a line saying so, and that the child health centre's own curve is the one to
+go by.
+
 The Swedish reference's SD tables are not published in any form an app could
 bundle. The WHO standards are, so they are what this app draws — the
 weight-for-age, length/height-for-age and head-circumference-for-age tables,
@@ -35,6 +41,11 @@ z = ((x / M)^L − 1) / (L · S)
 
 and a z-score turns back into a measurement with `x = M · (1 + L·S·z)^(1/L)`.
 Between the published months the three parameters are interpolated linearly.
+From about three months that is within a few hundredths of an SD of the WHO's
+own daily tables; in the first month, when growth is fastest, it can be up to
+about a quarter of an SD off, and the step from recumbent length to standing
+height at two years is spread over the month after. The WHO also restricts
+the weight z-score beyond ±3 SD, which the app does not.
 The chart draws the median and the ±1 and ±2 SD curves as the channels BVC
 uses, and every reading as a disc; the readout names its z-score ("−0.2 SD")
 and the readings list names the channel ("within ±1 SD of the median").
@@ -47,9 +58,13 @@ estimate without letting one wet nappy's worth of grams swing it.
 
 The trend card compares the latest reading with the last one at least two
 months earlier (or the earliest there is). A move of two thirds of an SD —
-one channel on the chart — is called "moving up" or "moving down across the
-channels"; less is "following the channel". Crossing a channel is worth
-mentioning at the next visit; it is not a diagnosis, and the copy says so.
+the conventional threshold for clinically significant catch-up or catch-down
+growth, one centile band on a centile chart (Ong et al. 2000), two thirds of
+a channel on this one — is called "moving up" or "moving down across the
+channels"; less is "following the channel". It is worth mentioning at the
+next visit, and no more than that: Rikshandboken's referral table allows
+far larger moves in the first year (up to 1.8 SD in three months before
+three months of age). It is not a diagnosis, and the copy says so.
 
 ## The forecast
 
@@ -92,7 +107,8 @@ than themselves — with a 95% prediction interval of about ±10 cm, which is
 the range the card quotes. The older textbook rule, the parents' mean ±6.5
 cm, is close; BVC's nomogram is drawn from this one. For the record, the
 difference between Swedish men's and women's average adult height is about
-13–14 cm (SCB and the Gothenburg cohorts), not the 8 cm sometimes quoted.
+13 cm — 12.7 cm in the 2002 reference, 13.4 cm in the 2020 one — not the 8 cm
+sometimes quoted.
 
 BVC reads a child's length against this target: a length outside ±1.5 SD of
 the target height is its referral criterion. The app shows the target beside
@@ -105,21 +121,34 @@ a **projection from the child's own growth**: a two-year-old on the +1 SD
 length curve is more likely than not to end up a tall adult, and the card
 says by how much.
 
-How much of the channel to believe depends on the age. Length in infancy
-still carries birth size and is only loosely tied to adult height; by two to
-three years the correlation between height SDS and adult height SDS is
-around 0.7 and it climbs toward 0.8 through the preschool years (the
-Swedish and Finnish longitudinal growth studies and Tanner's tables all land
-in that region — the app's table is approximate, and says so). So:
+How much of the channel to believe depends on the age. The app takes the
+correlation between length at an age and adult height from the Aberdeen
+growth study (Tanner et al. 1956, table 3A), boys and girls averaged: 0.27 at
+birth, 0.68 at one year, 0.77 at two, 0.79 at three, 0.82 at four and 0.79 at
+five, straight lines between. It is a small sample born in the 1920s, and
+still the one published table of these correlations from birth. So:
 
 ```
 z_adult = r(age) · z_length + (1 − r(age)) · z_target
 ```
 
 where `z_target` is the mid-parental target on the Swedish adult
-distribution (men 180.4 ± 6.6 cm, women 167.7 ± 6.0 cm at 18 years, Wikland
-2002), or the population mean when the parents' heights are unknown. The
+distribution (men 182.0 ± 6.42 cm, women 168.56 ± 6.40 cm, the 2020 Swedish
+reference, Albertsson-Wikland et al.), or the population mean when the
+parents' heights are unknown. The
 80% range is the unexplained variance at that age — wide for an infant,
 narrower for a preschooler, and a little narrower again when the parents'
 heights anchor where the regression goes. It is a fun estimate with honest
 bars, not a prognosis, and the card says that too.
+
+## Sources
+
+Every source above is an entry in [`references.json`](references.json), cited
+in the code by its `[ref:<id>]` tag and listed for parents under Settings →
+About, with the words the numbers were taken from: the WHO standards and
+their methods (`who-2006`, `who-2007`, `who-child-growth-standards`), the
+Swedish references (`wikland-2002`, `albertsson-wikland-2020`), the target
+height (`luo-1998`), the height correlations (`tanner-1956`), the trend
+threshold (`ong-2000`) and Rikshandboken's growth pages
+(`rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser`,
+`rikshandboken-avvikande-langdtillvaxt`).
