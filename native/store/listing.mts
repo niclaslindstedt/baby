@@ -192,7 +192,7 @@ export const RULES: StoreRules = {
   brand: {
     projectName: "Baby",
     publisher: "Agilator AB",
-    marketingUrl: "https://baby.niclaslindstedt.se/",
+    marketingUrl: "https://apps.agilator.se/baby/",
     // Generated from one row in agilatorab/apps — see that repository's
     // AGENTS.md. A policy that claims less than the app does is a compliance
     // problem rather than a typo, so the row changes in the same release the
@@ -213,10 +213,11 @@ export const RULES: StoreRules = {
   },
 
   apple: {
-    // A baby health and nutrition log for parents. HEALTH_AND_FITNESS is where
-    // a parent looking for a growth or diaper log looks; MEDICAL second, for
-    // the growth curves and the vaccination schedule.
-    categories: ["HEALTH_AND_FITNESS", "MEDICAL"],
+    // A baby health and nutrition log for parents, filed under
+    // HEALTH_AND_FITNESS alone — where a parent looking for a growth or diaper
+    // log looks. MEDICAL is deliberately absent: it invites review to weigh
+    // the growth curves and the vaccination schedule as a medical device.
+    categories: ["HEALTH_AND_FITNESS"],
 
     advisory: {
       // A log a parent keeps about their baby. Every row but one is NONE and
