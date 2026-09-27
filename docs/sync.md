@@ -32,7 +32,7 @@ folder is on this computer, but it is a folder anything else may be syncing (a
 Dropbox, OneDrive or iCloud Drive client), so the rule is not "Dropbox is
 encrypted" but "a copy that is not the browser's own is only ever an
 envelope". There is no switch to turn it off: it is a requirement of the
-backend, not a setting (`useRequiredEncryption` from the framework, wired in
+backend, not a setting (the framework's `useEncryption` with `policy: "required"`, wired in
 `src/app/useSyncEngine.ts`). Until a passphrase is held the engine has no
 adapter to talk to, so nothing is pulled or pushed at all.
 

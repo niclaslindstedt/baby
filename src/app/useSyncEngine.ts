@@ -29,8 +29,8 @@ import {
 } from "@niclaslindstedt/oss-framework/storage";
 import {
   WrongPasswordError,
-  useRequiredEncryption,
-  type RequiredEncryption,
+  useEncryption,
+  type Encryption,
 } from "@niclaslindstedt/oss-framework/encryption";
 import type {
   ConnectionProbeResult,
@@ -84,7 +84,7 @@ import type { DocStore } from "./useDocStore.ts";
 // this computer, but it is a folder anything else may be syncing — a Dropbox,
 // OneDrive or iCloud Drive client — so the rule is not "Dropbox is
 // encrypted" but "a copy that is not the browser's own is only ever an
-// envelope" (`useRequiredEncryption`, below).
+// envelope" (`useEncryption`, below).
 //
 // Reconciliation is a per-record merge (see `merge.ts`), not a "pick a side"
 // prompt: records carry their own `updatedAt` and diaper changes merge as a
@@ -103,11 +103,11 @@ export const LOCAL_BACKEND: SyncBackendId = "idb";
 
 const BACKEND_KEY = "baby:sync:backend";
 const DROPBOX_TOKENS_KEY = "baby:sync:dropbox";
-// The passphrase a copy outside this device is encrypted with, remembered on
-// this device per backend (see `useRequiredEncryption`). Beside a working
+// Where this device keeps the encryption of a copy outside it, per backend
+// (see `useEncryption`): the passphrase is remembered here. Beside a working
 // copy that is itself plaintext in the same storage, remembering it exposes
 // nothing new; what it protects is the copy the provider holds.
-const PASSPHRASE_KEY = "baby:sync:passphrase";
+const ENCRYPTION_KEY = "baby:sync:encryption";
 // Dropbox is gone as a backend. The key stays named so a token a device
 // may still hold is cleared rather than left sitting in storage.
 const RETIRED_GDRIVE_TOKEN_KEY = "baby:sync:gdrive";
@@ -244,7 +244,7 @@ export type SyncEngine = {
   folderReconnectNeeded: boolean;
   /** The encryption every copy outside this device requires. Sync is held
    *  until it is `ready`. */
-  encryption: RequiredEncryption;
+  encryption: Encryption;
 };
 
 export function useSyncEngine(
@@ -332,13 +332,15 @@ export function useSyncEngine(
   // A copy outside this device is only ever an envelope. `adapter` stays null
   // until the passphrase is held, which is what holds every pull and push
   // below — there is no path for the document to leave in plaintext.
-  const encryption = useRequiredEncryption({
-    inner,
-    required: backend !== LOCAL_BACKEND,
-    storageKey: `${PASSPHRASE_KEY}:${backend}`,
+  const encryption = useEncryption({
+    adapter: backend !== LOCAL_BACKEND ? inner : null,
+    policy: "required",
+    remember: "device",
+    storageKey: `${ENCRYPTION_KEY}:${backend}`,
     logger: encryptionLog,
   });
-  const adapter = encryption.adapter;
+  // The browser's own IndexedDB copy is the device's, like the working copy.
+  const adapter = backend !== LOCAL_BACKEND ? encryption.adapter : inner;
 
   const connected = inner !== null;
 

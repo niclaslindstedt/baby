@@ -562,7 +562,7 @@ export const sv: Catalog = {
 
   // Det som står mellan journalen och en kopia som lämnar enheten.
   encryption: {
-    title: "Kryptering",
+    headline: "Krypterat innan det lämnar enheten",
     required:
       "Allt krypteras på den här enheten innan det går till {name}, som bara någonsin får chiffertext.",
     on: "Krypterat. Lösenfrasen är sparad på den här enheten.",
@@ -572,7 +572,6 @@ export const sv: Catalog = {
     unreachable: "Kunde inte nå {name} för att kolla krypteringen.",
     retry: "Försök igen",
     set: "Välj lösenfras",
-    enter: "Ange lösenfrasen",
     change: "Byt lösenfras",
     changed: "Lösenfrasen är bytt",
     createTitle: "Välj en lösenfras",

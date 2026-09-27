@@ -222,12 +222,13 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   folder, Dropbox. Suspended wholesale while demo data has
   taken over storage. A copy in the folder or Dropbox is **always
   encrypted**: the adapter comes from the framework's
-  `useRequiredEncryption`, which is `null` until the passphrase is held, so
+  `useEncryption` (`policy: "required"`, `remember: "device"`), which is `null` until the passphrase is held, so
   nothing is ever written there in plaintext. Never sync through the raw
   `inner` adapter.
 - `src/app/SyncEncryption.tsx` — the app's words for the framework's
-  passphrase dialog, the encryption lines under "Where the record lives", the
-  PIN gate (`UnlockGate`) and the app-lock control. The passphrase is
+  encryption kit: `EncryptionGate` in the shell, `EncryptionSettings` under
+  sync, and the PIN's `PinGate` and `PinLockControl`. The kit owns the
+  machinery; this file only translates it. The passphrase is
   remembered on the device per backend; the PIN verifier never leaves the
   device. A PIN is a soft lock and its copy must keep saying so.
 - `src/app/dev/` — the developer "Demo data" switch: an invented

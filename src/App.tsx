@@ -8,7 +8,11 @@ import {
   createToastStore,
 } from "@niclaslindstedt/oss-framework/components";
 import { useSwipeNav } from "@niclaslindstedt/oss-framework/hooks";
-import { usePinLock } from "@niclaslindstedt/oss-framework/encryption";
+import {
+  EncryptionGate,
+  PinGate,
+  usePinLock,
+} from "@niclaslindstedt/oss-framework/encryption";
 import { LogViewer } from "@niclaslindstedt/oss-framework/logging";
 import { UpdateToast, usePwaUpdate } from "@niclaslindstedt/oss-framework/pwa";
 import {
@@ -39,9 +43,8 @@ import { logStore } from "./app/log.ts";
 import { cacheIdForBase } from "./app/pwa.ts";
 import { SettingsScreen } from "./app/SettingsScreen.tsx";
 import {
-  AppLockGate,
-  PassphrasePrompt,
-  usePassphrasePrompt,
+  useEncryptionLabels,
+  usePinGateLabels,
 } from "./app/SyncEncryption.tsx";
 import { TodayScreen } from "./app/TodayScreen.tsx";
 import { TopBar } from "./app/TopBar.tsx";
@@ -102,11 +105,14 @@ export function App() {
   }, [demo.on]);
   const store = useDocStore(backend);
   const sync = useSyncEngine(store, demo.on);
-  const passphrase = usePassphrasePrompt(sync.encryption, demo.on);
   const pin = usePinLock({
     storageKey: PIN_KEY,
     relockAfterMs: RELOCK_AFTER_MS,
   });
+  const encryptionLabels = useEncryptionLabels(
+    t(`settings.backendName.${sync.backend}` as const),
+  );
+  const pinGateLabels = usePinGateLabels();
   const standards = useGrowthStandards();
 
   // The trackers this parent uses, and the bar that follows from them: a
@@ -221,8 +227,8 @@ export function App() {
 
   const hasChild = store.data.child !== null;
 
-  // Behind the PIN, nothing of the record renders — not a screen, not a modal.
-  if (pin.locked) return <AppLockGate pin={pin} />;
+  // Behind the PIN, nothing renders — not a screen, not a modal.
+  if (pin.locked) return <PinGate pin={pin} labels={pinGateLabels} />;
 
   return (
     <div className="flex h-full flex-col bg-page text-fg">
@@ -325,7 +331,6 @@ export function App() {
               demoData={demo}
               onEditChild={() => toggle("child")}
               pin={pin}
-              onAskPassphrase={passphrase.open}
               onNotice={notice}
             />
           )}
@@ -369,15 +374,13 @@ export function App() {
         onClose={() => setDiaperOpen(false)}
       />
 
-      <PassphrasePrompt
+      {/* Asks for the passphrase whenever sync is waiting on one. A dialog,
+          not a gate: the working copy on this device works behind it. */}
+      <EncryptionGate
         encryption={sync.encryption}
-        providerName={t(`settings.backendName.${sync.backend}` as const)}
-        mode={passphrase.mode}
-        onClose={passphrase.close}
-        onChanged={() => {
-          notice(t("encryption.changed"));
-          void sync.reload();
-        }}
+        location={t(`settings.backendName.${sync.backend}` as const)}
+        labels={encryptionLabels}
+        paused={demo.on}
       />
 
       <SyncDetailsModal
