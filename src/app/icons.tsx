@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 // App-owned glyphs — the marks the framework's set has no vocabulary for
-// because they are this app's domain: a diaper, a scale, a bowl, a syringe.
+// because they are this app's domain: a diaper, a moon, a scale, a bowl, a
+// syringe.
 // Everything else (cog, check, chevrons, cloud, plus) comes from
 // `@niclaslindstedt/oss-framework/components`, so the two sets only ever
 // differ where the domain does.
@@ -146,6 +147,52 @@ export function PooIcon({ className }: IconProps) {
       <path d="M8.5 11.5h7a3.5 3.5 0 0 0-7 0Z" />
       <path d="M5 16h14a4.5 4.5 0 0 0-4.5-4.5h-5A4.5 4.5 0 0 0 5 16Z" />
       <path d="M2 20.5h20a4.5 4.5 0 0 0-4.5-4.5h-11A4.5 4.5 0 0 0 2 20.5Z" />
+    </Glyph>
+  );
+}
+
+/**
+ * Sleep — a crescent moon. The Sleep tab, the Today card, and the Night
+ * button: the tab is the sleep log as a whole, and night is what a parent
+ * pictures when they think of it, so the one glyph serves both.
+ */
+export function MoonIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+    </Glyph>
+  );
+}
+
+/** A nap — the sun, for the sleep that happens in daylight. */
+export function SunIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2" />
+      <path d="M12 20v2" />
+      <path d="m4.93 4.93 1.41 1.41" />
+      <path d="m17.66 17.66 1.41 1.41" />
+      <path d="M2 12h2" />
+      <path d="M20 12h2" />
+      <path d="m6.34 17.66-1.41 1.41" />
+      <path d="m19.07 4.93-1.41 1.41" />
+    </Glyph>
+  );
+}
+
+/** Waking — the sun over the horizon, for the button that ends a sleep. */
+export function SunriseIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M12 2v8" />
+      <path d="m4.93 10.93 1.41 1.41" />
+      <path d="M2 18h2" />
+      <path d="M20 18h2" />
+      <path d="m19.07 10.93-1.41 1.41" />
+      <path d="M22 22H2" />
+      <path d="m8 6 4-4 4 4" />
+      <path d="M16 18a4 4 0 0 0-8 0" />
     </Glyph>
   );
 }

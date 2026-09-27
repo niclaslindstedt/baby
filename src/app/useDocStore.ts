@@ -10,6 +10,7 @@ import {
   type Food,
   type Measurement,
   type MilkFeeding,
+  type SleepSession,
   type Vaccination,
 } from "./types.ts";
 import * as output from "../output.ts";
@@ -105,6 +106,10 @@ export type DocStore = {
   /** Log one diaper change. The app's one high-frequency write. */
   addDiaper: (change: DiaperChange) => void;
   removeDiaper: (id: string) => void;
+  /** Upsert one sleep — starting one, ending it, and correcting either time
+   *  are all this one edit. */
+  saveSleep: (sleep: SleepSession) => void;
+  removeSleep: (id: string) => void;
   /** Upsert one food in the regimen. */
   saveFood: (food: Food) => void;
   removeFood: (id: string) => void;
@@ -127,7 +132,7 @@ export type DocStore = {
   writeFailures: number;
 };
 
-type MapKey = "measurements" | "diapers" | "foods" | "vaccinations";
+type MapKey = "measurements" | "diapers" | "sleeps" | "foods" | "vaccinations";
 
 export function useDocStore(backend: DocBackend = localDocBackend): DocStore {
   // Read synchronously on the first render: localStorage can answer before
@@ -199,6 +204,14 @@ export function useDocStore(backend: DocBackend = localDocBackend): DocStore {
     (id: string) => remove("diapers", id),
     [remove],
   );
+  const saveSleep = useCallback(
+    (sleep: SleepSession) => upsert("sleeps", sleep),
+    [upsert],
+  );
+  const removeSleep = useCallback(
+    (id: string) => remove("sleeps", id),
+    [remove],
+  );
   const saveFood = useCallback((food: Food) => upsert("foods", food), [upsert]);
   const removeFood = useCallback((id: string) => remove("foods", id), [remove]);
   const saveVaccination = useCallback(
@@ -219,6 +232,8 @@ export function useDocStore(backend: DocBackend = localDocBackend): DocStore {
       removeMeasurement,
       addDiaper,
       removeDiaper,
+      saveSleep,
+      removeSleep,
       saveFood,
       removeFood,
       setMilk,
@@ -236,6 +251,8 @@ export function useDocStore(backend: DocBackend = localDocBackend): DocStore {
       removeMeasurement,
       addDiaper,
       removeDiaper,
+      saveSleep,
+      removeSleep,
       saveFood,
       removeFood,
       setMilk,

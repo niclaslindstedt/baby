@@ -68,6 +68,21 @@ of heavier, fewer diapers. The copy names the signs that matter — light
 diapers, dark urine, hard stools, an uncomfortable baby. See
 [diapers.md](diapers.md).
 
+### The sleep average looks short
+
+The averages count every day with anything logged, so a day where only the
+night was entered reads as a day without naps — check the Sleep tab's list
+first. The recommendation is the WHO's, and the view also says what most
+children of that age are observed to sleep; only an average outside both
+warms the card. See [sleep.md](sleep.md).
+
+### The suggested nap time seems off
+
+It starts from the published awake times for the age and moves to your
+child's own after five similar wake windows in the last two weeks, so it
+settles within a few days of logging. After a night waking it suggests
+nothing on purpose. Tired signs come first. See [sleep.md](sleep.md).
+
 ### A vaccination shows "expected by now" but BVC hasn't called
 
 The ages are the programme's; the child health centre works to its own

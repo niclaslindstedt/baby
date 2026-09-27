@@ -1,6 +1,6 @@
 # Baby
 
-> A local-first baby health and nutrition tracker for parents in Sweden — is the food regimen still enough, is the baby growing along the curve, how many diapers today, and which vaccination comes next. No account, no server.
+> A local-first baby health and nutrition tracker for parents in Sweden — is the food regimen still enough, is the baby growing along the curve, how many diapers today, how much sleep and when the next nap, and which vaccination comes next. No account, no server.
 
 [![ci](https://github.com/niclaslindstedt/baby/actions/workflows/ci.yml/badge.svg)](https://github.com/niclaslindstedt/baby/actions/workflows/ci.yml)
 [![seo](https://github.com/niclaslindstedt/baby/actions/workflows/seo.yml/badge.svg)](https://github.com/niclaslindstedt/baby/actions/workflows/seo.yml)
@@ -9,7 +9,7 @@
 
 ## What
 
-**Baby** follows one child from birth and answers the four questions
+**Baby** follows one child from birth and answers the five questions
 that matter most, without turning childcare into data entry. It runs
 entirely in your browser and is built around one principle: **minimal
 input, useful output.**
@@ -19,6 +19,14 @@ input, useful output.**
   wet and dirty diapers a baby of that age usually produces (from the first days' ramp to the Swedish "minst sex kissblöjor per
   dygn") and says so when the last 24 hours look thin, naming the sign to look
   for rather than a diagnosis.
+- **Sleep.** **Nap** or **Night** when the baby falls asleep, **Woke up**
+  when they wake — from the Sleep tab or the **+** on any screen, now or
+  "20 minutes ago" when the phone was out of reach. The app
+  shows the last 24 hours and the 30- and 90-day averages, night and naps,
+  against the WHO recommendation for the age and what children that age are
+  observed to sleep, and suggests when the next nap or bedtime is likely to
+  suit from the last sleep, its length, the published awake times for the age
+  and the baby's own last two weeks.
 - **Growth.** Weight, length and head circumference, as often as you like —
   a BVC visit or a bathroom scale every morning — plotted on the WHO growth
   standards as SD channels, the way Swedish child health care draws them. The
@@ -38,7 +46,7 @@ input, useful output.**
   for your child — given, expected by now, upcoming — plus the vaccinations
   offered outside it, each recordable with its date and the vaccine's name.
 
-Each of the four has a tab of its own and a switch in **Settings → What you
+Each of the five has a tab of its own and a switch in **Settings → What you
 track**. Switch one off and its tab and its card leave the app; nothing is
 deleted, and switching it back on finds everything where you left it.
 
@@ -95,14 +103,15 @@ npm run dev
 
 Open the printed URL. The app opens on the child setup: a birth date and a
 sex are all it needs (a name and the parents' heights are optional). Press
-**Save** and you land on **Today**: tap **Pee**, **Poo** or **Both** when
-you change a diaper, and the last 24 hours count up. Add a reading under
+**Save** and you land on **Today**: tap **+** and **Pee**, **Poo** or
+**Both** when you change a diaper, or **Nap** / **Night** when the baby falls
+asleep, and the Today cards count up. Add a reading under
 **Growth**, and from six months keep the regimen under **Food** — the
 common-foods chips fill in typical values from Livsmedelsverket's database.
 
 To see every screen populated, turn on **Settings → Developer mode → Demo
-data**: an invented baby of seven and a half months with readings, diapers, a regimen and a
-vaccination card, in memory only.
+data**: an invented baby of seven and a half months with readings, diapers,
+sleeps, a regimen and a vaccination card, in memory only.
 
 To open it on the demo instead — held in memory, never written to the
 browser — run `make demo` (`VITE_SEED=demo`).
@@ -115,8 +124,8 @@ npm run build && npm run preview
 
 ## Usage
 
-Five tabs on a bottom bar — swipe left or right to move between them. **Today
-is where the answers are; the other four are where things go in.** Not
+Six tabs on a bottom bar — swipe left or right to move between them. **Today
+is where the answers are; the other five are where things go in.** Not
 everyone tracks everything: **Settings → What you track** switches a tracker
 off, and its tab and its card go with it (nothing is deleted). Tapping one of
 Today's cards opens the matching view over the screen — full screen on a
@@ -125,27 +134,29 @@ where you were.
 
 | Tab          | What it does                                                                                                                                                                                              |
 | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Today**    | The child's age, then one line each on diapers, the regimen, growth and the next vaccine — tap a card for its full view, and it warms when it is asking for a look.                                       |
+| **Today**    | The child's age, then one line each on diapers, sleep, the regimen, growth and the next vaccine — tap a card for its full view, and it warms when it is asking for a look.                                |
 | **Diapers**  | The three buttons — pee, poo, both — and the last seven days of changes under them, newest first, so a mistap is one tap to remove.                                                                       |
+| **Sleep**    | **Nap** / **Night** and **Woke up**, and the last seven days of sleeps under them, a night under the evening it began — edit a time tapped late, or add a sleep nobody logged.                            |
 | **Growth**   | The readings list, and the form behind it: weight, length and head circumference, as often as you like.                                                                                                   |
 | **Food**     | The daily regimen with one-tap presets and, optionally, the times of day each food is given; then milk feeding (breast / formula / both, and which formula — modersmjölksersättning or tillskottsnäring). |
 | **Vaccines** | The Swedish programme as a timeline — given, expected by now, upcoming — where a dose is marked given with the vaccine name off the card, beside the extras outside the programme.                        |
 
-The four views Today opens:
+The five views Today opens:
 
 | View             | What it shows                                                                                                                                                                                                                       |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Diapers**      | The last 24 hours as wet and dirty against the floor for the child's age, the source that floor comes from, and the week as a chart.                                                                                                |
+| **Sleep**        | Asleep or awake and for how long, the suggested next nap or bedtime and what it is built from, the last 24 hours, the 30- and 90-day averages against the recommendation, two weeks as a chart and the week hour by hour.           |
 | **Growth**       | A tab each for weight, length and head circumference on the WHO standard with the SD channels, the trend across them, the projected range ahead, and (under Length) the expected and projected adult heights.                       |
 | **Food regimen** | Whether the regimen covers the day, and how the day fills up: energy accumulating across the clock against the line it is held to, then iron, vitamin D, the fat shares, omega-3/6 and DHA against the recommendations for the age. |
 | **Vaccinations** | The card at a glance: every visit the programme books, a tick against what is recorded, and how much of the card is done.                                                                                                           |
 
 …and two buttons on the top bar, for the things you do and then leave:
 
-| Button | What it does                                                                                                                                         |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **+**  | Log a diaper without leaving the screen you are on: a sheet with the same three buttons. One tap logs and closes. Gone while diaper tracking is off. |
-| **⚙**  | Settings: theme, language, what you track, the child's profile, where the record lives, backup / restore / delete, About.                            |
+| Button | What it does                                                                                                                                                    |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **+**  | Log a diaper or a sleep without leaving the screen you are on: a sheet with the same buttons as the two tabs. One tap logs and closes. Gone while both are off. |
+| **⚙**  | Settings: theme, language, what you track, the child's profile, where the record lives, backup / restore / delete, About.                                       |
 
 ## Configuration
 

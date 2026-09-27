@@ -53,6 +53,12 @@ export function formatClock(iso: string, locale?: string): string {
   return formatDate(date, locale, { hour: "numeric", minute: "2-digit" });
 }
 
+/** An instant in milliseconds as a wall-clock time — `formatClock` for the
+ *  moments the derivations compute rather than read off a record. */
+export function formatInstant(ms: number, locale?: string): string {
+  return formatClock(new Date(ms).toISOString(), locale);
+}
+
 /** A weight in kilograms, to the gram-ish precision a scale gives: two
  *  decimals under 10 kg, one above. */
 export function formatKg(kg: number, locale?: string): string {

@@ -1,11 +1,17 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
 import { ChevronRightIcon } from "@niclaslindstedt/oss-framework/components";
 
 import { ageInDays } from "./age.ts";
-import { ageLabel, childName } from "./copy.ts";
+import {
+  ageLabel,
+  childName,
+  durationLabel,
+  sleepNextLine,
+  sleepNowLine,
+} from "./copy.ts";
 import { assessDiapers } from "./diapers.ts";
 import { DiapersModal } from "./DiapersModal.tsx";
 import {
@@ -16,14 +22,29 @@ import {
   measurementValues,
 } from "./format.ts";
 import { readings, trend, type GrowthStandards } from "./growth.ts";
-import { BowlIcon, DiaperIcon, GrowthIcon, SyringeIcon } from "./icons.tsx";
+import {
+  BowlIcon,
+  DiaperIcon,
+  GrowthIcon,
+  MoonIcon,
+  SyringeIcon,
+} from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
 import { FoodModal } from "./FoodModal.tsx";
 import { GrowthModal } from "./GrowthModal.tsx";
 import { assess, outgrown, regimenApplies } from "./nutrition.ts";
+import {
+  averageSleep,
+  lastNight,
+  nextSleep,
+  sleepNormFor,
+  sleepStatus,
+} from "./sleep.ts";
+import { SleepModal } from "./SleepModal.tsx";
 import { sortedMeasurements, type AppData } from "./types.ts";
 import type { Features } from "./useAppSettings.ts";
 import { Card, Heading } from "./ui.tsx";
+import { useNow } from "./useNow.ts";
 import { nextDose, timeline } from "./vaccines.ts";
 import { VaccinesModal } from "./VaccinesModal.tsx";
 
@@ -58,7 +79,7 @@ type Props = {
 };
 
 /** Which headline answer is open over the screen, if any. */
-type View = "diapers" | "growth" | "food" | "vaccines";
+type View = "diapers" | "sleep" | "growth" | "food" | "vaccines";
 
 export function TodayScreen({ data, today, standards, features }: Props) {
   const t = useT();
@@ -68,21 +89,40 @@ export function TodayScreen({ data, today, standards, features }: Props) {
   const name = childName(t, child);
   const ageDays = ageInDays(child.birthDate, today);
 
-  // The clock, read at the edge: the "last 24 hours" window moves with it,
-  // so it ticks once a minute while the screen is up. The derivation stays
-  // clock-free — `now` is a parameter to it.
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 60_000);
-    return () => clearInterval(timer);
-  }, []);
-  useEffect(() => setNow(new Date()), [data]);
+  // The clock, read at the edge: the "last 24 hours" window and the sleep
+  // card move with it, so it ticks once a minute while the screen is up. The
+  // derivations stay clock-free — `now` is a parameter to them.
+  const now = useNow(data);
 
   const breastfed = data.milk.kind === "breast" || data.milk.kind === "mixed";
   const diapers = useMemo(
     () => assessDiapers(data, ageDays, now, breastfed),
     [data, ageDays, now, breastfed],
   );
+
+  // Sleep: where the child is now and when the next sleep is likely to suit,
+  // with last night and the month's average under it.
+  const sleepNow = useMemo(
+    () => nextSleep(data, ageDays, now),
+    [data, ageDays, now],
+  );
+  const night = useMemo(() => lastNight(data, now), [data, now]);
+  const sleepAverage = useMemo(() => averageSleep(data, now, 30), [data, now]);
+  const sleepNorm = sleepNormFor(ageDays);
+  const sleepVerdict = sleepNorm
+    ? sleepStatus(sleepNorm, sleepAverage)
+    : "tooEarly";
+  const sleepNext = sleepNow ? sleepNextLine(t, sleepNow, locale) : null;
+  const sleepFacts = [
+    night
+      ? t("sleep.lastNight", { duration: durationLabel(t, night.minutes) })
+      : null,
+    sleepAverage && sleepVerdict !== "tooEarly"
+      ? t("sleep.average30", {
+          duration: durationLabel(t, sleepAverage.totalMinutes),
+        })
+      : null,
+  ].filter((line): line is string => line !== null);
 
   const food = useMemo(
     () => (standards ? assess(data, today, standards.weight) : null),
@@ -159,6 +199,35 @@ export function TodayScreen({ data, today, standards, features }: Props) {
                 wet: String(diapers.wet),
                 dirty: String(diapers.dirty),
               })}
+        </HeadlineCard>
+      )}
+
+      {features.sleep && (
+        <HeadlineCard
+          icon={<MoonIcon className="h-4 w-4" />}
+          title={t("today.sleepCard")}
+          tone={
+            sleepVerdict === "short" || sleepVerdict === "long"
+              ? "warn"
+              : "default"
+          }
+          onOpen={() => setView("sleep")}
+        >
+          {sleepNow !== null
+            ? sleepNowLine(t, sleepNow, locale)
+            : Object.keys(data.sleeps).length === 0
+              ? t("sleep.noneYet", { name })
+              : t("sleep.quiet")}
+          {sleepNext && (
+            <span className="mt-1 block font-bold text-fg-bright">
+              {sleepNext}
+            </span>
+          )}
+          {sleepFacts.length > 0 && (
+            <span className="mt-1 block text-xs text-muted">
+              {sleepFacts.join(" · ")}
+            </span>
+          )}
         </HeadlineCard>
       )}
 
@@ -272,6 +341,13 @@ export function TodayScreen({ data, today, standards, features }: Props) {
           the card is the headline and the modal is the rest of the sentence. */}
       <DiapersModal
         open={view === "diapers" && features.diapers}
+        onClose={() => setView(null)}
+        data={data}
+        today={today}
+        now={now}
+      />
+      <SleepModal
+        open={view === "sleep" && features.sleep}
         onClose={() => setView(null)}
         data={data}
         today={today}

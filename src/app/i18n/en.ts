@@ -22,14 +22,18 @@ export const en = {
   nav: {
     today: "Today",
     diapers: "Diapers",
+    sleep: "Sleep",
     growth: "Growth",
     food: "Food",
     vaccines: "Vaccines",
     settings: "Settings",
     child: "Your child",
     // The top bar's `+`: a glyph with no label, so its name carries what it
-    // does — open the diaper sheet, the app's one high-frequency action.
+    // does — open the quick-log sheet, with whichever of the two
+    // high-frequency trackers are on.
     logDiaper: "Log a diaper",
+    logSleep: "Log a sleep",
+    logAny: "Log a diaper or a sleep",
   },
 
   common: {
@@ -58,6 +62,13 @@ export const en = {
     prevYears: "Previous years",
     nextYears: "Next years",
     clear: "Clear",
+  },
+
+  // A length of time, as the sleep screens say one: "1 h 5 min".
+  duration: {
+    hm: "{h} h {m} min",
+    h: "{h} h",
+    m: "{m} min",
   },
 
   age: {
@@ -106,6 +117,7 @@ export const en = {
     // each opening its own read-only view over this screen rather than
     // sending the parent off to a tab.
     diapersCard: "Diapers",
+    sleepCard: "Sleep",
     foodCard: "Food regimen",
     growthCard: "Growth",
     vaccinesCard: "Next vaccination",
@@ -121,10 +133,16 @@ export const en = {
     allGiven: "Every programme dose is recorded.",
   },
 
-  // The sheet behind the top bar's `+`: the three buttons, from anywhere.
+  // The sheet behind the top bar's `+`: the diaper buttons and the sleep
+  // buttons, from anywhere.
   quickLog: {
-    title: "Log a diaper",
-    subtitle: "Tap what the diaper held. The time is recorded now.",
+    title: "Log",
+    titleDiaper: "Log a diaper",
+    titleSleep: "Log a sleep",
+    subtitle:
+      "One tap. The time is now — unless you pick an earlier one for a sleep.",
+    diaper: "Diaper",
+    sleep: "Sleep",
   },
 
   // The Diapers tab — the buttons and the week's log — and the view behind
@@ -177,6 +195,164 @@ export const en = {
       toddler:
         "After the first birthday the sources give no count; a toddler's diaper is dry for longer.",
     },
+  },
+
+  // The Sleep tab — the buttons and the week's log — and the view behind
+  // Today's Sleep card, where the log is read against the age.
+  sleep: {
+    title: "Sleep",
+    log: "Log a sleep",
+    logHint:
+      "Tap Nap or Night when {name} falls asleep, and Woke up when they wake. Didn't have a hand free? Pick how long ago above the buttons first, or a time — and the same buttons sit behind the + in the top bar.",
+    nap: "Nap",
+    night: "Night",
+    // The **When** row above the sleep buttons: the time the next tap
+    // stands for, for the sleep that is logged after it happened.
+    when: {
+      fell: "Fell asleep",
+      woke: "Woke up",
+      now: "Now",
+      ago: "{duration} ago",
+      pick: "Pick a time",
+      at: "at {time}",
+      problem: {
+        future: "That time hasn't happened yet.",
+        beforeStart: "That is before the sleep began at {start}.",
+        beforeLastSleep:
+          "That is before the last sleep ended at {end} — correct that one in the list first.",
+      },
+    },
+    wokeUp: "Woke up",
+    asleepNap: "Napping since {time}",
+    asleepNight: "Asleep for the night since {time}",
+    startedNap: "Nap from {time}",
+    startedNight: "Good night — asleep from {time}",
+    woke: "Woke up at {time} — logged",
+    saved: "Sleep saved",
+    removed: "Sleep removed",
+    recent: "The last 7 days",
+    recentHint:
+      "Grouped by the day each sleep belongs to — a night counts toward the evening it began. Correct a time tapped late, or add a sleep nobody logged.",
+    add: "Add a sleep",
+    dayToday: "Today",
+    span: "{start}–{end}",
+    spanOpen: "{start}–",
+    stillAsleep: "still asleep",
+    noneYet:
+      "Nothing logged yet. Tap Nap or Night when {name} falls asleep — the time is recorded for you.",
+    unfinished:
+      "A sleep from {date} at {time} was never ended. Set when {name} woke up, or remove it — until then it isn't counted.",
+    finish: "Set when it ended",
+    form: {
+      addTitle: "Add a sleep",
+      editTitle: "Edit sleep",
+      kind: "Nap or night",
+      start: "Fell asleep",
+      startTime: "Time fell asleep",
+      end: "Woke up",
+      endTime: "Time woke up",
+      stillAsleep: "Still asleep",
+      startMissing: "Enter when the sleep began",
+      endMissing: "Enter when it ended, or tick Still asleep",
+      inFuture: "That time hasn't happened yet",
+      endBeforeStart: "The end has to come after the start",
+      tooLong: "That is longer than any one sleep — check the dates",
+      save: "Save sleep",
+      deleteConfirm: "Remove this sleep?",
+    },
+    // Right now: the state, and the next sleep.
+    nowAsleep: "Asleep since {time} — {duration}",
+    nowAwake: "Awake since {time} — {duration}",
+    nightWaking: "Awake since {time} — a night waking",
+    nextNap: "Next nap around {time}",
+    nextBedtime: "Bedtime around {time}",
+    nextSleep: "Next sleep around {time}",
+    nextPassed: "{next} — any time now",
+    lastNight: "Last night {duration}",
+    average30: "{duration} a day over the last 30 days",
+    // The view.
+    now: "Right now",
+    window:
+      "At this age a child is usually awake about {min} to {max} between sleeps, feeding included.",
+    basisHistory:
+      "{name}'s own wake windows over the last two weeks put this one at about {window}.",
+    basisAge:
+      "Until there are a few days of {name}'s own sleeps to go on, the suggestion takes the middle of that range.",
+    shortNap:
+      "The last nap was short — under one sleep cycle — so the next sleep is likely to be wanted sooner.",
+    longNap:
+      "The last nap was long, so {name} can probably stay up toward the longer end.",
+    bedtimeNote:
+      "{name} usually goes down for the night around {time}, which is within reach from here — so the next sleep is the night.",
+    overdue:
+      "The suggested time has passed. Tired signs — yawning, rubbing eyes, staring, fussing — say more than the clock.",
+    // Galland et al. 2012, table 3: 1.7 night wakings at 0–2 months, still
+    // 0.7 at 1–2 years [ref:galland-2012].
+    nightWakingNote:
+      "Waking in the night is common through the first years. The next sleep is the rest of the night, so no time is suggested.",
+    suggestionHint:
+      "A suggestion from the last sleep, its length, and the usual awake time for the age — {name}'s tired signs come first.",
+    quiet:
+      "Nothing logged for a while. Tap Nap or Night on the Sleep tab when the next sleep begins.",
+    nothingToSuggest:
+      "Log a sleep and its end, and the next one is suggested here.",
+    noSuggestionAge:
+      "From about three, most children have dropped or are dropping the daytime nap, and a wake window stops being a useful way to plan the day.",
+    last24: "Last 24 hours",
+    last24Line: "{total} — {night} at night, {day} in naps",
+    averages: "Averages",
+    avg30: "Last 30 days",
+    avg90: "Last 90 days",
+    avgTotal: "{duration} a day",
+    avgSplit: "{night} at night · {day} in naps · {naps} naps a day",
+    avgDays: "from {count} logged days",
+    avgNone: "Nothing logged yet.",
+    recommended:
+      "The WHO recommends {low}–{high} hours in 24 hours at this age, naps included. Children observed in studies sleep {mean} hours on average, and 19 in 20 between {obsLow} and {obsHigh}.",
+    // One sentence per age band, each a source's own claim: the day–night
+    // rhythm and the 4–11 months split from 1177
+    // [ref:1177-barns-somn-i-olika-aldrar], with the melatonin rhythm
+    // appearing at 9–12 weeks [ref:kennaway-1992]; two naps to one at 18
+    // months [ref:iglowstein-2003]; the nap dropped between three and five
+    // [ref:galland-2012].
+    band: {
+      newborn:
+        "Newborns sleep round the clock in short stretches. A day–night rhythm usually appears between two and four months, when the nights start to lengthen.",
+      infant:
+        "1177 says most children of 4–11 months sleep 9–10 hours at night and 3–6 hours during the day.",
+      toddler:
+        "Most children move from two naps to one around 18 months; 1177 counts about two hours of daytime sleep between one and two.",
+      preschool:
+        "Between three and five most children drop the daytime nap; a quiet rest can take its place.",
+    },
+    status: {
+      within: "The 30-day average is within the recommended range.",
+      littleShort:
+        "The 30-day average is a little under the recommendation, but within what most children of this age are observed to sleep.",
+      littleLong:
+        "The 30-day average is a little over the recommendation, but within what most children of this age are observed to sleep.",
+      short:
+        "The 30-day average is under what 19 in 20 children of this age sleep. Check first that the naps are logged — a day with only the night entered reads short. If it is right, it is worth mentioning at BVC: a reason to look, not a verdict.",
+      long: "The 30-day average is over what 19 in 20 children of this age sleep. Worth mentioning at BVC if {name} is also hard to wake or unusually drowsy: a reason to look, not a verdict.",
+      tooEarly:
+        "A week of logged days is needed before the average is read against the recommendation.",
+    },
+    loggedNote:
+      "The averages count the days with anything logged, ending with the last full day. A day where only the night was entered reads as a day without naps.",
+    chart: "Last 14 days",
+    chartDesc:
+      "Sleep per day over the last two weeks: the night at the bottom of each column and the naps on top, over the recommended range for the age. A day nothing was logged for is left empty.",
+    chartReadout: "{total} · {night} night · {day} naps",
+    chartReadoutSoFar: "{total} so far · {night} night · {day} naps",
+    chartNothing: "nothing logged",
+    legendNight: "Night",
+    legendDay: "Naps",
+    legendRecommended: "Recommended",
+    diary: "Hour by hour",
+    diaryDesc:
+      "The last seven days, one row per day from midnight to midnight, with each logged sleep drawn where it fell: nights in the accent colour, naps lighter.",
+    sources:
+      "Sources: WHO, Guidelines on physical activity, sedentary behaviour and sleep for children under 5 (2019); Galland et al., Sleep Medicine Reviews (2012); awake times from Tresillian and Karitane (NSW Health); 1177.",
   },
 
   growth: {
@@ -514,13 +690,16 @@ export const en = {
       "Switch off what you don't use and its tab and cards disappear. Nothing is deleted — switch it back on and everything you entered is still there.",
     feature: {
       diapers: "Diapers",
+      sleep: "Sleep",
       growth: "Growth",
       food: "Food",
       vaccines: "Vaccines",
     },
     featureHint: {
       diapers:
-        "The Diapers tab, the + in the top bar, and the last 24 hours against the norm for the age.",
+        "The Diapers tab, the diaper buttons behind the + in the top bar, and the last 24 hours against the norm for the age.",
+      sleep:
+        "The Sleep tab, the sleep buttons behind the +, the averages against the recommendation for the age, and a suggested time for the next sleep.",
       growth:
         "Weight, length and head readings on the WHO curves, with the trend and the forecast.",
       food: "The daily food regimen and the milk, checked against the recommendation for the age and weight.",
@@ -578,7 +757,7 @@ export const en = {
     importFailed: "That file could not be read as a backup.",
     deleteAll: "Delete everything",
     deleteAllHint:
-      "Removes the child and every reading, diaper change, food and vaccination from this device. This cannot be undone.",
+      "Removes the child and every reading, diaper change, sleep, food and vaccination from this device. This cannot be undone.",
     deleteAllConfirm: "Delete the whole record on this device?",
     deleted: "Everything deleted",
     developer: "Developer",
@@ -587,7 +766,7 @@ export const en = {
       "Shows the demo document, the log capture switch, the app log, and the raw document size.",
     demoData: "Demo data",
     demoDataHint:
-      "Swap your record for an invented baby of seven and a half months with readings, diapers, a regimen and a vaccination card. In memory only: nothing is saved, nothing is synced, and reloading brings your own record back.",
+      "Swap your record for an invented baby of seven and a half months with readings, diapers, sleeps, a regimen and a vaccination card. In memory only: nothing is saved, nothing is synced, and reloading brings your own record back.",
     demoDataOn: "Showing demo data — reload to get yours back",
     demoDataOff: "Back to your own record",
     captureLogs: "Capture console output",
