@@ -28,7 +28,8 @@ publishes it (table updated April 2026):
 
 Two footnotes the app carries as row notes: the third rotavirus dose applies
 to the three-dose vaccine (RotaTeq, the nationally procured product since
-September 2023), and hepatitis B is not formally in the national programme
+September 2023 — Region Stockholm's guidance for BVC says so; Folkhälsomyndigheten
+names no product), and hepatitis B is not formally in the national programme
 but is recommended by Folkhälsomyndigheten and offered free by every region
 as part of the same hexavalent injection — so it is listed with the
 programme, where a parent sees it on the card.
@@ -37,7 +38,9 @@ programme, where a parent sees it on the card.
 born from 1 July 2025: two doses, with MPR at 18 months and in årskurs 1–2.
 The rows appear in the timeline only from that date and only for that cohort;
 until then chickenpox is listed among the extras as a self-paid option from
-twelve months.
+twelve months. Older children — born before 1 July 2025, up to seventeen —
+are offered a free catch-up from 1 March 2027 (the government's decision of
+June 2026), and the extra's label says so.
 
 ## Expected dates
 
@@ -55,17 +58,31 @@ know, and a row that turns red a day late would only alarm.
 
 Vaccinations offered to risk groups, by a region, or as a self-paid extra
 are listed separately so they can be recorded without muddling the
-programme's timeline: BCG (tuberculosis, from six weeks for risk groups), a
-hepatitis B birth dose, the RSV antibody nirsevimab (offered by the regions
-to newborns in season since 2025), influenza (risk groups, from six months),
-chickenpox, TBE (from three years in risk areas), meningococcal (risk groups),
-and an extra pneumococcal dose (risk groups) — plus "Other" for anything
-else, with a free-text label.
+programme's timeline: BCG (tuberculosis, at six weeks for risk groups, in
+the national risk-group programme since May 2025), a hepatitis B birth dose
+(for the children of a mother with hepatitis B), the RSV antibody nirsevimab
+(free in every region since autumn 2025, for babies born in the season),
+influenza (risk groups, from six months, each autumn), chickenpox, TBE (from
+three years in the risk areas, usually self-paid), meningococcal (risk
+groups; the youngest age any of the vaccines is approved for is six weeks),
+and an extra pneumococcal dose (risk groups, from two years) — plus "Other"
+for anything else, with a free-text label.
 
 ## Sources
 
-- Folkhälsomyndigheten, _Barnvaccinationsprogram_ and the A–Ö pages for
-  rotavirus, hepatit B, HPV, vattkoppor, tuberkulos, influensa, TBE and the
-  risk-group programmes (2025–2026).
-- 1177.se, _Vaccinationsprogrammet för barn_ (2025).
-- Rikshandboken barnhälsovård, the BVC vaccination pages.
+Every source is an entry in [`references.json`](references.json), cited in
+the code by its `[ref:<id>]` tag and listed for parents under Settings →
+About, with the words the ages were taken from:
+
+- Folkhälsomyndigheten: _Barnvaccinationsprogram_ (updated 16 April 2026),
+  the A–Ö pages for rotavirus, hepatit B, HPV, vattkoppor (and its page for
+  guardians), tuberkulos, influensa, TBE and meningokocker, the
+  recommendations on protecting newborns against RSV and their questions and
+  answers, and the 2026 recommendations on pneumococcal vaccination for risk
+  groups.
+- 1177.se: _Vaccinationsprogrammet för barn_ (2025-11-18) and _Vattkoppor_.
+- Rikshandboken barnhälsovård: _Barnvaccinationsprogrammet_.
+- Region Stockholm: _Rotavirusvaccination, information till vårdgivare_ (the
+  RotaTeq procurement).
+- Regeringskansliet: _Ikappvaccination ska ge fler barn skydd mot vattkoppor_
+  (18 June 2026).

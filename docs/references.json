@@ -317,6 +317,47 @@
       "note": "Last updated 5/12/2022. Adapted from Dad to Dad: Parenting Like a Pro (AAP 2012).",
       "usedBy": ["src/app/diapers.ts"]
     },
+    "albertsson-wikland-2020": {
+      "evidence": "cohort",
+      "authors": [
+        "Albertsson-Wikland K",
+        "Niklasson A",
+        "Holmgren A",
+        "Gelander L",
+        "Nierop AFM"
+      ],
+      "title": "A new Swedish reference for total and prepubertal height",
+      "container": "Acta Paediatrica",
+      "year": 2020,
+      "volume": "109",
+      "issue": "4",
+      "pages": "754–763",
+      "doi": "10.1111/apa.15129",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7154623/",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "Mean adult height was 168.6 cm for girls and 182.0 cm for boys; the sex‐difference in height was 13.4 cm.",
+          "at": "Results, 3.1"
+        },
+        {
+          "text": "Adult height, cm | 763 | 168.56 | 168.11‐169.02 | 6.40",
+          "at": "table 1A, girls (N, mean, 95% CI, SD)"
+        },
+        {
+          "text": "Adult height, cm | 809 | 182.0 | 181.6‐182.5 | 6.42",
+          "at": "table 1B, boys (N, mean, 95% CI, SD)"
+        }
+      ],
+      "supports": "The Swedish adult height, mean and SD per sex (men 182.0 ± 6.42 cm, women 168.56 ± 6.40 cm), the projected adult height is expressed on (ADULT_HEIGHT, adultHeightProjection).",
+      "summary": {
+        "en": "The newest Swedish height reference: how tall Swedish adults become on average, and how much they vary.",
+        "sv": "Den senaste svenska längdreferensen: hur långa svenska vuxna blir i genomsnitt och hur mycket de varierar."
+      },
+      "topics": ["growth"],
+      "note": "Open access. Table rows are copied cell by cell from the PMC HTML table; '|' separates cells. Proposed, not yet cited by the code.",
+      "usedBy": ["src/app/growth.ts", "src/app/i18n/en.ts"]
+    },
     "fohm-2026-pneumokockvaccination-riskgrupper": {
       "evidence": "guideline",
       "organization": "Folkhälsomyndigheten",
@@ -1058,6 +1099,36 @@
       "note": "Published January 2018, revised September 2024. llli.org answers plain HTTP clients with 403, so the text was read through a fetching tool that returned the page body; the quotes are from that copy.",
       "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
     },
+    "luo-1998": {
+      "evidence": "cohort",
+      "authors": ["Luo ZC", "Albertsson-Wikland K", "Karlberg J"],
+      "title": "Target height as predicted by parental heights in a population-based study",
+      "container": "Pediatric Research",
+      "year": 1998,
+      "volume": "44",
+      "issue": "4",
+      "pages": "563–571",
+      "doi": "10.1203/00006450-199810000-00016",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "A simple linear function of midparental height (x) was proposed to estimate target height (y): y = 45.99 + 0.78x (boys), y = 37.85+0.75x (girls), with a 95% predicted interval of about ±10 cm.",
+          "at": "abstract"
+        },
+        {
+          "text": "The model may underestimate the potential stature by about 2 cm for children with midparental height below -2 SDS, or 163 cm. In comparison, the Tanner method may lead to a 6-cm error in underestimating target height for these children.",
+          "at": "abstract"
+        }
+      ],
+      "supports": "The mid-parental target height (targetHeight: boys 45.99 + 0.78·x, girls 37.85 + 0.75·x) and its ±10 cm 95% interval (TARGET_HEIGHT_INTERVAL_CM), and the target the adult-height projection regresses toward (adultHeightProjection).",
+      "summary": {
+        "en": "The formula for the expected adult height from both parents' heights, and why the range around it is about ±10 cm.",
+        "sv": "Formeln för förväntad vuxenlängd utifrån båda föräldrarnas längd, och varför spannet runt den är ungefär ±10 cm."
+      },
+      "topics": ["growth"],
+      "note": "Only the abstract was read (nature.com/articles/pr1998502); the full text is paywalled. n = 2402, Swedish population-based.",
+      "usedBy": ["src/app/growth.ts", "src/app/i18n/en.ts"]
+    },
     "nhs-how-to-change-your-babys-nappy": {
       "evidence": "health-service",
       "organization": "NHS (England)",
@@ -1129,6 +1200,37 @@
       "topics": ["diapers"],
       "note": "Page last reviewed 30 April 2026. The page gives no count for days 3 and 4, and 'the first few weeks', not six weeks, for the two stools a day. It gives a count, not a maximum gap. It links Unicef UK's checklist for more guidance.",
       "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
+    },
+    "ong-2000": {
+      "evidence": "cohort",
+      "authors": ["Ong KK", "Ahmed ML", "Emmett PM", "Preece MA", "Dunger DB"],
+      "title": "Association between postnatal catch-up growth and obesity in childhood: prospective cohort study",
+      "container": "BMJ",
+      "year": 2000,
+      "volume": "320",
+      "issue": "7240",
+      "pages": "967–971",
+      "doi": "10.1136/bmj.320.7240.967",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC27335/",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "A gain in SD score for weight between zero and two years that was greater than 0.67 SD scores was taken to indicate clinically significant catch-up growth, as 0.67 SD scores represent the width of each percentile band on standard growth charts—that is, second to ninth percentile, ninth to 25th, 25th to 50th, and so on.",
+          "at": "Subjects and methods"
+        },
+        {
+          "text": "Similarly, a decrease in SD scores for weight by more than 0.67 SD scores indicated catch-down growth.",
+          "at": "Subjects and methods"
+        }
+      ],
+      "supports": "The two-thirds of an SD a child must move before the trend reads 'moving up' or 'moving down' (TREND_THRESHOLD_Z = 0.67, trend).",
+      "summary": {
+        "en": "Why a move of two-thirds of a standard deviation counts as a real change of channel rather than noise.",
+        "sv": "Varför en förflyttning på två tredjedels standardavvikelse räknas som ett verkligt kanalbyte och inte som brus."
+      },
+      "topics": ["growth"],
+      "note": "The abstract quote is from Europe PMC (the '30. 7%' spacing is theirs). The methods sentences were read from the PMC full text. The 0.67 is the spacing of the UK 1990 nine-centile chart lines (2nd, 9th, 25th, 50th …), not of a chart drawn in whole-SD lines.",
+      "usedBy": ["src/app/growth.ts", "src/app/i18n/en.ts"]
     },
     "paruthi-2016": {
       "evidence": "consensus",
@@ -1255,6 +1357,42 @@
       "note": "Godkänd 2025-04-01. Manusförfattare Elisabeth Hjärtmyr. Gives no starting day and no end to 'de första veckorna'.",
       "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
     },
+    "rikshandboken-avvikande-langdtillvaxt": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Avvikande längdtillväxt",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2023,
+      "url": "https://www.rikshandboken-bhv.se/halsobesok/halsoundersokning/tillvaxt/avvikande-langdtillvaxt/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Kriteriet för avvikelse är att barnets längd ligger utanför ±1,5 SDS i förhållande till medelföräldralängden.",
+          "at": "Avvikelse i förhållande till medelföräldralängd"
+        },
+        {
+          "text": "Kortvuxenhet mot ärftlighet … Längd SDS <-1.5 SD jämfört med medelföräldralängd",
+          "at": "Kriterier för remittering eller utredning, table"
+        },
+        {
+          "text": "Vi talar om att barnet tappar eller klättrar en kanal och här betyder kanal just linjerna i kurvan.",
+          "at": "Avvikelser i tillväxthastighet för längd"
+        },
+        {
+          "text": "Maximala avvikelser i vikt- och längplacering på kurvan i SD-score (95% konfidensintervall) … Per 3 mån … Per 6 mån … Per 12 mån … 0-3 mån 1,8 … 3-6 mån 1,2 … 6-9 mån 1,0 … 9-12 mån 0,75 … 12-18 mån 1,0 … 18-24 mån 0,75 … 2-4 år 0,75 … 4-7 år 0,5",
+          "at": "Kriterier för remittering eller utredning, table (flattened from the page)"
+        }
+      ],
+      "supports": "docs/growth.md's ±1.5 SD target-height referral criterion, and what a channel is in Swedish child health care (TREND_THRESHOLD_Z, the trend copy).",
+      "summary": {
+        "en": "When child health care looks closer at a child's length: when it is far from what the parents' heights predict, or has moved too far across the channels in a few months.",
+        "sv": "När barnhälsovården tittar närmare på ett barns längd: när den ligger långt från vad föräldrarnas längd förutsäger, eller har rört sig för långt mellan kanalerna på några månader."
+      },
+      "topics": ["growth"],
+      "note": "Godkänd 2023-01-31. The table is flattened in the page text; rows 0–12 months read as per 3 months, 12–24 months per 6 months, 2–7 years per 12 months.",
+      "usedBy": ["src/app/growth.ts"]
+    },
     "rikshandboken-barnvaccinationsprogrammet": {
       "evidence": "health-service",
       "organization": "Rikshandboken barnhälsovård (Inera)",
@@ -1352,6 +1490,99 @@
       "topics": ["sleep"],
       "note": "Godkänd 2025-11-04.",
       "usedBy": ["src/app/sleep.ts"]
+    },
+    "rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "Tillväxtkurvor och tillväxtreferenser",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2022,
+      "url": "https://www.rikshandboken-bhv.se/halsobesok/halsoundersokning/tillvaxt/tillvaxtkurvor-och-tillvaxtreferenser/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "För att kunna se barnets tillväxt i förhållande till föräldrarnas längder används ett nomogram för medelföräldralängd, se figur 3, beräknat utifrån formeln pojkar cm = 45,99 + 0,78x, flickor cm = 37,85 + 0,75x, x =längd cm mor + far/2.",
+          "at": "Medelföräldralängd"
+        },
+        {
+          "text": "Den äldre metoden, som finns i andra referenser, använder den enklare formeln där man beräknar ett barns mållängd genom att räkna ut medelföräldralängden och sedan dra ifrån 6,5 cm om det är en flicka eller addera den summan för en pojke.",
+          "at": "Medelföräldralängd"
+        },
+        {
+          "text": "De tillväxtreferenser som används i Sverige har SD-kurvor med linjer för medelvärdet samt 1, 2 och 3 SD under och ovan medelvärdet. Dessa linjer kan benämnas SD-kanaler eller vanligen tillväxtkanaler.",
+          "at": "Om normalfördelning och standarddeviationer"
+        },
+        {
+          "text": "År 2011 rekommenderade NEXT-gruppen att alla elektroniska journalsystem skall innehålla minst en av de två svenska referenserna samt WHO:s referens.",
+          "at": "Olika tillväxtreferenser i Sverige"
+        },
+        {
+          "text": "I det praktiska arbetet är skillnaderna inte så stora under BVC-åren mellan de olika kurvreferenserna. Det är, oavsett kurvreferens, förflyttningar på kurvan över tid, \"vandringar i kanaler\", som är av betydelse vid bedömning av tillväxt.",
+          "at": "Skillnader mellan olika tillväxtreferenser"
+        },
+        {
+          "text": "WHO har också tagit fram kurvor för huvudomfång, men dessa visar sig inte överensstämma med klinisk verklighet i Nordeuropeiska länder. Särskilt stor skillnad ses bland barn med större huvudomfång, varför WHO:s kurvor för huvudomfång inte rekommenderas.",
+          "at": "WHO:S kurvor för huvudomfång rekommenderas inte"
+        }
+      ],
+      "supports": "That BVC uses the Luo 1998 formula (targetHeight) and that the older parents' mean ± 6.5 cm rule is the one it replaced; that Swedish charts are drawn in SD channels; that WHO is the alternative reference in Swedish records; and that in the BVC years the references differ little and movement across channels is what matters (data/whoGrowth.ts header, trend).",
+      "summary": {
+        "en": "How Swedish child health care reads growth curves: in SD channels, against the parents' heights, and by how the child moves across the channels over time.",
+        "sv": "Hur barnhälsovården läser tillväxtkurvor: i SD-kanaler, mot föräldrarnas längd och utifrån hur barnet rör sig mellan kanalerna över tid."
+      },
+      "topics": ["growth"],
+      "note": "Godkänd 2022-08-08. The page advises against the WHO head circumference curves for Nordic children — see the report.",
+      "usedBy": [
+        "src/app/data/whoGrowth.ts",
+        "src/app/growth.ts",
+        "src/app/i18n/en.ts"
+      ]
+    },
+    "tanner-1956": {
+      "evidence": "cohort",
+      "authors": [
+        "Tanner JM",
+        "Healy MJR",
+        "Lockhart RD",
+        "MacKenzie JD",
+        "Whitehouse RH"
+      ],
+      "title": "Aberdeen growth study. I. The prediction of adult body measurements from measurements taken each year from birth to 5 years",
+      "container": "Archives of Disease in Childhood",
+      "year": 1956,
+      "volume": "31",
+      "issue": "159",
+      "pages": "372–381",
+      "doi": "10.1136/adc.31.159.372",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2011938/",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "Supine length, male … Adult 0·25 0·65 0·79 0·80 0·81 0·77",
+          "at": "p. 374, table 3A, correlation of adult length with length at 0, 1, 2, 3, 4, 5 years"
+        },
+        {
+          "text": "Supine length, female … Adult 0·29 0·70 0·74 0·78 0·82 0·81",
+          "at": "p. 374, table 3A, correlation of adult length with length at 0, 1, 2, 3, 4, 5 years"
+        },
+        {
+          "text": "Consider first supine length, the top line: there is a steep rise in adult correlation from birth to 1 year and a lesser but distinct rise from 1 to 2. After this the rise becomes quite small and the adult/5-year correlation is actually slightly below the adult/4-year correlation.",
+          "at": "p. 376"
+        },
+        {
+          "text": "Evidently birth measurements are very much less of a guide to future developments than are measurements taken at 1 year of age.",
+          "at": "p. 376"
+        }
+      ],
+      "supports": "The correlation between length at an age and adult height that the projected adult height keeps of the child's channel (HEIGHT_SDS_CORRELATION, heightCorrelationAt, adultHeightProjection).",
+      "summary": {
+        "en": "How closely a child's length at each age up to five predicts their adult height — loosely at birth, much more closely from one or two years.",
+        "sv": "Hur väl ett barns längd vid varje ålder upp till fem år förutsäger vuxenlängden – svagt vid födseln, betydligt bättre från ett eller två års ålder."
+      },
+      "topics": ["growth"],
+      "note": "Read from the scanned pages on PMC. Small sample: 42 men and 38 women born 1923–1927 in Aberdeen. Lengths at 4 and 5 years and in adulthood were measured standing and converted to supine.",
+      "usedBy": ["src/app/growth.ts", "src/app/i18n/en.ts"]
     },
     "tresillian-3-to-5-months": {
       "evidence": "health-service",
@@ -1494,6 +1725,84 @@
       "note": "Linked from NHS's 'is my baby getting enough milk?' page. The PDF carries no date; the upload path says October 2016. Table cells are quoted as the PDF's text layer reads them. Not currently cited by the code — proposed as the source for the ramp.",
       "usedBy": ["src/app/diapers.ts", "src/app/i18n/en.ts"]
     },
+    "who-2006": {
+      "evidence": "dataset",
+      "organization": "WHO Multicentre Growth Reference Study Group (World Health Organization)",
+      "title": "WHO Child Growth Standards: Length/height-for-age, weight-for-age, weight-for-length, weight-for-height and body mass index-for-age: Methods and development",
+      "container": "World Health Organization, Geneva",
+      "year": 2006,
+      "isbn": "924154693X",
+      "url": "https://iris.who.int/handle/10665/43413",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Since a standard defines how children should grow, deviations from the pattern it describes are evidence of abnormal growth. A reference, on the other hand, does not provide as sound a basis for such value judgments, although in practice references often are mistakenly used as standards.",
+          "at": "p. 1, Introduction"
+        },
+        {
+          "text": "The initial phase of the expert group's work documented the deficiencies of the reference and led to a plan for developing new growth charts that would show how children should grow in all countries rather than merely describing how they grew at a particular time and place.",
+          "at": "p. 1, Introduction"
+        },
+        {
+          "text": "The standard for linear growth has a part based on length (length-for-age, 0 to 24 months) and another on height (height-for-age, 2 to 5 years).",
+          "at": "p. xviii, Executive summary"
+        },
+        {
+          "text": "The average difference between the two measurements in this set of 1625 children was 0.73 cm. To fit a single model for the whole age range, 0.7 cm was therefore added to the cross-sectional height values before merging them with the longitudinal sample's length data. After the model was fitted, the median curve was shifted back downwards by 0.7 cm for ages above two years, and the coefficient of variation curve adjusted to the new median values to construct the height-for-age growth curves.",
+          "at": "p. xviii, Executive summary"
+        },
+        {
+          "text": "For all indicators, the tabulated fitted values of Box-Cox power, median and coefficient of variation corresponding to age (or length/height) t are denoted by L(t), M(t) and S(t), respectively.",
+          "at": "p. 301, section 7"
+        },
+        {
+          "text": "The following procedure is recommended to calculate a z-score for an individual child with measurement y at age (or length/height) t: 1. Calculate z_ind = ([y / M(t)]^L(t) − 1) / (S(t)L(t))",
+          "at": "p. 302, section 7 (the equation is typeset; transcribed here from the page)"
+        },
+        {
+          "text": "A restricted application of the LMS method was thus used for the construction of the WHO weight-based indicators, limiting the Box-Cox normal distribution to the interval corresponding to z-scores where empirical data were available (i.e. between -3 SD and 3 SD).",
+          "at": "p. 302, section 7"
+        }
+      ],
+      "supports": "The weight-for-age and length/height-for-age LMS tables in data/whoGrowth.ts (WEIGHT_FOR_AGE, LENGTH_FOR_AGE), the z-score and its inverse (zScore, valueAtZ), the SD channel curves (curveAtZ), recumbent length to 24 months and standing height after with the 0.7 cm step, and the prescriptive 'how children should grow' framing in docs/growth.md. Weight-for-age also gives the reference weight behind the food energy target (nutrition.ts via lmsAt).",
+      "summary": {
+        "en": "The WHO growth curves for weight and length that every reading is placed on — drawn from healthy, breastfed children in six countries to show how children grow in good conditions.",
+        "sv": "WHO:s tillväxtkurvor för vikt och längd som varje mätning placeras på – framtagna från friska, ammade barn i sex länder för att visa hur barn växer under goda förhållanden."
+      },
+      "topics": ["growth", "food"],
+      "note": "PDF: https://iris.who.int/server/api/core/bitstreams/b9a488f7-c337-4c75-a254-8a7d11846f8c/content (coordinating team: Mercedes de Onis et al.). The weight-based z-score has a second step the app does not apply: beyond ±3 SD the WHO replaces the LMS tail with a linear one (z*_ind, p. 302).",
+      "usedBy": ["src/app/data/whoGrowth.ts", "src/app/growth.ts"]
+    },
+    "who-2007": {
+      "evidence": "dataset",
+      "organization": "WHO Multicentre Growth Reference Study Group (World Health Organization)",
+      "title": "WHO Child Growth Standards: Head circumference-for-age, arm circumference-for-age, triceps skinfold-for-age and subscapular skinfold-for-age: Methods and development",
+      "container": "World Health Organization, Geneva",
+      "year": 2007,
+      "isbn": "9789241547185",
+      "url": "https://iris.who.int/handle/10665/43706",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Since a standard defines how children should grow, deviations from the pattern it describes are evidence of abnormal growth.",
+          "at": "p. 1, Introduction"
+        },
+        {
+          "text": "For this indicator, L(t) is equal to 1, simplifying the Box-Cox normal distribution used in the LMS method (Cole and Green, 1992) to the normal distribution.",
+          "at": "p. 209, section 7, 'Centiles and z-scores for head circumference-for-age'"
+        }
+      ],
+      "supports": "The head-circumference-for-age LMS table in data/whoGrowth.ts (HEAD_FOR_AGE) and the head circumference view of the Growth chart.",
+      "summary": {
+        "en": "The WHO growth curves for head circumference — which Swedish child health care does not use, and the app says so.",
+        "sv": "WHO:s tillväxtkurvor för huvudomfång — som barnhälsovården inte använder, vilket appen säger."
+      },
+      "topics": ["growth"],
+      "note": "PDF: https://iris.who.int/server/api/core/bitstreams/0c57f82c-feec-4211-9cf5-7467b94a8e20/content. Rikshandboken (rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser) does not recommend the WHO head circumference curves for Nordic children.",
+      "usedBy": ["src/app/data/whoGrowth.ts", "src/app/growth.ts"]
+    },
     "who-2019-under5": {
       "evidence": "guideline",
       "organization": "World Health Organization",
@@ -1528,6 +1837,73 @@
       },
       "topics": ["sleep"],
       "usedBy": ["src/app/i18n/en.ts", "src/app/sleep.ts"]
+    },
+    "who-child-growth-standards": {
+      "evidence": "dataset",
+      "organization": "World Health Organization",
+      "title": "Child growth standards: weight-for-age, length/height-for-age, head circumference-for-age (tables and expanded tables)",
+      "container": "who.int",
+      "year": 2006,
+      "url": "https://www.who.int/tools/child-growth-standards/standards",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "The tables provided for constructing curves are in days for age-based indicators. To convert this scale to months in producing the charts, the correct conversion is 1 month = 30.4375 days",
+          "at": "Instructions for the expanded tables, note 2"
+        },
+        {
+          "text": "Length/height-for-age charts present discontinuity between 730 and 731 days, as the measurement changes from recumbent length to standing height at the age of two years.",
+          "at": "Instructions for the expanded tables, note 1"
+        },
+        {
+          "text": "The age-based indicator tables extend to one day before 61 completed months, i.e., to 1856 days (equivalent to 60.98 months) to accommodate up to 60 completed months.",
+          "at": "Instructions for the expanded tables, note 3"
+        }
+      ],
+      "supports": "The WHO's month of 30.4375 days (DAYS_PER_MONTH in age.ts), which every WHO-indexed age in the app is converted with, and the monthly LMS files data/whoGrowth.ts is generated from (wfa_*_0-to-5-years_zscores.xlsx, lhfa_*_0-to-2-years / 2-to-5-years_zscores.xlsx, hcfa-*-0-5-zscores.xlsx).",
+      "summary": {
+        "en": "The WHO's published growth tables, and its rule that a month is 30.4375 days.",
+        "sv": "WHO:s publicerade tillväxttabeller och deras regel att en månad är 30,4375 dagar."
+      },
+      "topics": ["growth", "food"],
+      "note": "Instructions sheet: https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/indicators/instructions-en.pdf. The WHO Anthro for PC manual v3.2.2 (2011), §3.2.1, says the same: 'one month (365.25 divided by 12 [months]) is equal to 30.4375 days' (https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/software/anthro-pc-manual-v322.pdf). All 366 monthly rows in data/whoGrowth.ts were checked against the current xlsx files and match exactly.",
+      "usedBy": ["src/app/age.ts", "src/app/data/whoGrowth.ts"]
+    },
+    "wikland-2002": {
+      "evidence": "cohort",
+      "authors": [
+        "Albertsson Wikland K",
+        "Luo ZC",
+        "Niklasson A",
+        "Karlberg J"
+      ],
+      "title": "Swedish population-based longitudinal reference values from birth to 18 years of age for height, weight and head circumference",
+      "container": "Acta Paediatrica",
+      "year": 2002,
+      "volume": "91",
+      "issue": "7",
+      "pages": "739–754",
+      "doi": "10.1111/j.1651-2227.2002.tb03322.x",
+      "language": "en",
+      "quotes": [
+        {
+          "text": "For instance, at 18 y of age, the updated height and weight reference values are 180.4 cm for males and 167.7 cm for females, i.e. 1.9 cm taller and 5.7 kg heavier for males and 2.3 cm taller and 3.4 kg heavier for females compared with the previous reference values.",
+          "at": "abstract"
+        },
+        {
+          "text": "The data came from a large longitudinal growth study on 3650 full-term healthy Swedish children who were born between 1973 and 1975.",
+          "at": "abstract"
+        }
+      ],
+      "supports": "The Swedish reference BVC plots on (the 'Göteborg 1974' cohort), named where the app explains why it draws the WHO standards instead.",
+      "summary": {
+        "en": "The Swedish growth reference child health care plots on, beside the WHO curves the app draws.",
+        "sv": "Den svenska tillväxtreferens barnhälsovården använder, vid sidan av WHO:s kurvor som appen ritar."
+      },
+      "topics": ["growth"],
+      "note": "Only the abstract was read (PubMed 12200898); the full text is paywalled. PubMed lists the legacy DOI 10.1080/08035250213216, which Crossref no longer resolves; the Wiley DOI above does. The SDs 6.6 and 6.0 in ADULT_HEIGHT could not be checked against this paper.",
+      "usedBy": ["src/app/data/whoGrowth.ts"]
     }
   }
 }

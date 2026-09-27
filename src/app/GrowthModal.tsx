@@ -135,6 +135,11 @@ export function GrowthModal({ open, onClose, data, today, standards }: Props) {
                 indicator: t(`growth.${indicator}` as const),
               })}
             />
+            {indicator === "head" && (
+              <p className="mt-2 text-xs leading-snug text-muted">
+                {t("growth.headCaveat")}
+              </p>
+            )}
           </Card>
 
           {seriesTrend && (

@@ -442,6 +442,7 @@ export const en = {
       "One reading so far. The trend — whether {name} keeps following the same channel — is what matters, and it needs a few readings some weeks apart.",
     trendSteady:
       "Following the channel: {z} now, {delta} over the last {days} days.",
+    // Two-thirds of an SD, the catch-up threshold [ref:ong-2000].
     trendUp:
       "Moving up across the channels: {z} now, {delta} over the last {days} days. Crossing a channel is worth mentioning at the next visit.",
     trendDown:
@@ -454,17 +455,25 @@ export const en = {
     forecastAt: "By {date}: about {value} (likely {low}–{high})",
     target: "Expected adult height",
     targetValue: "About {cm} — roughly {low} to {high}.",
+    // [ref:luo-1998] [ref:rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser]
     targetHint:
       "From both parents' heights, with the formula Swedish child health care uses (Luo, Albertsson-Wikland & Karlberg 1998). The range is wide because it is: about ±10 cm for 19 children in 20.",
     targetMissing:
       "Add both parents' heights under Your child to see the expected adult height.",
     projection: "Projected adult height from {name}'s own growth",
     projectionValue: "About {cm} — likely {low} to {high}.",
+    // How much of the channel is kept [ref:tanner-1956], on the Swedish
+    // adult reference [ref:albertsson-wikland-2020].
     projectionHint:
       "From the current length channel ({z}), kept at {share} of its weight because length at this age only loosely predicts adult height, and regressed the rest of the way toward the parents' target. A fun estimate with honest bars, not a prognosis.",
     projectionHintNoParents:
       "From the current length channel ({z}), kept at {share} of its weight because length at this age only loosely predicts adult height, and regressed the rest of the way toward the average. Add both parents' heights to anchor it.",
     projectionMissing: "Add a length reading to project an adult height.",
+    // Under the head circumference chart: BVC does not recommend the WHO's
+    // head curves for Northern European children
+    // [ref:rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser].
+    headCaveat:
+      "Swedish child health care does not use the WHO curves for head circumference: they fit children in Northern Europe poorly, those with larger heads most of all. Read the channel here with that in mind — the child health centre's own curve is the one to go by.",
     outOfRange:
       "The standards cover the first five years; later readings are listed but not placed.",
     form: {

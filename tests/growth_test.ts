@@ -296,20 +296,23 @@ describe("adultHeightProjection", () => {
   };
 
   it("keeps more of the channel the older the child", () => {
-    expect(heightCorrelationAt(0)).toBeCloseTo(0.25, 6);
-    expect(heightCorrelationAt(9)).toBeCloseTo(0.5, 6);
-    expect(heightCorrelationAt(24)).toBeCloseTo(0.7, 6);
-    expect(heightCorrelationAt(120)).toBeCloseTo(0.8, 6);
+    // Tanner et al. 1956, table 3A: the boys' and girls' rows averaged.
+    expect(heightCorrelationAt(0)).toBeCloseTo(0.27, 6);
+    expect(heightCorrelationAt(6)).toBeCloseTo((0.27 + 0.675) / 2, 6);
+    expect(heightCorrelationAt(12)).toBeCloseTo(0.675, 6);
+    expect(heightCorrelationAt(24)).toBeCloseTo(0.765, 6);
+    expect(heightCorrelationAt(48)).toBeCloseTo(0.815, 6);
+    expect(heightCorrelationAt(120)).toBeCloseTo(0.79, 6);
   });
 
   it("shrinks a tall channel toward the target and widens with youth", () => {
     const young = adultHeightProjection(child, 1.5, 6)!;
     const older = adultHeightProjection(child, 1.5, 36)!;
     // Both sit above the parental target (180.93) and below the raw channel
-    // (180.4 + 1.5 × 6.6 = 190.3).
+    // (182.0 + 1.5 × 6.42 = 191.63).
     expect(young.cm).toBeGreaterThan(180.93);
     expect(older.cm).toBeGreaterThan(young.cm);
-    expect(older.cm).toBeLessThan(190.3);
+    expect(older.cm).toBeLessThan(191.63);
     expect(young.high - young.low).toBeGreaterThan(older.high - older.low);
     expect(young.withParents).toBe(true);
   });
@@ -317,7 +320,8 @@ describe("adultHeightProjection", () => {
   it("regresses to the population mean without the parents", () => {
     const noParents = { ...child, motherHeightCm: null, fatherHeightCm: null };
     const p = adultHeightProjection(noParents, 0, 24)!;
-    expect(p.cm).toBeCloseTo(180.4, 6);
+    // The 2020 Swedish reference's adult mean for men.
+    expect(p.cm).toBeCloseTo(182.0, 6);
     expect(p.withParents).toBe(false);
     expect(adultHeightProjection(child, null, 24)).toBeNull();
   });

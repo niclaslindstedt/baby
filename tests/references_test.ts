@@ -89,15 +89,10 @@ describe("the references, as the Sources screen lists them", () => {
     ]);
   });
 
-  it("groups by tracker in the bar's order, and names the trackers still to come", () => {
+  it("groups by tracker in the bar's order, with every tracker listed", () => {
     const groups = byTopic(list, FEATURES);
-    expect(groups.map((g) => g.topic)).toEqual([
-      "diapers",
-      "sleep",
-      "food",
-      "vaccines",
-    ]);
-    expect(unlistedTopics(list, FEATURES)).toEqual(["growth"]);
+    expect(groups.map((g) => g.topic)).toEqual([...FEATURES]);
+    expect(unlistedTopics(list, FEATURES)).toEqual([]);
   });
 
   it("cites a paper by its authors and journal, and links its DOI", () => {

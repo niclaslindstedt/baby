@@ -3,12 +3,18 @@
 // moving across it, where the next readings are likely to land, and how tall
 // the parents say the child will be.
 //
+// Every source is an entry in `docs/references.json`, cited here by its
+// `[ref:<id>]` tag — the verbatim quotes live there, and `docs/growth.md` is
+// the prose account.
+//
 // Everything here is expressed in **z-scores** (standard deviations from the
-// median of the WHO Child Growth Standards for the child's sex and exact age)
+// median of the WHO Child Growth Standards for the child's sex and exact age
+// [ref:who-2006] [ref:who-2007])
 // and only converted back to kilograms and centimetres at the edge. That is
 // the same language Swedish child health care plots in — the BVC curves are
 // drawn as SD channels, and what matters clinically is not a single reading
-// but movement across channels over time. It is also what makes forecasting
+// but movement across channels over time
+// [ref:rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser]. It is also what makes forecasting
 // tractable: growth decelerates sharply over the first year, so a straight
 // line through kilograms is wrong within weeks, but a child's *channel* is
 // roughly stable, and a line through z-scores is a claim about the one thing
@@ -18,10 +24,17 @@
 //
 // The standards publish, per sex and completed month, the Box-Cox power `L`,
 // the median `M` and the coefficient of variation `S`. A measurement `x` at
-// that age has `z = ((x/M)^L − 1) / (L·S)`, and a z-score turns back into a
-// measurement with `x = M·(1 + L·S·z)^(1/L)`. Between the published months
-// the three parameters are interpolated linearly — the WHO's own daily tables
-// are within rounding of that.
+// that age has `z = ((x/M)^L − 1) / (L·S)` [ref:who-2006], and a z-score
+// turns back into a measurement with `x = M·(1 + L·S·z)^(1/L)`. Between the
+// published months the three parameters are interpolated linearly. That is
+// close to the WHO's own daily tables from about three months (within a few
+// hundredths of an SD) but not before: in the first month, when growth is
+// fastest, a reading can sit up to about a quarter of an SD away from where
+// the daily table puts it, and in the month after the second birthday the
+// step from recumbent length to standing height is spread across the month
+// rather than taken at day 731. The WHO also restricts the weight z-score
+// beyond ±3 SD; the app does not, and a reading that far out is one for the
+// child health centre, not for the decimal.
 //
 // ## The forecast
 //
@@ -51,13 +64,15 @@
 // ## The target height
 //
 // The mid-parental target height uses the regression Swedish child health
-// care uses (Luo, Albertsson-Wikland & Karlberg 1998, as reproduced in
-// Rikshandboken barnhälsovård): boys 45.99 + 0.78·x, girls 37.85 + 0.75·x,
-// where x is the mean of the parents' heights. It is a shrinkage regression
-// — tall parents have children a little less tall than themselves — with a
-// 95% prediction interval of about ±10 cm. (The older textbook rule, the
-// parents' mean ± 6.5 cm, is what most people know; it is close, and this
-// one is the one BVC's nomogram is drawn from.)
+// care uses (Luo, Albertsson-Wikland & Karlberg 1998 [ref:luo-1998], as
+// reproduced in Rikshandboken barnhälsovård
+// [ref:rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser]): boys
+// 45.99 + 0.78·x, girls 37.85 + 0.75·x, where x is the mean of the parents'
+// heights. It is a shrinkage regression — tall parents have children a
+// little less tall than themselves — with a 95% prediction interval of about
+// ±10 cm. (The older textbook rule, the parents' mean ± 6.5 cm, is what most
+// people know; it is close, and this one is the one BVC's nomogram is drawn
+// from.)
 //
 // Pure and clock-free. The standards are a parameter rather than an import:
 // they are a few hundred rows nobody needs before the Growth screen is open,
@@ -239,8 +254,14 @@ export type Trend = {
  *  cross, longer than a scale's bad morning. */
 export const TREND_SPAN_DAYS = 60;
 
-/** How much of a channel a child has to move before the screen calls it a
- *  trend. Two-thirds of an SD is one channel on the chart. */
+/** How much a child has to move before the screen calls it a trend.
+ *  Two-thirds of an SD is the conventional threshold for clinically
+ *  significant catch-up or catch-down growth — the width of one centile band
+ *  on a centile chart (Ong et al. 2000) [ref:ong-2000] — so two-thirds of a
+ *  channel on this chart, whose lines are a whole SD apart. Well inside what
+ *  BVC treats as normal movement in the first year
+ *  [ref:rikshandboken-avvikande-langdtillvaxt], which is why the copy only
+ *  calls it worth mentioning at the next visit. */
 export const TREND_THRESHOLD_Z = 0.67;
 
 /** Read the trend off a series of placed readings. */
@@ -444,7 +465,7 @@ export type TargetHeight = {
   high: number;
 };
 
-/** How wide the target's 95% interval is, either side. */
+/** How wide the target's 95% interval is, either side [ref:luo-1998]. */
 export const TARGET_HEIGHT_INTERVAL_CM = 10;
 
 /** The mid-parental target height for the child, or null while either
@@ -470,12 +491,13 @@ export function targetHeight(child: Child): TargetHeight | null {
 // wants — and it reads the child's own channel: a two-year-old on the +1 SD
 // length curve is more likely than not to end up a tall adult.
 //
-// How much more likely depends on the age. Length in infancy still carries
-// birth size and is only loosely tied to adult height; by two to three
-// years the correlation between height SDS and adult height SDS is around
-// 0.7, and it climbs toward 0.8 through the preschool years (the Swedish and
-// Finnish longitudinal growth studies, and Tanner's classic tables, all land
-// in that region). So the child's channel is *shrunk* toward the population
+// How much more likely depends on the age. Length at birth is only loosely
+// tied to adult height — a correlation of about a quarter — and the tie
+// tightens steeply through the first year and more slowly after: close to
+// 0.8 from two, and around 0.8 through the preschool years (Tanner et al.
+// 1956, the Aberdeen growth study [ref:tanner-1956]; a small sample, born in
+// the 1920s, and still the one published table of these correlations from
+// birth). So the child's channel is *shrunk* toward the population
 // mean by that correlation — the further from adulthood, the more the
 // estimate regresses to the mean — and the remainder is taken from the
 // mid-parental target when the parents' heights are known, since that is the
@@ -485,24 +507,25 @@ export function targetHeight(child: Child): TargetHeight | null {
 // of adult height given a reading at this age, on the Swedish adult SD.
 // This is a fun estimate with honest bars, not a prognosis.
 
-/** The adult reference: mean and SD of adult height in Sweden, per sex
- *  (Wikland et al. 2002 at 18 years: men 180.4 cm, women 167.7 cm; the SDs
- *  are the usual 6.6 and 6.0). */
+/** The adult reference: mean and SD of adult height in Sweden, per sex —
+ *  the 2020 Swedish reference, table 1: men 182.0 ± 6.42 cm, women
+ *  168.56 ± 6.40 cm [ref:albertsson-wikland-2020]. */
 const ADULT_HEIGHT: Record<Sex, { mean: number; sd: number }> = {
-  male: { mean: 180.4, sd: 6.6 },
-  female: { mean: 167.7, sd: 6.0 },
+  male: { mean: 182.0, sd: 6.42 },
+  female: { mean: 168.56, sd: 6.4 },
 };
 
-/** Approximate correlation between length/height SDS at an age and adult
- *  height SDS, by age in months. Piecewise-linear between the anchors. */
+/** The correlation between length at an age and adult height, by age in
+ *  months: Tanner et al. 1956, table 3A, the mean of the boys' and girls'
+ *  rows at birth and each birthday to five [ref:tanner-1956].
+ *  Piecewise-linear between the anchors. */
 const HEIGHT_SDS_CORRELATION: readonly [number, number][] = [
-  [0, 0.25],
-  [6, 0.45],
-  [12, 0.55],
-  [18, 0.62],
-  [24, 0.7],
-  [36, 0.75],
-  [60, 0.8],
+  [0, 0.27],
+  [12, 0.675],
+  [24, 0.765],
+  [36, 0.79],
+  [48, 0.815],
+  [60, 0.79],
 ];
 
 /** The correlation at an age, interpolated. */

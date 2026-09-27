@@ -36,21 +36,39 @@ the morning is not a warning; a rolling day asks the question the nurse asks
 
 ## The floors, by age
 
-| Age                | Fewest wet diapers in 24 h | Dirty-diaper gap worth a look     | Source                                                                                                       |
-| ------------------ | -------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| Day 1 / 2 / 3 / 4  | 1 / 2 / 3 / 4              | No stool within 48 hours of birth | NHS, La Leche League, AAP for the ramp; 1177 for the meconium deadline                                       |
-| Day 5 – 6 weeks    | 6                          | More than 48 hours                | 1177 ("minst sex gånger per dag"), Rikshandboken ("kissar ljust minst 6 gånger varje dygn"); NHS for the gap |
-| 6 weeks – 6 months | 5                          | None from the interval alone      | La Leche League ("five to six"), AAP ("fewer than six" as a dehydration sign)                                |
-| 6 – 12 months      | 5                          | More than 4 days                  | Same; 1177's constipation definition (fewer than three a week, hard stools) once solids begin                |
-| From 1 year        | 4 (soft)                   | More than 4 days                  | The sources give no toddler count; a toddler's diaper is dry for longer, and the copy says so                |
+| Age                | Fewest wet diapers in 24 h | Dirty-diaper gap worth a look     | Source                                                                                                                              |
+| ------------------ | -------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Day 1 / 2 / 3 / 4  | 1 / 2 / 3 / 3              | No stool within 48 hours of birth | Unicef UK's checklist and La Leche League for the ramp; 1177 for the first pee within a day and the meconium within two days        |
+| Day 5 – 6 weeks    | 6                          | More than 48 hours                | NHS and La Leche League ("from day 5"); 1177 ("minst sex gånger per dag"), Rikshandboken ("kissar ljust minst 6 gånger varje dygn") |
+| 6 weeks – 6 months | 5                          | None from the interval alone      | La Leche League ("five to six diapers per day" after about six weeks)                                                               |
+| 6 – 12 months      | 5                          | More than 4 days                  | Same; once solids begin, Rikshandboken's "en avföring varannan dag" and 1177's signs of constipation                                |
+| From 1 year        | 4 (soft)                   | More than 4 days                  | The sources give no toddler count; a toddler's diaper is dry for longer, and the copy says so                                       |
 
-For a **breastfed** baby past six weeks the dirty-diaper interval is not a
-signal on its own — 1177: "tio–tolv dagar eller längre", Rikshandboken:
+The 48 hours in the first six weeks is not a quoted gap: the sources give
+counts — at least two stools a day from the fourth day for a breastfed baby
+(NHS), at least once a day in the first month (AAP), while a formula-fed baby
+"may go 1 to 2 days between bowel movements" (AAP) — and 48 hours is the
+cautious gap those counts allow.
+
+For a **breastfed** baby from six weeks the dirty-diaper interval is not a
+signal on its own — 1177: "tio-tolv dagar eller längre", Rikshandboken:
 "10–14 dagar" — so the gap is only mentioned beyond fourteen days, whatever
-the age band says. The warning copy points at the signs that matter (hard
+the age band says, until solids begin at six months. From then the stool
+pattern moves toward "en avföring varannan dag" (Rikshandboken), and a
+breastfed child's gap is read like any other. The warning copy points at the signs that matter (hard
 stools, an uncomfortable baby; light diapers, dark urine) rather than at the
 count alone, and the source of the floor is quoted under it.
 
 These are the cautious end of what the sources allow. A warning is "worth a
 look", never a diagnosis: the sources pair the counts with weight gain, the
 urine's colour, tears and a dry mouth, and so does the copy.
+
+## Sources
+
+Every source above is an entry in [`references.json`](references.json), cited
+in the code by its `[ref:<id>]` tag and listed for parents under Settings →
+About, with the words the floors were taken from: 1177's pages on
+breastfeeding, formula, the newborn's body, the first week's pee and poo and
+constipation; Rikshandboken's pages on breastfeeding and constipation; the
+NHS, Unicef UK and La Leche League pages on whether a baby gets enough milk;
+and the AAP's page on infant constipation.

@@ -12,15 +12,17 @@ chart.
 
 The app knows roughly how many wet and dirty diapers a baby of your child's
 age produces — from the first days, when the count rises with the milk, to
-the "at least six wet diapers a day" Swedish child health care quotes from
-day five, to the heavier and fewer diapers after six weeks. It reads the last
+at least six wet diapers a day from day five — the count Swedish child health
+care quotes too — to the heavier and fewer diapers after six weeks. It reads the last
 24 hours against that, and when the day looks thin, or the gap since the last
 dirty diaper is longer than usual for the age and feeding, the Diapers card
 on Today warms and the view behind it says so, naming the sign to look for:
 light diapers or dark urine, hard stools or an uncomfortable baby.
 
-A breastfed baby past six weeks can go many days between dirty diapers, and
-the app knows that too — the gap is only mentioned beyond two weeks. Every
+A breastfed baby between six weeks and six months can go many days between
+dirty diapers, and the app knows that too — the gap is only mentioned beyond
+two weeks, until solids begin. Every
 floor is the cautious end of what the sources allow, and a warning is worth a
-look, never a diagnosis. The details and the sources are in
-[the diapers documentation](../diapers.md).
+look, never a diagnosis. The details are in
+[the diapers documentation](../diapers.md), and every source — with the words
+the floors were taken from — is listed under Settings → About and sources.
