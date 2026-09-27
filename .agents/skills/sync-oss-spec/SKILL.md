@@ -31,19 +31,20 @@ git diff --name-only "${BASELINE:-$(git rev-list --max-parents=0 HEAD)}"..HEAD -
    ```
 
 2. Read the **whole** output: the "Structural violations" list names a spec section and an exact path per line; the "Agent review checklist" is the qualitative half the script cannot check, and it is part of the run.
-3. Compare the spec version in `OSS_SPEC.md`'s front matter with the one the script says it is pinned against; a newer spec may carry mandates the script does not check yet — read its changelog section.
+3. Leave §11.3's SEO mandates unmet on purpose — no `seo`/`lighthouse` workflows, sitemap, JSON-LD, `llms.txt` or page-weight budget: no SEO and no size budgets, by owner decision, and the site carries `noindex`.
+4. Compare the spec version in `OSS_SPEC.md`'s front matter with the one the script says it is pinned against; a newer spec may carry mandates the script does not check yet — read its changelog section.
 
 ## Mapping
 
-| Violation names…                      | Fix in…                                                                                |
-| ------------------------------------- | -------------------------------------------------------------------------------------- |
-| A missing root file (§2–§9)           | Add it, modelled on the sibling `meds` repo's copy                                     |
-| A `.md` that must be a symlink (§7.1) | `ln -sfn AGENTS.md <name>`; `.github/copilot-instructions.md` links `../AGENTS.md`     |
-| A missing workflow (§10, §11.3.10)    | `.github/workflows/` — copy the sibling's and rename the app's identity                |
-| SEO / PWA scaffolding (§11.3, §11.4)  | `index.html`, `public/`, `pwa-plugin.ts`, `scripts/check-seo.mjs`, `lighthouserc.json` |
-| `.agents/skills` (§21)                | The skill's `SKILL.md` sections, its `.last-updated`, the `maintenance` registry       |
-| Test naming or file size (§20)        | Rename to `*_test.ts`; split the file by concern                                       |
-| A README section (§3)                 | `README.md` — run `update-readme` if the surface itself moved                          |
+| Violation names…                      | Fix in…                                                                            |
+| ------------------------------------- | ---------------------------------------------------------------------------------- |
+| A missing root file (§2–§9)           | Add it, modelled on the sibling `meds` repo's copy                                 |
+| A `.md` that must be a symlink (§7.1) | `ln -sfn AGENTS.md <name>`; `.github/copilot-instructions.md` links `../AGENTS.md` |
+| A missing workflow (§10)              | `.github/workflows/` — copy the sibling's and rename the app's identity            |
+| PWA scaffolding (§11.4)               | `index.html`, `public/`, `pwa-plugin.ts`                                           |
+| `.agents/skills` (§21)                | The skill's `SKILL.md` sections, its `.last-updated`, the `maintenance` registry   |
+| Test naming or file size (§20)        | Rename to `*_test.ts`; split the file by concern                                   |
+| A README section (§3)                 | `README.md` — run `update-readme` if the surface itself moved                      |
 
 ## Update checklist
 

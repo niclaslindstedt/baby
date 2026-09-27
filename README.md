@@ -3,7 +3,6 @@
 > A local-first baby health and nutrition tracker for parents in Sweden — is the food regimen still enough, is the baby growing along the curve, how many diapers today, how much sleep and when the next nap, and which vaccination comes next. No account, no server.
 
 [![ci](https://github.com/niclaslindstedt/baby/actions/workflows/ci.yml/badge.svg)](https://github.com/niclaslindstedt/baby/actions/workflows/ci.yml)
-[![seo](https://github.com/niclaslindstedt/baby/actions/workflows/seo.yml/badge.svg)](https://github.com/niclaslindstedt/baby/actions/workflows/seo.yml)
 [![pages](https://github.com/niclaslindstedt/baby/actions/workflows/pages.yml/badge.svg)](https://github.com/niclaslindstedt/baby/actions/workflows/pages.yml)
 [![license](https://img.shields.io/badge/license-PolyForm--Noncommercial--1.0.0-blue.svg)](LICENSE)
 

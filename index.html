@@ -28,7 +28,10 @@
       name="description"
       content="Baby is a local-first baby health and nutrition tracker for parents in Sweden. Keep a simple daily food regimen and see whether it still covers your baby's needs as they grow, plot weight, length and head circumference on standard growth curves, log diapers and sleep in one tap, see sleep against the recommendation for the age with a suggested time for the next nap, and follow the Swedish childhood vaccination timeline. Everything stays on your device unless you connect your own Dropbox, and then it is encrypted with your own passphrase first."
     />
-    <link rel="canonical" href="https://baby.niclaslindstedt.se/" />
+    <!-- The web edition is not meant to be found: people find the app on the
+         App Store and apps.agilator.se, so search engines are asked not to
+         index this page (robots.txt still allows the fetch that reads it). -->
+    <meta name="robots" content="noindex" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -54,21 +57,6 @@
       name="twitter:image"
       content="https://baby.niclaslindstedt.se/og.png"
     />
-
-    <!-- JSON-LD -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Baby",
-        "applicationCategory": "HealthApplication",
-        "operatingSystem": "Any",
-        "description": "A local-first baby health and nutrition tracker PWA for parents in Sweden: a daily food regimen checked against age-appropriate recommendations, growth on standard curves, one-tap diaper and sleep logging with sleep averages against the WHO recommendation and a suggested next nap, and the Swedish childhood vaccination timeline. Optional end-to-end encrypted Dropbox sync.",
-        "url": "https://baby.niclaslindstedt.se/",
-        "image": "https://baby.niclaslindstedt.se/og.png",
-        "offers": { "@type": "Offer", "price": "0" }
-      }
-    </script>
   </head>
   <body>
     <div id="root"></div>
