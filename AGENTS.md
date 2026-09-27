@@ -220,7 +220,16 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
 - `src/app/useSyncEngine.ts` — the sync engine over the framework's storage
   adapters plus the app's own `idbAdapter.ts`: local, IndexedDB, a picked
   folder, Dropbox. Suspended wholesale while demo data has
-  taken over storage.
+  taken over storage. A copy in the folder or Dropbox is **always
+  encrypted**: the adapter comes from the framework's
+  `useRequiredEncryption`, which is `null` until the passphrase is held, so
+  nothing is ever written there in plaintext. Never sync through the raw
+  `inner` adapter.
+- `src/app/SyncEncryption.tsx` — the app's words for the framework's
+  passphrase dialog, the encryption lines under "Where the record lives", the
+  PIN gate (`UnlockGate`) and the app-lock control. The passphrase is
+  remembered on the device per backend; the PIN verifier never leaves the
+  device. A PIN is a soft lock and its copy must keep saying so.
 - `src/app/dev/` — the developer "Demo data" switch: an invented
   baby of seven and a half months (`demoData.ts`, pure, every date an
   offset from the moment it opens — also the store screenshots' data,

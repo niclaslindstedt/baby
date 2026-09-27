@@ -8,6 +8,7 @@ import {
   createToastStore,
 } from "@niclaslindstedt/oss-framework/components";
 import { useSwipeNav } from "@niclaslindstedt/oss-framework/hooks";
+import { usePinLock } from "@niclaslindstedt/oss-framework/encryption";
 import { LogViewer } from "@niclaslindstedt/oss-framework/logging";
 import { UpdateToast, usePwaUpdate } from "@niclaslindstedt/oss-framework/pwa";
 import {
@@ -37,6 +38,11 @@ import { appearanceFor } from "./app/look.ts";
 import { logStore } from "./app/log.ts";
 import { cacheIdForBase } from "./app/pwa.ts";
 import { SettingsScreen } from "./app/SettingsScreen.tsx";
+import {
+  AppLockGate,
+  PassphrasePrompt,
+  usePassphrasePrompt,
+} from "./app/SyncEncryption.tsx";
 import { TodayScreen } from "./app/TodayScreen.tsx";
 import { TopBar } from "./app/TopBar.tsx";
 import { newId, type DiaperKind } from "./app/types.ts";
@@ -60,6 +66,11 @@ import { status } from "./output.ts";
 // Module-scoped so the identity stays stable across renders (the framework's
 // `useToasts` keys its subscription on the store object).
 const toasts = createToastStore();
+
+// The app lock's verifier, on this device only, and how long the app may sit
+// in the background before it asks again.
+const PIN_KEY = "baby:pin";
+const RELOCK_AFTER_MS = 5 * 60_000;
 
 export function App() {
   const t = useT();
@@ -91,6 +102,11 @@ export function App() {
   }, [demo.on]);
   const store = useDocStore(backend);
   const sync = useSyncEngine(store, demo.on);
+  const passphrase = usePassphrasePrompt(sync.encryption, demo.on);
+  const pin = usePinLock({
+    storageKey: PIN_KEY,
+    relockAfterMs: RELOCK_AFTER_MS,
+  });
   const standards = useGrowthStandards();
 
   // The trackers this parent uses, and the bar that follows from them: a
@@ -205,6 +221,9 @@ export function App() {
 
   const hasChild = store.data.child !== null;
 
+  // Behind the PIN, nothing of the record renders — not a screen, not a modal.
+  if (pin.locked) return <AppLockGate pin={pin} />;
+
   return (
     <div className="flex h-full flex-col bg-page text-fg">
       <TopBar
@@ -305,6 +324,8 @@ export function App() {
               sync={sync}
               demoData={demo}
               onEditChild={() => toggle("child")}
+              pin={pin}
+              onAskPassphrase={passphrase.open}
               onNotice={notice}
             />
           )}
@@ -346,6 +367,17 @@ export function App() {
         open={diaperOpen && features.diapers}
         onLog={logDiaper}
         onClose={() => setDiaperOpen(false)}
+      />
+
+      <PassphrasePrompt
+        encryption={sync.encryption}
+        providerName={t(`settings.backendName.${sync.backend}` as const)}
+        mode={passphrase.mode}
+        onClose={passphrase.close}
+        onChanged={() => {
+          notice(t("encryption.changed"));
+          void sync.reload();
+        }}
       />
 
       <SyncDetailsModal

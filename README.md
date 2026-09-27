@@ -58,8 +58,9 @@ cannot inspect — often with a feeding diary that asks for every millilitre.
 
 This one has no account and no server. The record lives on your device, in
 your browser's own storage. If you want it on more than one device, you keep
-a copy in a folder you pick, or in **your own** Dropbox — a JSON file you can
-open and read. Your child's record never goes to iCloud. Nothing else leaves the device: no analytics, no telemetry, no third-party
+a copy in a folder you pick, or in **your own** Dropbox — encrypted on the
+device with a passphrase only you know, so the folder and Dropbox hold
+ciphertext. Your child's record never goes to iCloud. Nothing else leaves the device: no analytics, no telemetry, no third-party
 requests at runtime. The growth standards, the food presets and the
 vaccination schedule are bundled with the app and read locally.
 
@@ -142,10 +143,10 @@ The four views Today opens:
 
 …and two buttons on the top bar, for the things you do and then leave:
 
-| Button | What it does                                                                                                                                         |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **+**  | Log a diaper without leaving the screen you are on: a sheet with the same three buttons. One tap logs and closes. Gone while diaper tracking is off. |
-| **⚙**  | Settings: theme, language, what you track, the child's profile, where the record lives, backup / restore / delete, About.                            |
+| Button | What it does                                                                                                                                                              |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **+**  | Log a diaper without leaving the screen you are on: a sheet with the same three buttons. One tap logs and closes. Gone while diaper tracking is off.                      |
+| **⚙**  | Settings: theme, language, what you track, the child's profile, where the record lives and its encryption passphrase, the PIN app lock, backup / restore / delete, About. |
 
 ## Configuration
 
