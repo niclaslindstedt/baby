@@ -25,6 +25,41 @@ Only the last two are _sync_ in the sense the top bar's glyph means —
 somewhere the record could also be read from. On **This device** there is no
 glyph: there is nothing to watch the status of.
 
+## Encryption
+
+The same two — the local folder and Dropbox — are **always encrypted**. A
+folder is on this computer, but it is a folder anything else may be syncing (a
+Dropbox, OneDrive or iCloud Drive client), so the rule is not "Dropbox is
+encrypted" but "a copy that is not the browser's own is only ever an
+envelope". There is no switch to turn it off: it is a requirement of the
+backend, not a setting (the framework's `useEncryption` with `policy: "required"`, wired in
+`src/app/useSyncEngine.ts`). Until a passphrase is held the engine has no
+adapter to talk to, so nothing is pulled or pushed at all.
+
+`baby.json` on either backend is an `oss.encrypted.v1` envelope (AES-256-GCM,
+PBKDF2-SHA256 at 600,000 iterations). You can see it, copy it and back it up,
+but only your passphrase opens it.
+
+- **First connect.** The app looks at what the backend holds. Nothing yet (or
+  an old plaintext copy) → it asks you to **choose a passphrase**, twice. An
+  old plaintext copy is re-written as ciphertext on the first read after that.
+- **Another device.** The backend already holds an envelope → it asks you to
+  **enter the passphrase** you chose; a wrong one is refused and nothing
+  syncs.
+- **Remembered here.** The passphrase is remembered on this device, per
+  backend (in localStorage, beside the record itself, which is already
+  plaintext here), so a device asks once, not on every open. What it protects
+  is the copy the folder or Dropbox holds.
+- **Changing it.** Settings → Where the record lives → **Change the
+  passphrase** re-encrypts the copy. Other devices find their passphrase no
+  longer opens it, forget it, and ask for the new one.
+- **Forgetting it.** Nobody can recover a forgotten passphrase — not the app,
+  not Dropbox. The record on each device is unaffected; disconnect, delete the
+  file, and connect again with a new passphrase.
+
+The on-device copy is not encrypted by this. If the phone itself needs a lock,
+that is the [app lock](features/encryption.md#app-lock).
+
 ### Where the local folder is offered
 
 The picker is the File System Access API's `showDirectoryPicker`, which
@@ -50,7 +85,8 @@ a child's health data. A pre-release phone build offered iCloud Drive; a
 stored `icloud` from it reads as this device (`parseBackend`). No released
 build ever wrote to iCloud, so there is nothing there to migrate.
 
-**Disconnecting** removes the credentials or the folder grant and comes back
+**Disconnecting** removes the credentials or the folder grant, and the
+remembered passphrase, and comes back
 to this device. The record stays here, and the copy already on the backend is
 left exactly where it is.
 

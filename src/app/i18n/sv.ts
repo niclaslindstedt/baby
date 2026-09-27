@@ -658,7 +658,7 @@ export const sv: Catalog = {
     editChild: "Ändra",
     sync: "Var journalen finns",
     syncHint:
-      "Din journal sparas på den här enheten. Håll en andra kopia i en mapp du väljer, eller i ditt eget molnkonto, för att läsa den på en annan enhet också.",
+      "Din journal sparas på den här enheten. Håll en andra, krypterad kopia i en mapp du väljer, eller i ditt eget molnkonto, för att läsa den på en annan enhet också.",
     backend: "Lagring",
     backendName: {
       idb: "Den här enheten",
@@ -714,13 +714,79 @@ export const sv: Catalog = {
     version: "Version",
     build: "Bygge",
     privacy:
-      "Allt stannar på den här enheten om du inte själv ansluter en mapp eller ett molnkonto. Det finns ingen server, inget konto och ingen statistikinsamling.",
+      "Allt stannar på den här enheten om du inte själv ansluter en mapp eller ett molnkonto, och en kopia där krypteras med din lösenfras först. Det finns ingen server, inget konto och ingen statistikinsamling.",
     disclaimer:
       "En anteckningsbok, inte medicinsk rådgivning. Appen sparar det du fyller i och jämför det med publicerade rekommendationer; frågor om ditt barns hälsa hör hemma på BVC.",
   },
 
   advice: {
     note: "En anteckningsbok, inte medicinsk rådgivning: det du fyller i, jämfört med publicerade referenser. Frågor om ditt barns hälsa hör hemma på BVC.",
+  },
+
+  // Det som står mellan journalen och en kopia som lämnar enheten.
+  encryption: {
+    headline: "Krypterat innan det lämnar enheten",
+    required:
+      "Allt krypteras på den här enheten innan det går till {name}, som bara någonsin får chiffertext.",
+    on: "Krypterat. Lösenfrasen är sparad på den här enheten.",
+    paused:
+      "Synkningen väntar tills lösenfrasen är satt — inget lämnar enheten okrypterat.",
+    checking: "Kollar vad {name} har…",
+    unreachable: "Kunde inte nå {name} för att kolla krypteringen.",
+    retry: "Försök igen",
+    set: "Välj lösenfras",
+    change: "Byt lösenfras",
+    changed: "Lösenfrasen är bytt",
+    createTitle: "Välj en lösenfras",
+    createHint:
+      "Ditt barns journal krypteras på den här enheten innan den når {name}. Varje enhet som synkar den behöver lösenfrasen.",
+    unlockTitle: "Ange din lösenfras",
+    unlockHint:
+      "Kopian i {name} är krypterad. Ange lösenfrasen du valde på din andra enhet.",
+    changedTitle: "Lösenfrasen har bytts",
+    changedHint:
+      "Lösenfrasen byttes på en annan enhet. Ange den nya för att fortsätta synka.",
+    changeTitle: "Byt lösenfras",
+    changeHint:
+      "Kopian i {name} krypteras om med den nya lösenfrasen. Dina andra enheter frågar efter den vid nästa synkning.",
+    noRecovery:
+      "Ingen kan återskapa en bortglömd lösenfras — inte vi, inte {name}. Skriv ner den någonstans säkert.",
+    passphrase: "Lösenfras",
+    confirm: "Upprepa lösenfrasen",
+    createSubmit: "Kryptera och synka",
+    unlockSubmit: "Lås upp",
+    changeSubmit: "Byt",
+    tooShort: "Använd minst {min} tecken.",
+    mismatch: "Lösenfraserna är inte lika.",
+    wrong: "Fel lösenfras. Försök igen.",
+    failed: "Det gick inte. Försök igen.",
+    offline:
+      "{name} går inte att nå just nu. Försök igen när du är uppkopplad.",
+    working: "Arbetar med krypteringen…",
+  },
+
+  // Applåset. Ett mjukt lås, och texten säger det.
+  pin: {
+    title: "Applås",
+    on: "En PIN-kod krävs på den här enheten",
+    off: "Ingen PIN-kod på den här enheten",
+    hint: "Frågas efter när appen öppnas, och igen efter fem minuter i bakgrunden.",
+    softWarning:
+      "En PIN-kod håller en lånad telefon ute. Den krypterar inte journalen på den här enheten.",
+    set: "Välj en PIN-kod",
+    change: "Byt PIN-kod",
+    remove: "Ta bort PIN-koden",
+    label: "Ny PIN-kod",
+    confirm: "Upprepa PIN-koden",
+    current: "Nuvarande PIN-kod",
+    tooShort: "Använd minst {min} siffror.",
+    mismatch: "PIN-koderna är inte lika.",
+    wrong: "Fel PIN-kod.",
+    gateTitle: "Låst",
+    gateHint: "Ange din PIN-kod för att öppna journalen.",
+    gateLabel: "PIN-kod",
+    gateSubmit: "Öppna",
+    gateWrong: "Fel PIN-kod. Försök igen.",
   },
 
   sync: {

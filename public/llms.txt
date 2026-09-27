@@ -5,9 +5,10 @@
 > regimen (from about 6 months) that the app checks against age- and
 > size-appropriate recommendations, record weight / length / head
 > circumference on the WHO growth standards, log diapers and sleep with one
-> tap, and follow the Swedish childhood vaccination programme. The document is stored
-> on-device as JSON, with an optional copy synced to the user's own Dropbox
->. Every assessment is derived from the document at read time.
+> tap, and follow the Swedish childhood vaccination programme. The document is
+> stored on-device as JSON, with an optional copy in a picked folder or the
+> user's own Dropbox, encrypted on the device with a passphrase the user
+> chooses. Every assessment is derived from the document at read time.
 
 - App: https://baby.niclaslindstedt.se/
 - Source: https://github.com/niclaslindstedt/baby

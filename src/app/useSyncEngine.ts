@@ -27,6 +27,11 @@ import {
   type DropboxAuthResult,
   type StorageAdapter,
 } from "@niclaslindstedt/oss-framework/storage";
+import {
+  WrongPasswordError,
+  useEncryption,
+  type Encryption,
+} from "@niclaslindstedt/oss-framework/encryption";
 import type {
   ConnectionProbeResult,
   SaveStatus,
@@ -75,12 +80,19 @@ import type { DocStore } from "./useDocStore.ts";
 // somewhere the record could also be read from. `remote` is that question,
 // and it is why a plain install carries no glyph.
 //
+// Those two are also the ones that are **always encrypted**. A folder is on
+// this computer, but it is a folder anything else may be syncing — a Dropbox,
+// OneDrive or iCloud Drive client — so the rule is not "Dropbox is
+// encrypted" but "a copy that is not the browser's own is only ever an
+// envelope" (`useEncryption`, below).
+//
 // Reconciliation is a per-record merge (see `merge.ts`), not a "pick a side"
 // prompt: records carry their own `updatedAt` and diaper changes merge as a
 // union, so two devices that logged different things between syncs both keep
 // them without anyone being asked to choose — see `docs/sync.md`.
 
 const syncLog = logStore.createLogger("sync");
+const encryptionLog = logStore.createLogger("encryption");
 
 export type SyncBackendId = "idb" | "folder" | "dropbox";
 
@@ -91,6 +103,11 @@ export const LOCAL_BACKEND: SyncBackendId = "idb";
 
 const BACKEND_KEY = "baby:sync:backend";
 const DROPBOX_TOKENS_KEY = "baby:sync:dropbox";
+// Where this device keeps the encryption of a copy outside it, per backend
+// (see `useEncryption`): the passphrase is remembered here. Beside a working
+// copy that is itself plaintext in the same storage, remembering it exposes
+// nothing new; what it protects is the copy the provider holds.
+const ENCRYPTION_KEY = "baby:sync:encryption";
 // Dropbox is gone as a backend. The key stays named so a token a device
 // may still hold is cleared rather than left sitting in storage.
 const RETIRED_GDRIVE_TOKEN_KEY = "baby:sync:gdrive";
@@ -225,6 +242,9 @@ export type SyncEngine = {
   checkConnection: () => Promise<ConnectionProbeResult>;
   /** True when the stored folder grant was revoked and needs re-confirming. */
   folderReconnectNeeded: boolean;
+  /** The encryption every copy outside this device requires. Sync is held
+   *  until it is `ready`. */
+  encryption: Encryption;
 };
 
 export function useSyncEngine(
@@ -273,8 +293,9 @@ export function useSyncEngine(
 
   // The storage adapter for the active backend. Cloud copies are wrapped so
   // they stay readable offline (`withLocalCache`); the on-device ones need
-  // no such thing.
-  const adapter: StorageAdapter | null = useMemo(() => {
+  // no such thing. Encryption sits above all of them, so the offline cache
+  // holds exactly the ciphertext the cloud does.
+  const inner: StorageAdapter | null = useMemo(() => {
     if (backend === "idb") {
       return createIdbDocAdapter({ dbName: IDB_DB_NAME });
     }
@@ -308,12 +329,33 @@ export function useSyncEngine(
     return null;
   }, [backend, folderHandle, dropboxTokens, markFolderPermissionLost]);
 
-  const connected = adapter !== null;
+  // A copy outside this device is only ever an envelope. `adapter` stays null
+  // until the passphrase is held, which is what holds every pull and push
+  // below — there is no path for the document to leave in plaintext.
+  const encryption = useEncryption({
+    adapter: backend !== LOCAL_BACKEND ? inner : null,
+    policy: "required",
+    remember: "device",
+    storageKey: `${ENCRYPTION_KEY}:${backend}`,
+    logger: encryptionLog,
+  });
+  // The browser's own IndexedDB copy is the device's, like the working copy.
+  const adapter = backend !== LOCAL_BACKEND ? encryption.adapter : inner;
+
+  const connected = inner !== null;
 
   // Turn a thrown error into the matching surface state. Every failure path
   // funnels through here so the glyph, the command centre, and the log always
   // agree on what went wrong.
   const reportFailure = useCallback((err: unknown, what: string): void => {
+    if (err instanceof WrongPasswordError) {
+      // The passphrase was changed on another device. The encryption state
+      // has already dropped it and asks for the new one; sync waits for it.
+      syncLog.warn(`${what}: the passphrase no longer opens the copy`);
+      setStatus("idle");
+      setStatusDetail(null);
+      return;
+    }
     const detail = describeStorageError(err);
     syncLog.error(`${what} failed — ${detail}`);
     setStatusDetail(detail);
@@ -593,7 +635,10 @@ export function useSyncEngine(
     [connectFolder, adoptDropbox],
   );
 
+  const { forget: forgetPassphrase } = encryption;
   const disconnect = useCallback((): void => {
+    // The remembered passphrase goes with the credentials.
+    forgetPassphrase();
     // Only the credentials and the grant go: the document stays on this
     // device, and the copy already on the backend is left exactly where it
     // is. Where it lands is `LOCAL_BACKEND` — disconnecting from a cloud
@@ -607,7 +652,7 @@ export function useSyncEngine(
     setFolderReconnectNeeded(false);
     setBackendState(LOCAL_BACKEND);
     syncLog.info("disconnected — the record stays on this device");
-  }, []);
+  }, [forgetPassphrase]);
 
   const saveNow = useCallback((): void => {
     if (!adapter || !baselineReady) return;
@@ -680,5 +725,6 @@ export function useSyncEngine(
     reconnect,
     checkConnection,
     folderReconnectNeeded,
+    encryption,
   };
 }

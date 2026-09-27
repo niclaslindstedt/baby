@@ -11,10 +11,16 @@ import {
   DatabaseIcon,
   CloudIcon,
   InfoIcon,
+  LockIcon,
   PaletteIcon,
   ScrollTextIcon,
   SlidersIcon,
 } from "@niclaslindstedt/oss-framework/components";
+import {
+  EncryptionSettings,
+  PinLockControl,
+  type PinLock,
+} from "@niclaslindstedt/oss-framework/encryption";
 import { LogViewer } from "@niclaslindstedt/oss-framework/logging";
 
 import { logStore } from "./log.ts";
@@ -25,6 +31,7 @@ import { formatCm, formatDayYear } from "./format.ts";
 import { BabyIcon } from "./icons.tsx";
 import { setLanguage, useLang, useT, type Lang } from "./i18n/index.ts";
 import { mergeDocs } from "./merge.ts";
+import { useEncryptionLabels, usePinControlLabels } from "./SyncEncryption.tsx";
 import { serializeDoc } from "./migrations.ts";
 import { emptyDoc } from "./types.ts";
 import {
@@ -65,6 +72,8 @@ type Props = {
    *  document. */
   demoData: DemoDataToggle;
   onEditChild: () => void;
+  /** The app lock, for its section. */
+  pin: PinLock;
   onNotice: (message: string) => void;
 };
 
@@ -77,9 +86,14 @@ export function SettingsScreen({
   sync,
   demoData,
   onEditChild,
+  pin,
   onNotice,
 }: Props) {
   const t = useT();
+  const encryptionLabels = useEncryptionLabels(
+    t(`settings.backendName.${sync.backend}` as const),
+  );
+  const pinControlLabels = usePinControlLabels();
   const lang = useLang();
   const locale = lang === "sv" ? "sv-SE" : "en-GB";
   const child = store.data.child;
@@ -265,6 +279,18 @@ export function SettingsScreen({
             </div>
           </div>
         )}
+        {sync.remote && (
+          <EncryptionSettings
+            encryption={sync.encryption}
+            location={t(`settings.backendName.${sync.backend}` as const)}
+            labels={encryptionLabels}
+            disabled={demoData.on}
+            onChanged={() => {
+              onNotice(t("encryption.changed"));
+              void sync.reload();
+            }}
+          />
+        )}
         {sync.connected && (
           <div className="flex flex-wrap gap-2">
             <Button onClick={sync.saveNow} disabled={busy || !sync.dirty}>
@@ -286,6 +312,13 @@ export function SettingsScreen({
             )}
           </div>
         )}
+      </Section>
+
+      <Section
+        title={t("pin.title")}
+        icon={<LockIcon className="h-3.5 w-3.5" />}
+      >
+        <PinLockControl pin={pin} labels={pinControlLabels} />
       </Section>
 
       <Section
