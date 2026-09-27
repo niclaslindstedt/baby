@@ -385,7 +385,7 @@ registry.
 | A new answer to show a parent          | A card on `TodayScreen.tsx`, or the matching `*Modal.tsx` behind it — never one of the five input tabs                                   |
 | A new way to log a diaper              | Never a second write path — render `DiaperButtons` and write through `addDiaper`                                                         |
 | A new way to log a sleep               | Never a second write path — render `SleepButtons` and write through `saveSleep`                                                          |
-| A running clock, a ring, a pulse       | `live.tsx` (`Elapsed`, `ProgressRing`, `useTick`) and the "Live" block of `styles.css` — never a per-screen `setInterval`                |
+| A running clock, a ring, a pulse       | `live.tsx` (`Elapsed`, `ProgressRing`, `FillRing`, `useTick`) and the "Live" block of `styles.css` — never a per-screen `setInterval`    |
 | A time span to show or drag            | `ClockDial.tsx` over `dial.ts` (with tests in `tests/dial_test.ts`); `SleepClock.tsx` is the worked example of dragging one              |
 | A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                                    |
 | A new feature switch                   | `FeatureId` in `useAppSettings.ts`, guards on the screens it owns, and `navTabs()` if it has a tab                                       |

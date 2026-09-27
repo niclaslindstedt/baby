@@ -493,13 +493,13 @@
           "at": "p. 22"
         }
       ],
-      "supports": "The recommended hours of sleep per 24 hours, naps included, for each age band (SLEEP_RECOMMENDATIONS).",
+      "supports": "The recommended hours of sleep per 24 hours, naps included, for each age band (SLEEP_RECOMMENDATIONS), and where the sleep rings close (sleepRing).",
       "summary": {
         "en": "The recommended hours of sleep a day, naps included, for each age.",
         "sv": "De rekommenderade timmarna sömn per dygn, tupplurar inräknade, för varje ålder."
       },
       "topics": ["sleep"],
-      "usedBy": ["src/app/sleep.ts"]
+      "usedBy": ["src/app/i18n/en.ts", "src/app/sleep.ts"]
     }
   }
 }

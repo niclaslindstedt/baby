@@ -233,6 +233,19 @@ export const sv: Catalog = {
         night: "Natt",
       },
     },
+    ring: {
+      label:
+        "{total} sömn de senaste 24 timmarna, på en ring som sluts vid toppen av de {low}–{high} timmar som rekommenderas för åldern",
+      avgLabel:
+        "{total} per dygn i genomsnitt, på en ring som sluts vid toppen av de {low}–{high} timmar som rekommenderas för åldern",
+      of: "av {low}–{high} h",
+      place: {
+        under:
+          "Under det rekommenderade de här 24 timmarna. Ett dygn säger lite — genomsnitten nedan är det som räknas.",
+        within: "Inom det rekommenderade de här 24 timmarna.",
+        over: "Över det rekommenderade de här 24 timmarna. Ett dygn säger lite — genomsnitten nedan är det som räknas.",
+      },
+    },
     live: {
       nap: "Tupplur",
       night: "Sover",

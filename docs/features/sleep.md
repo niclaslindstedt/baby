@@ -22,8 +22,10 @@ before; the arrows step the sleep a whole day. A **Woke up** nobody tapped
 opens with a guessed end, ready to drag to the right time.
 
 What the log adds up to is on Today, behind the **Sleep** card: whether your
-child is asleep or awake, on a running clock, with a ring filling toward the
-suggested next sleep and a countdown to it, last night, and the last 30 days'
+child is asleep or awake, on a running clock, inside two rings — the last 24
+hours of sleep filling toward the WHO's recommended range for the age, night
+and naps in their own colours, and the time awake filling toward the suggested
+next sleep — with a countdown to it, last night, and the last 30 days'
 average. Open it for the rest — the day on the dial with the suggested window
 marked — the last 24 hours, the 30- and 90-day averages
 split into night and naps, two weeks as a chart over the recommended range, and

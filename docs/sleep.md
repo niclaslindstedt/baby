@@ -63,6 +63,23 @@ Two sleeps that overlap — the same nap logged on two phones, or a corrected
 start that runs into the sleep before — are clipped, so no minute is counted
 twice.
 
+## The rings
+
+Sleep is also drawn as a ring that fills as the child sleeps (`sleepRing`):
+the night in the accent, the naps lighter on top, on a track whose full turn
+is the top of the WHO's recommended range for the age, with the stretch from
+its low end washed in and ticked. A ring that reaches the wash has reached the
+low end of the recommendation; one that closes has reached its top, and never
+fills past it. Today's Sleep card carries the last 24 hours this way, round
+the ring for where the child is now, and the view draws it large beside its
+night, naps and range, with the 30- and 90-day averages on rings of their own.
+
+One 24 hours is only placed — under, within or over — and said to say
+little: whether a habit is short or long is the 30-day average's question
+(`sleepStatus`), and nothing about a single day warms a card. The rings are on
+Today and the view only, never on the Sleep tab, because they are a
+comparison.
+
 ## The sleep day
 
 A night that begins at 19:30 and ends at 06:10 is one night, and a parent calls

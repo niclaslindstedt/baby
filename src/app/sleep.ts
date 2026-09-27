@@ -595,6 +595,42 @@ export function sleepStatus(
   return "within";
 }
 
+/** Sleep drawn as a ring: the night's and the naps' shares of the fill, the
+ *  point on the ring where the recommended range begins, and where the
+ *  total sits against it. */
+export type SleepRing = {
+  night: number;
+  day: number;
+  bandFrom: number;
+  place: "under" | "within" | "over";
+};
+
+/**
+ * A stretch of sleep on a ring whose full turn is the top of the WHO's
+ * recommended range for the age [ref:who-2019-under5] — so the ring fills
+ * as the child sleeps, enters the recommended stretch at its low end, and
+ * is closed at its high end. Night first, then naps, as the charts stack
+ * them. A single day is read by where it lands and nothing more: whether a
+ * habit is short or long is `sleepStatus`'s question, over a month.
+ */
+export function sleepRing(
+  norm: SleepNorm,
+  nightMinutes: number,
+  dayMinutes: number,
+): SleepRing {
+  const [low, high] = norm.recommended.hours;
+  const full = high * 60;
+  const night = Math.min(1, Math.max(0, nightMinutes) / full);
+  const day = Math.min(1 - night, Math.max(0, dayMinutes) / full);
+  const hours = (nightMinutes + dayMinutes) / 60;
+  return {
+    night,
+    day,
+    bandFrom: low / high,
+    place: hours < low ? "under" : hours > high ? "over" : "within",
+  };
+}
+
 // ── When the next sleep is likely to suit ──────────────────────────────────
 
 /** The typical time awake between sleeps for an age band, in minutes. Ages in

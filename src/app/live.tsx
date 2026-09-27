@@ -159,3 +159,125 @@ export function ProgressRing({
     </span>
   );
 }
+
+/** One share of a `FillRing`: how much of the turn it takes, and its ink. */
+export type RingSegment = { value: number; color: string; opacity?: number };
+
+/**
+ * A ring that fills clockwise from the top with stacked `segments` — the
+ * night, then the naps — over a track that marks a `band`: the stretch of
+ * the turn a reference calls enough, drawn as a wash with a tick where it
+ * begins. The ring fills with the thing it counts, so a clock that is
+ * running fills it as it runs. The children sit in the middle; nest a
+ * smaller ring there for a second reading, the way activity rings do.
+ */
+export function FillRing({
+  segments,
+  band,
+  size = 56,
+  stroke = 6,
+  label,
+  children,
+  className = "",
+}: {
+  segments: RingSegment[];
+  /** Where the band begins and ends, as fractions of the turn. */
+  band?: [number, number];
+  size?: number;
+  stroke?: number;
+  label?: string;
+  children?: React.ReactNode;
+  className?: string;
+}) {
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const mid = size / 2;
+  // Each share starts where the one before it ended, and none runs past
+  // the full turn.
+  const shares: { seg: RingSegment; from: number; value: number }[] = [];
+  let filled = 0;
+  for (const seg of segments) {
+    const value = Math.max(0, Math.min(1 - filled, seg.value));
+    shares.push({ seg, from: filled, value });
+    filled += value;
+  }
+  const arcs = shares.map(({ seg, from, value }, i) => (
+    <circle
+      key={i}
+      cx={mid}
+      cy={mid}
+      r={r}
+      fill="none"
+      stroke={seg.color}
+      strokeOpacity={seg.opacity ?? 1}
+      strokeWidth={stroke}
+      pathLength={1}
+      strokeDasharray={`${value} 1`}
+      strokeDashoffset={-from}
+      className="live-fill"
+    />
+  ));
+  const tick =
+    band &&
+    (() => {
+      const a = band[0] * 2 * Math.PI;
+      const inner = r - stroke / 2 - 1.5;
+      const outer = r + stroke / 2 + 1.5;
+      return (
+        <line
+          x1={mid + inner * Math.cos(a)}
+          y1={mid + inner * Math.sin(a)}
+          x2={mid + outer * Math.cos(a)}
+          y2={mid + outer * Math.sin(a)}
+          stroke="var(--color-fg-bright)"
+          strokeWidth={1.5}
+          strokeLinecap="round"
+        />
+      );
+    })();
+  return (
+    <span
+      role={label ? "img" : undefined}
+      aria-label={label}
+      className={`relative inline-flex shrink-0 items-center justify-center ${className}`}
+      style={{ width: size, height: size }}
+    >
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        aria-hidden="true"
+        focusable="false"
+        className="absolute inset-0 -rotate-90 overflow-visible"
+      >
+        <circle
+          cx={mid}
+          cy={mid}
+          r={r}
+          fill="none"
+          stroke="var(--color-fg-bright)"
+          strokeOpacity={0.09}
+          strokeWidth={stroke}
+        />
+        {band && (
+          <circle
+            cx={mid}
+            cy={mid}
+            r={r}
+            fill="none"
+            stroke="var(--color-accent)"
+            strokeOpacity={0.18}
+            strokeWidth={stroke}
+            strokeDasharray={`${c * (band[1] - band[0])} ${c}`}
+            strokeDashoffset={-c * band[0]}
+          />
+        )}
+        {arcs}
+        {tick}
+      </svg>
+      <span className="relative flex flex-col items-center justify-center text-center">
+        {children}
+      </span>
+    </span>
+  );
+}

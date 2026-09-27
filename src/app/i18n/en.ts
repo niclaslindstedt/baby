@@ -272,6 +272,22 @@ export const en = {
         night: "Night",
       },
     },
+    // The rings: sleep filling toward the top of the WHO's recommended range
+    // for the age [ref:who-2019-under5], the stretch from its low end
+    // washed onto the track.
+    ring: {
+      label:
+        "{total} slept in the last 24 hours, on a ring that closes at the top of the {low}–{high} hours recommended for the age",
+      avgLabel:
+        "{total} a day on average, on a ring that closes at the top of the {low}–{high} hours recommended for the age",
+      of: "of {low}–{high} h",
+      place: {
+        under:
+          "Short of the recommended range in these 24 hours. One day says little — the averages below are the reading.",
+        within: "Within the recommended range in these 24 hours.",
+        over: "Over the recommended range in these 24 hours. One day says little — the averages below are the reading.",
+      },
+    },
     // The running clock: the Sleep tab's dial, Today's card and the view.
     live: {
       nap: "Napping",

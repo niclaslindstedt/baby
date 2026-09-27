@@ -22,6 +22,7 @@ import {
   sleepDays,
   sleepDiary,
   sleepNormFor,
+  sleepRing,
   sleepRhythm,
   sleepSpans,
   sleepStatus,
@@ -334,6 +335,27 @@ describe("the recommendation", () => {
     expect(sleepStatus(norm, avg(15.5))).toBe("long");
     expect(sleepStatus(norm, avg(9.5, MIN_LOGGED_DAYS - 1))).toBe("tooEarly");
     expect(sleepStatus(norm, null)).toBe("tooEarly");
+  });
+});
+
+describe("the ring", () => {
+  it("closes at the top of the recommendation and marks where it begins", () => {
+    // Seven and a half months: the WHO's 12–16 hours.
+    const norm = sleepNormFor(228)!;
+    const ring = sleepRing(norm, 11 * 60, 3 * 60);
+    expect(ring.night).toBeCloseTo(11 / 16);
+    expect(ring.day).toBeCloseTo(3 / 16);
+    expect(ring.bandFrom).toBe(12 / 16);
+    expect(ring.place).toBe("within");
+  });
+
+  it("reads a short day and a long one, and never fills past a turn", () => {
+    const norm = sleepNormFor(228)!;
+    expect(sleepRing(norm, 8 * 60, 2 * 60).place).toBe("under");
+    const long = sleepRing(norm, 13 * 60, 4 * 60);
+    expect(long.place).toBe("over");
+    expect(long.night + long.day).toBe(1);
+    expect(long.day).toBeCloseTo(3 / 16);
   });
 });
 

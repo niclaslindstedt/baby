@@ -204,7 +204,10 @@ sleep all write through `saveSleep`.
 **Live, and the dial.** A record that is still running shows its clock
 running. `live.tsx` holds the pieces: `useTick`, a clock that re-renders only
 the component holding it and stops while the page is hidden; `Elapsed`, a
-stopwatch (or a countdown) to the second; and `ProgressRing`. The 24-hour dial
+stopwatch (or a countdown) to the second; `ProgressRing`; and `FillRing`,
+stacked shares filling a ring over a track that washes in a reference band —
+the sleep rings, and the shape any "how much of the recommended amount" is to
+take. The 24-hour dial
 is `ClockDial.tsx` over the pure `dial.ts` — the face, the arcs on its track,
 the now dot — and the sleep module uses it three ways: showing the last day on
 the Sleep tab (`SleepNow.tsx`), showing it with the suggested window on the

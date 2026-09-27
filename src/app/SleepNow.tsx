@@ -6,13 +6,15 @@ import { sleepNowLine } from "./copy.ts";
 import { formatInstant } from "./format.ts";
 import { MoonIcon, SunIcon, SunriseIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
-import { Elapsed, ProgressRing } from "./live.tsx";
+import { Elapsed, FillRing, ProgressRing } from "./live.tsx";
 import {
   currentSleep,
   lastEndedSleep,
   spansInLast,
+  sleepRing,
   STALE_SLEEP_HOURS,
   type NextSleep,
+  type SleepNorm,
 } from "./sleep.ts";
 import type { AppData } from "./types.ts";
 
@@ -125,11 +127,20 @@ export function SleepNow({ data, now, name }: Props) {
  * The fill is a reading of `nextSleep`, so it lives on Today, never on the
  * tab.
  */
-export function SleepRing({ next, now }: { next: NextSleep; now: Date }) {
+export function SleepRing({
+  next,
+  now,
+  size = 48,
+}: {
+  next: NextSleep;
+  now: Date;
+  size?: number;
+}) {
+  const stroke = size < 44 ? 3 : 4;
   if (next.state === "asleep") {
     const Icon = next.kind === "night" ? MoonIcon : SunIcon;
     return (
-      <ProgressRing value={1} spin size={48}>
+      <ProgressRing value={1} spin size={size} stroke={stroke}>
         <Icon className="live-breathe h-5 w-5 text-accent" />
       </ProgressRing>
     );
@@ -138,7 +149,12 @@ export function SleepRing({ next, now }: { next: NextSleep; now: Date }) {
   const total = s ? s.at - next.since : 0;
   const value = s && total > 0 ? (now.getTime() - next.since) / total : 0;
   return (
-    <ProgressRing value={value} tone={s?.overdue ? "warn" : "accent"} size={48}>
+    <ProgressRing
+      value={value}
+      tone={s?.overdue ? "warn" : "accent"}
+      size={size}
+      stroke={stroke}
+    >
       <SunriseIcon
         className={`h-5 w-5 ${s?.overdue ? "text-danger" : "text-accent"}`}
       />
@@ -184,5 +200,47 @@ export function SleepCountdown({ next }: { next: NextSleep }) {
       {t("sleep.live.in")}{" "}
       <Elapsed to={next.suggestion.at} className="text-accent" />
     </span>
+  );
+}
+
+/**
+ * Sleep filling a ring against the recommendation for the age: the night in
+ * the accent, the naps lighter on top of it, and the recommended stretch
+ * washed onto the track with a tick where it begins — so a ring that
+ * reaches the wash has reached the low end of the recommendation, and one
+ * that closes has reached its top (`sleepRing` in `sleep.ts`). Fed by the
+ * screen's clock, it fills while the child sleeps.
+ */
+export function SleepFill({
+  norm,
+  nightMinutes,
+  dayMinutes,
+  size,
+  stroke,
+  label,
+  children,
+}: {
+  norm: SleepNorm;
+  nightMinutes: number;
+  dayMinutes: number;
+  size: number;
+  stroke: number;
+  label?: string;
+  children?: React.ReactNode;
+}) {
+  const ring = sleepRing(norm, nightMinutes, dayMinutes);
+  return (
+    <FillRing
+      segments={[
+        { value: ring.night, color: "var(--color-accent)" },
+        { value: ring.day, color: "var(--color-fg-bright)", opacity: 0.6 },
+      ]}
+      band={[ring.bandFrom, 1]}
+      size={size}
+      stroke={stroke}
+      label={label}
+    >
+      {children}
+    </FillRing>
   );
 }

@@ -9,6 +9,7 @@ import { ageLabel, childName, durationLabel, sleepNextLine } from "./copy.ts";
 import { assessDiapers } from "./diapers.ts";
 import { DiapersModal } from "./DiapersModal.tsx";
 import {
+  formatAmount,
   formatDay,
   formatDayYear,
   formatWhole,
@@ -33,9 +34,15 @@ import {
   nextSleep,
   sleepNormFor,
   sleepStatus,
+  sleptInLast,
 } from "./sleep.ts";
 import { SleepModal } from "./SleepModal.tsx";
-import { SleepCountdown, SleepNowLive, SleepRing } from "./SleepNow.tsx";
+import {
+  SleepCountdown,
+  SleepFill,
+  SleepNowLive,
+  SleepRing,
+} from "./SleepNow.tsx";
 import { sortedMeasurements, type AppData } from "./types.ts";
 import type { Features } from "./useAppSettings.ts";
 import { Card, Heading } from "./ui.tsx";
@@ -108,6 +115,8 @@ export function TodayScreen({ data, today, standards, features }: Props) {
     ? sleepStatus(sleepNorm, sleepAverage)
     : "tooEarly";
   const sleepNext = sleepNow ? sleepNextLine(t, sleepNow, locale) : null;
+  const last24 = useMemo(() => sleptInLast(data, now), [data, now]);
+  const hasSleeps = Object.keys(data.sleeps).length > 0;
   const sleepFacts = [
     night
       ? t("sleep.lastNight", { duration: durationLabel(t, night.minutes) })
@@ -207,7 +216,33 @@ export function TodayScreen({ data, today, standards, features }: Props) {
               : "default"
           }
           onOpen={() => setView("sleep")}
-          aside={sleepNow && <SleepRing next={sleepNow} now={now} />}
+          aside={
+            sleepNorm && hasSleeps ? (
+              // Two rings, one inside the other: the last 24 hours filling
+              // toward the recommendation outside, and where the child is
+              // now — asleep, or awake toward the next sleep — inside.
+              <SleepFill
+                norm={sleepNorm}
+                nightMinutes={last24.nightMinutes}
+                dayMinutes={last24.dayMinutes}
+                size={62}
+                stroke={5}
+                label={t("sleep.ring.label", {
+                  total: durationLabel(t, last24.totalMinutes),
+                  low: formatAmount(sleepNorm.recommended.hours[0], locale),
+                  high: formatAmount(sleepNorm.recommended.hours[1], locale),
+                })}
+              >
+                {sleepNow ? (
+                  <SleepRing next={sleepNow} now={now} size={40} />
+                ) : (
+                  <MoonIcon className="h-5 w-5 text-muted" />
+                )}
+              </SleepFill>
+            ) : (
+              sleepNow && <SleepRing next={sleepNow} now={now} />
+            )
+          }
         >
           {sleepNow !== null ? (
             <SleepNowLive next={sleepNow} locale={locale} />
