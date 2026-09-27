@@ -214,14 +214,15 @@ export const RULES: StoreRules = {
 
   apple: {
     // A baby health and nutrition log for parents. HEALTH_AND_FITNESS is where
-    // a parent looking for a feeding, growth or diaper log looks; MEDICAL
-    // second, for the growth curves and the vaccination schedule.
+    // a parent looking for a growth or diaper log looks; MEDICAL second, for
+    // the growth curves and the vaccination schedule.
     categories: ["HEALTH_AND_FITNESS", "MEDICAL"],
 
     advisory: {
       // A log a parent keeps about their baby. Every row but one is NONE and
-      // none of those is a judgement call: the app records feeds, growth,
-      // diapers and vaccinations the parent enters, and shows nothing else.
+      // none of those is a judgement call: the app records growth readings,
+      // diaper changes, the food regimen and vaccinations the parent enters,
+      // and shows nothing else.
       violenceCartoonOrFantasy: "NONE",
       violenceRealistic: "NONE",
       violenceRealisticProlongedGraphicOrSadistic: "NONE",
@@ -258,7 +259,7 @@ export const RULES: StoreRules = {
       lastName: "Lindstedt",
       email: "niclas@agilator.se",
       // Nothing to sign in to and no permission prompt: a reviewer opens the
-      // app, adds a child and logs a feed.
+      // app, adds a child and logs a diaper.
       demoRequired: false,
     },
 
