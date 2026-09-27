@@ -1,5 +1,5 @@
 {
-  "$comment": "Every source the app's numbers and claims rest on, keyed by the id code cites as [ref:<id>]. usedBy lists the files that cite each entry; tests/references_test.ts keeps it and the tags in step. See AGENTS.md, 'Every threshold cites its source'.",
+  "$comment": "Every source the app's numbers and claims rest on, keyed by the id code cites as [ref:<id>]. usedBy lists the files that cite each entry; tests/references_test.ts keeps it and the tags in step (OSS_SPEC.md §24). summary and topics are the app's own: the parent-facing line the Sources screen shows, in both languages, and the tracker it is listed under. See AGENTS.md, 'Every threshold cites its source'.",
   "references": {
     "1177-barns-somn-i-olika-aldrar": {
       "evidence": "health-service",
@@ -25,6 +25,11 @@
         }
       ],
       "supports": "The Swedish picture beside the WHO range, the newborn's one-to-two-hour wake window, the 4–11 months night/day split, and the day–night rhythm between two and four months.",
+      "summary": {
+        "en": "The Swedish sleep ranges shown beside the WHO's, how long a newborn is usually awake, and when a day–night rhythm appears.",
+        "sv": "De svenska sömnintervallen bredvid WHO:s, hur länge en nyfödd brukar vara vaken och när dygnsrytmen kommer."
+      },
+      "topics": ["sleep"],
       "note": "Senast uppdaterad 2026-05-04. The page cites no source for its ranges.",
       "usedBy": ["src/app/i18n/en.ts", "src/app/sleep.ts"]
     },
@@ -44,6 +49,11 @@
         }
       ],
       "supports": "The same ranges as 1177, from the public health agency.",
+      "summary": {
+        "en": "The same sleep ranges, from Folkhälsomyndigheten.",
+        "sv": "Samma sömnintervall, från Folkhälsomyndigheten."
+      },
+      "topics": ["sleep"],
       "note": "Published 9 April 2026. The PDF: https://www.folkhalsomyndigheten.se/contentassets/0255be040c2646f8a6de5d64f41b637f/framja-goda-somnvanor-bland-barn-och-unga.pdf",
       "usedBy": ["src/app/sleep.ts"]
     },
@@ -76,6 +86,11 @@
         }
       ],
       "supports": "What children are observed to sleep at each age (OBSERVED_SLEEP), the sixteen-hour cap on one sleep (STALE_SLEEP_HOURS), night wakings being common, and the nap dropped between three and five.",
+      "summary": {
+        "en": "How much children of each age are observed to sleep, that waking at night is common, and when the daytime nap is dropped.",
+        "sv": "Hur mycket barn i varje ålder faktiskt sover, att nattliga uppvaknanden är vanliga och när tuppluren på dagen försvinner."
+      },
+      "topics": ["sleep"],
       "note": "The abstract gives 'all infants' as 12.8 (9.7–15.9) where table 2 gives 12.7 (9.0–16.3); the app uses the table's age rows only. There is no 3–4 years row.",
       "usedBy": ["src/app/i18n/en.ts", "src/app/sleep.ts"]
     },
@@ -97,6 +112,11 @@
         }
       ],
       "supports": "A nap under 45 minutes has not finished one sleep cycle; two hours or more has been through two (SHORT_NAP_MINUTES, LONG_NAP_MINUTES).",
+      "summary": {
+        "en": "Why a nap under 45 minutes counts as short and one over two hours as long.",
+        "sv": "Varför en tupplur under 45 minuter räknas som kort och en över två timmar som lång."
+      },
+      "topics": ["sleep"],
       "usedBy": ["src/app/sleep.ts"]
     },
     "hirshkowitz-2015": {
@@ -138,6 +158,11 @@
         }
       ],
       "supports": "The 14–17 hours for 0–3 months that the WHO adopted and the AASM declined to set.",
+      "summary": {
+        "en": "The recommended 14–17 hours of sleep in the first three months.",
+        "sv": "De rekommenderade 14–17 timmarna sömn de första tre månaderna."
+      },
+      "topics": ["sleep"],
       "note": "The NSF's wider 'may be appropriate' bands could not be checked against the paper, so the app does not use them; Galland et al. 2012's observed range stands in.",
       "usedBy": ["src/app/sleep.ts"]
     },
@@ -165,6 +190,11 @@
         }
       ],
       "supports": "One nap from about 18 months, no wake-window suggestion from three, and the demo baby's night and day split.",
+      "summary": {
+        "en": "When children go from two naps to one, and why the app stops suggesting naps at three.",
+        "sv": "När barn går från två tupplurar till en, och varför appen slutar föreslå tupplurar vid tre år."
+      },
+      "topics": ["sleep"],
       "usedBy": [
         "src/app/dev/demoData.ts",
         "src/app/i18n/en.ts",
@@ -188,6 +218,11 @@
         }
       ],
       "supports": "The physiology behind wake windows (the two-process model), and the reasoning that a short nap brings the next sleep sooner. The halfway adjustment for nap length is the app's own rule, not a measured one.",
+      "summary": {
+        "en": "Why time awake builds up a need to sleep, and why a short nap brings the next sleep sooner.",
+        "sv": "Varför vakentid bygger upp ett sömnbehov, och varför en kort tupplur gör att nästa sömn kommer tidigare."
+      },
+      "topics": ["sleep"],
       "usedBy": ["src/app/sleep.ts"]
     },
     "karitane-2016": {
@@ -206,6 +241,11 @@
         }
       ],
       "supports": "Wake windows from the first birthday to three years (WAKE_WINDOWS).",
+      "summary": {
+        "en": "How long a child of one to three is usually awake between sleeps.",
+        "sv": "Hur länge ett barn mellan ett och tre år brukar vara vaket mellan sömnperioderna."
+      },
+      "topics": ["sleep"],
       "note": "Updated May 2016. Superseded on Karitane's own site by the Flexible Daily Routine (karitane-flexible-routine), which stops at twelve months; the 2016 guide survives only as a copy on a third-party site. It is used because no service we found publishes a newer table past the first birthday.",
       "usedBy": ["src/app/sleep.ts"]
     },
@@ -225,6 +265,11 @@
         }
       ],
       "supports": "That Karitane's current guidance agrees with the 2016 guide to nine months and gives no table past twelve.",
+      "summary": {
+        "en": "That Karitane's current advice still agrees with the times awake the app uses.",
+        "sv": "Att Karitanes nuvarande råd fortfarande stämmer med de vakentider appen använder."
+      },
+      "topics": ["sleep"],
       "note": "Linked from https://karitane.com.au/newborn/infant-routines/. Undated; the upload path says January 2025.",
       "usedBy": ["src/app/sleep.ts"]
     },
@@ -245,6 +290,11 @@
         }
       ],
       "supports": "The newborn note that a day–night rhythm appears between two and four months.",
+      "summary": {
+        "en": "That a baby's day–night rhythm appears between two and four months.",
+        "sv": "Att ett spädbarns dygnsrytm kommer mellan två och fyra månaders ålder."
+      },
+      "topics": ["sleep"],
       "usedBy": ["src/app/i18n/en.ts"]
     },
     "paruthi-2016": {
@@ -282,6 +332,11 @@
         }
       ],
       "supports": "Agreement with the WHO from four months, the 10–13 hours carried to the sixth birthday (3–5 years), and why there is no AASM figure under four months.",
+      "summary": {
+        "en": "The recommended hours of sleep from four months to six years, in line with the WHO.",
+        "sv": "De rekommenderade sömntimmarna från fyra månader till sex år, i linje med WHO."
+      },
+      "topics": ["sleep"],
       "usedBy": ["src/app/sleep.ts"]
     },
     "rikshandboken-framja-god-somn": {
@@ -302,6 +357,11 @@
         }
       ],
       "supports": "The infant sleep cycle behind the short-nap threshold, in Swedish child health care's own words.",
+      "summary": {
+        "en": "How long a baby's sleep cycle is, which decides what counts as a short nap.",
+        "sv": "Hur lång ett spädbarns sömncykel är, vilket avgör vad som räknas som en kort tupplur."
+      },
+      "topics": ["sleep"],
       "note": "Godkänd 2025-11-04.",
       "usedBy": ["src/app/sleep.ts"]
     },
@@ -320,6 +380,11 @@
         }
       ],
       "supports": "Wake windows from twelve weeks to six months, turning at four months (WAKE_WINDOWS).",
+      "summary": {
+        "en": "How long a baby of three to six months is usually awake between sleeps.",
+        "sv": "Hur länge ett barn på tre till sex månader brukar vara vaket mellan sömnperioderna."
+      },
+      "topics": ["sleep"],
       "note": "The page shows no date; the year is when it was read.",
       "usedBy": ["src/app/sleep.ts"]
     },
@@ -339,6 +404,11 @@
         }
       ],
       "supports": "Wake windows from six to nine months (WAKE_WINDOWS).",
+      "summary": {
+        "en": "How long a baby of six to nine months is usually awake between sleeps.",
+        "sv": "Hur länge ett barn på sex till nio månader brukar vara vaket mellan sömnperioderna."
+      },
+      "topics": ["sleep"],
       "note": "The page shows no date; the year is when it was read.",
       "usedBy": ["src/app/dev/demoData.ts", "src/app/sleep.ts"]
     },
@@ -362,6 +432,11 @@
         }
       ],
       "supports": "Wake windows from nine months to the first birthday (WAKE_WINDOWS).",
+      "summary": {
+        "en": "How long a baby of nine months to a year is usually awake between sleeps.",
+        "sv": "Hur länge ett barn från nio månader till ett år brukar vara vaket mellan sömnperioderna."
+      },
+      "topics": ["sleep"],
       "note": "The page shows no date; the year is when it was read.",
       "usedBy": ["src/app/sleep.ts"]
     },
@@ -383,6 +458,11 @@
         }
       ],
       "supports": "Wake windows from birth to twelve weeks (WAKE_WINDOWS).",
+      "summary": {
+        "en": "How long a newborn is usually awake between sleeps, up to twelve weeks.",
+        "sv": "Hur länge en nyfödd brukar vara vaken mellan sömnperioderna, fram till tolv veckor."
+      },
+      "topics": ["sleep"],
       "note": "The page shows no date; the year is when it was read.",
       "usedBy": ["src/app/sleep.ts"]
     },
@@ -414,6 +494,11 @@
         }
       ],
       "supports": "The recommended hours of sleep per 24 hours, naps included, for each age band (SLEEP_RECOMMENDATIONS).",
+      "summary": {
+        "en": "The recommended hours of sleep a day, naps included, for each age.",
+        "sv": "De rekommenderade timmarna sömn per dygn, tupplurar inräknade, för varje ålder."
+      },
+      "topics": ["sleep"],
       "usedBy": ["src/app/sleep.ts"]
     }
   }

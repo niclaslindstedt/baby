@@ -719,6 +719,35 @@ export const sv: Catalog = {
       "En anteckningsbok, inte medicinsk rådgivning. Appen sparar det du fyller i och jämför det med publicerade rekommendationer; frågor om ditt barns hälsa hör hemma på BVC.",
   },
 
+  about: {
+    title: "Om appen",
+    open: "Om appen och källor",
+    openHint: "Riktlinjerna och studierna bakom appens siffror",
+    sources: "Källor",
+    sourcesIntro:
+      "De publicerade riktlinjerna, studierna och vårdens egna sidor bakom appens siffror, med det starkaste underlaget först — var och en med orden appen hämtade ur den.",
+    pending:
+      "{trackers}: deras källor anges i deras egna vyer än så länge, och läggs till här när siffrorna har stämts av mot källorna igen.",
+    loading: "Hämtar källorna…",
+    quotes: "Vad appen hämtade ur den",
+    accessed: "Läst {date}",
+    openSource: "Öppna källan",
+    isbn: "ISBN {isbn}",
+    evidence: {
+      guideline: "Riktlinje",
+      consensus: "Konsensusuttalande",
+      "systematic-review": "Systematisk översikt",
+      "meta-analysis": "Metaanalys",
+      "randomized-trial": "Randomiserad studie",
+      cohort: "Kohortstudie",
+      "clinical-study": "Klinisk studie",
+      review: "Översikt",
+      method: "Metod",
+      dataset: "Referensdata",
+      "health-service": "Vårdens råd",
+    },
+  },
+
   advice: {
     note: "En anteckningsbok, inte medicinsk rådgivning: det du fyller i, jämfört med publicerade referenser. Frågor om ditt barns hälsa hör hemma på BVC.",
   },

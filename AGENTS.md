@@ -56,7 +56,8 @@ the band is "a reason to look, not a verdict", a thin diaper day names the
 sign to look for, and the disclaimer in Settings exists for this reason and
 must not be quietly dropped. Every threshold in the code cites its source in
 a comment — and, in the modules moved over so far (`sleep.ts`), with a
-`[ref:<id>]` tag into `docs/references.json` (see "Every threshold cites its
+`[ref:<id>]` tag into `docs/references.json`, which Settings → About lists
+for the parent, citation, quotes and all (see "Every threshold cites its
 source" below).
 
 ## Build and test commands
@@ -168,8 +169,8 @@ This is a **frontend-only, local-first PWA** — there is no server. It is built
 on [`oss-framework`](https://github.com/niclaslindstedt/oss-framework), the
 same shared surface behind the sibling `meds`, `contacts`, `notes` and `cycle`
 apps, and its shell is the `meds` app's: a top bar with the app mark, the sync
-glyph, a `+` and a cog, six bottom-nav tabs a swipe moves between, and two
-off-bar screens (the child profile and Settings).
+glyph, a `+` and a cog, six bottom-nav tabs a swipe moves between, and three
+off-bar screens (the child profile, Settings, and About behind it).
 
 The framework owns the UI kit and the generic mechanics: modals, form
 primitives, the theme engine, the bottom bar and the tab-paging swipe, the
@@ -225,6 +226,11 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   union.
 - `src/app/migrations.ts` — parse / normalise / serialize; the only module
   that trusts stored bytes.
+- `src/app/references.ts` — the references registry's typed face (see
+  "Every threshold cites its source"): the entry shape, the evidence
+  vocabulary ranked strongest first, and how the About screen lists and
+  cites an entry. The registry itself rides in its own chunk through
+  `useReferences.ts`.
 - `src/app/useDocStore.ts` — the document store over a `DocBackend` seam
   (which is what demo data swaps). Its edits are the app's whole write
   vocabulary.
@@ -250,7 +256,9 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   never-persisted flag. Behind `import()`.
 - `src/app/TodayScreen.tsx`, `DiapersScreen.tsx`, `SleepScreen.tsx`,
   `GrowthScreen.tsx`, `FoodScreen.tsx`, `VaccinesScreen.tsx` — the six tabs;
-  `ChildScreen.tsx` and `SettingsScreen.tsx` — the two off-bar screens;
+  `ChildScreen.tsx`, `SettingsScreen.tsx` and `AboutScreen.tsx` (behind
+  Settings → About: the disclaimer and every source in the registry) — the
+  three off-bar screens;
   `QuickLogSheet.tsx` — the sheet behind the top bar's `+`.
   `DiaperButtons.tsx` is the app's only diaper-logging control and
   `SleepButtons.tsx` its only sleep-logging one, and every place that logs
@@ -309,16 +317,24 @@ citation next to the value, and update `docs/` (see the sync table) in the
 same PR.
 
 **The references registry.** `docs/references.json` is the one list of every
-source the app's numbers and claims rest on, keyed by a stable id: authors or
-organization, title, where it was published, the DOI / URL / ISBN, the
-language, the kind of evidence (`guideline`, `consensus`,
-`systematic-review`, `cohort`, `review`, `clinical-study`, or
-`health-service` for practitioner guidance), the verbatim quotes the numbers
-were taken from, what the app uses it for, and `usedBy` — the files that cite
-it. Code cites an entry with a `[ref:<id>]` tag in the comment beside the
-number (a claim in a catalog string gets its tag in a comment above the
-key). `tests/references_test.ts` fails on a tag with no entry, an entry
-nothing cites, or a `usedBy` that doesn't match the tags. A new source means
+source the app's numbers and claims rest on, keyed by a stable id — the
+shape OSS_SPEC.md §24 prescribes, which `oss-spec validate` checks too:
+authors or organization, title, where it was published, the DOI / URL / ISBN,
+the language, the kind of evidence (`EVIDENCE` in `src/app/references.ts`:
+`guideline`, `consensus`, `systematic-review`, `meta-analysis`,
+`randomized-trial`, `cohort`, `clinical-study`, `review`, `method`,
+`dataset`, or `health-service` for practitioner guidance), the verbatim
+quotes the numbers were taken from, what the app uses it for (`supports`, for
+a contributor), and `usedBy` — the files that cite it. Two fields are the
+app's own: `summary`, the same in a parent's words in English and Swedish,
+and `topics`, the trackers the source serves. Both are read by the About
+screen, which lists every entry straight from the registry through
+`references.ts` — so a new source is shown to parents in the same change
+that cites it, with no second list to keep. Code cites an entry with a
+`[ref:<id>]` tag in the comment beside the number (a claim in a catalog
+string gets its tag in a comment above the key). `tests/references_test.ts` fails on a tag with no entry, an entry
+nothing cites, a `usedBy` that doesn't match the tags, or an entry without
+its `summary` in both languages and a `topics` tracker. A new source means
 an entry and a tag in the same change; a module whose comments still cite
 in prose alone (`growth.ts`, `nutrition.ts`, `diapers.ts`, `vaccines.ts`)
 moves over when it is next touched, the goal being every module in the
@@ -331,6 +347,7 @@ registry.
 | A new fact about the child or a record | Probably nowhere — see rule two. If it survives that: `src/app/types.ts` + `migrations.ts` (bump `DOC_VERSION`, append a step)           |
 | A new derived number                   | The matching domain module (`growth.ts`, `nutrition.ts`, `diapers.ts`, `sleep.ts`, `vaccines.ts`) with tests in `tests/<module>_test.ts` |
 | A change to a recommendation or floor  | The same module, next to its `[ref:<id>]` citation, plus the entry in `docs/references.json` and the matching `docs/*.md` topic          |
+| A new source                           | An entry in `docs/references.json` (with `summary` in both languages and `topics`) and its `[ref:<id>]` tag — About lists it by itself   |
 | A new programme dose or extra vaccine  | `src/app/vaccines.ts` (`PROGRAMME` / `EXTRAS`) + the group label in `i18n/en.ts` and `sv.ts`                                             |
 | A food preset                          | `src/app/data/foods.ts`                                                                                                                  |
 | A new screen                           | `src/app/<Name>Screen.tsx` + a tab in `BottomNav.tsx`, or a button in `TopBar.tsx` if it is an action rather than a place                |
@@ -353,7 +370,7 @@ registry.
 Tests live in `tests/` with a `_test` suffix (OSS_SPEC §20.2) and run under
 Vitest in the `node` environment — they cover the pure domain modules
 (`age`, `growth`, `nutrition`, `diapers`, `sleep`, `vaccines`, `merge`,
-`migrations`),
+`migrations`, `references` — which also holds the registry to the tags),
 which is where the app's real logic is. No DOM, no testing-library, no mocked
 clock: every test pins real dates, and the WHO rows it checks against are the
 published ones.
@@ -402,7 +419,8 @@ references live under `docs/` proper.
 | `nutrition.ts` or `data/foods.ts`                | `docs/nutrition.md`, `docs/features/food.md`                                                                   |
 | `diapers.ts`                                     | `docs/diapers.md`, `docs/features/diapers.md`                                                                  |
 | `sleep.ts`                                       | `docs/sleep.md`, `docs/features/sleep.md`, and `docs/references.json` for any source added or dropped          |
-| A `[ref:<id>]` tag anywhere                      | `docs/references.json` — the entry, its quotes, and its `usedBy`                                               |
+| A `[ref:<id>]` tag anywhere                      | `docs/references.json` — the entry, its quotes, its `usedBy`, and its `summary` / `topics` for About           |
+| `references.ts` or `AboutScreen.tsx`             | `docs/architecture.md` ("Where the numbers come from"), `docs/features/sources.md`                             |
 | `vaccines.ts`                                    | `docs/vaccinations.md`, `docs/features/vaccinations.md`                                                        |
 | The document shape (`types.ts`, `migrations.ts`) | `docs/architecture.md`'s data shape, and a `migrations.ts` step                                                |
 | `useSyncEngine.ts`, `idbAdapter.ts`, `merge.ts`  | `docs/sync.md`, `docs/features/cloud-sync.md`                                                                  |

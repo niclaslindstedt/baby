@@ -154,10 +154,10 @@ The five views Today opens:
 
 …and two buttons on the top bar, for the things you do and then leave:
 
-| Button | What it does                                                                                                                                                              |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **+**  | Log a diaper or a sleep without leaving the screen you are on: a sheet with the same buttons as the two tabs. One tap logs and closes. Gone while both are off.           |
-| **⚙**  | Settings: theme, language, what you track, the child's profile, where the record lives and its encryption passphrase, the PIN app lock, backup / restore / delete, About. |
+| Button | What it does                                                                                                                                                                                                                                                                            |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **+**  | Log a diaper or a sleep without leaving the screen you are on: a sheet with the same buttons as the two tabs. One tap logs and closes. Gone while both are off.                                                                                                                         |
+| **⚙**  | Settings: theme, language, what you track, the child's profile, where the record lives and its encryption passphrase, the PIN app lock, backup / restore / delete, and About — the disclaimer, and every published source the app's numbers rest on with the words each was taken from. |
 
 ## Configuration
 
@@ -233,6 +233,7 @@ More in [`docs/troubleshooting.md`](docs/troubleshooting.md).
 - [Nutrition](docs/nutrition.md) — the regimen, the recommendations, the assessment
 - [Diapers](docs/diapers.md) — the counts and the age-scoped floors
 - [Vaccinations](docs/vaccinations.md) — the programme and the extras
+- [Sources](docs/features/sources.md) — the references registry and the About screen that lists it
 - [Sync](docs/sync.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - [`AGENTS.md`](AGENTS.md) — conventions for humans and coding agents
