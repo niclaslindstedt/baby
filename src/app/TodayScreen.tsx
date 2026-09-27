@@ -5,13 +5,7 @@ import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
 import { ChevronRightIcon } from "@niclaslindstedt/oss-framework/components";
 
 import { ageInDays } from "./age.ts";
-import {
-  ageLabel,
-  childName,
-  durationLabel,
-  sleepNextLine,
-  sleepNowLine,
-} from "./copy.ts";
+import { ageLabel, childName, durationLabel, sleepNextLine } from "./copy.ts";
 import { assessDiapers } from "./diapers.ts";
 import { DiapersModal } from "./DiapersModal.tsx";
 import {
@@ -41,6 +35,7 @@ import {
   sleepStatus,
 } from "./sleep.ts";
 import { SleepModal } from "./SleepModal.tsx";
+import { SleepCountdown, SleepNowLive, SleepRing } from "./SleepNow.tsx";
 import { sortedMeasurements, type AppData } from "./types.ts";
 import type { Features } from "./useAppSettings.ts";
 import { Card, Heading } from "./ui.tsx";
@@ -212,15 +207,19 @@ export function TodayScreen({ data, today, standards, features }: Props) {
               : "default"
           }
           onOpen={() => setView("sleep")}
+          aside={sleepNow && <SleepRing next={sleepNow} now={now} />}
         >
-          {sleepNow !== null
-            ? sleepNowLine(t, sleepNow, locale)
-            : Object.keys(data.sleeps).length === 0
-              ? t("sleep.noneYet", { name })
-              : t("sleep.quiet")}
-          {sleepNext && (
-            <span className="mt-1 block font-bold text-fg-bright">
+          {sleepNow !== null ? (
+            <SleepNowLive next={sleepNow} locale={locale} />
+          ) : Object.keys(data.sleeps).length === 0 ? (
+            t("sleep.noneYet", { name })
+          ) : (
+            t("sleep.quiet")
+          )}
+          {sleepNext && sleepNow && (
+            <span className="mt-1 flex flex-wrap items-baseline gap-x-2 font-bold text-fg-bright">
               {sleepNext}
+              <SleepCountdown next={sleepNow} />
             </span>
           )}
           {sleepFacts.length > 0 && (
@@ -390,25 +389,29 @@ function HeadlineCard({
   icon,
   title,
   tone = "default",
+  aside,
   children,
   onOpen,
 }: {
   icon: React.ReactNode;
   title: string;
   tone?: "default" | "accent" | "warn";
+  /** A live figure beside the headline — the sleep card's ring. */
+  aside?: React.ReactNode;
   children: React.ReactNode;
   onOpen: () => void;
 }) {
   return (
     <Card tone={tone} onClick={onOpen}>
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="flex items-center gap-1.5 text-xs font-bold tracking-wide text-accent uppercase">
             {icon}
             {title}
           </p>
           <p className="mt-1 text-sm text-fg">{children}</p>
         </div>
+        {aside}
         <ChevronRightIcon
           aria-hidden="true"
           className="mt-0.5 h-5 w-5 shrink-0 text-muted"

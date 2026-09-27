@@ -166,9 +166,6 @@ export const sv: Catalog = {
 
   sleep: {
     title: "Sömn",
-    log: "Logga sömn",
-    logHint:
-      "Tryck på Tupplur eller Natt när {name} somnar, och på Vaknade när barnet vaknar. Hade du inte en hand ledig? Välj hur länge sedan det var ovanför knapparna först, eller en tid — och samma knappar finns bakom + i toppraden.",
     nap: "Tupplur",
     night: "Natt",
     when: {
@@ -194,13 +191,12 @@ export const sv: Catalog = {
     saved: "Sömnen sparad",
     removed: "Sömnen borttagen",
     recent: "Senaste 7 dagarna",
-    recentHint:
-      "Grupperat efter dygnet varje sömn hör till — en natt räknas till kvällen den började. Rätta en tid som trycktes in sent, eller lägg till en sömn som ingen loggade.",
-    add: "Lägg till sömn",
+    add: "Lägg till",
+    editRow: "Ändra {kind}, {span}",
+    notEnded: "ej avslutad",
     dayToday: "Idag",
     span: "{start}–{end}",
     spanOpen: "{start}–",
-    stillAsleep: "sover fortfarande",
     noneYet:
       "Inget loggat än. Tryck på Tupplur eller Natt när {name} somnar — tiden sparas åt dig.",
     unfinished:
@@ -209,19 +205,49 @@ export const sv: Catalog = {
     form: {
       addTitle: "Lägg till sömn",
       editTitle: "Ändra sömn",
+      finishTitle: "När slutade den?",
       kind: "Tupplur eller natt",
       start: "Somnade",
-      startTime: "Tid somnade",
       end: "Vaknade",
-      endTime: "Tid vaknade",
       stillAsleep: "Sover fortfarande",
-      startMissing: "Ange när sömnen började",
-      endMissing: "Ange när den slutade, eller kryssa i Sover fortfarande",
-      inFuture: "Den tiden har inte varit än",
-      endBeforeStart: "Slutet måste komma efter början",
-      tooLong: "Det är längre än någon enskild sömn — kontrollera datumen",
+      problem: {
+        future: "Den tiden har inte varit än",
+        endBeforeStart: "Slutet måste komma efter början",
+        tooLong: "Längre än någon enskild sömn — kontrollera dagarna",
+      },
       save: "Spara sömn",
+      delete: "Ta bort sömnen",
       deleteConfirm: "Ta bort den här sömnen?",
+    },
+    clock: {
+      today: "Idag",
+      yesterday: "Igår",
+      now: "Nu",
+      asleepFor: "Har sovit i",
+      label:
+        "En 24-timmarsurtavla med sömnen från {start} till {end}. Dra i någon av ändarna, eller i bågen för att flytta båda.",
+      dayEarlier: "En dag tidigare",
+      dayLater: "En dag senare",
+      kind: {
+        nap: "Tupplur",
+        night: "Natt",
+      },
+    },
+    live: {
+      nap: "Tupplur",
+      night: "Sover",
+      awake: "Vaken",
+      since: "sedan {time}",
+      asleepSince: "Sover sedan {time}",
+      awakeSince: "Vaken sedan {time}",
+      idle: "Tryck på Tupplur eller Natt när {name} somnar",
+      in: "om",
+      how: "Hur räknas det här ut?",
+      dialLabel: "De senaste 24 timmarna på en urtavla",
+      dialDesc:
+        "En 24-timmarsurtavla med midnatt överst: varje sömn det senaste dygnet ritad där den föll, nätter i accentfärgen och tupplurar ljusare, och en prick vid klockslaget nu.",
+      viewDialDesc:
+        "En 24-timmarsurtavla med midnatt överst: varje sömn det senaste dygnet ritad där den föll, fönstret där nästa sömn föreslås streckat, och en prick vid klockslaget nu.",
     },
     nowAsleep: "Sover sedan {time} — {duration}",
     nowAwake: "Vaken sedan {time} — {duration}",

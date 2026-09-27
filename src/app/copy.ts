@@ -4,7 +4,12 @@
 // reading in. Kept out of the screens so three of them phrase an age the
 // same way.
 
-import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
+import {
+  addDays,
+  dayKeyOf,
+  formatDayKey,
+  type DayKey,
+} from "@niclaslindstedt/oss-framework/calendar";
 
 import { ageParts } from "./age.ts";
 import { formatDayYear, formatInstant } from "./format.ts";
@@ -97,4 +102,22 @@ export function sleepNextLine(
     { time: formatInstant(s.at, locale) },
   );
   return s.overdue ? t("sleep.nextPassed", { next: line }) : line;
+}
+
+/** The day an instant fell on, as a parent says it next to a time: "Today",
+ *  "Yesterday", or "Mon 21 Sep" further back. */
+export function relativeDay(
+  t: TFn,
+  ms: number,
+  today: DayKey,
+  locale?: string,
+): string {
+  const day = dayKeyOf(new Date(ms));
+  if (day === today) return t("sleep.clock.today");
+  if (day === addDays(today, -1)) return t("sleep.clock.yesterday");
+  return formatDayKey(
+    day,
+    { weekday: "short", day: "numeric", month: "short" },
+    locale,
+  );
 }

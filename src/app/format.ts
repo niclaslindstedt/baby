@@ -119,3 +119,15 @@ export function formatPercent(share: number, locale?: string): string {
     maximumFractionDigits: 0,
   });
 }
+
+/** A running length of time as a stopwatch reads it: "12:05" under an hour,
+ *  "1:23:45" from one — the seconds ticking are what says the clock is
+ *  live. Negative lengths read as zero. */
+export function formatElapsed(ms: number): string {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+}

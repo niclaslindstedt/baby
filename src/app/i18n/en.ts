@@ -201,9 +201,6 @@ export const en = {
   // Today's Sleep card, where the log is read against the age.
   sleep: {
     title: "Sleep",
-    log: "Log a sleep",
-    logHint:
-      "Tap Nap or Night when {name} falls asleep, and Woke up when they wake. Didn't have a hand free? Pick how long ago above the buttons first, or a time — and the same buttons sit behind the + in the top bar.",
     nap: "Nap",
     night: "Night",
     // The **When** row above the sleep buttons: the time the next tap
@@ -231,13 +228,12 @@ export const en = {
     saved: "Sleep saved",
     removed: "Sleep removed",
     recent: "The last 7 days",
-    recentHint:
-      "Grouped by the day each sleep belongs to — a night counts toward the evening it began. Correct a time tapped late, or add a sleep nobody logged.",
-    add: "Add a sleep",
+    add: "Add",
+    editRow: "Edit {kind}, {span}",
+    notEnded: "not ended",
     dayToday: "Today",
     span: "{start}–{end}",
     spanOpen: "{start}–",
-    stillAsleep: "still asleep",
     noneYet:
       "Nothing logged yet. Tap Nap or Night when {name} falls asleep — the time is recorded for you.",
     unfinished:
@@ -246,19 +242,52 @@ export const en = {
     form: {
       addTitle: "Add a sleep",
       editTitle: "Edit sleep",
+      finishTitle: "When did it end?",
       kind: "Nap or night",
       start: "Fell asleep",
-      startTime: "Time fell asleep",
       end: "Woke up",
-      endTime: "Time woke up",
       stillAsleep: "Still asleep",
-      startMissing: "Enter when the sleep began",
-      endMissing: "Enter when it ended, or tick Still asleep",
-      inFuture: "That time hasn't happened yet",
-      endBeforeStart: "The end has to come after the start",
-      tooLong: "That is longer than any one sleep — check the dates",
+      problem: {
+        future: "That time hasn't happened yet",
+        endBeforeStart: "The end has to come after the start",
+        tooLong: "Longer than any one sleep — check the days",
+      },
       save: "Save sleep",
+      delete: "Remove this sleep",
       deleteConfirm: "Remove this sleep?",
+    },
+    // The dial a sleep is set on (the Sleep tab's editor), and the day
+    // each of its ends fell on.
+    clock: {
+      today: "Today",
+      yesterday: "Yesterday",
+      now: "Now",
+      asleepFor: "Asleep for",
+      label:
+        "A 24-hour dial with the sleep from {start} to {end}. Drag either end, or the arc to move both.",
+      dayEarlier: "A day earlier",
+      dayLater: "A day later",
+      kind: {
+        nap: "Nap",
+        night: "Night",
+      },
+    },
+    // The running clock: the Sleep tab's dial, Today's card and the view.
+    live: {
+      nap: "Napping",
+      night: "Asleep",
+      awake: "Awake",
+      since: "since {time}",
+      asleepSince: "Asleep since {time}",
+      awakeSince: "Awake since {time}",
+      idle: "Tap Nap or Night when {name} falls asleep",
+      in: "in",
+      how: "How is this worked out?",
+      dialLabel: "The last 24 hours on a clock face",
+      dialDesc:
+        "A 24-hour dial, midnight at the top: each sleep in the last day drawn where it fell, nights in the accent colour and naps lighter, and a dot at the time now.",
+      viewDialDesc:
+        "A 24-hour dial, midnight at the top: each sleep in the last day drawn where it fell, the window the next sleep is suggested in dashed, and a dot at the time now.",
     },
     // Right now: the state, and the next sleep.
     nowAsleep: "Asleep since {time} — {duration}",

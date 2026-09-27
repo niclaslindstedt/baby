@@ -13,7 +13,6 @@ import {
   lastCompleteSleepDay,
   lastEndedSleep,
   lastNight,
-  latestClockTime,
   LONG_NAP_MINUTES,
   MIN_LOGGED_DAYS,
   nextSleep,
@@ -26,12 +25,18 @@ import {
   sleepRhythm,
   sleepSpans,
   sleepStatus,
-  sleepTimeProblem,
   sleptInLast,
+  spansInLast,
   unfinishedSleeps,
   wakeWindowFor,
   type SleepAverage,
 } from "../src/app/sleep.ts";
+import {
+  latestClockTime,
+  sleepDraft,
+  sleepEditProblem,
+  sleepTimeProblem,
+} from "../src/app/sleepEdit.ts";
 import {
   emptyDoc,
   type AppData,
@@ -234,6 +239,28 @@ describe("the averages", () => {
     expect(last24.dayMinutes).toBe(90 + 30);
     expect(last24.nightMinutes).toBe(11 * 60);
     expect(last24.totalMinutes).toBe(120 + 660);
+  });
+
+  it("clips the rolling day's spans to the window, as the dial draws them", () => {
+    const data = docWith([
+      ...regularDays("2026-09-25", "2026-09-26"),
+      sleep("nap", "2026-09-27", [9, 40], null),
+    ]);
+    const now = local("2026-09-27", 10, 0);
+    const spans = spansInLast(data, now);
+    // From 10:00 yesterday: the 12:00 and 16:00 naps, the night, and the
+    // nap running now — the 8:30 nap ended before the window opened.
+    expect(spans.map((s) => [s.kind, s.ongoing])).toEqual([
+      ["nap", false],
+      ["nap", false],
+      ["night", false],
+      ["nap", true],
+    ]);
+    expect(spans.at(-1)!.end).toBe(now.getTime());
+    // A night that began before the window is cut at its edge.
+    const short = spansInLast(data, local("2026-09-27", 4, 0), 6);
+    expect(short).toHaveLength(1);
+    expect(short[0]!.start).toBe(local("2026-09-26", 22, 0).getTime());
   });
 
   it("adds a night logged in halves into one last night, and waits while it goes on", () => {
@@ -549,5 +576,64 @@ describe("logging after the fact", () => {
     expect(sleepTimeProblem(data, local("2026-09-27", 12, 10), now)).toBe(
       "beforeStart",
     );
+  });
+});
+
+describe("correcting a sleep on the dial", () => {
+  const at = (day: string, h: number, m = 0) => local(day, h, m).getTime();
+
+  it("opens a new sleep as the hour up to now, on the five-minute grid", () => {
+    const draft = sleepDraft(null, at("2026-09-27", 13, 42));
+    expect(draft).toEqual({
+      kind: "nap",
+      start: at("2026-09-27", 12, 40),
+      end: at("2026-09-27", 13, 40),
+    });
+  });
+
+  it("opens a recorded sleep as it was, and keeps the running one open", () => {
+    const now = at("2026-09-27", 14, 0);
+    const ended = sleep("night", "2026-09-26", [19, 7], [30, 4]);
+    expect(sleepDraft(ended, now)).toEqual({
+      kind: "night",
+      start: at("2026-09-26", 19, 7),
+      end: at("2026-09-27", 6, 4),
+    });
+    const running = sleep("nap", "2026-09-27", [13, 10], null);
+    expect(sleepDraft(running, now).end).toBeNull();
+  });
+
+  it("guesses an end for a sleep being finished — never past now", () => {
+    const now = at("2026-09-27", 14, 0);
+    const night = sleep("night", "2026-09-26", [19, 30], null);
+    // Ten hours on: 5:30 the next morning.
+    expect(sleepDraft(night, now, true).end).toBe(at("2026-09-27", 5, 30));
+    const nap = sleep("nap", "2026-09-27", [13, 20], null);
+    // An hour on would be 14:20, which hasn't happened: the grid step
+    // before now instead.
+    expect(sleepDraft(nap, now, true).end).toBe(at("2026-09-27", 14, 0));
+  });
+
+  it("refuses a time to come, an end before the start, and a sleep too long to be one", () => {
+    const now = at("2026-09-27", 14, 0);
+    const ok = { start: at("2026-09-26", 19, 0), end: at("2026-09-27", 6, 0) };
+    expect(sleepEditProblem(ok, now)).toBeNull();
+    expect(
+      sleepEditProblem({ start: ok.start, end: at("2026-09-27", 14, 5) }, now),
+    ).toBe("future");
+    expect(sleepEditProblem({ start: ok.end, end: ok.start }, now)).toBe(
+      "endBeforeStart",
+    );
+    // Seventeen hours: past STALE_SLEEP_HOURS.
+    expect(
+      sleepEditProblem({ start: ok.start, end: at("2026-09-27", 12, 0) }, now),
+    ).toBe("tooLong");
+    // An open sleep runs to now for the length check.
+    expect(
+      sleepEditProblem({ start: at("2026-09-27", 13, 0), end: null }, now),
+    ).toBeNull();
+    expect(
+      sleepEditProblem({ start: at("2026-09-26", 20, 0), end: null }, now),
+    ).toBe("tooLong");
   });
 });

@@ -165,12 +165,12 @@ App.tsx
 ├── <main>          one scrolling region; the swipe is measured across it
 │   ├── TodayScreen     the age line, then one headline card per tracker
 │   │   ├── DiapersModal    last 24 h against the floor for the age, the week chart
-│   │   ├── SleepModal      now and the next sleep, averages vs. the age, SleepChart, SleepDiary
+│   │   ├── SleepModal      the dial with the suggested window, averages vs. the age, SleepChart, SleepDiary
 │   │   ├── GrowthModal     indicator tabs, GrowthChart, trend, forecast, adult height
 │   │   ├── FoodModal       the verdict, DayCoverageChart, the target, the regimen, nutrients
 │   │   └── VaccinesModal   the card at a glance: visits, ticks, the count
 │   ├── DiapersScreen   DiaperButtons, then the last seven days of changes
-│   ├── SleepScreen     SleepButtons, then the last seven days of sleeps (SleepForm)
+│   ├── SleepScreen     the live dial (SleepNow), SleepButtons, the last seven days (SleepForm → SleepClock)
 │   ├── GrowthScreen    the readings list, and MeasurementForm
 │   ├── FoodScreen      the regimen (FoodForm), then milk feeding
 │   ├── VaccinesScreen  the programme timeline, the extras, the record form
@@ -200,6 +200,20 @@ it — cross-fade in and go back where they came from. Logging a diaper is one c
 and both write through `addDiaper`. Logging a sleep is too: the Sleep tab and
 the sheet both render `SleepButtons`, and starting, ending and correcting a
 sleep all write through `saveSleep`.
+
+**Live, and the dial.** A record that is still running shows its clock
+running. `live.tsx` holds the pieces: `useTick`, a clock that re-renders only
+the component holding it and stops while the page is hidden; `Elapsed`, a
+stopwatch (or a countdown) to the second; and `ProgressRing`. The 24-hour dial
+is `ClockDial.tsx` over the pure `dial.ts` — the face, the arcs on its track,
+the now dot — and the sleep module uses it three ways: showing the last day on
+the Sleep tab (`SleepNow.tsx`), showing it with the suggested window on the
+view, and editing one sleep by dragging its ends (`SleepClock.tsx`). A running
+clock of a record's own start is allowed on a tab; a comparison — a ring
+filling toward a suggested time — stays on Today. Every animation is CSS
+(`styles.css`, "Live") and holds still under reduced motion. The sleep module
+is the reference: the other trackers take these pieces up as they are, rather
+than growing their own.
 
 **Trackers switch off.** Settings → What you track carries a switch per
 tracker — diapers, sleep, growth, food, vaccines — stored in

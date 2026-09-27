@@ -21,10 +21,14 @@ import {
   sleepNormFor,
   sleepStatus,
   sleptInLast,
+  spansInLast,
   type SleepAverage,
   type SleepSuggestion,
 } from "./sleep.ts";
+import { ClockDial, type DialArc } from "./ClockDial.tsx";
+import { Elapsed } from "./live.tsx";
 import { SleepChart } from "./SleepChart.tsx";
+import { SleepCountdown } from "./SleepNow.tsx";
 import { SleepDiary } from "./SleepDiary.tsx";
 import type { AppData } from "./types.ts";
 import { Card, Heading } from "./ui.tsx";
@@ -78,6 +82,31 @@ export function SleepModal({ open, onClose, data, today, now }: Props) {
     () => sleepDays(data, addDays(today, -CHART_DAYS), addDays(today, -1), now),
     [data, today, now],
   );
+  // The dial: the sleeps of the last day, and the window the next one is
+  // suggested in, dashed. The past is drawn short of a full turn by as much
+  // as the window reaches ahead, so the two never land on the same stretch
+  // of the face.
+  const arcs = useMemo<DialArc[]>(() => {
+    const t0 = now.getTime();
+    const hint =
+      next?.state === "awake" && next.suggestion && next.suggestion.latest > t0
+        ? {
+            from: Math.max(next.suggestion.earliest, t0),
+            to: next.suggestion.latest,
+          }
+        : null;
+    const ahead = hint ? (hint.to - t0) / 3_600_000 + 0.5 : 0;
+    const past: DialArc[] = spansInLast(data, now, Math.max(1, 24 - ahead)).map(
+      (span) => ({
+        key: span.id,
+        from: span.start,
+        to: span.end,
+        tone: span.kind,
+        live: span.ongoing,
+      }),
+    );
+    return hint ? [...past, { key: "hint", tone: "hint", ...hint }] : past;
+  }, [data, now, next]);
   const diary = useMemo(
     () => sleepDiary(data, addDays(today, -(DIARY_DAYS - 1)), today, now),
     [data, today, now],
@@ -110,36 +139,71 @@ export function SleepModal({ open, onClose, data, today, now }: Props) {
           </p>
         ) : (
           <>
-            <p className="mt-2 text-sm text-fg">
-              {sleepNowLine(t, next, locale)}
-            </p>
+            <div className="mt-3">
+              <ClockDial
+                arcs={arcs}
+                now={now.getTime()}
+                label={t("sleep.live.dialLabel")}
+                desc={t("sleep.live.viewDialDesc")}
+                className="max-w-[17rem]"
+              >
+                <span className="text-[0.65rem] font-bold tracking-wide text-accent uppercase">
+                  {next.state === "asleep"
+                    ? t(
+                        next.kind === "night"
+                          ? "sleep.live.night"
+                          : "sleep.live.nap",
+                      )
+                    : t("sleep.live.awake")}
+                </span>
+                <Elapsed
+                  from={next.since}
+                  className="text-2xl leading-tight font-bold text-fg-bright"
+                />
+                <span className="text-xs text-muted tabular-nums">
+                  {t("sleep.live.since", {
+                    time: formatInstant(next.since, locale),
+                  })}
+                </span>
+              </ClockDial>
+            </div>
             {nextLine && (
-              <p className="mt-1 text-lg font-bold text-fg-bright">
-                {nextLine}
+              <div className="mt-3 text-center">
+                <p className="text-lg font-bold text-fg-bright">{nextLine}</p>
+                {next.state === "awake" && next.suggestion && (
+                  <p className="flex items-baseline justify-center gap-2 text-xs text-muted tabular-nums">
+                    {formatInstant(next.suggestion.earliest, locale)}–
+                    {formatInstant(next.suggestion.latest, locale)}
+                    <SleepCountdown next={next} />
+                  </p>
+                )}
+              </div>
+            )}
+            {next.state === "nightWaking" && (
+              <p className="mt-3 text-xs text-muted">
+                {t("sleep.nightWakingNote")}
+              </p>
+            )}
+            {next.state === "awake" && next.suggestion === null && (
+              <p className="mt-3 text-xs text-muted">
+                {t("sleep.noSuggestionAge")}
               </p>
             )}
             {next.state === "awake" && next.suggestion && (
-              <p className="text-xs text-muted tabular-nums">
-                {formatInstant(next.suggestion.earliest, locale)}–
-                {formatInstant(next.suggestion.latest, locale)}
-              </p>
+              <details className="group mt-3 text-xs text-muted">
+                <summary className="cursor-pointer list-none text-center font-medium text-accent">
+                  {t("sleep.live.how")}
+                </summary>
+                <div className="mt-2 flex flex-col gap-2">
+                  <Explanation
+                    suggestion={next.suggestion}
+                    name={name}
+                    t={t}
+                    locale={locale}
+                  />
+                </div>
+              </details>
             )}
-            <div className="mt-3 flex flex-col gap-2 text-xs text-muted">
-              {next.state === "nightWaking" && (
-                <p>{t("sleep.nightWakingNote")}</p>
-              )}
-              {next.state === "awake" && next.suggestion === null && (
-                <p>{t("sleep.noSuggestionAge")}</p>
-              )}
-              {next.state === "awake" && next.suggestion && (
-                <Explanation
-                  suggestion={next.suggestion}
-                  name={name}
-                  t={t}
-                  locale={locale}
-                />
-              )}
-            </div>
           </>
         )}
       </Card>
