@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
-// The document merge: stamped records by last edit, diaper changes by union.
+// The document merge: stamped records (sleeps among them) by last edit,
+// diaper changes by union.
 
 import { describe, expect, it } from "vitest";
 
@@ -77,6 +78,39 @@ describe("mergeDocs", () => {
     const merged = mergeDocs(local, remote);
     expect(Object.keys(merged.diapers).sort()).toEqual(["a", "b"]);
     expect(merged.child?.name).toBe("Alva");
+  });
+
+  it("takes the device that ended a sleep over the one still showing it open", () => {
+    const start = "2026-03-01T18:30:00.000Z";
+    const open: AppData = {
+      ...emptyDoc(),
+      sleeps: {
+        s: { id: "s", kind: "night", start, end: null, updatedAt: start },
+      },
+    };
+    const ended: AppData = {
+      ...emptyDoc(),
+      sleeps: {
+        s: {
+          id: "s",
+          kind: "night",
+          start,
+          end: "2026-03-02T05:10:00.000Z",
+          updatedAt: "2026-03-02T05:10:00.000Z",
+        },
+        n: {
+          id: "n",
+          kind: "nap",
+          start: "2026-03-02T08:00:00.000Z",
+          end: null,
+          updatedAt: "2026-03-02T08:00:00.000Z",
+        },
+      },
+    };
+    for (const merged of [mergeDocs(open, ended), mergeDocs(ended, open)]) {
+      expect(merged.sleeps.s?.end).toBe("2026-03-02T05:10:00.000Z");
+      expect(Object.keys(merged.sleeps).sort()).toEqual(["n", "s"]);
+    }
   });
 
   it("agrees on content whichever side is local", () => {

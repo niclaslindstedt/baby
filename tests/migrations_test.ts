@@ -128,6 +128,47 @@ describe("normalizeDoc", () => {
     expect(Object.keys(doc.vaccinations)).toEqual([]);
   });
 
+  it("keeps a sleep with a kind and a start, and reads a bad end as still going", () => {
+    const doc = normalizeDoc({
+      version: DOC_VERSION,
+      sleeps: {
+        ok: {
+          id: "ok",
+          kind: "nap",
+          start: "2026-03-01T11:00:00.000Z",
+          end: "2026-03-01T12:10:00.000Z",
+          updatedAt: "2026-03-01T12:10:00.000Z",
+        },
+        open: {
+          id: "open",
+          kind: "night",
+          start: "2026-03-01T18:30:00.000Z",
+          end: null,
+          updatedAt: "2026-03-01T18:30:00.000Z",
+        },
+        backwards: {
+          id: "backwards",
+          kind: "nap",
+          start: "2026-03-01T15:00:00.000Z",
+          end: "2026-03-01T14:00:00.000Z",
+        },
+        badKind: { id: "badKind", kind: "doze", start: "2026-03-01T15:00:00Z" },
+        noStart: { id: "noStart", kind: "nap", start: "earlier" },
+      },
+    });
+    expect(Object.keys(doc.sleeps).sort()).toEqual(["backwards", "ok", "open"]);
+    expect(doc.sleeps.ok?.end).toBe("2026-03-01T12:10:00.000Z");
+    expect(doc.sleeps.open?.end).toBeNull();
+    // The start was real; the end is what the Sleep tab asks for again.
+    expect(doc.sleeps.backwards?.end).toBeNull();
+  });
+
+  it("gives a v3 document an empty sleep log", () => {
+    const doc = normalizeDoc({ version: 3, child: CHILD, diapers: {} });
+    expect(doc.version).toBe(DOC_VERSION);
+    expect(doc.sleeps).toEqual({});
+  });
+
   it("falls back to breast milk for an unreadable milk record", () => {
     expect(normalizeDoc({ milk: 7 }).milk.kind).toBe("breast");
     expect(normalizeDoc({ milk: { kind: "goat" } }).milk.kind).toBe("breast");

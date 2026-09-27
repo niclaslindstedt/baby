@@ -3,7 +3,9 @@
 //
 // The model makes this easy. Every record is keyed by id and the editable
 // ones carry the timestamp of their last edit, so two copies merge record by
-// record with the later edit winning. Diaper changes have no edits at all —
+// record with the later edit winning. A sleep is one of those: the tap that
+// ends it is an edit, so the phone that tapped "woke up" wins over the tablet
+// that still thinks the child is asleep. Diaper changes have no edits at all —
 // each is one tap that happened on one device — so they merge as a plain
 // union: a change logged on the phone and another on the tablet the same
 // afternoon both survive.
@@ -39,8 +41,8 @@ function mergeStamped<T extends Stamped>(
   return out;
 }
 
-/** Merge two documents: stamped records by last edit, diaper changes by
- *  union. */
+/** Merge two documents: stamped records (sleeps included) by last edit,
+ *  diaper changes by union. */
 export function mergeDocs(local: AppData, remote: AppData): AppData {
   const child =
     local.child && remote.child
@@ -55,6 +57,7 @@ export function mergeDocs(local: AppData, remote: AppData): AppData {
     child,
     measurements: mergeStamped(local.measurements, remote.measurements),
     diapers: { ...remote.diapers, ...local.diapers },
+    sleeps: mergeStamped(local.sleeps, remote.sleeps),
     foods: mergeStamped(local.foods, remote.foods),
     milk,
     vaccinations: mergeStamped(local.vaccinations, remote.vaccinations),

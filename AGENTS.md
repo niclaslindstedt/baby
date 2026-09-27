@@ -36,14 +36,15 @@ byte of the record, or a byte _about_ the record, anywhere the user did not
 choose, it is the wrong change however useful the feature is.
 
 **Rule two: minimal input, useful output.** The app is not a diary. A diaper
-change is one tap and a timestamp; a growth reading is what the scale said;
+change is one tap and a timestamp; a sleep is a tap when it starts and one
+when it ends; a growth reading is what the scale said;
 the food regimen is the foods the child _typically_ gets in a day with a
 daily amount each and, optionally, the times of day they are given, updated
 when the normal diet changes — never a meal log.
 Before six months there is nothing to track about food, and the Food screen
 says so and stays out of the way. Every field in the model is read by a
 number on some screen; a field nothing reads is a question asked for
-nothing. Before adding one, name the answer on Today, Growth, Food or
+nothing. Before adding one, name the answer on Today, Sleep, Growth, Food or
 Vaccines that would move because of it.
 
 **Rule three: the app is a notebook, not a clinician.** It records what the
@@ -54,7 +55,9 @@ health care quotes. Copy must not imply medical authority: a reading outside
 the band is "a reason to look, not a verdict", a thin diaper day names the
 sign to look for, and the disclaimer in Settings exists for this reason and
 must not be quietly dropped. Every threshold in the code cites its source in
-a comment.
+a comment — and, in the modules moved over so far (`sleep.ts`), with a
+`[ref:<id>]` tag into `docs/references.json` (see "Every threshold cites its
+source" below).
 
 ## Build and test commands
 
@@ -165,7 +168,7 @@ This is a **frontend-only, local-first PWA** — there is no server. It is built
 on [`oss-framework`](https://github.com/niclaslindstedt/oss-framework), the
 same shared surface behind the sibling `meds`, `contacts`, `notes` and `cycle`
 apps, and its shell is the `meds` app's: a top bar with the app mark, the sync
-glyph, a `+` and a cog, five bottom-nav tabs a swipe moves between, and two
+glyph, a `+` and a cog, six bottom-nav tabs a swipe moves between, and two
 off-bar screens (the child profile and Settings).
 
 The framework owns the UI kit and the generic mechanics: modals, form
@@ -189,8 +192,8 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
 
 ### The app owns the domain ("store stays in the app")
 
-- `src/app/types.ts` — the `Child` / `Measurement` / `DiaperChange` / `Food`
-  / `MilkFeeding` / `Vaccination` / `AppData` model. One child per document.
+- `src/app/types.ts` — the `Child` / `Measurement` / `DiaperChange` /
+  `SleepSession` / `Food` / `MilkFeeding` / `Vaccination` / `AppData` model. One child per document.
   A food is a name, a daily amount and its content per 100 g, of which only
   calories are required; a blank nutrient is unknown, never zero.
 - `src/app/age.ts` — days and WHO months for the tables, calendar months
@@ -208,10 +211,18 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   `src/app/data/foods.ts` is the preset list behind the food form's chips.
 - `src/app/diapers.ts` — the counts (per local day, wet and dirty), the
   daily series, and the age-scoped norms with the last-24-hours assessment.
+- `src/app/sleep.ts` — the sleep log read: the spans (the running sleep up
+  to now, overlaps clipped), the sleep day a night belongs to (the evening it
+  began), the rolling 24 hours, the 30/90-day averages, the WHO
+  recommendation and Galland 2012's observed range for the age, the
+  Tresillian/Karitane wake windows, the child's own rhythm, and `nextSleep`
+  — where the child is now and when the next nap or bedtime is likely to
+  suit.
 - `src/app/vaccines.ts` — Folkhälsomyndigheten's programme as data, the
   extras outside it, and the timeline derivation (given / due / upcoming).
 - `src/app/merge.ts` — the document merge both sync and backup restore run
-  through: stamped records by last edit, diaper changes by union.
+  through: stamped records (sleeps included) by last edit, diaper changes by
+  union.
 - `src/app/migrations.ts` — parse / normalise / serialize; the only module
   that trusts stored bytes.
 - `src/app/useDocStore.ts` — the document store over a `DocBackend` seam
@@ -237,16 +248,20 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   booted before the first render by `VITE_SEED=demo` / `make demo`,
   with tests in `tests/demoData_test.ts`), the in-memory `DocBackend` that serves it, and the
   never-persisted flag. Behind `import()`.
-- `src/app/TodayScreen.tsx`, `DiapersScreen.tsx`, `GrowthScreen.tsx`,
-  `FoodScreen.tsx`, `VaccinesScreen.tsx` — the five tabs; `ChildScreen.tsx`
-  and `SettingsScreen.tsx` — the two off-bar screens; `DiaperSheet.tsx` — the
-  sheet behind the top bar's `+`. `DiaperButtons.tsx` is the app's only
-  diaper-logging control and every place that logs one renders it.
-- `src/app/ViewModal.tsx` and the four views it wraps — `DiapersModal.tsx`,
-  `GrowthModal.tsx`, `FoodModal.tsx`, `VaccinesModal.tsx` — the read-only
+- `src/app/TodayScreen.tsx`, `DiapersScreen.tsx`, `SleepScreen.tsx`,
+  `GrowthScreen.tsx`, `FoodScreen.tsx`, `VaccinesScreen.tsx` — the six tabs;
+  `ChildScreen.tsx` and `SettingsScreen.tsx` — the two off-bar screens;
+  `QuickLogSheet.tsx` — the sheet behind the top bar's `+`.
+  `DiaperButtons.tsx` is the app's only diaper-logging control and
+  `SleepButtons.tsx` its only sleep-logging one, and every place that logs
+  either renders it; `SleepForm.tsx` corrects a sleep on the Sleep tab.
+- `src/app/ViewModal.tsx` and the five views it wraps — `DiapersModal.tsx`,
+  `SleepModal.tsx`, `GrowthModal.tsx`, `FoodModal.tsx`, `VaccinesModal.tsx`
+  — the read-only
   answers, opened from Today's headline cards. See "Input on the tabs,
   answers on Today" below.
-- `src/app/GrowthChart.tsx`, `DiaperChart.tsx`, `DayCoverageChart.tsx` —
+- `src/app/GrowthChart.tsx`, `DiaperChart.tsx`, `SleepChart.tsx`,
+  `SleepDiary.tsx`, `DayCoverageChart.tsx` —
   hand-built from the framework's chart _primitives_ (`bandPath`, `linePath`,
   `areaPath`, `barPath`, `linearScale`, `niceTicks`), not its finished chart
   components.
@@ -260,11 +275,12 @@ framework's internals — only its published subpaths.
 
 ### Input on the tabs, answers on Today
 
-The four bottom-bar destinations beside Today are where a record goes **in** —
-a diaper, a reading, a food, a dose marked given — and they carry no derived
-numbers. Everything the app _concludes_ is on Today, one tap behind a headline
-card, in a `ViewModal`: the last 24 hours of diapers, the growth curves, the
-day's food coverage, the vaccination card. Full screen on a phone, a card over
+The five bottom-bar destinations beside Today are where a record goes **in** —
+a diaper, a sleep, a reading, a food, a dose marked given — and they carry no
+derived numbers. Everything the app _concludes_ is on Today, one tap behind a
+headline card, in a `ViewModal`: the last 24 hours of diapers, the sleep
+averages and the suggested next nap, the growth curves, the day's food
+coverage, the vaccination card. Full screen on a phone, a card over
 a blurred page from `sm:` up.
 
 Two rules follow. **A view never writes** — a modal that could edit would be a
@@ -285,40 +301,59 @@ is a function in the matching domain module.
 ### Every threshold cites its source
 
 The growth standards, the energy and nutrient targets, the breast-milk
-energy shares, the diaper floors, and the vaccination ages are all quoted
+energy shares, the diaper floors, the sleep recommendations and wake
+windows, and the vaccination ages are all quoted
 from a named source in the module header or beside the number. A change to
 one of them is a change to a claim the app makes to a parent: keep the
 citation next to the value, and update `docs/` (see the sync table) in the
 same PR.
 
+**The references registry.** `docs/references.json` is the one list of every
+source the app's numbers and claims rest on, keyed by a stable id: authors or
+organization, title, where it was published, the DOI / URL / ISBN, the
+language, the kind of evidence (`guideline`, `consensus`,
+`systematic-review`, `cohort`, `review`, `clinical-study`, or
+`health-service` for practitioner guidance), the verbatim quotes the numbers
+were taken from, what the app uses it for, and `usedBy` — the files that cite
+it. Code cites an entry with a `[ref:<id>]` tag in the comment beside the
+number (a claim in a catalog string gets its tag in a comment above the
+key). `tests/references_test.ts` fails on a tag with no entry, an entry
+nothing cites, or a `usedBy` that doesn't match the tags. A new source means
+an entry and a tag in the same change; a module whose comments still cite
+in prose alone (`growth.ts`, `nutrition.ts`, `diapers.ts`, `vaccines.ts`)
+moves over when it is next touched, the goal being every module in the
+registry.
+
 ## Where new code goes
 
-| Change                                 | Goes in                                                                                                                         |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| A new fact about the child or a record | Probably nowhere — see rule two. If it survives that: `src/app/types.ts` + `migrations.ts` (bump `DOC_VERSION`, append a step)  |
-| A new derived number                   | The matching domain module (`growth.ts`, `nutrition.ts`, `diapers.ts`, `vaccines.ts`) with tests in `tests/<module>_test.ts`    |
-| A change to a recommendation or floor  | The same module, next to its citation, plus the matching `docs/*.md` topic                                                      |
-| A new programme dose or extra vaccine  | `src/app/vaccines.ts` (`PROGRAMME` / `EXTRAS`) + the group label in `i18n/en.ts` and `sv.ts`                                    |
-| A food preset                          | `src/app/data/foods.ts`                                                                                                         |
-| A new screen                           | `src/app/<Name>Screen.tsx` + a tab in `BottomNav.tsx`, or a button in `TopBar.tsx` if it is an action rather than a place       |
-| A new way to keep the record           | `useSyncEngine.ts` (`SyncBackendId`, `AVAILABLE_BACKENDS`, the adapter) + `settings.backendName`/`backendHint` in both catalogs |
-| A new answer to show a parent          | A card on `TodayScreen.tsx`, or the matching `*Modal.tsx` behind it — never one of the four input tabs                          |
-| A new way to log a diaper              | Never a second write path — render `DiaperButtons` and write through `addDiaper`                                                |
-| A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                           |
-| A new feature switch                   | `FeatureId` in `useAppSettings.ts`, guards on the screens it owns, and `navTabs()` if it has a tab                              |
-| A new storage backend                  | The framework, if generic; `useSyncEngine.ts` wires adapters up, and `idbAdapter.ts` is the one app-local adapter               |
-| A change to what the demo shows        | `src/app/dev/demoData.ts` (offsets from `now`, never fixed dates), with tests in `tests/demoData_test.ts`                       |
-| Any user-facing string                 | `src/app/i18n/en.ts` **and** `sv.ts`, never inline in a component                                                               |
-| A shared UI primitive                  | The framework, if it is domain-free; `src/app/ui.tsx` only for this app's layout pieces                                         |
-| Tests                                  | `tests/<module>_test.ts`                                                                                                        |
-| Docs                                   | `docs/` (references) and `docs/features/` (changelog-linked feature docs only)                                                  |
-| LLM prompt                             | `prompts/<name>/<major>_<minor>_<patch>.md` (see `prompts/README.md`) — none exist; the app makes no LLM calls                  |
+| Change                                 | Goes in                                                                                                                                  |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| A new fact about the child or a record | Probably nowhere — see rule two. If it survives that: `src/app/types.ts` + `migrations.ts` (bump `DOC_VERSION`, append a step)           |
+| A new derived number                   | The matching domain module (`growth.ts`, `nutrition.ts`, `diapers.ts`, `sleep.ts`, `vaccines.ts`) with tests in `tests/<module>_test.ts` |
+| A change to a recommendation or floor  | The same module, next to its `[ref:<id>]` citation, plus the entry in `docs/references.json` and the matching `docs/*.md` topic          |
+| A new programme dose or extra vaccine  | `src/app/vaccines.ts` (`PROGRAMME` / `EXTRAS`) + the group label in `i18n/en.ts` and `sv.ts`                                             |
+| A food preset                          | `src/app/data/foods.ts`                                                                                                                  |
+| A new screen                           | `src/app/<Name>Screen.tsx` + a tab in `BottomNav.tsx`, or a button in `TopBar.tsx` if it is an action rather than a place                |
+| A new way to keep the record           | `useSyncEngine.ts` (`SyncBackendId`, `AVAILABLE_BACKENDS`, the adapter) + `settings.backendName`/`backendHint` in both catalogs          |
+| A new answer to show a parent          | A card on `TodayScreen.tsx`, or the matching `*Modal.tsx` behind it — never one of the five input tabs                                   |
+| A new way to log a diaper              | Never a second write path — render `DiaperButtons` and write through `addDiaper`                                                         |
+| A new way to log a sleep               | Never a second write path — render `SleepButtons` and write through `saveSleep`                                                          |
+| A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                                    |
+| A new feature switch                   | `FeatureId` in `useAppSettings.ts`, guards on the screens it owns, and `navTabs()` if it has a tab                                       |
+| A new storage backend                  | The framework, if generic; `useSyncEngine.ts` wires adapters up, and `idbAdapter.ts` is the one app-local adapter                        |
+| A change to what the demo shows        | `src/app/dev/demoData.ts` (offsets from `now`, never fixed dates), with tests in `tests/demoData_test.ts`                                |
+| Any user-facing string                 | `src/app/i18n/en.ts` **and** `sv.ts`, never inline in a component                                                                        |
+| A shared UI primitive                  | The framework, if it is domain-free; `src/app/ui.tsx` only for this app's layout pieces                                                  |
+| Tests                                  | `tests/<module>_test.ts`                                                                                                                 |
+| Docs                                   | `docs/` (references) and `docs/features/` (changelog-linked feature docs only)                                                           |
+| LLM prompt                             | `prompts/<name>/<major>_<minor>_<patch>.md` (see `prompts/README.md`) — none exist; the app makes no LLM calls                           |
 
 ## Test conventions
 
 Tests live in `tests/` with a `_test` suffix (OSS_SPEC §20.2) and run under
 Vitest in the `node` environment — they cover the pure domain modules
-(`age`, `growth`, `nutrition`, `diapers`, `vaccines`, `merge`, `migrations`),
+(`age`, `growth`, `nutrition`, `diapers`, `sleep`, `vaccines`, `merge`,
+`migrations`),
 which is where the app's real logic is. No DOM, no testing-library, no mocked
 clock: every test pins real dates, and the WHO rows it checks against are the
 published ones.
@@ -366,6 +401,8 @@ references live under `docs/` proper.
 | `growth.ts` or `data/whoGrowth.ts`               | `docs/growth.md`, `docs/features/growth.md`, and the README's Examples block if the output shape moved         |
 | `nutrition.ts` or `data/foods.ts`                | `docs/nutrition.md`, `docs/features/food.md`                                                                   |
 | `diapers.ts`                                     | `docs/diapers.md`, `docs/features/diapers.md`                                                                  |
+| `sleep.ts`                                       | `docs/sleep.md`, `docs/features/sleep.md`, and `docs/references.json` for any source added or dropped          |
+| A `[ref:<id>]` tag anywhere                      | `docs/references.json` — the entry, its quotes, and its `usedBy`                                               |
 | `vaccines.ts`                                    | `docs/vaccinations.md`, `docs/features/vaccinations.md`                                                        |
 | The document shape (`types.ts`, `migrations.ts`) | `docs/architecture.md`'s data shape, and a `migrations.ts` step                                                |
 | `useSyncEngine.ts`, `idbAdapter.ts`, `merge.ts`  | `docs/sync.md`, `docs/features/cloud-sync.md`                                                                  |
@@ -385,16 +422,18 @@ references live under `docs/` proper.
 - **Two themes only** — one light, one dark, plus "follow the device". The
   framework ships a dozen palettes; this app deliberately exposes none of
   them. Don't reintroduce the picker.
-- **The bottom nav is the navigation.** Five tabs — Today plus one per
+- **The bottom nav is the navigation.** Six tabs — Today plus one per
   tracker, in `FEATURES` order — no sidebar, no drawer, and they are
   _destinations_ in a fixed order a swipe moves along, minus the ones whose
   tracker is switched off in Settings (`navTabs()` filters the order; Today
   is never one of them). Things you do and then leave — editing the child,
   changing a setting — belong on the top bar, and so does the `+`: it opens
-  a sheet rather than a screen so logging a diaper never costs the chart
-  someone had open.
+  a sheet rather than a screen so logging a diaper or a sleep never costs
+  the chart someone had open.
 - **Logging is one code path.** The Diapers tab and the sheet both render
-  `DiaperButtons` and both write through `addDiaper`.
+  `DiaperButtons` and both write through `addDiaper`; the Sleep tab and the
+  sheet both render `SleepButtons`, and starting, ending and correcting a
+  sleep all write through `saveSleep`.
 - **The service-worker contract** (cache id, `sw.js`, `version.json`,
   `precache-manifest.json`) is shared between `src/app/pwa.ts` and
   `pwa-plugin.ts`; change them together.

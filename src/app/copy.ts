@@ -7,8 +7,9 @@
 import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
 
 import { ageParts } from "./age.ts";
-import { formatDayYear } from "./format.ts";
+import { formatDayYear, formatInstant } from "./format.ts";
 import type { TFn } from "./i18n/index.ts";
+import type { NextSleep } from "./sleep.ts";
 import type { Child } from "./types.ts";
 
 /** "7 mo 2 wk", "2 y 3 mo", "6 d", or "Newborn" on the day of birth. */
@@ -53,4 +54,47 @@ export function channelKey(
   if (z >= -1) return "middle";
   if (z >= -2) return "belowOne";
   return "low";
+}
+
+/** A length of time as a parent says it: "1 h 5 min", "45 min", "11 h".
+ *  Rounded to the minute — a sleep log is read in minutes, never seconds. */
+export function durationLabel(t: TFn, minutes: number): string {
+  const total = Math.max(0, Math.round(minutes));
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  if (h === 0) return t("duration.m", { m: String(m) });
+  if (m === 0) return t("duration.h", { h: String(h) });
+  return t("duration.hm", { h: String(h), m: String(m) });
+}
+
+/** Where the child is right now, as the Sleep card and view open with it:
+ *  "Asleep since 12:40 — 1 h 5 min", "Awake since 9:25 — 16 min", or a night
+ *  waking. */
+export function sleepNowLine(t: TFn, next: NextSleep, locale?: string): string {
+  const time = formatInstant(next.since, locale);
+  if (next.state === "nightWaking") return t("sleep.nightWaking", { time });
+  return t(next.state === "asleep" ? "sleep.nowAsleep" : "sleep.nowAwake", {
+    time,
+    duration: durationLabel(t, next.minutes),
+  });
+}
+
+/** The suggested next sleep, or null when there is none to suggest (the
+ *  child is asleep, awake in the night, or past the age of wake windows). */
+export function sleepNextLine(
+  t: TFn,
+  next: NextSleep,
+  locale?: string,
+): string | null {
+  if (next.state !== "awake" || next.suggestion === null) return null;
+  const s = next.suggestion;
+  const line = t(
+    s.kind === "nap"
+      ? "sleep.nextNap"
+      : s.kind === "night"
+        ? "sleep.nextBedtime"
+        : "sleep.nextSleep",
+    { time: formatInstant(s.at, locale) },
+  );
+  return s.overdue ? t("sleep.nextPassed", { next: line }) : line;
 }

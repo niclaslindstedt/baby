@@ -25,6 +25,7 @@ import {
   type Measurement,
   type MilkFeeding,
   type Nutrients,
+  type SleepSession,
   type Vaccination,
 } from "./types.ts";
 
@@ -108,6 +109,33 @@ function parseDiaper(id: string, value: unknown): DiaperChange | null {
     id: typeof value.id === "string" ? value.id : id,
     kind,
     at: value.at,
+  };
+}
+
+/** Whether a value is a string `Date.parse` reads. */
+function isTimestamp(value: unknown): value is string {
+  return typeof value === "string" && !Number.isNaN(Date.parse(value));
+}
+
+/** Coerce one stored sleep, or drop it when it cannot be one: a sleep needs a
+ *  kind and a start. An end that isn't a timestamp, or that falls before the
+ *  start, is read as "still going" rather than dropping the record — the
+ *  start was real, and the Sleep tab is where a missing end is put right. */
+function parseSleep(id: string, value: unknown): SleepSession | null {
+  if (!isRecord(value)) return null;
+  const kind =
+    value.kind === "nap" || value.kind === "night" ? value.kind : null;
+  if (kind === null || !isTimestamp(value.start)) return null;
+  const end =
+    isTimestamp(value.end) && Date.parse(value.end) >= Date.parse(value.start)
+      ? value.end
+      : null;
+  return {
+    id: typeof value.id === "string" ? value.id : id,
+    kind,
+    start: value.start,
+    end,
+    updatedAt: parseTimestamp(value.updatedAt),
   };
 }
 
@@ -222,6 +250,13 @@ const migrator = createMigrator({
       }
       return { ...doc, version: 3, foods: withTimes };
     },
+    // v3 → v4: `sleeps`. A new record type, not a new field on an old one —
+    // nobody logged a sleep before this step, so the map starts empty.
+    3: (doc) => ({
+      ...doc,
+      version: 4,
+      sleeps: isRecord(doc.sleeps) ? doc.sleeps : {},
+    }),
   },
 });
 
@@ -252,6 +287,7 @@ export function normalizeDoc(value: unknown): AppData {
     child: parseChild(migrated.child),
     measurements: parseMap(migrated.measurements, parseMeasurement, idOf),
     diapers: parseMap(migrated.diapers, parseDiaper, idOf),
+    sleeps: parseMap(migrated.sleeps, parseSleep, idOf),
     foods: parseMap(migrated.foods, parseFood, idOf),
     milk: parseMilk(migrated.milk),
     vaccinations: parseMap(migrated.vaccinations, parseVaccination, idOf),
@@ -280,6 +316,7 @@ export function serializeDoc(data: AppData): string {
     child: data.child,
     measurements: sortedMap(data.measurements),
     diapers: sortedMap(data.diapers),
+    sleeps: sortedMap(data.sleeps),
     foods: sortedMap(data.foods),
     milk: data.milk,
     vaccinations: sortedMap(data.vaccinations),

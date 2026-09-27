@@ -33,22 +33,25 @@ import {
 } from "./app/BottomNav.tsx";
 import { ChildScreen } from "./app/ChildScreen.tsx";
 import { demoBackendModule, useDemoData } from "./app/dev/useDemoData.ts";
-import { DiaperSheet } from "./app/DiaperSheet.tsx";
 import { DiapersScreen } from "./app/DiapersScreen.tsx";
 import { FoodScreen } from "./app/FoodScreen.tsx";
 import { GrowthScreen } from "./app/GrowthScreen.tsx";
-import { useT } from "./app/i18n/index.ts";
+import { formatInstant } from "./app/format.ts";
+import { useLang, useT } from "./app/i18n/index.ts";
 import { appearanceFor } from "./app/look.ts";
 import { logStore } from "./app/log.ts";
 import { cacheIdForBase } from "./app/pwa.ts";
+import { QuickLogSheet } from "./app/QuickLogSheet.tsx";
 import { SettingsScreen } from "./app/SettingsScreen.tsx";
 import {
   useEncryptionLabels,
   usePinGateLabels,
 } from "./app/SyncEncryption.tsx";
+import { currentSleep } from "./app/sleep.ts";
+import { SleepScreen } from "./app/SleepScreen.tsx";
 import { TodayScreen } from "./app/TodayScreen.tsx";
 import { TopBar } from "./app/TopBar.tsx";
-import { newId, type DiaperKind } from "./app/types.ts";
+import { newId, type DiaperKind, type SleepKind } from "./app/types.ts";
 import { useAppSettings } from "./app/useAppSettings.ts";
 import { localDocBackend, useDocStore } from "./app/useDocStore.ts";
 import { useGrowthStandards } from "./app/useGrowthStandards.ts";
@@ -58,7 +61,7 @@ import { status } from "./output.ts";
 
 // A local-first baby tracker built from the framework's shared surface. The
 // app owns the document store, the derivations (growth, nutrition, diapers,
-// vaccinations) and the screens; the framework supplies the theme engine,
+// sleep, vaccinations) and the screens; the framework supplies the theme engine,
 // the storage adapters behind sync, the chart primitives, and the PWA update
 // lifecycle.
 //
@@ -77,6 +80,7 @@ const RELOCK_AFTER_MS = 5 * 60_000;
 
 export function App() {
   const t = useT();
+  const locale = useLang() === "sv" ? "sv-SE" : "en-GB";
   const { settings, update, setFeature } = useAppSettings();
   useApplyTheme(useMemo(() => appearanceFor(settings.theme), [settings.theme]));
 
@@ -182,7 +186,7 @@ export function App() {
     }
   }, [store.data.child, tab]);
 
-  const [diaperOpen, setDiaperOpen] = useState(false);
+  const [quickLogOpen, setQuickLogOpen] = useState(false);
   const [syncDetailsOpen, setSyncDetailsOpen] = useState(false);
   const [reloading, setReloading] = useState(false);
 
@@ -216,6 +220,43 @@ export function App() {
     [store, notice, t],
   );
 
+  // Sleep's two taps. Both are the one `saveSleep` edit — a start writes an
+  // open sleep, a wake closes the one running — at the moment the buttons'
+  // **When** row says: the tap itself, or a few minutes before it (see
+  // `SleepButtons.tsx`). The toast names the time, so a lag picked by
+  // mistake is seen at once.
+  const startSleep = useCallback(
+    (kind: SleepKind, at: Date) => {
+      const stamp = new Date().toISOString();
+      store.saveSleep({
+        id: newId(),
+        kind,
+        start: at.toISOString(),
+        end: null,
+        updatedAt: stamp,
+      });
+      notice(
+        t(kind === "night" ? "sleep.startedNight" : "sleep.startedNap", {
+          time: formatInstant(at.getTime(), locale),
+        }),
+      );
+    },
+    [store, notice, t, locale],
+  );
+  const wake = useCallback(
+    (at: Date) => {
+      const current = currentSleep(store.data, new Date());
+      if (!current) return;
+      store.saveSleep({
+        ...current,
+        end: at.toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+      notice(t("sleep.woke", { time: formatInstant(at.getTime(), locale) }));
+    },
+    [store, notice, t, locale],
+  );
+
   const pwa = usePwaUpdate({
     base: import.meta.env.BASE_URL,
     cacheId: cacheIdForBase(import.meta.env.BASE_URL),
@@ -235,9 +276,16 @@ export function App() {
       <TopBar
         active={tab}
         onOpenSettings={() => toggle("settings")}
-        onQuickLog={() => setDiaperOpen(true)}
-        quickLogOpen={diaperOpen}
-        showQuickLog={features.diapers}
+        onQuickLog={() => setQuickLogOpen(true)}
+        quickLogOpen={quickLogOpen}
+        showQuickLog={features.diapers || features.sleep}
+        quickLogLabel={
+          features.diapers && features.sleep
+            ? t("nav.logAny")
+            : features.sleep
+              ? t("nav.logSleep")
+              : t("nav.logDiaper")
+        }
         syncSlot={
           sync.remote ? (
             <SyncStatus
@@ -277,6 +325,22 @@ export function App() {
               onRemove={(id) => {
                 store.removeDiaper(id);
                 notice(t("diapers.removed"));
+              }}
+            />
+          )}
+          {tab === "sleep" && hasChild && features.sleep && (
+            <SleepScreen
+              data={store.data}
+              today={today}
+              onStart={startSleep}
+              onWake={wake}
+              onSave={(sleep) => {
+                store.saveSleep(sleep);
+                notice(t("sleep.saved"));
+              }}
+              onRemove={(id) => {
+                store.removeSleep(id);
+                notice(t("sleep.removed"));
               }}
             />
           )}
@@ -368,10 +432,15 @@ export function App() {
         <BottomNav active={tab} tabs={tabs} onSelect={show} />
       </div>
 
-      <DiaperSheet
-        open={diaperOpen && features.diapers}
-        onLog={logDiaper}
-        onClose={() => setDiaperOpen(false)}
+      <QuickLogSheet
+        open={quickLogOpen && (features.diapers || features.sleep)}
+        diapers={features.diapers}
+        sleep={features.sleep}
+        onLogDiaper={logDiaper}
+        data={store.data}
+        onStartSleep={startSleep}
+        onWake={wake}
+        onClose={() => setQuickLogOpen(false)}
       />
 
       {/* Asks for the passphrase whenever sync is waiting on one. A dialog,

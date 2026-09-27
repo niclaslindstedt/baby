@@ -4,10 +4,11 @@
 > built on @niclaslindstedt/oss-framework. Parents keep a simple daily food
 > regimen (from about 6 months) that the app checks against age- and
 > size-appropriate recommendations, record weight / length / head
-> circumference on the WHO growth standards, log diapers with one tap, and
-> follow the Swedish childhood vaccination programme. The document is stored
-> on-device as JSON, with an optional copy in a picked folder or the user's
-> own Dropbox, encrypted on the device with a passphrase the user chooses. Every assessment is derived from the document at read time.
+> circumference on the WHO growth standards, log diapers and sleep with one
+> tap, and follow the Swedish childhood vaccination programme. The document is
+> stored on-device as JSON, with an optional copy in a picked folder or the
+> user's own Dropbox, encrypted on the device with a passphrase the user
+> chooses. Every assessment is derived from the document at read time.
 
 - App: https://baby.niclaslindstedt.se/
 - Source: https://github.com/niclaslindstedt/baby
@@ -15,10 +16,17 @@
 
 ## Features
 
-- Today: the child's age, a one-tap diaper log (pee / poo / both, time
-  recorded automatically) with today's tally, and the headline answers —
-  is the food regimen still sufficient, the latest growth reading, and the
-  next vaccination
+- Today: the child's age and the headline answers — the last 24 hours of
+  diapers, asleep or awake and the next suggested sleep, is the food regimen
+  still sufficient, the latest growth reading, and the next vaccination
+- Diapers: a one-tap diaper log (pee / poo / both, time recorded
+  automatically), also behind the + on every screen
+- Sleep: naps and nights started and ended with one tap each; the last 24
+  hours and 30- and 90-day averages (night, naps, naps per day) against the
+  WHO recommendation for the age and the range children are observed to
+  sleep (Galland et al. 2012), and a suggested time for the next nap or
+  bedtime from the last sleep, its length, the child's own recent wake
+  windows and the published awake times for the age
 - Food: a daily regimen of the foods the baby typically gets, each with
   calories (required) and optional iron, vitamin D and fat details, compared
   against the recommendations for the child's current age and weight; the

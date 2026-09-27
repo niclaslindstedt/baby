@@ -94,10 +94,12 @@ left exactly where it is.
 
 Record by record, matched to what the data means:
 
-- The **child**, each **measurement**, each **food**, the **milk feeding** and
-  each **vaccination** carry an `updatedAt`; the later edit wins, record by
-  record. Editing a reading on the phone and adding a food on the laptop
-  keeps both.
+- The **child**, each **measurement**, each **sleep**, each **food**, the
+  **milk feeding** and each **vaccination** carry an `updatedAt`; the later
+  edit wins, record by record. Editing a reading on the phone and adding a
+  food on the laptop keeps both. Ending a sleep is an edit too, so the device
+  that tapped **Woke up** wins over the one that still shows the child
+  asleep.
 - **Diaper changes** merge as a **union**: each is one tap that happened on
   one device, so a change logged on the phone and another on the tablet the
   same afternoon both survive.

@@ -24,6 +24,16 @@ import {
 } from "../src/app/growth.ts";
 import { parseDoc, serializeDoc } from "../src/app/migrations.ts";
 import { assess, dayCoverage, outgrown } from "../src/app/nutrition.ts";
+import {
+  averageSleep,
+  nextSleep,
+  sleepNormFor,
+  sleepRhythm,
+  sleepSpans,
+  sleepStatus,
+  unfinishedSleeps,
+  wakeWindowFor,
+} from "../src/app/sleep.ts";
 import { sortedFoods } from "../src/app/types.ts";
 import { nextDose, timeline } from "../src/app/vaccines.ts";
 
@@ -62,6 +72,12 @@ describe("the demo document", () => {
     expect(data.child?.name).toBe("Robin");
     for (const change of Object.values(data.diapers)) {
       expect(Date.parse(change.at)).toBeLessThanOrEqual(now.getTime());
+    }
+    for (const s of Object.values(data.sleeps)) {
+      expect(Date.parse(s.start)).toBeLessThanOrEqual(now.getTime());
+      if (s.end !== null) {
+        expect(Date.parse(s.end)).toBeLessThanOrEqual(now.getTime());
+      }
     }
     for (const m of Object.values(data.measurements)) {
       expect(m.date <= dayKeyOf(now)).toBe(true);
@@ -147,6 +163,38 @@ describe("every day of a year, at 9:41", () => {
     }
   });
 
+  it("sleeps inside the recommendation, every wake window inside the band", () => {
+    const band = wakeWindowFor(DEMO_AGE_DAYS)!;
+    const norm = sleepNormFor(DEMO_AGE_DAYS)!;
+    for (const now of yearOfMornings()) {
+      const data = buildDemoData(now);
+      for (const days of [30, 90]) {
+        const avg = averageSleep(data, now, days)!;
+        expect(avg.loggedDays).toBe(days);
+        expect(sleepStatus(norm, avg)).toBe("within");
+        // About eleven hours at night and three by day, on three naps.
+        expect(avg.nightMinutes / 60).toBeGreaterThan(10.5);
+        expect(avg.nightMinutes / 60).toBeLessThan(11.5);
+        expect(avg.dayMinutes / 60).toBeGreaterThan(2.5);
+        expect(avg.dayMinutes / 60).toBeLessThan(3.5);
+        expect(avg.napsPerDay).toBe(3);
+      }
+      const rhythm = sleepRhythm(data, now, band);
+      for (const w of [...rhythm.afterNight, ...rhythm.afterNap]) {
+        expect(w).toBeGreaterThanOrEqual(band.min);
+        expect(w).toBeLessThanOrEqual(band.max);
+      }
+      // Awake since the morning nap, the midday one suggested ahead.
+      const next = nextSleep(data, DEMO_AGE_DAYS, now)!;
+      expect(next.state).toBe("awake");
+      if (next.state !== "awake") continue;
+      expect(next.suggestion!.kind).toBe("nap");
+      expect(next.suggestion!.overdue).toBe(false);
+      expect(next.suggestion!.own).not.toBeNull();
+      expect(unfinishedSleeps(data, now)).toEqual([]);
+    }
+  });
+
   it("keeps a regimen that covers the day, with room but not twice over", () => {
     for (const now of yearOfMornings()) {
       const data = buildDemoData(now);
@@ -202,6 +250,42 @@ describe("at any hour", () => {
         const a = assessDiapers(buildDemoData(now), DEMO_AGE_DAYS, now, true)!;
         expect(a.fewWet).toBe(false);
         expect(a.longDirtyGap).toBe(false);
+      }
+    }
+  });
+});
+
+describe("the sleeps and the diapers", () => {
+  it("never change a diaper while the child is asleep", () => {
+    // Three weeks of changes per document, so a few documents cover it.
+    for (let day = 0; day < 4; day++) {
+      const now = new Date(2026, 4, 1 + day * 9, 23, 59);
+      const data = buildDemoData(now);
+      const spans = sleepSpans(data, now);
+      const asleep = Object.values(data.diapers).filter((change) => {
+        const at = Date.parse(change.at);
+        return spans.some((span) => at > span.start && at < span.end);
+      });
+      expect(asleep).toEqual([]);
+    }
+  });
+
+  it("reads as calm at any hour", () => {
+    const norm = sleepNormFor(DEMO_AGE_DAYS)!;
+    for (let day = 0; day < 30; day++) {
+      for (const [h, m] of [
+        [0, 5],
+        [2, 45],
+        [6, 5],
+        [12, 0],
+        [17, 0],
+        [23, 55],
+      ] as const) {
+        const now = new Date(2026, 2, 1 + day, h, m);
+        const data = buildDemoData(now);
+        expect(nextSleep(data, DEMO_AGE_DAYS, now)).not.toBeNull();
+        expect(unfinishedSleeps(data, now)).toEqual([]);
+        expect(sleepStatus(norm, averageSleep(data, now, 30))).toBe("within");
       }
     }
   });

@@ -11,25 +11,27 @@ import {
   BowlIcon,
   DiaperIcon,
   GrowthIcon,
+  MoonIcon,
   SyringeIcon,
 } from "./icons.tsx";
 import { useT } from "./i18n/index.ts";
 import type { AppData } from "./types.ts";
 import type { Features } from "./useAppSettings.ts";
 
-// The app's navigation: five tabs pinned to the bottom of the screen — the
+// The app's navigation: six tabs pinned to the bottom of the screen — the
 // same shell the sibling meds app uses, because the two are used the same
 // way: one-handed, in a short burst, with something else in the other arm.
 //
 // The order is the order of the questions: what is happening today (Today —
 // the child's age and the headline answers), what went into the diaper
-// (Diapers), is the child growing along the curve (Growth), is the food
-// regimen still enough (Food), and which vaccination comes next (Vaccines).
-// Today leads because it is the reason the app is opened; Diapers follows
-// because it is the one logged several times a day; Vaccines sits last
-// because it changes a handful of times a year.
+// (Diapers), is the child asleep and when is the next sleep (Sleep), is the
+// child growing along the curve (Growth), is the food regimen still enough
+// (Food), and which vaccination comes next (Vaccines). Today leads because
+// it is the reason the app is opened; Diapers and Sleep follow because they
+// are the two logged several times a day; Vaccines sits last because it
+// changes a handful of times a year.
 //
-// Four of the five are a tracker a parent can switch off in Settings, and
+// Five of the six are a tracker a parent can switch off in Settings, and
 // a switched-off tracker is not on the bar at all (see `navTabs`) — the
 // order survives, it just gets shorter. Today is never one of them.
 //
@@ -40,18 +42,27 @@ import type { Features } from "./useAppSettings.ts";
 
 /** Every screen the shell can show. */
 export type Tab =
-  "today" | "diapers" | "growth" | "food" | "vaccines" | "child" | "settings";
+  | "today"
+  | "diapers"
+  | "sleep"
+  | "growth"
+  | "food"
+  | "vaccines"
+  | "child"
+  | "settings";
 
 /** The screens that are *destinations* — the ones the bottom bar carries and
- *  a swipe moves between. Four of them share their name with the tracker
+ *  a swipe moves between. Five of them share their name with the tracker
  *  that can switch them off (`FeatureId`); Today has no switch. */
-export type NavTab = "today" | "diapers" | "growth" | "food" | "vaccines";
+export type NavTab =
+  "today" | "diapers" | "sleep" | "growth" | "food" | "vaccines";
 
 /** Every destination, in order, with none switched off. The bar itself is
  *  `navTabs` — this is the order it draws from. */
 export const TABS: NavTab[] = [
   "today",
   "diapers",
+  "sleep",
   "growth",
   "food",
   "vaccines",
@@ -109,6 +120,7 @@ export function initialTab(data: AppData): Tab {
 const ICONS: Record<NavTab, (props: { className?: string }) => ReactNode> = {
   today: BabyIcon,
   diapers: DiaperIcon,
+  sleep: MoonIcon,
   growth: GrowthIcon,
   food: BowlIcon,
   vaccines: SyringeIcon,

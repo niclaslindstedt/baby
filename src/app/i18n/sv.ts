@@ -16,12 +16,15 @@ export const sv: Catalog = {
   nav: {
     today: "Idag",
     diapers: "Blöjor",
+    sleep: "Sömn",
     growth: "Tillväxt",
     food: "Mat",
     vaccines: "Vaccin",
     settings: "Inställningar",
     child: "Ditt barn",
     logDiaper: "Logga en blöja",
+    logSleep: "Logga sömn",
+    logAny: "Logga en blöja eller sömn",
   },
 
   common: {
@@ -47,6 +50,12 @@ export const sv: Catalog = {
     prevYears: "Föregående tolv år",
     nextYears: "Nästa tolv år",
     clear: "Rensa",
+  },
+
+  duration: {
+    hm: "{h} tim {m} min",
+    h: "{h} tim",
+    m: "{m} min",
   },
 
   age: {
@@ -88,6 +97,7 @@ export const sv: Catalog = {
     saveFailed:
       "Kunde inte spara på den här enheten — kontrollera webbläsarens lagringsinställningar.",
     diapersCard: "Blöjor",
+    sleepCard: "Sömn",
     foodCard: "Matregim",
     growthCard: "Tillväxt",
     vaccinesCard: "Nästa vaccination",
@@ -100,8 +110,13 @@ export const sv: Catalog = {
   },
 
   quickLog: {
-    title: "Logga en blöja",
-    subtitle: "Tryck på vad blöjan innehöll. Tiden sparas nu.",
+    title: "Logga",
+    titleDiaper: "Logga en blöja",
+    titleSleep: "Logga sömn",
+    subtitle:
+      "Ett tryck. Tiden är nu — om du inte väljer en tidigare för sömnen.",
+    diaper: "Blöja",
+    sleep: "Sömn",
   },
 
   diapers: {
@@ -147,6 +162,151 @@ export const sv: Catalog = {
       toddler:
         "Efter ettårsdagen anger källorna inget antal; ett litet barns blöja är torr längre.",
     },
+  },
+
+  sleep: {
+    title: "Sömn",
+    log: "Logga sömn",
+    logHint:
+      "Tryck på Tupplur eller Natt när {name} somnar, och på Vaknade när barnet vaknar. Hade du inte en hand ledig? Välj hur länge sedan det var ovanför knapparna först, eller en tid — och samma knappar finns bakom + i toppraden.",
+    nap: "Tupplur",
+    night: "Natt",
+    when: {
+      fell: "Somnade",
+      woke: "Vaknade",
+      now: "Nu",
+      ago: "för {duration} sedan",
+      pick: "Välj tid",
+      at: "kl. {time}",
+      problem: {
+        future: "Den tiden har inte varit än.",
+        beforeStart: "Det är före sömnen började kl. {start}.",
+        beforeLastSleep:
+          "Det är före förra sömnen slutade kl. {end} — rätta den i listan först.",
+      },
+    },
+    wokeUp: "Vaknade",
+    asleepNap: "Sover middag sedan {time}",
+    asleepNight: "Sover för natten sedan {time}",
+    startedNap: "Tupplur från {time}",
+    startedNight: "God natt — sover från {time}",
+    woke: "Vaknade {time} — loggat",
+    saved: "Sömnen sparad",
+    removed: "Sömnen borttagen",
+    recent: "Senaste 7 dagarna",
+    recentHint:
+      "Grupperat efter dygnet varje sömn hör till — en natt räknas till kvällen den började. Rätta en tid som trycktes in sent, eller lägg till en sömn som ingen loggade.",
+    add: "Lägg till sömn",
+    dayToday: "Idag",
+    span: "{start}–{end}",
+    spanOpen: "{start}–",
+    stillAsleep: "sover fortfarande",
+    noneYet:
+      "Inget loggat än. Tryck på Tupplur eller Natt när {name} somnar — tiden sparas åt dig.",
+    unfinished:
+      "En sömn från {date} kl. {time} avslutades aldrig. Ange när {name} vaknade, eller ta bort den — till dess räknas den inte.",
+    finish: "Ange när den slutade",
+    form: {
+      addTitle: "Lägg till sömn",
+      editTitle: "Ändra sömn",
+      kind: "Tupplur eller natt",
+      start: "Somnade",
+      startTime: "Tid somnade",
+      end: "Vaknade",
+      endTime: "Tid vaknade",
+      stillAsleep: "Sover fortfarande",
+      startMissing: "Ange när sömnen började",
+      endMissing: "Ange när den slutade, eller kryssa i Sover fortfarande",
+      inFuture: "Den tiden har inte varit än",
+      endBeforeStart: "Slutet måste komma efter början",
+      tooLong: "Det är längre än någon enskild sömn — kontrollera datumen",
+      save: "Spara sömn",
+      deleteConfirm: "Ta bort den här sömnen?",
+    },
+    nowAsleep: "Sover sedan {time} — {duration}",
+    nowAwake: "Vaken sedan {time} — {duration}",
+    nightWaking: "Vaken sedan {time} — ett nattligt uppvaknande",
+    nextNap: "Nästa tupplur runt {time}",
+    nextBedtime: "Läggdags runt {time}",
+    nextSleep: "Nästa sömn runt {time}",
+    nextPassed: "{next} — när som helst nu",
+    lastNight: "I natt {duration}",
+    average30: "{duration} per dygn de senaste 30 dagarna",
+    now: "Just nu",
+    window:
+      "I den här åldern brukar ett barn vara vaket ungefär {min} till {max} mellan sömnperioderna, matning inräknad.",
+    basisHistory:
+      "Barnets egna vakentider de senaste två veckorna lägger den här på ungefär {window}.",
+    basisAge:
+      "Tills det finns några dagar av barnets egen sömn att gå på tar förslaget mitten av det spannet.",
+    shortNap:
+      "Senaste tuppluren var kort — kortare än en sömncykel — så nästa sömn behövs troligen tidigare.",
+    longNap:
+      "Senaste tuppluren var lång, så {name} orkar troligen vara vaken mot den längre änden.",
+    bedtimeNote:
+      "{name} brukar somna för natten runt {time}, och det är inom räckhåll härifrån — så nästa sömn är natten.",
+    overdue:
+      "Den föreslagna tiden har passerat. Trötthetstecken — gäspningar, gnuggade ögon, stirrande blick, gnäll — säger mer än klockan.",
+    nightWakingNote:
+      "Att vakna på natten är vanligt de första åren. Nästa sömn är resten av natten, så ingen tid föreslås.",
+    suggestionHint:
+      "Ett förslag utifrån senaste sömnen, hur lång den var och den vanliga vakentiden för åldern — barnets trötthetstecken går först.",
+    quiet:
+      "Inget loggat på ett tag. Tryck på Tupplur eller Natt under Sömn när nästa sömn börjar.",
+    nothingToSuggest:
+      "Logga en sömn och när den slutade, så föreslås nästa här.",
+    noSuggestionAge:
+      "Från ungefär tre år har de flesta barn slutat eller håller på att sluta sova middag, och vakentider slutar vara ett användbart sätt att planera dagen.",
+    last24: "Senaste dygnet",
+    last24Line: "{total} — {night} på natten, {day} tupplurar",
+    averages: "Medelvärden",
+    avg30: "Senaste 30 dagarna",
+    avg90: "Senaste 90 dagarna",
+    avgTotal: "{duration} per dygn",
+    avgSplit: "{night} på natten · {day} tupplurar · {naps} tupplurar per dag",
+    avgDays: "från {count} loggade dagar",
+    avgNone: "Inget loggat än.",
+    recommended:
+      "WHO rekommenderar {low}–{high} timmars sömn per dygn i den här åldern, tupplurar inräknade. Barn som följts i studier sover i genomsnitt {mean} timmar, och 19 av 20 mellan {obsLow} och {obsHigh}.",
+    band: {
+      newborn:
+        "Nyfödda sover dygnet runt i korta pass. En dygnsrytm brukar komma efter ungefär två till fyra månader, när nätterna börjar bli längre.",
+      infant:
+        "Enligt 1177 sover de flesta barn i åldern 4–11 månader 9–10 timmar på natten och 3–6 timmar på dagen.",
+      toddler:
+        "De flesta barn går från två tupplurar till en runt 18 månader; 1177 räknar med ungefär två timmars dagsömn mellan ett och två år.",
+      preschool:
+        "Mellan tre och fem år slutar de flesta barn sova middag; en lugn vila kan ta dess plats.",
+    },
+    status: {
+      within:
+        "Medelvärdet de senaste 30 dagarna ligger inom det rekommenderade spannet.",
+      littleShort:
+        "Medelvärdet de senaste 30 dagarna ligger lite under rekommendationen, men inom vad de flesta barn i den här åldern sover.",
+      littleLong:
+        "Medelvärdet de senaste 30 dagarna ligger lite över rekommendationen, men inom vad de flesta barn i den här åldern sover.",
+      short:
+        "Medelvärdet de senaste 30 dagarna ligger under vad 19 av 20 barn i den här åldern sover. Kontrollera först att tupplurarna är loggade — en dag med bara natten inlagd blir kort. Stämmer det är det värt att nämna på BVC: en anledning att titta, inte en bedömning.",
+      long: "Medelvärdet de senaste 30 dagarna ligger över vad 19 av 20 barn i den här åldern sover. Värt att nämna på BVC om {name} dessutom är svår att väcka eller ovanligt dåsig: en anledning att titta, inte en bedömning.",
+      tooEarly:
+        "Det behövs en veckas loggade dagar innan medelvärdet jämförs med rekommendationen.",
+    },
+    loggedNote:
+      "Medelvärdena räknar dagarna där något är loggat, till och med senaste hela dygnet. En dag där bara natten är inlagd räknas som en dag utan tupplurar.",
+    chart: "Senaste 14 dagarna",
+    chartDesc:
+      "Sömn per dygn de senaste två veckorna: natten längst ned i varje stapel och tupplurarna ovanpå, över det rekommenderade spannet för åldern. En dag där inget loggades lämnas tom.",
+    chartReadout: "{total} · {night} natt · {day} tupplurar",
+    chartReadoutSoFar: "{total} hittills · {night} natt · {day} tupplurar",
+    chartNothing: "inget loggat",
+    legendNight: "Natt",
+    legendDay: "Tupplurar",
+    legendRecommended: "Rekommenderat",
+    diary: "Timme för timme",
+    diaryDesc:
+      "De senaste sju dagarna, en rad per dygn från midnatt till midnatt, med varje loggad sömn där den inföll: nätter i accentfärgen, tupplurar ljusare.",
+    sources:
+      "Källor: WHO, Guidelines on physical activity, sedentary behaviour and sleep for children under 5 (2019); Galland m.fl., Sleep Medicine Reviews (2012); vakentider från Tresillian och Karitane (NSW Health); 1177.",
   },
 
   growth: {
@@ -471,13 +631,16 @@ export const sv: Catalog = {
       "Stäng av det du inte använder, så försvinner fliken och korten. Inget tas bort — slå på det igen så finns allt du fyllt i kvar.",
     feature: {
       diapers: "Blöjor",
+      sleep: "Sömn",
       growth: "Tillväxt",
       food: "Mat",
       vaccines: "Vaccin",
     },
     featureHint: {
       diapers:
-        "Blöjfliken, plusknappen i toppraden och de senaste 24 timmarna mot normen för åldern.",
+        "Blöjfliken, blöjknapparna bakom plusknappen i toppraden och de senaste 24 timmarna mot normen för åldern.",
+      sleep:
+        "Sömnfliken, sömnknapparna bakom plusknappen, medelvärdena mot rekommendationen för åldern och en föreslagen tid för nästa sömn.",
       growth:
         "Vikt, längd och huvudomfång på WHO-kurvorna, med trenden och prognosen.",
       food: "Den dagliga matregimen och mjölken, jämförda med rekommendationen för ålder och vikt.",
@@ -532,7 +695,7 @@ export const sv: Catalog = {
     importFailed: "Filen gick inte att läsa som en säkerhetskopia.",
     deleteAll: "Ta bort allt",
     deleteAllHint:
-      "Tar bort barnet och alla mätvärden, blöjbyten, livsmedel och vaccinationer från den här enheten. Går inte att ångra.",
+      "Tar bort barnet och alla mätvärden, blöjbyten, sömnperioder, livsmedel och vaccinationer från den här enheten. Går inte att ångra.",
     deleteAllConfirm: "Ta bort hela journalen på den här enheten?",
     deleted: "Allt borttaget",
     developer: "Utvecklare",
@@ -541,7 +704,7 @@ export const sv: Catalog = {
       "Visar demodokumentet, loggfångsten, appens logg och dokumentets råstorlek.",
     demoData: "Demodata",
     demoDataHint:
-      "Byt ut din journal mot en påhittad bebis på sju och en halv månad med mätvärden, blöjor, en regim och ett vaccinationskort. Bara i minnet: inget sparas, inget synkas, och en omladdning tar tillbaka din egen journal.",
+      "Byt ut din journal mot en påhittad bebis på sju och en halv månad med mätvärden, blöjor, sömn, en regim och ett vaccinationskort. Bara i minnet: inget sparas, inget synkas, och en omladdning tar tillbaka din egen journal.",
     demoDataOn: "Visar demodata — ladda om för att få tillbaka din egen",
     demoDataOff: "Tillbaka till din egen journal",
     captureLogs: "Fånga konsolutskrifter",
