@@ -11,6 +11,17 @@ A sleep is a kind — **nap** or **night** — a start and an end. **Nap** or
 the moment of the tap. Until the second tap the sleep is _open_ (`end: null`)
 and the child reads as asleep.
 
+A sleep rarely starts with a hand free — the child drops off in a pram or on
+an arm, and the phone comes out twenty minutes later — so the buttons carry a
+**When** row: **Now**, **5**, **10**, **15**, **30** or **45 min ago**, **1 h
+ago**, or **Pick a time**. Whatever is picked applies to the next tap, start
+or wake, shows the clock time it stands for, and then goes back to **Now**. A
+picked clock time is its latest occurrence, so 23:50 picked just after
+midnight is last night (`latestClockTime`). A time that can't be right is
+refused before anything is written (`sleepTimeProblem`): one in the future, a
+wake before the sleep began, or a start before the last sleep ended. The toast
+names the time that was logged.
+
 The kind is the parent's tap rather than the app's guess. Nothing about a
 start time says which it is — a newborn's longest sleep is as likely at noon as
 at midnight, and a toddler's 18:30 is bedtime in one family and a late nap in

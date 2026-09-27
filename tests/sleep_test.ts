@@ -11,7 +11,9 @@ import {
   averageSleep,
   currentSleep,
   lastCompleteSleepDay,
+  lastEndedSleep,
   lastNight,
+  latestClockTime,
   LONG_NAP_MINUTES,
   MIN_LOGGED_DAYS,
   nextSleep,
@@ -24,6 +26,7 @@ import {
   sleepRhythm,
   sleepSpans,
   sleepStatus,
+  sleepTimeProblem,
   sleptInLast,
   unfinishedSleeps,
   wakeWindowFor,
@@ -504,5 +507,47 @@ describe("the diary", () => {
     expect(diary[1]!.segments).toEqual([
       { kind: "night", from: 0, to: 360, ongoing: false },
     ]);
+  });
+});
+
+describe("logging after the fact", () => {
+  it("reads a picked clock time as its latest occurrence", () => {
+    // 13:05 picked at 13:40 is today; 23:50 picked at 00:10 is last night.
+    expect(latestClockTime("13:05", local("2026-09-27", 13, 40))).toEqual(
+      local("2026-09-27", 13, 5),
+    );
+    expect(latestClockTime("23:50", local("2026-09-27", 0, 10))).toEqual(
+      local("2026-09-26", 23, 50),
+    );
+    // The minute of the tap itself is now, not yesterday.
+    expect(latestClockTime("09:41", local("2026-09-27", 9, 41))).toEqual(
+      local("2026-09-27", 9, 41),
+    );
+  });
+
+  it("refuses a start before the last sleep ended, and a time in the future", () => {
+    const data = docWith([sleep("nap", "2026-09-27", [9, 0], [10, 0])]);
+    const now = local("2026-09-27", 12, 30);
+    expect(lastEndedSleep(data, now)).toBe(
+      local("2026-09-27", 10, 0).getTime(),
+    );
+    // Fell asleep twenty minutes ago: fine.
+    expect(sleepTimeProblem(data, local("2026-09-27", 12, 10), now)).toBeNull();
+    expect(sleepTimeProblem(data, local("2026-09-27", 9, 45), now)).toBe(
+      "beforeLastSleep",
+    );
+    expect(sleepTimeProblem(data, local("2026-09-27", 12, 31), now)).toBe(
+      "future",
+    );
+  });
+
+  it("refuses a wake before the running sleep began", () => {
+    const data = docWith([sleep("nap", "2026-09-27", [12, 10], null)]);
+    const now = local("2026-09-27", 14, 0);
+    // Woke up a quarter of an hour ago: fine.
+    expect(sleepTimeProblem(data, local("2026-09-27", 13, 45), now)).toBeNull();
+    expect(sleepTimeProblem(data, local("2026-09-27", 12, 10), now)).toBe(
+      "beforeStart",
+    );
   });
 });

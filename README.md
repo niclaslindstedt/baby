@@ -20,7 +20,8 @@ input, useful output.**
   dygn") and says so when the last 24 hours look thin, naming the sign to look
   for rather than a diagnosis.
 - **Sleep.** **Nap** or **Night** when the baby falls asleep, **Woke up**
-  when they wake — from the Sleep tab or the **+** on any screen. The app
+  when they wake — from the Sleep tab or the **+** on any screen, now or
+  "20 minutes ago" when the phone was out of reach. The app
   shows the last 24 hours and the 30- and 90-day averages, night and naps,
   against the WHO recommendation for the age and what children that age are
   observed to sleep, and suggests when the next nap or bedtime is likely to

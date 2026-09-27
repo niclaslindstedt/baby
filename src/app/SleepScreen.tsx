@@ -41,8 +41,8 @@ const LIST_DAYS = 7;
 type Props = {
   data: AppData;
   today: DayKey;
-  onStart: (kind: SleepKind) => void;
-  onWake: () => void;
+  onStart: (kind: SleepKind, at: Date) => void;
+  onWake: (at: Date) => void;
   onSave: (sleep: SleepSession) => void;
   onRemove: (id: string) => void;
 };
@@ -111,7 +111,7 @@ export function SleepScreen({
           {t("sleep.logHint", { name })}
         </p>
         <div className="mt-3">
-          <SleepButtons current={current} onStart={onStart} onWake={onWake} />
+          <SleepButtons data={data} onStart={onStart} onWake={onWake} />
         </div>
       </Card>
 

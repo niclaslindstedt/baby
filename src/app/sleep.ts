@@ -177,6 +177,56 @@ export function sleepSpans(data: AppData, now: Date): SleepSpan[] {
   return out;
 }
 
+// ── Logging after the fact ─────────────────────────────────────────────────
+
+/**
+ * The latest moment at or before `now` whose local wall clock reads `time`
+ * (`HH:MM`): today's, or yesterday's when today's has not come yet. A parent
+ * who picks 23:50 just after midnight means last night, not tonight.
+ */
+export function latestClockTime(time: string, now: Date): Date {
+  const [h, m] = time.split(":").map(Number);
+  const at = new Date(now);
+  at.setHours(h ?? 0, m ?? 0, 0, 0);
+  if (at.getTime() > now.getTime()) at.setDate(at.getDate() - 1);
+  return at;
+}
+
+/** Why a time can't be used for the next tap. */
+export type SleepTimeProblem = "future" | "beforeStart" | "beforeLastSleep";
+
+/**
+ * Whether `at` can be the moment of the next tap — a wake if a sleep is
+ * running, a start if not — or why not: it hasn't happened yet, a wake before
+ * the sleep began, or a start before the last sleep ended. Checked before
+ * anything is written, so a mis-picked time is refused rather than logged
+ * and corrected.
+ */
+export function sleepTimeProblem(
+  data: AppData,
+  at: Date,
+  now: Date,
+): SleepTimeProblem | null {
+  const t = at.getTime();
+  if (t > now.getTime()) return "future";
+  const current = currentSleep(data, now);
+  if (current) return t <= Date.parse(current.start) ? "beforeStart" : null;
+  const last = lastEndedSleep(data, now);
+  return last !== null && t < last ? "beforeLastSleep" : null;
+}
+
+/** When the last ended sleep ended, at or before `now`, or null. */
+export function lastEndedSleep(data: AppData, now: Date): number | null {
+  let latest: number | null = null;
+  for (const s of Object.values(data.sleeps)) {
+    if (s.end === null) continue;
+    const end = Date.parse(s.end);
+    if (Number.isNaN(end) || end > now.getTime()) continue;
+    if (latest === null || end > latest) latest = end;
+  }
+  return latest;
+}
+
 /** Minutes between two instants. */
 function minutesOf(start: number, end: number): number {
   return Math.max(0, (end - start) / MINUTE);

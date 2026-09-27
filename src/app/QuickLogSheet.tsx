@@ -4,7 +4,7 @@ import { Button, Modal } from "@niclaslindstedt/oss-framework/components";
 import { DiaperButtons } from "./DiaperButtons.tsx";
 import { useT } from "./i18n/index.ts";
 import { SleepButtons } from "./SleepButtons.tsx";
-import type { DiaperKind, SleepKind, SleepSession } from "./types.ts";
+import type { AppData, DiaperKind, SleepKind } from "./types.ts";
 
 // The sheet behind the top bar's `+`: the two things logged several times a
 // day — a diaper and a sleep — from any screen. A modal rather than a screen
@@ -22,10 +22,10 @@ type Props = {
   diapers: boolean;
   sleep: boolean;
   onLogDiaper: (kind: DiaperKind) => void;
-  /** The sleep running now, which turns the sleep half into **Woke up**. */
-  currentSleep: SleepSession | null;
-  onStartSleep: (kind: SleepKind) => void;
-  onWake: () => void;
+  /** The document, which the sleep half reads its state from. */
+  data: AppData;
+  onStartSleep: (kind: SleepKind, at: Date) => void;
+  onWake: (at: Date) => void;
   onClose: () => void;
 };
 
@@ -36,7 +36,7 @@ export function QuickLogSheet({
   diapers,
   sleep,
   onLogDiaper,
-  currentSleep,
+  data,
   onStartSleep,
   onWake,
   onClose,
@@ -95,13 +95,13 @@ export function QuickLogSheet({
               </h3>
             )}
             <SleepButtons
-              current={currentSleep}
-              onStart={(kind) => {
-                onStartSleep(kind);
+              data={data}
+              onStart={(kind, at) => {
+                onStartSleep(kind, at);
                 onClose();
               }}
-              onWake={() => {
-                onWake();
+              onWake={(at) => {
+                onWake(at);
                 onClose();
               }}
               large

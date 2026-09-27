@@ -3,7 +3,9 @@
 A sleep is two taps: **Nap** or **Night** when your child falls asleep, and
 **Woke up** when they wake. The buttons are on the **Sleep** tab and in the
 sheet behind the top bar's **+**, from any screen, and the time is recorded
-for you. The tab lists the last seven days, a night under the evening it began,
+for you — or, when you only get to the phone later, pick **5 min ago**
+through **1 h ago** or a time on the clock above the buttons first. The tab
+lists the last seven days, a night under the evening it began,
 so a sleep noticed late or a **Woke up** tapped at breakfast is one edit to put
 right — and a nap nobody logged is one **Add a sleep** away.
 

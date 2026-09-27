@@ -31,7 +31,8 @@ import { demoBackendModule, useDemoData } from "./app/dev/useDemoData.ts";
 import { DiapersScreen } from "./app/DiapersScreen.tsx";
 import { FoodScreen } from "./app/FoodScreen.tsx";
 import { GrowthScreen } from "./app/GrowthScreen.tsx";
-import { useT } from "./app/i18n/index.ts";
+import { formatInstant } from "./app/format.ts";
+import { useLang, useT } from "./app/i18n/index.ts";
 import { appearanceFor } from "./app/look.ts";
 import { logStore } from "./app/log.ts";
 import { cacheIdForBase } from "./app/pwa.ts";
@@ -65,6 +66,7 @@ const toasts = createToastStore();
 
 export function App() {
   const t = useT();
+  const locale = useLang() === "sv" ? "sv-SE" : "en-GB";
   const { settings, update, setFeature } = useAppSettings();
   useApplyTheme(useMemo(() => appearanceFor(settings.theme), [settings.theme]));
 
@@ -197,30 +199,41 @@ export function App() {
   );
 
   // Sleep's two taps. Both are the one `saveSleep` edit — a start writes an
-  // open sleep, a wake closes the one running — and both read the clock at
-  // the tap, the way a diaper does.
+  // open sleep, a wake closes the one running — at the moment the buttons'
+  // **When** row says: the tap itself, or a few minutes before it (see
+  // `SleepButtons.tsx`). The toast names the time, so a lag picked by
+  // mistake is seen at once.
   const startSleep = useCallback(
-    (kind: SleepKind) => {
-      const at = new Date().toISOString();
+    (kind: SleepKind, at: Date) => {
+      const stamp = new Date().toISOString();
       store.saveSleep({
         id: newId(),
         kind,
-        start: at,
+        start: at.toISOString(),
         end: null,
-        updatedAt: at,
+        updatedAt: stamp,
       });
-      notice(t(kind === "night" ? "sleep.startedNight" : "sleep.startedNap"));
+      notice(
+        t(kind === "night" ? "sleep.startedNight" : "sleep.startedNap", {
+          time: formatInstant(at.getTime(), locale),
+        }),
+      );
     },
-    [store, notice, t],
+    [store, notice, t, locale],
   );
-  const wake = useCallback(() => {
-    const now = new Date();
-    const current = currentSleep(store.data, now);
-    if (!current) return;
-    const at = now.toISOString();
-    store.saveSleep({ ...current, end: at, updatedAt: at });
-    notice(t("sleep.woke"));
-  }, [store, notice, t]);
+  const wake = useCallback(
+    (at: Date) => {
+      const current = currentSleep(store.data, new Date());
+      if (!current) return;
+      store.saveSleep({
+        ...current,
+        end: at.toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+      notice(t("sleep.woke", { time: formatInstant(at.getTime(), locale) }));
+    },
+    [store, notice, t, locale],
+  );
 
   const pwa = usePwaUpdate({
     base: import.meta.env.BASE_URL,
@@ -398,7 +411,7 @@ export function App() {
         diapers={features.diapers}
         sleep={features.sleep}
         onLogDiaper={logDiaper}
-        currentSleep={currentSleep(store.data, new Date())}
+        data={store.data}
         onStartSleep={startSleep}
         onWake={wake}
         onClose={() => setQuickLogOpen(false)}

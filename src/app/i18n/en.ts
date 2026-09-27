@@ -139,7 +139,8 @@ export const en = {
     title: "Log",
     titleDiaper: "Log a diaper",
     titleSleep: "Log a sleep",
-    subtitle: "One tap. The time is recorded now.",
+    subtitle:
+      "One tap. The time is now — unless you pick an earlier one for a sleep.",
     diaper: "Diaper",
     sleep: "Sleep",
   },
@@ -202,15 +203,31 @@ export const en = {
     title: "Sleep",
     log: "Log a sleep",
     logHint:
-      "Tap Nap or Night when {name} falls asleep, and Woke up when they wake. The times are recorded for you, and the same buttons sit behind the + in the top bar.",
+      "Tap Nap or Night when {name} falls asleep, and Woke up when they wake. Didn't have a hand free? Pick how long ago above the buttons first, or a time — and the same buttons sit behind the + in the top bar.",
     nap: "Nap",
     night: "Night",
+    // The **When** row above the sleep buttons: the time the next tap
+    // stands for, for the sleep that is logged after it happened.
+    when: {
+      fell: "Fell asleep",
+      woke: "Woke up",
+      now: "Now",
+      ago: "{duration} ago",
+      pick: "Pick a time",
+      at: "at {time}",
+      problem: {
+        future: "That time hasn't happened yet.",
+        beforeStart: "That is before the sleep began at {start}.",
+        beforeLastSleep:
+          "That is before the last sleep ended at {end} — correct that one in the list first.",
+      },
+    },
     wokeUp: "Woke up",
     asleepNap: "Napping since {time}",
     asleepNight: "Asleep for the night since {time}",
-    startedNap: "Nap started",
-    startedNight: "Good night",
-    woke: "Woke up — logged",
+    startedNap: "Nap from {time}",
+    startedNight: "Good night — asleep from {time}",
+    woke: "Woke up at {time} — logged",
     saved: "Sleep saved",
     removed: "Sleep removed",
     recent: "The last 7 days",
