@@ -479,3 +479,169 @@ body {
     transition: none;
   }
 }
+
+/* ── Live ──────────────────────────────────────────────────────────────────
+   The moving parts of a record that is still running (`live.tsx`), and of
+   the 24-hour dial (`ClockDial.tsx`, `SleepClock.tsx`). The sleep module is
+   where these were first used; they are named for what they do rather than
+   for sleep so the other trackers can take them up as they are.
+
+   As with the charts, only `transform`, `opacity` and a stroke offset move,
+   and all of it holds still for a device that asks for reduced motion — the
+   digits of a running clock keep ticking, since they are the reading. */
+
+/* A dot going round a ring once a minute: the second hand of something with
+   no end yet. */
+.live-orbit {
+  animation: live-orbit 60s linear infinite;
+}
+
+@keyframes live-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A ring's fill easing to its new value rather than jumping a minute's
+   worth. */
+.live-ring {
+  transition: stroke-dasharray 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* A ring filling up from empty when it first appears, then easing to each
+   new value as the clock moves it. Drawn with `pathLength="1"`, so the
+   same keyframe fits every ring whatever its size. */
+.live-fill {
+  animation: live-fill 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition:
+    stroke-dasharray 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke-dashoffset 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes live-fill {
+  from {
+    stroke-dasharray: 0 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* A sleeping glyph, breathing. */
+.live-breathe {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: live-breathe 4s ease-in-out infinite;
+}
+
+@keyframes live-breathe {
+  50% {
+    transform: scale(0.86);
+    opacity: 0.7;
+  }
+}
+
+/* A ring spreading out from a point and fading: "now", on the dial. */
+.live-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: live-pulse 2.4s ease-out infinite;
+}
+
+@keyframes live-pulse {
+  from {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* The growing end of an arc still being slept. */
+.live-glow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: live-glow 2s ease-in-out infinite;
+}
+
+@keyframes live-glow {
+  50% {
+    opacity: 0.45;
+    transform: scale(1.12);
+  }
+}
+
+/* A small dot blinking beside a running clock in a list. */
+.live-dot {
+  animation: live-dot 1.2s ease-in-out infinite;
+}
+
+@keyframes live-dot {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* A new state landing — a tap on Nap, Night or Woke up. */
+.live-pop {
+  animation: live-pop 420ms cubic-bezier(0.22, 1.4, 0.36, 1) backwards;
+}
+
+@keyframes live-pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+
+/* An arc on the dial drawing itself round the face when it first appears. */
+.dial-arc {
+  stroke-dasharray: 1 1;
+  animation: dial-draw 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes dial-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+/* The dashed window a suggestion covers, creeping round — a hint, not a
+   record. */
+.dial-hint {
+  animation: dial-march 1.6s linear infinite;
+}
+
+@keyframes dial-march {
+  to {
+    stroke-dashoffset: -7;
+  }
+}
+
+/* The keyboard's ring round a handle. SVG draws no outline of its own. */
+.dial-handle .dial-focus {
+  opacity: 0;
+}
+
+.dial-handle:focus-visible .dial-focus {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-orbit,
+  .live-fill,
+  .live-breathe,
+  .live-pulse,
+  .live-glow,
+  .live-dot,
+  .live-pop,
+  .dial-arc,
+  .dial-hint {
+    animation: none;
+  }
+
+  .live-ring,
+  .live-fill {
+    transition: none;
+  }
+}

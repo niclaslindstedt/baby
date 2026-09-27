@@ -5,13 +5,13 @@ import { durationLabel } from "./copy.ts";
 import { formatClock, formatInstant } from "./format.ts";
 import { MoonIcon, SunIcon, SunriseIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
+import { Elapsed } from "./live.tsx";
+import { currentSleep, lastEndedSleep } from "./sleep.ts";
 import {
-  currentSleep,
-  lastEndedSleep,
   latestClockTime,
   sleepTimeProblem,
   type SleepTimeProblem,
-} from "./sleep.ts";
+} from "./sleepEdit.ts";
 import { isClockTime, type AppData, type SleepKind } from "./types.ts";
 import { INPUT_CLASS } from "./ui.tsx";
 import { useNow } from "./useNow.ts";
@@ -44,6 +44,9 @@ type Props = {
   onWake: (at: Date) => void;
   /** Taller buttons, for the sheet. */
   large?: boolean;
+  /** The running sleep's line, with its clock. Off on the Sleep tab, whose
+   *  dial already says it (`SleepNow.tsx`). */
+  showStatus?: boolean;
 };
 
 const KINDS: SleepKind[] = ["nap", "night"];
@@ -53,7 +56,13 @@ const AGO = [0, 5, 10, 15, 30, 45, 60];
 
 type When = number | "pick";
 
-export function SleepButtons({ data, onStart, onWake, large }: Props) {
+export function SleepButtons({
+  data,
+  onStart,
+  onWake,
+  large,
+  showStatus = true,
+}: Props) {
   const t = useT();
   const lang = useLang();
   const locale = lang === "sv" ? "sv-SE" : "en-GB";
@@ -94,17 +103,25 @@ export function SleepButtons({ data, onStart, onWake, large }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      {current && (
+      {showStatus && current && (
         <p className="flex items-center gap-1.5 text-sm text-fg-bright">
           {current.kind === "night" ? (
-            <MoonIcon className="h-4 w-4 text-accent" />
+            <MoonIcon className="live-breathe h-4 w-4 text-accent" />
           ) : (
-            <SunIcon className="h-4 w-4 text-accent" />
+            <SunIcon className="live-breathe h-4 w-4 text-accent" />
           )}
-          {t(
-            current.kind === "night" ? "sleep.asleepNight" : "sleep.asleepNap",
-            { time: formatClock(current.start, locale) },
-          )}
+          <span className="min-w-0 flex-1">
+            {t(
+              current.kind === "night"
+                ? "sleep.asleepNight"
+                : "sleep.asleepNap",
+              { time: formatClock(current.start, locale) },
+            )}
+          </span>
+          <Elapsed
+            from={Date.parse(current.start)}
+            className="font-bold text-accent"
+          />
         </p>
       )}
 

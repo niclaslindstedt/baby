@@ -5,16 +5,11 @@ import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
 import { ChevronRightIcon } from "@niclaslindstedt/oss-framework/components";
 
 import { ageInDays } from "./age.ts";
-import {
-  ageLabel,
-  childName,
-  durationLabel,
-  sleepNextLine,
-  sleepNowLine,
-} from "./copy.ts";
+import { ageLabel, childName, durationLabel, sleepNextLine } from "./copy.ts";
 import { assessDiapers } from "./diapers.ts";
 import { DiapersModal } from "./DiapersModal.tsx";
 import {
+  formatAmount,
   formatDay,
   formatDayYear,
   formatWhole,
@@ -39,8 +34,15 @@ import {
   nextSleep,
   sleepNormFor,
   sleepStatus,
+  sleptInLast,
 } from "./sleep.ts";
 import { SleepModal } from "./SleepModal.tsx";
+import {
+  SleepCountdown,
+  SleepFill,
+  SleepNowLive,
+  SleepRing,
+} from "./SleepNow.tsx";
 import { sortedMeasurements, type AppData } from "./types.ts";
 import type { Features } from "./useAppSettings.ts";
 import { Card, Heading } from "./ui.tsx";
@@ -113,6 +115,8 @@ export function TodayScreen({ data, today, standards, features }: Props) {
     ? sleepStatus(sleepNorm, sleepAverage)
     : "tooEarly";
   const sleepNext = sleepNow ? sleepNextLine(t, sleepNow, locale) : null;
+  const last24 = useMemo(() => sleptInLast(data, now), [data, now]);
+  const hasSleeps = Object.keys(data.sleeps).length > 0;
   const sleepFacts = [
     night
       ? t("sleep.lastNight", { duration: durationLabel(t, night.minutes) })
@@ -212,15 +216,45 @@ export function TodayScreen({ data, today, standards, features }: Props) {
               : "default"
           }
           onOpen={() => setView("sleep")}
+          aside={
+            sleepNorm && hasSleeps ? (
+              // Two rings, one inside the other: the last 24 hours filling
+              // toward the recommendation outside, and where the child is
+              // now — asleep, or awake toward the next sleep — inside.
+              <SleepFill
+                norm={sleepNorm}
+                nightMinutes={last24.nightMinutes}
+                dayMinutes={last24.dayMinutes}
+                size={62}
+                stroke={5}
+                label={t("sleep.ring.label", {
+                  total: durationLabel(t, last24.totalMinutes),
+                  low: formatAmount(sleepNorm.recommended.hours[0], locale),
+                  high: formatAmount(sleepNorm.recommended.hours[1], locale),
+                })}
+              >
+                {sleepNow ? (
+                  <SleepRing next={sleepNow} now={now} size={40} />
+                ) : (
+                  <MoonIcon className="h-5 w-5 text-muted" />
+                )}
+              </SleepFill>
+            ) : (
+              sleepNow && <SleepRing next={sleepNow} now={now} />
+            )
+          }
         >
-          {sleepNow !== null
-            ? sleepNowLine(t, sleepNow, locale)
-            : Object.keys(data.sleeps).length === 0
-              ? t("sleep.noneYet", { name })
-              : t("sleep.quiet")}
-          {sleepNext && (
-            <span className="mt-1 block font-bold text-fg-bright">
+          {sleepNow !== null ? (
+            <SleepNowLive next={sleepNow} locale={locale} />
+          ) : Object.keys(data.sleeps).length === 0 ? (
+            t("sleep.noneYet", { name })
+          ) : (
+            t("sleep.quiet")
+          )}
+          {sleepNext && sleepNow && (
+            <span className="mt-1 flex flex-wrap items-baseline gap-x-2 font-bold text-fg-bright">
               {sleepNext}
+              <SleepCountdown next={sleepNow} />
             </span>
           )}
           {sleepFacts.length > 0 && (
@@ -390,25 +424,29 @@ function HeadlineCard({
   icon,
   title,
   tone = "default",
+  aside,
   children,
   onOpen,
 }: {
   icon: React.ReactNode;
   title: string;
   tone?: "default" | "accent" | "warn";
+  /** A live figure beside the headline — the sleep card's ring. */
+  aside?: React.ReactNode;
   children: React.ReactNode;
   onOpen: () => void;
 }) {
   return (
     <Card tone={tone} onClick={onOpen}>
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="flex items-center gap-1.5 text-xs font-bold tracking-wide text-accent uppercase">
             {icon}
             {title}
           </p>
           <p className="mt-1 text-sm text-fg">{children}</p>
         </div>
+        {aside}
         <ChevronRightIcon
           aria-hidden="true"
           className="mt-0.5 h-5 w-5 shrink-0 text-muted"

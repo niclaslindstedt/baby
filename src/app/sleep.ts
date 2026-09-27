@@ -177,44 +177,6 @@ export function sleepSpans(data: AppData, now: Date): SleepSpan[] {
   return out;
 }
 
-// ── Logging after the fact ─────────────────────────────────────────────────
-
-/**
- * The latest moment at or before `now` whose local wall clock reads `time`
- * (`HH:MM`): today's, or yesterday's when today's has not come yet. A parent
- * who picks 23:50 just after midnight means last night, not tonight.
- */
-export function latestClockTime(time: string, now: Date): Date {
-  const [h, m] = time.split(":").map(Number);
-  const at = new Date(now);
-  at.setHours(h ?? 0, m ?? 0, 0, 0);
-  if (at.getTime() > now.getTime()) at.setDate(at.getDate() - 1);
-  return at;
-}
-
-/** Why a time can't be used for the next tap. */
-export type SleepTimeProblem = "future" | "beforeStart" | "beforeLastSleep";
-
-/**
- * Whether `at` can be the moment of the next tap — a wake if a sleep is
- * running, a start if not — or why not: it hasn't happened yet, a wake before
- * the sleep began, or a start before the last sleep ended. Checked before
- * anything is written, so a mis-picked time is refused rather than logged
- * and corrected.
- */
-export function sleepTimeProblem(
-  data: AppData,
-  at: Date,
-  now: Date,
-): SleepTimeProblem | null {
-  const t = at.getTime();
-  if (t > now.getTime()) return "future";
-  const current = currentSleep(data, now);
-  if (current) return t <= Date.parse(current.start) ? "beforeStart" : null;
-  const last = lastEndedSleep(data, now);
-  return last !== null && t < last ? "beforeLastSleep" : null;
-}
-
 /** When the last ended sleep ended, at or before `now`, or null. */
 export function lastEndedSleep(data: AppData, now: Date): number | null {
   let latest: number | null = null;
@@ -394,6 +356,15 @@ export function averageSleep(
   };
 }
 
+/** The spans slept in the `hours` before `now`, clipped to that window —
+ *  the rolling day, as the 24-hour dial draws it. */
+export function spansInLast(data: AppData, now: Date, hours = 24): SleepSpan[] {
+  const since = now.getTime() - hours * HOUR;
+  return sleepSpans(data, now)
+    .filter((span) => span.end > since)
+    .map((span) => ({ ...span, start: Math.max(span.start, since) }));
+}
+
 /** Minutes slept in the `hours` before `now`, split by kind — the rolling
  *  day, which can be asked at any hour (see `diapers.ts` for why a calendar
  *  day can't). */
@@ -402,15 +373,10 @@ export function sleptInLast(
   now: Date,
   hours = 24,
 ): { totalMinutes: number; nightMinutes: number; dayMinutes: number } {
-  const t = now.getTime();
-  const since = t - hours * HOUR;
   let night = 0;
   let day = 0;
-  for (const span of sleepSpans(data, now)) {
-    const minutes = minutesOf(
-      Math.max(span.start, since),
-      Math.min(span.end, t),
-    );
+  for (const span of spansInLast(data, now, hours)) {
+    const minutes = minutesOf(span.start, span.end);
     if (span.kind === "night") night += minutes;
     else day += minutes;
   }
@@ -627,6 +593,42 @@ export function sleepStatus(
   if (hours < recLow) return "littleShort";
   if (hours > recHigh) return "littleLong";
   return "within";
+}
+
+/** Sleep drawn as a ring: the night's and the naps' shares of the fill, the
+ *  point on the ring where the recommended range begins, and where the
+ *  total sits against it. */
+export type SleepRing = {
+  night: number;
+  day: number;
+  bandFrom: number;
+  place: "under" | "within" | "over";
+};
+
+/**
+ * A stretch of sleep on a ring whose full turn is the top of the WHO's
+ * recommended range for the age [ref:who-2019-under5] — so the ring fills
+ * as the child sleeps, enters the recommended stretch at its low end, and
+ * is closed at its high end. Night first, then naps, as the charts stack
+ * them. A single day is read by where it lands and nothing more: whether a
+ * habit is short or long is `sleepStatus`'s question, over a month.
+ */
+export function sleepRing(
+  norm: SleepNorm,
+  nightMinutes: number,
+  dayMinutes: number,
+): SleepRing {
+  const [low, high] = norm.recommended.hours;
+  const full = high * 60;
+  const night = Math.min(1, Math.max(0, nightMinutes) / full);
+  const day = Math.min(1 - night, Math.max(0, dayMinutes) / full);
+  const hours = (nightMinutes + dayMinutes) / 60;
+  return {
+    night,
+    day,
+    bandFrom: low / high,
+    place: hours < low ? "under" : hours > high ? "over" : "within",
+  };
 }
 
 // ── When the next sleep is likely to suit ──────────────────────────────────

@@ -21,7 +21,10 @@ input, useful output.**
   for rather than a diagnosis.
 - **Sleep.** **Nap** or **Night** when the baby falls asleep, **Woke up**
   when they wake — from the Sleep tab or the **+** on any screen, now or
-  "20 minutes ago" when the phone was out of reach. The app
+  "20 minutes ago" when the phone was out of reach, with the sleep or the
+  waking counting up to the second on a 24-hour dial. A sleep logged late is
+  put right by dragging its ends round that dial, like setting a bedtime
+  alarm. The app
   shows the last 24 hours and the 30- and 90-day averages, night and naps,
   against the WHO recommendation for the age and what children that age are
   observed to sleep, and suggests when the next nap or bedtime is likely to
@@ -133,24 +136,24 @@ Today's cards opens the matching view over the screen — full screen on a
 phone, a panel over a blurred page on a desktop — and closing it puts you back
 where you were.
 
-| Tab          | What it does                                                                                                                                                                                              |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Today**    | The child's age, then one line each on diapers, sleep, the regimen, growth and the next vaccine — tap a card for its full view, and it warms when it is asking for a look.                                |
-| **Diapers**  | The three buttons — pee, poo, both — and the last seven days of changes under them, newest first, so a mistap is one tap to remove.                                                                       |
-| **Sleep**    | **Nap** / **Night** and **Woke up**, and the last seven days of sleeps under them, a night under the evening it began — edit a time tapped late, or add a sleep nobody logged.                            |
-| **Growth**   | The readings list, and the form behind it: weight, length and head circumference, as often as you like.                                                                                                   |
-| **Food**     | The daily regimen with one-tap presets and, optionally, the times of day each food is given; then milk feeding (breast / formula / both, and which formula — modersmjölksersättning or tillskottsnäring). |
-| **Vaccines** | The Swedish programme as a timeline — given, expected by now, upcoming — where a dose is marked given with the vaccine name off the card, beside the extras outside the programme.                        |
+| Tab          | What it does                                                                                                                                                                                                                |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Today**    | The child's age, then one line each on diapers, sleep, the regimen, growth and the next vaccine — tap a card for its full view, and it warms when it is asking for a look.                                                  |
+| **Diapers**  | The three buttons — pee, poo, both — and the last seven days of changes under them, newest first, so a mistap is one tap to remove.                                                                                         |
+| **Sleep**    | The last 24 hours on a 24-hour dial with the current sleep or waking counting up, **Nap** / **Night** and **Woke up**, and the last seven days of sleeps — tap one to drag its times on the dial, or add one nobody logged. |
+| **Growth**   | The readings list, and the form behind it: weight, length and head circumference, as often as you like.                                                                                                                     |
+| **Food**     | The daily regimen with one-tap presets and, optionally, the times of day each food is given; then milk feeding (breast / formula / both, and which formula — modersmjölksersättning or tillskottsnäring).                   |
+| **Vaccines** | The Swedish programme as a timeline — given, expected by now, upcoming — where a dose is marked given with the vaccine name off the card, beside the extras outside the programme.                                          |
 
 The five views Today opens:
 
-| View             | What it shows                                                                                                                                                                                                                       |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Diapers**      | The last 24 hours as wet and dirty against the floor for the child's age, the source that floor comes from, and the week as a chart.                                                                                                |
-| **Sleep**        | Asleep or awake and for how long, the suggested next nap or bedtime and what it is built from, the last 24 hours, the 30- and 90-day averages against the recommendation, two weeks as a chart and the week hour by hour.           |
-| **Growth**       | A tab each for weight, length and head circumference on the WHO standard with the SD channels, the trend across them, the projected range ahead, and (under Length) the expected and projected adult heights.                       |
-| **Food regimen** | Whether the regimen covers the day, and how the day fills up: energy accumulating across the clock against the line it is held to, then iron, vitamin D, the fat shares, omega-3/6 and DHA against the recommendations for the age. |
-| **Vaccinations** | The card at a glance: every visit the programme books, a tick against what is recorded, and how much of the card is done.                                                                                                           |
+| View             | What it shows                                                                                                                                                                                                                                                                 |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Diapers**      | The last 24 hours as wet and dirty against the floor for the child's age, the source that floor comes from, and the week as a chart.                                                                                                                                          |
+| **Sleep**        | Asleep or awake on a running clock, the last day on a dial with the suggested next nap or bedtime marked and counting down, what it is built from, the last 24 hours, the 30- and 90-day averages against the recommendation, two weeks as a chart and the week hour by hour. |
+| **Growth**       | A tab each for weight, length and head circumference on the WHO standard with the SD channels, the trend across them, the projected range ahead, and (under Length) the expected and projected adult heights.                                                                 |
+| **Food regimen** | Whether the regimen covers the day, and how the day fills up: energy accumulating across the clock against the line it is held to, then iron, vitamin D, the fat shares, omega-3/6 and DHA against the recommendations for the age.                                           |
+| **Vaccinations** | The card at a glance: every visit the programme books, a tick against what is recorded, and how much of the card is done.                                                                                                                                                     |
 
 …and two buttons on the top bar, for the things you do and then leave:
 

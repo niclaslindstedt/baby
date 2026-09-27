@@ -263,7 +263,22 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   `QuickLogSheet.tsx` — the sheet behind the top bar's `+`.
   `DiaperButtons.tsx` is the app's only diaper-logging control and
   `SleepButtons.tsx` its only sleep-logging one, and every place that logs
-  either renders it; `SleepForm.tsx` corrects a sleep on the Sleep tab.
+  either renders it; `SleepForm.tsx` is the sheet that corrects a sleep on
+  the Sleep tab, on the dial `SleepClock.tsx` draws, and `SleepNow.tsx` the
+  tab's live dial (plus the ring, running line and countdown on Today's
+  card).
+- `src/app/sleepEdit.ts` — the sleep log, written: the rules a tapped time
+  (`sleepTimeProblem`) or a corrected span (`sleepEditProblem`) must pass,
+  and where the dial opens (`sleepDraft`). Pure, like `sleep.ts`.
+- `src/app/dial.ts` and `ClockDial.tsx` — the 24-hour dial: the pure
+  arithmetic (a time's angle, the time under a finger, a drag read as a
+  change in angle so it runs past midnight, snapping, stopping at now) and
+  the face every sleep dial is drawn on.
+- `src/app/live.tsx` — the moving parts: `useTick` (a clock that re-renders
+  only its holder and stops while the page is hidden), `Elapsed` (a
+  stopwatch or countdown to the second) and `ProgressRing`. The CSS they
+  wear is `styles.css`'s "Live" block, all of it still under reduced
+  motion.
 - `src/app/ViewModal.tsx` and the five views it wraps — `DiapersModal.tsx`,
   `SleepModal.tsx`, `GrowthModal.tsx`, `FoodModal.tsx`, `VaccinesModal.tsx`
   — the read-only
@@ -295,7 +310,22 @@ a blurred page from `sm:` up.
 Two rules follow. **A view never writes** — a modal that could edit would be a
 second write path for data the tab behind it owns. And **a stat never moves to
 a tab**: if a new derivation needs a home, it belongs in the matching view or
-on a Today card, not on the screen where the record is typed.
+on a Today card, not on the screen where the record is typed. A running
+record's own clock — a sleep counting up from its start — is a reading of the
+record, not a stat, and belongs on the tab; a ring filling toward a suggested
+time is a comparison, and stays on Today.
+
+### Alive, not explained — the sleep module is the reference
+
+A record that is running shows its clock running, to the second, and a span
+of time is drawn on the 24-hour dial rather than described. The Sleep tab is
+the reference every tracker is to be brought up to: a live dial and
+stopwatch where there used to be a paragraph of instructions, rows that open
+the record on a draggable dial instead of four date and time fields, and no
+hint text a shape can replace. Reuse the pieces — `live.tsx`, `dial.ts`,
+`ClockDial.tsx`, the "Live" CSS — rather than growing a second set, keep
+every animation in CSS and still under `prefers-reduced-motion`, and tick
+only the component that shows the time, never a whole screen.
 
 ### Derive, don't store
 
@@ -359,6 +389,8 @@ registry.
 | A new answer to show a parent          | A card on `TodayScreen.tsx`, or the matching `*Modal.tsx` behind it — never one of the five input tabs                                   |
 | A new way to log a diaper              | Never a second write path — render `DiaperButtons` and write through `addDiaper`                                                         |
 | A new way to log a sleep               | Never a second write path — render `SleepButtons` and write through `saveSleep`                                                          |
+| A running clock, a ring, a pulse       | `live.tsx` (`Elapsed`, `ProgressRing`, `FillRing`, `useTick`) and the "Live" block of `styles.css` — never a per-screen `setInterval`    |
+| A time span to show or drag            | `ClockDial.tsx` over `dial.ts` (with tests in `tests/dial_test.ts`); `SleepClock.tsx` is the worked example of dragging one              |
 | A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                                    |
 | A new feature switch                   | `FeatureId` in `useAppSettings.ts`, guards on the screens it owns, and `navTabs()` if it has a tab                                       |
 | A new storage backend                  | The framework, if generic; `useSyncEngine.ts` wires adapters up, and `idbAdapter.ts` is the one app-local adapter                        |
@@ -373,8 +405,9 @@ registry.
 
 Tests live in `tests/` with a `_test` suffix (OSS_SPEC §20.2) and run under
 Vitest in the `node` environment — they cover the pure domain modules
-(`age`, `growth`, `nutrition`, `diapers`, `sleep`, `vaccines`, `merge`,
-`migrations`, `references` — which also holds the registry to the tags),
+(`age`, `growth`, `nutrition`, `diapers`, `sleep` — `sleepEdit` included —,
+`dial`, `vaccines`, `merge`, `migrations`, `references` — which also holds
+the registry to the tags),
 which is where the app's real logic is. No DOM, no testing-library, no mocked
 clock: every test pins real dates, and the WHO rows it checks against are the
 published ones.
@@ -422,7 +455,8 @@ references live under `docs/` proper.
 | `growth.ts` or `data/whoGrowth.ts`               | `docs/growth.md`, `docs/features/growth.md`, and the README's Examples block if the output shape moved         |
 | `nutrition.ts` or `data/foods.ts`                | `docs/nutrition.md`, `docs/features/food.md`                                                                   |
 | `diapers.ts`                                     | `docs/diapers.md`, `docs/features/diapers.md`                                                                  |
-| `sleep.ts`                                       | `docs/sleep.md`, `docs/features/sleep.md`, and `docs/references.json` for any source added or dropped          |
+| `sleep.ts`, `sleepEdit.ts`                       | `docs/sleep.md`, `docs/features/sleep.md`, and `docs/references.json` for any source added or dropped          |
+| `live.tsx`, `dial.ts`, `ClockDial.tsx`           | `docs/architecture.md` ("Live, and the dial") and this file's "Alive, not explained"                           |
 | A `[ref:<id>]` tag anywhere                      | `docs/references.json` — the entry, its quotes, its `usedBy`, and its `summary` / `topics` for About           |
 | `references.ts` or `AboutScreen.tsx`             | `docs/architecture.md` ("Where the numbers come from"), `docs/features/sources.md`                             |
 | `vaccines.ts`                                    | `docs/vaccinations.md`, `docs/features/vaccinations.md`                                                        |

@@ -21,10 +21,16 @@ import {
   sleepNormFor,
   sleepStatus,
   sleptInLast,
+  sleepRing,
+  spansInLast,
   type SleepAverage,
+  type SleepNorm,
   type SleepSuggestion,
 } from "./sleep.ts";
+import { ClockDial, type DialArc } from "./ClockDial.tsx";
+import { Elapsed } from "./live.tsx";
 import { SleepChart } from "./SleepChart.tsx";
+import { SleepCountdown, SleepFill } from "./SleepNow.tsx";
 import { SleepDiary } from "./SleepDiary.tsx";
 import type { AppData } from "./types.ts";
 import { Card, Heading } from "./ui.tsx";
@@ -78,6 +84,31 @@ export function SleepModal({ open, onClose, data, today, now }: Props) {
     () => sleepDays(data, addDays(today, -CHART_DAYS), addDays(today, -1), now),
     [data, today, now],
   );
+  // The dial: the sleeps of the last day, and the window the next one is
+  // suggested in, dashed. The past is drawn short of a full turn by as much
+  // as the window reaches ahead, so the two never land on the same stretch
+  // of the face.
+  const arcs = useMemo<DialArc[]>(() => {
+    const t0 = now.getTime();
+    const hint =
+      next?.state === "awake" && next.suggestion && next.suggestion.latest > t0
+        ? {
+            from: Math.max(next.suggestion.earliest, t0),
+            to: next.suggestion.latest,
+          }
+        : null;
+    const ahead = hint ? (hint.to - t0) / 3_600_000 + 0.5 : 0;
+    const past: DialArc[] = spansInLast(data, now, Math.max(1, 24 - ahead)).map(
+      (span) => ({
+        key: span.id,
+        from: span.start,
+        to: span.end,
+        tone: span.kind,
+        live: span.ongoing,
+      }),
+    );
+    return hint ? [...past, { key: "hint", tone: "hint", ...hint }] : past;
+  }, [data, now, next]);
   const diary = useMemo(
     () => sleepDiary(data, addDays(today, -(DIARY_DAYS - 1)), today, now),
     [data, today, now],
@@ -110,49 +141,133 @@ export function SleepModal({ open, onClose, data, today, now }: Props) {
           </p>
         ) : (
           <>
-            <p className="mt-2 text-sm text-fg">
-              {sleepNowLine(t, next, locale)}
-            </p>
+            <div className="mt-3">
+              <ClockDial
+                arcs={arcs}
+                now={now.getTime()}
+                label={t("sleep.live.dialLabel")}
+                desc={t("sleep.live.viewDialDesc")}
+                className="max-w-[17rem]"
+              >
+                <span className="text-[0.65rem] font-bold tracking-wide text-accent uppercase">
+                  {next.state === "asleep"
+                    ? t(
+                        next.kind === "night"
+                          ? "sleep.live.night"
+                          : "sleep.live.nap",
+                      )
+                    : t("sleep.live.awake")}
+                </span>
+                <Elapsed
+                  from={next.since}
+                  className="text-2xl leading-tight font-bold text-fg-bright"
+                />
+                <span className="text-xs text-muted tabular-nums">
+                  {t("sleep.live.since", {
+                    time: formatInstant(next.since, locale),
+                  })}
+                </span>
+              </ClockDial>
+            </div>
             {nextLine && (
-              <p className="mt-1 text-lg font-bold text-fg-bright">
-                {nextLine}
+              <div className="mt-3 text-center">
+                <p className="text-lg font-bold text-fg-bright">{nextLine}</p>
+                {next.state === "awake" && next.suggestion && (
+                  <p className="flex items-baseline justify-center gap-2 text-xs text-muted tabular-nums">
+                    {formatInstant(next.suggestion.earliest, locale)}–
+                    {formatInstant(next.suggestion.latest, locale)}
+                    <SleepCountdown next={next} />
+                  </p>
+                )}
+              </div>
+            )}
+            {next.state === "nightWaking" && (
+              <p className="mt-3 text-xs text-muted">
+                {t("sleep.nightWakingNote")}
+              </p>
+            )}
+            {next.state === "awake" && next.suggestion === null && (
+              <p className="mt-3 text-xs text-muted">
+                {t("sleep.noSuggestionAge")}
               </p>
             )}
             {next.state === "awake" && next.suggestion && (
-              <p className="text-xs text-muted tabular-nums">
-                {formatInstant(next.suggestion.earliest, locale)}–
-                {formatInstant(next.suggestion.latest, locale)}
-              </p>
+              <details className="group mt-3 text-xs text-muted">
+                <summary className="cursor-pointer list-none text-center font-medium text-accent">
+                  {t("sleep.live.how")}
+                </summary>
+                <div className="mt-2 flex flex-col gap-2">
+                  <Explanation
+                    suggestion={next.suggestion}
+                    name={name}
+                    t={t}
+                    locale={locale}
+                  />
+                </div>
+              </details>
             )}
-            <div className="mt-3 flex flex-col gap-2 text-xs text-muted">
-              {next.state === "nightWaking" && (
-                <p>{t("sleep.nightWakingNote")}</p>
-              )}
-              {next.state === "awake" && next.suggestion === null && (
-                <p>{t("sleep.noSuggestionAge")}</p>
-              )}
-              {next.state === "awake" && next.suggestion && (
-                <Explanation
-                  suggestion={next.suggestion}
-                  name={name}
-                  t={t}
-                  locale={locale}
-                />
-              )}
-            </div>
           </>
         )}
       </Card>
 
       <Card>
         <Heading>{t("sleep.last24")}</Heading>
-        <p className="mt-2 text-sm text-fg-bright">
-          {t("sleep.last24Line", {
-            total: durationLabel(t, last24.totalMinutes),
-            night: durationLabel(t, last24.nightMinutes),
-            day: durationLabel(t, last24.dayMinutes),
-          })}
-        </p>
+        {norm ? (
+          <div className="mt-3 flex items-center gap-3">
+            <SleepFill
+              norm={norm}
+              nightMinutes={last24.nightMinutes}
+              dayMinutes={last24.dayMinutes}
+              size={120}
+              stroke={12}
+              label={t("sleep.ring.label", {
+                total: durationLabel(t, last24.totalMinutes),
+                low: hours(norm.recommended.hours[0]),
+                high: hours(norm.recommended.hours[1]),
+              })}
+            >
+              <span className="text-sm leading-tight font-bold text-fg-bright tabular-nums">
+                {durationLabel(t, last24.totalMinutes)}
+              </span>
+              <span className="text-[0.65rem] text-muted">
+                {t("sleep.ring.of", {
+                  low: hours(norm.recommended.hours[0]),
+                  high: hours(norm.recommended.hours[1]),
+                })}
+              </span>
+            </SleepFill>
+            <div className="flex min-w-0 flex-col gap-1.5 text-sm">
+              <Legend
+                swatch="bg-accent"
+                label={t("sleep.legendNight")}
+                value={durationLabel(t, last24.nightMinutes)}
+              />
+              <Legend
+                swatch="bg-fg-bright/60"
+                label={t("sleep.legendDay")}
+                value={durationLabel(t, last24.dayMinutes)}
+              />
+              <Legend
+                swatch="bg-accent/20"
+                label={t("sleep.legendRecommended")}
+                value={`${hours(norm.recommended.hours[0])}–${hours(norm.recommended.hours[1])} h`}
+              />
+              <p className="mt-1 text-xs text-muted">
+                {t(
+                  `sleep.ring.place.${sleepRing(norm, last24.nightMinutes, last24.dayMinutes).place}` as const,
+                )}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p className="mt-2 text-sm text-fg-bright">
+            {t("sleep.last24Line", {
+              total: durationLabel(t, last24.totalMinutes),
+              night: durationLabel(t, last24.nightMinutes),
+              day: durationLabel(t, last24.dayMinutes),
+            })}
+          </p>
+        )}
       </Card>
 
       <Card tone={status === "short" || status === "long" ? "warn" : "default"}>
@@ -161,12 +276,14 @@ export function SleepModal({ open, onClose, data, today, now }: Props) {
           <AverageRow
             label={t("sleep.avg30")}
             average={avg30}
+            norm={norm}
             t={t}
             locale={locale}
           />
           <AverageRow
             label={t("sleep.avg90")}
             average={avg90}
+            norm={norm}
             t={t}
             locale={locale}
           />
@@ -238,38 +355,61 @@ export function SleepModal({ open, onClose, data, today, now }: Props) {
 function AverageRow({
   label,
   average,
+  norm,
   t,
   locale,
 }: {
   label: string;
   average: SleepAverage | null;
+  norm: SleepNorm | null;
   t: TFn;
   locale: string;
 }) {
   return (
-    <div>
-      <p className="text-xs tracking-wide text-muted uppercase">{label}</p>
-      {average === null ? (
-        <p className="text-sm text-muted">{t("sleep.avgNone")}</p>
-      ) : (
-        <>
-          <p className="text-sm font-bold text-fg-bright tabular-nums">
-            {t("sleep.avgTotal", {
-              duration: durationLabel(t, average.totalMinutes),
-            })}{" "}
-            <span className="text-xs font-normal text-muted">
-              {t("sleep.avgDays", { count: String(average.loggedDays) })}
-            </span>
-          </p>
-          <p className="text-xs text-fg tabular-nums">
-            {t("sleep.avgSplit", {
-              night: durationLabel(t, average.nightMinutes),
-              day: durationLabel(t, average.dayMinutes),
-              naps: formatAmount(average.napsPerDay, locale),
-            })}
-          </p>
-        </>
+    <div className="flex items-center gap-3">
+      {norm && average && (
+        <SleepFill
+          norm={norm}
+          nightMinutes={average.nightMinutes}
+          dayMinutes={average.dayMinutes}
+          size={64}
+          stroke={7}
+          label={t("sleep.ring.avgLabel", {
+            total: durationLabel(t, average.totalMinutes),
+            low: formatAmount(norm.recommended.hours[0], locale),
+            high: formatAmount(norm.recommended.hours[1], locale),
+          })}
+        >
+          <span className="text-xs font-bold text-fg-bright tabular-nums">
+            {formatAmount(average.totalMinutes / 60, locale)}
+            <span className="font-normal text-muted"> h</span>
+          </span>
+        </SleepFill>
       )}
+      <div className="min-w-0">
+        <p className="text-xs tracking-wide text-muted uppercase">{label}</p>
+        {average === null ? (
+          <p className="text-sm text-muted">{t("sleep.avgNone")}</p>
+        ) : (
+          <>
+            <p className="text-sm font-bold text-fg-bright tabular-nums">
+              {t("sleep.avgTotal", {
+                duration: durationLabel(t, average.totalMinutes),
+              })}{" "}
+              <span className="text-xs font-normal text-muted">
+                {t("sleep.avgDays", { count: String(average.loggedDays) })}
+              </span>
+            </p>
+            <p className="text-xs text-fg tabular-nums">
+              {t("sleep.avgSplit", {
+                night: durationLabel(t, average.nightMinutes),
+                day: durationLabel(t, average.dayMinutes),
+                naps: formatAmount(average.napsPerDay, locale),
+              })}
+            </p>
+          </>
+        )}
+      </div>
     </div>
   );
 }
@@ -315,5 +455,26 @@ function Explanation({
       {s.overdue && <p>{t("sleep.overdue")}</p>}
       <p>{t("sleep.suggestionHint", { name })}</p>
     </>
+  );
+}
+
+/** One line of a ring's key: the swatch, what it is, and how much. */
+function Legend({
+  swatch,
+  label,
+  value,
+}: {
+  swatch: string;
+  label: string;
+  value: string;
+}) {
+  return (
+    <p className="flex items-center gap-2">
+      <span className={`h-3 w-3 shrink-0 rounded-sm ${swatch}`} />
+      <span className="text-muted">{label}</span>
+      <span className="ml-auto font-bold whitespace-nowrap text-fg-bright tabular-nums">
+        {value}
+      </span>
+    </p>
   );
 }

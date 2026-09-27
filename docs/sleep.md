@@ -30,10 +30,27 @@ the suggestion aims for.
 
 Unlike a diaper change, a sleep can be edited: a sleep noticed ten minutes
 late, a **Woke up** tapped at breakfast, a nap nobody logged. The **Sleep** tab
-lists the last seven days, grouped by sleep day, with an edit and a remove on
-every row and **Add a sleep** for the ones that were missed. The top bar's
-**+** opens the same buttons from any screen, and both write through the same
-`saveSleep` edit. Nothing on the tab is derived.
+lists the last seven days, grouped by sleep day, and a tap on any row — or on
+**Add** for one that was missed — opens it on a 24-hour dial (`SleepClock.tsx`,
+the arithmetic in `dial.ts`): midnight at the top, the sleep an arc between two
+handles, the way the phone's own bedtime alarm is set. A handle moves one end
+and the arc moves both; every move lands on five minutes, stops at now, and can
+run on past midnight into the day before, and the chevrons step the whole sleep
+a day at a time. The length is read out as it is dragged. The sheet refuses
+before saving, with the reason under the dial, a time to come, an end before
+the start, and a span longer than sixteen hours (`sleepEditProblem` in
+`sleepEdit.ts`). A new sleep opens as the hour up to now; a **Woke up** nobody
+tapped opens with an end guessed from its kind — an hour for a nap, ten for a
+night — and never past now (`sleepDraft`). The handles are sliders to the
+keyboard: arrows five minutes, Page Up and Down an hour. The top bar's **+**
+opens the same buttons from any screen, and both write through the same
+`saveSleep` edit.
+
+The top of the tab is the same dial, showing: the last 24 hours as they were
+tapped, a pulsing dot at the time now, and the sleep going on now growing round
+the face, with a stopwatch in the middle counting it — or the time awake since
+the last sleep ended — to the second. That clock is a reading of the record,
+not a conclusion from it; nothing on the tab is compared with anything.
 
 An open sleep that is not the newest, or that has been running for more than
 sixteen hours, is a **Woke up** nobody tapped. Its end is unknown, so no number
@@ -45,6 +62,23 @@ the longest sleep period at 6–24 months at 8.3 hours, 13.7 at the top of its
 Two sleeps that overlap — the same nap logged on two phones, or a corrected
 start that runs into the sleep before — are clipped, so no minute is counted
 twice.
+
+## The rings
+
+Sleep is also drawn as a ring that fills as the child sleeps (`sleepRing`):
+the night in the accent, the naps lighter on top, on a track whose full turn
+is the top of the WHO's recommended range for the age, with the stretch from
+its low end washed in and ticked. A ring that reaches the wash has reached the
+low end of the recommendation; one that closes has reached its top, and never
+fills past it. Today's Sleep card carries the last 24 hours this way, round
+the ring for where the child is now, and the view draws it large beside its
+night, naps and range, with the 30- and 90-day averages on rings of their own.
+
+One 24 hours is only placed — under, within or over — and said to say
+little: whether a habit is short or long is the 30-day average's question
+(`sleepStatus`), and nothing about a single day warms a card. The rings are on
+Today and the view only, never on the Sleep tab, because they are a
+comparison.
 
 ## The sleep day
 

@@ -5,7 +5,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { measurementValues } from "../src/app/format.ts";
+import { formatElapsed, measurementValues } from "../src/app/format.ts";
 import type { Measurement } from "../src/app/types.ts";
 
 function reading(values: Partial<Measurement>): Measurement {
@@ -50,5 +50,15 @@ describe("measurementValues", () => {
     expect(
       measurementValues(reading({ weightKg: 7.42, lengthCm: 68.5 }), "sv-SE"),
     ).toEqual(["7,42 kg", "68,5 cm"]);
+  });
+});
+
+describe("formatElapsed", () => {
+  it("reads like a stopwatch: minutes and seconds, then hours in front", () => {
+    expect(formatElapsed(0)).toBe("00:00");
+    expect(formatElapsed(65_000)).toBe("01:05");
+    expect(formatElapsed((1 * 3600 + 23 * 60 + 45) * 1000)).toBe("1:23:45");
+    expect(formatElapsed(10 * 3600 * 1000 + 999)).toBe("10:00:00");
+    expect(formatElapsed(-5_000)).toBe("00:00");
   });
 });

@@ -3,40 +3,48 @@ import { useMemo, useState } from "react";
 
 import { dayKeyOf, type DayKey } from "@niclaslindstedt/oss-framework/calendar";
 import {
+  ChevronRightIcon,
   ConfirmDialog,
-  PencilIcon,
   PlusIcon,
 } from "@niclaslindstedt/oss-framework/components";
 
-import { childName } from "./copy.ts";
+import { childName, durationLabel } from "./copy.ts";
 import { formatClock, formatDay } from "./format.ts";
-import { AlertIcon, MoonIcon, SunIcon, TrashIcon } from "./icons.tsx";
+import { AlertIcon, MoonIcon, SunIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
+import { Elapsed } from "./live.tsx";
 import { currentSleep, recentSleepsByDay, unfinishedSleeps } from "./sleep.ts";
 import { SleepButtons } from "./SleepButtons.tsx";
 import { SleepForm } from "./SleepForm.tsx";
+import { SleepNow } from "./SleepNow.tsx";
 import type { AppData, SleepKind, SleepSession } from "./types.ts";
 import { Card, Heading } from "./ui.tsx";
 import { useNow } from "./useNow.ts";
 
-// Sleep, the input side: the buttons, and the sleeps they wrote.
+// Sleep, the input side — and the reference for how every tracker's tab
+// should feel: the record running on a live clock at the top, the buttons
+// that write it under that, and the week's records under those, each one a
+// tap from being put right. Shapes and running numbers rather than
+// paragraphs about them.
 //
 // A sleep is two taps — **Nap** or **Night** when the child falls asleep,
 // **Woke up** when they wake — and the same buttons sit behind the top bar's
-// `+`, so a sleep can be started from whatever screen is open. What the log
-// adds up to — how long the child has been awake, when the next sleep is
-// likely to suit, the averages against the recommendation for the age — is
-// an answer, and answers are on Today behind the Sleep card
-// (`SleepModal.tsx`). Nothing on this screen is derived; the list shows the
-// times as they were recorded.
+// `+`. The dial above them (`SleepNow.tsx`) draws the last 24 hours as they
+// were tapped, and counts the sleep or the waking going on now to the
+// second. What the log adds up to — the averages against the age, when the
+// next sleep is likely to suit — is an answer, and answers are on Today
+// behind the Sleep card (`SleepModal.tsx`).
 //
-// Unlike a diaper change, a sleep can be *edited*: a "fell asleep" noticed
-// ten minutes late, a "woke up" tapped at breakfast, a nap nobody logged.
-// The list is where that happens, a week deep, grouped by the day each sleep
-// belongs to — a night counts toward the evening it began (see `sleep.ts`).
+// Unlike a diaper change, a sleep can be *corrected*: a "fell asleep"
+// noticed ten minutes late, a "woke up" tapped at breakfast, a nap nobody
+// logged. Tapping a row, or **Add**, opens the sleep on the dial
+// (`SleepForm.tsx`), a week deep, grouped by the day each sleep belongs to
+// — a night counts toward the evening it began (see `sleep.ts`).
 
 /** How far back the correctable list reaches. */
 const LIST_DAYS = 7;
+
+type Editing = { sleep: SleepSession | null; finish: boolean };
 
 type Props = {
   data: AppData;
@@ -60,7 +68,7 @@ export function SleepScreen({
   const locale = lang === "sv" ? "sv-SE" : "en-GB";
   const name = childName(t, data.child);
   const now = useNow(data);
-  const [editing, setEditing] = useState<SleepSession | null | "new">(null);
+  const [editing, setEditing] = useState<Editing | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<SleepSession | null>(null);
 
   const current = useMemo(() => currentSleep(data, now), [data, now]);
@@ -70,48 +78,17 @@ export function SleepScreen({
     [data, today],
   );
 
-  if (editing !== null) {
-    return (
-      <div className="flex flex-1 flex-col justify-center gap-3 px-3 py-3">
-        <Card>
-          <Heading>
-            {editing === "new"
-              ? t("sleep.form.addTitle")
-              : t("sleep.form.editTitle")}
-          </Heading>
-          <div className="mt-3">
-            <SleepForm
-              initial={editing === "new" ? null : editing}
-              today={today}
-              onSave={(sleep) => {
-                onSave(sleep);
-                setEditing(null);
-              }}
-              onCancel={() => setEditing(null)}
-            />
-          </div>
-        </Card>
-      </div>
-    );
-  }
-
-  const span = (s: SleepSession) =>
-    s.end === null
-      ? t("sleep.spanOpen", { start: formatClock(s.start, locale) })
-      : t("sleep.span", {
-          start: formatClock(s.start, locale),
-          end: formatClock(s.end, locale),
-        });
-
   return (
     <div className="flex flex-col gap-3 px-3 py-3">
       <Card>
-        <Heading>{t("sleep.log")}</Heading>
-        <p className="mt-1 text-xs text-muted">
-          {t("sleep.logHint", { name })}
-        </p>
-        <div className="mt-3">
-          <SleepButtons data={data} onStart={onStart} onWake={onWake} />
+        <SleepNow data={data} now={now} name={name} />
+        <div className="mt-4">
+          <SleepButtons
+            data={data}
+            onStart={onStart}
+            onWake={onWake}
+            showStatus={false}
+          />
         </div>
       </Card>
 
@@ -132,7 +109,7 @@ export function SleepScreen({
               <div className="mt-2 flex gap-3">
                 <button
                   type="button"
-                  onClick={() => setEditing(s)}
+                  onClick={() => setEditing({ sleep: s, finish: true })}
                   className="text-sm font-medium text-accent hover:underline"
                 >
                   {t("sleep.finish")}
@@ -155,14 +132,13 @@ export function SleepScreen({
           <Heading>{t("sleep.recent")}</Heading>
           <button
             type="button"
-            onClick={() => setEditing("new")}
-            className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-accent hover:bg-surface-2"
+            onClick={() => setEditing({ sleep: null, finish: false })}
+            className="flex items-center gap-1.5 rounded-full border border-accent/50 px-3 py-1.5 text-sm text-accent hover:bg-accent/10"
           >
             <PlusIcon className="h-4 w-4" />
             {t("sleep.add")}
           </button>
         </div>
-        <p className="mt-1 text-xs text-muted">{t("sleep.recentHint")}</p>
         {days.length === 0 ? (
           <p className="mt-3 text-sm text-muted">
             {t("sleep.noneYet", { name })}
@@ -176,43 +152,18 @@ export function SleepScreen({
                 </p>
                 <ul className="mt-1 flex flex-col gap-1">
                   {sleeps.map((s) => (
-                    <li
-                      key={s.id}
-                      className="flex items-center justify-between gap-2 text-sm"
-                    >
-                      <span className="flex min-w-0 items-center gap-2 text-fg">
-                        {s.kind === "night" ? (
-                          <MoonIcon className="h-4 w-4 shrink-0 text-accent" />
-                        ) : (
-                          <SunIcon className="h-4 w-4 shrink-0 text-accent" />
-                        )}
-                        <span className="tabular-nums">{span(s)}</span>
-                        <span className="truncate text-xs text-muted">
-                          {s.end === null && s.id === current?.id
-                            ? t("sleep.stillAsleep")
-                            : t(`sleep.${s.kind}` as const)}
-                        </span>
-                      </span>
-                      <span className="flex shrink-0 gap-1">
-                        <button
-                          type="button"
-                          onClick={() => setEditing(s)}
-                          aria-label={t("common.edit")}
-                          title={t("common.edit")}
-                          className="flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-2 hover:text-fg"
-                        >
-                          <PencilIcon className="h-4 w-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setConfirmDelete(s)}
-                          aria-label={t("common.delete")}
-                          title={t("common.delete")}
-                          className="flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-2 hover:text-danger"
-                        >
-                          <TrashIcon className="h-4 w-4" />
-                        </button>
-                      </span>
+                    <li key={s.id}>
+                      <SleepRow
+                        sleep={s}
+                        running={s.end === null && s.id === current?.id}
+                        locale={locale}
+                        onOpen={() =>
+                          setEditing({
+                            sleep: s,
+                            finish: s.end === null && s.id !== current?.id,
+                          })
+                        }
+                      />
                     </li>
                   ))}
                 </ul>
@@ -221,6 +172,28 @@ export function SleepScreen({
           </div>
         )}
       </Card>
+
+      {editing && (
+        <SleepForm
+          key={editing.sleep?.id ?? "new"}
+          initial={editing.sleep}
+          finish={editing.finish}
+          today={today}
+          onSave={(sleep) => {
+            onSave(sleep);
+            setEditing(null);
+          }}
+          onDelete={
+            editing.sleep
+              ? () => {
+                  setConfirmDelete(editing.sleep);
+                  setEditing(null);
+                }
+              : undefined
+          }
+          onClose={() => setEditing(null)}
+        />
+      )}
 
       <ConfirmDialog
         open={confirmDelete !== null}
@@ -235,5 +208,65 @@ export function SleepScreen({
         onCancel={() => setConfirmDelete(null)}
       />
     </div>
+  );
+}
+
+/** One sleep in the week's list: the kind, the times, and how long — the
+ *  running one on a live clock — and the whole row opens it on the dial. */
+function SleepRow({
+  sleep: s,
+  running,
+  locale,
+  onOpen,
+}: {
+  sleep: SleepSession;
+  running: boolean;
+  locale: string;
+  onOpen: () => void;
+}) {
+  const t = useT();
+  const start = formatClock(s.start, locale);
+  const Icon = s.kind === "night" ? MoonIcon : SunIcon;
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label={t("sleep.editRow", {
+        kind: t(`sleep.${s.kind}` as const),
+        span:
+          s.end === null
+            ? t("sleep.spanOpen", { start })
+            : t("sleep.span", { start, end: formatClock(s.end, locale) }),
+      })}
+      className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left text-sm transition-colors hover:bg-surface-2 active:bg-surface-2"
+    >
+      <span
+        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+          s.kind === "night"
+            ? "bg-accent/20 text-accent"
+            : "bg-fg-bright/10 text-fg-bright"
+        }`}
+      >
+        <Icon className={`h-4 w-4 ${running ? "live-breathe" : ""}`} />
+      </span>
+      <span className="min-w-0 flex-1 text-fg-bright tabular-nums">
+        {s.end === null
+          ? t("sleep.spanOpen", { start })
+          : t("sleep.span", { start, end: formatClock(s.end, locale) })}
+      </span>
+      <span className="shrink-0 text-xs text-muted tabular-nums">
+        {running ? (
+          <span className="flex items-center gap-1.5 text-accent">
+            <span className="live-dot h-1.5 w-1.5 rounded-full bg-accent" />
+            <Elapsed from={Date.parse(s.start)} />
+          </span>
+        ) : s.end === null ? (
+          t("sleep.notEnded")
+        ) : (
+          durationLabel(t, (Date.parse(s.end) - Date.parse(s.start)) / 60_000)
+        )}
+      </span>
+      <ChevronRightIcon className="h-4 w-4 shrink-0 text-muted" />
+    </button>
   );
 }

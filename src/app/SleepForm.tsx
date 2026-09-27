@@ -1,216 +1,185 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
-import { useState } from "react";
+import { useId, useState } from "react";
 
+import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
 import {
-  addDays,
-  dayKeyOf,
-  type DayKey,
-} from "@niclaslindstedt/oss-framework/calendar";
-import {
-  Button,
+  CheckIcon,
+  CloseIcon,
+  Modal,
   SegmentedControl,
 } from "@niclaslindstedt/oss-framework/components";
 
 import { useT } from "./i18n/index.ts";
-import { STALE_SLEEP_HOURS } from "./sleep.ts";
-import {
-  isClockTime,
-  newId,
-  type SleepKind,
-  type SleepSession,
-} from "./types.ts";
-import { DateField, INPUT_CLASS, INPUT_INVALID_CLASS } from "./ui.tsx";
+import { TrashIcon } from "./icons.tsx";
+import { useTick } from "./live.tsx";
+import { SleepClock } from "./SleepClock.tsx";
+import { sleepDraft, sleepEditProblem, type SleepDraft } from "./sleepEdit.ts";
+import { newId, type SleepKind, type SleepSession } from "./types.ts";
 
-// One sleep, typed in: for the sleep nobody tapped, and for the one tapped
-// late. The buttons are the normal way in (`SleepButtons.tsx`); this form is
-// the correction, so it asks for exactly what a button would have recorded —
-// the kind, when it began, and when it ended or that it hasn't yet.
+// One sleep, set after the fact: the sleep nobody tapped, the one tapped
+// late, the "woke up" that never was. The buttons are the normal way in
+// (`SleepButtons.tsx`); this is the correction, and it asks for exactly what
+// the buttons would have recorded — the kind, and the two ends — on the
+// dial (`SleepClock.tsx`) rather than in two date fields and two time
+// fields.
+//
+// A sheet over the Sleep tab, shaped like the phone's own alarm editor:
+// cancel on the left, the title, save on the right. It never closes on a
+// swipe down — that gesture is the dial's. Save stays greyed while the dial
+// holds a sleep that can't be saved, and the line under the dial says why,
+// so nothing is refused after the tap.
 
 type Props = {
+  /** The sleep being corrected, or null for a new one. */
   initial: SleepSession | null;
+  /** An open sleep being ended: the dial opens with an end to drag. */
+  finish?: boolean;
   today: DayKey;
   onSave: (sleep: SleepSession) => void;
-  onCancel: () => void;
+  /** Present for a sleep that exists — the sheet's own way to remove it. */
+  onDelete?: () => void;
+  onClose: () => void;
 };
 
-/** `HH:MM` of an ISO timestamp, in local time. */
-function clockOf(iso: string): string {
-  const d = new Date(iso);
-  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
-}
-
-/** A local day and `HH:MM` as an instant. */
-function instantOf(day: string, time: string): number | null {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !isClockTime(time)) return null;
-  const [y, m, d] = day.split("-").map(Number);
-  const [h, min] = time.split(":").map(Number);
-  return new Date(y!, m! - 1, d!, h!, min!).getTime();
-}
-
-export function SleepForm({ initial, today, onSave, onCancel }: Props) {
+export function SleepForm({
+  initial,
+  finish = false,
+  today,
+  onSave,
+  onDelete,
+  onClose,
+}: Props) {
   const t = useT();
-  const [kind, setKind] = useState<SleepKind>(initial?.kind ?? "nap");
-  const [startDay, setStartDay] = useState<string>(
-    initial ? dayKeyOf(new Date(initial.start)) : today,
+  const titleId = useId();
+  const now = useTick(30_000);
+  const [draft, setDraft] = useState<SleepDraft>(() =>
+    sleepDraft(initial, Date.now(), finish),
   );
-  const [startTime, setStartTime] = useState(
-    initial ? clockOf(initial.start) : "",
-  );
-  const [open, setOpen] = useState(initial !== null && initial.end === null);
-  // An open sleep being finished most likely ended the morning after, if it
-  // was a night, and the same day if it was a nap.
-  const [endDay, setEndDay] = useState<string>(() => {
-    if (!initial) return today;
-    if (initial.end) return dayKeyOf(new Date(initial.end));
-    const startDay = dayKeyOf(new Date(initial.start));
-    const next = initial.kind === "night" ? addDays(startDay, 1) : startDay;
-    return next > today ? today : next;
-  });
-  const [endTime, setEndTime] = useState(
-    initial?.end ? clockOf(initial.end) : "",
-  );
-  const [error, setError] = useState<string | null>(null);
+  const problem = sleepEditProblem(draft, now);
+
+  const setOpen = (open: boolean) => {
+    if (open) {
+      setDraft({ ...draft, end: null });
+      return;
+    }
+    const guess = sleepDraft(
+      {
+        id: "",
+        kind: draft.kind,
+        start: new Date(draft.start).toISOString(),
+        end: null,
+        updatedAt: "",
+      },
+      Date.now(),
+      true,
+    );
+    setDraft({ ...draft, end: guess.end });
+  };
 
   const save = () => {
-    const start = instantOf(startDay, startTime);
-    if (start === null) {
-      setError(t("sleep.form.startMissing"));
-      return;
-    }
-    const now = Date.now();
-    if (start > now) {
-      setError(t("sleep.form.inFuture"));
-      return;
-    }
-    let end: number | null = null;
-    if (!open) {
-      end = instantOf(endDay, endTime);
-      if (end === null) {
-        setError(t("sleep.form.endMissing"));
-        return;
-      }
-      if (end > now) {
-        setError(t("sleep.form.inFuture"));
-        return;
-      }
-      if (end <= start) {
-        setError(t("sleep.form.endBeforeStart"));
-        return;
-      }
-    }
-    // Longer than any one sleep: almost always a date left on the wrong day.
-    if ((end ?? now) - start > STALE_SLEEP_HOURS * 3_600_000) {
-      setError(t("sleep.form.tooLong"));
-      return;
-    }
+    if (sleepEditProblem(draft, Date.now()) !== null) return;
     onSave({
       id: initial?.id ?? newId(),
-      kind,
-      start: new Date(start).toISOString(),
-      end: end === null ? null : new Date(end).toISOString(),
+      kind: draft.kind,
+      start: new Date(draft.start).toISOString(),
+      end: draft.end === null ? null : new Date(draft.end).toISOString(),
       updatedAt: new Date().toISOString(),
     });
   };
 
-  const timeInput = (
-    value: string,
-    onChange: (next: string) => void,
-    label: string,
-  ) => (
-    <input
-      type="time"
-      value={value}
-      aria-label={label}
-      onInput={(e) => {
-        onChange(e.currentTarget.value);
-        setError(null);
-      }}
-      className={
-        error && !isClockTime(value) ? INPUT_INVALID_CLASS : INPUT_CLASS
-      }
-    />
-  );
-
   return (
-    <form
-      className="flex flex-col gap-4"
-      onSubmit={(e) => {
-        e.preventDefault();
-        save();
-      }}
+    <Modal
+      open
+      onClose={onClose}
+      labelledBy={titleId}
+      closeLabel={t("common.close")}
+      swipeToClose={false}
     >
-      <SegmentedControl<SleepKind>
-        value={kind}
-        options={[
-          { value: "nap", label: t("sleep.nap") },
-          { value: "night", label: t("sleep.night") },
-        ]}
-        onChange={setKind}
-        ariaLabel={t("sleep.form.kind")}
-        fullWidth
-      />
-      <div className="flex flex-col gap-1">
-        <span className="text-xs font-medium text-fg">
-          {t("sleep.form.start")}
-        </span>
-        <div className="grid grid-cols-[3fr_2fr] gap-2">
-          <DateField
-            label={t("sleep.form.start")}
-            value={startDay}
-            max={today}
-            onChange={(day) => {
-              setStartDay(day);
-              // An end still on the old day follows the start, so a sleep
-              // moved to yesterday doesn't suddenly span a day.
-              if (endDay === startDay) setEndDay(day);
-              setError(null);
-            }}
+      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-line bg-surface-3 px-3 py-2">
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t("common.cancel")}
+          title={t("common.cancel")}
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface text-fg hover:border-accent"
+        >
+          <CloseIcon className="h-5 w-5" />
+        </button>
+        <h2 id={titleId} className="text-base font-bold text-fg-bright">
+          {initial === null
+            ? t("sleep.form.addTitle")
+            : finish
+              ? t("sleep.form.finishTitle")
+              : t("sleep.form.editTitle")}
+        </h2>
+        <button
+          type="button"
+          onClick={save}
+          disabled={problem !== null}
+          aria-label={t("sleep.form.save")}
+          title={t("sleep.form.save")}
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-page-bg transition-opacity hover:brightness-110 disabled:opacity-30"
+        >
+          <CheckIcon className="h-5 w-5" />
+        </button>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-page-bg px-4 pt-4 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+        <div className="mx-auto flex max-w-md flex-col gap-4">
+          <SegmentedControl<SleepKind>
+            value={draft.kind}
+            options={[
+              { value: "nap", label: t("sleep.nap") },
+              { value: "night", label: t("sleep.night") },
+            ]}
+            onChange={(kind) => setDraft({ ...draft, kind })}
+            ariaLabel={t("sleep.form.kind")}
+            fullWidth
           />
-          {timeInput(startTime, setStartTime, t("sleep.form.startTime"))}
-        </div>
-      </div>
-      <label className="flex items-center gap-2 text-sm text-fg">
-        <input
-          type="checkbox"
-          checked={open}
-          onChange={(e) => {
-            setOpen(e.currentTarget.checked);
-            setError(null);
-          }}
-          className="h-4 w-4 accent-[var(--color-accent)]"
-        />
-        {t("sleep.form.stillAsleep")}
-      </label>
-      {!open && (
-        <div className="flex flex-col gap-1">
-          <span className="text-xs font-medium text-fg">
-            {t("sleep.form.end")}
-          </span>
-          <div className="grid grid-cols-[3fr_2fr] gap-2">
-            <DateField
-              label={t("sleep.form.end")}
-              value={endDay}
-              max={today}
-              onChange={(day) => {
-                setEndDay(day);
-                setError(null);
-              }}
+
+          <div className="rounded-2xl border border-line bg-surface-3 p-4">
+            <SleepClock
+              draft={draft}
+              onChange={(range) => setDraft({ ...draft, ...range })}
+              today={today}
+              problem={problem}
             />
-            {timeInput(endTime, setEndTime, t("sleep.form.endTime"))}
           </div>
+
+          <button
+            type="button"
+            role="switch"
+            aria-checked={draft.end === null}
+            onClick={() => setOpen(draft.end !== null)}
+            className="flex items-center justify-between gap-3 rounded-2xl border border-line bg-surface-3 px-4 py-3 text-left text-sm text-fg-bright"
+          >
+            {t("sleep.form.stillAsleep")}
+            <span
+              aria-hidden="true"
+              className={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${
+                draft.end === null ? "bg-accent" : "bg-muted/40"
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow transition-[left] ${
+                  draft.end === null ? "left-[1.375rem]" : "left-0.5"
+                }`}
+              />
+            </span>
+          </button>
+
+          {onDelete && (
+            <button
+              type="button"
+              onClick={onDelete}
+              className="flex items-center justify-center gap-2 rounded-2xl border border-line bg-surface-3 px-4 py-3 text-sm text-danger hover:border-danger"
+            >
+              <TrashIcon className="h-4 w-4" />
+              {t("sleep.form.delete")}
+            </button>
+          )}
         </div>
-      )}
-      {error && (
-        <p role="alert" className="text-xs text-danger">
-          {error}
-        </p>
-      )}
-      <div className="flex gap-2">
-        <Button type="submit" variant="primary">
-          {t("sleep.form.save")}
-        </Button>
-        <Button onClick={onCancel}>{t("common.cancel")}</Button>
       </div>
-    </form>
+    </Modal>
   );
 }

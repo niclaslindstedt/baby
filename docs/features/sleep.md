@@ -4,14 +4,30 @@ A sleep is two taps: **Nap** or **Night** when your child falls asleep, and
 **Woke up** when they wake. The buttons are on the **Sleep** tab and in the
 sheet behind the top bar's **+**, from any screen, and the time is recorded
 for you — or, when you only get to the phone later, pick **5 min ago**
-through **1 h ago** or a time on the clock above the buttons first. The tab
-lists the last seven days, a night under the evening it began,
-so a sleep noticed late or a **Woke up** tapped at breakfast is one edit to put
-right — and a nap nobody logged is one **Add a sleep** away.
+through **1 h ago** or a time on the clock above the buttons first.
+
+**A clock that is running.** The top of the tab is a 24-hour dial — midnight at
+the top, noon at the bottom — with the last day's sleeps drawn round it where
+they fell and a dot pulsing at the time now. While your child sleeps, the sleep
+grows round the face and a stopwatch in the middle counts it to the second;
+while they are awake, it counts the time since they woke.
+
+**Set a sleep the way you set a bedtime alarm.** The tab lists the last seven
+days, a night under the evening it began. Tap any sleep — or **Add** for a nap
+nobody logged — and it opens on the same dial: when it began on one handle,
+when it ended on the other. Drag a handle to move that end, drag the arc to
+move the whole sleep, and watch the length change as you go. Times land on five
+minutes, never run into the future, and carry on past midnight into the day
+before; the arrows step the sleep a whole day. A **Woke up** nobody tapped
+opens with a guessed end, ready to drag to the right time.
 
 What the log adds up to is on Today, behind the **Sleep** card: whether your
-child is asleep or awake and for how long, last night, and the last 30 days'
-average. Open it for the rest — the last 24 hours, the 30- and 90-day averages
+child is asleep or awake, on a running clock, inside two rings — the last 24
+hours of sleep filling toward the WHO's recommended range for the age, night
+and naps in their own colours, and the time awake filling toward the suggested
+next sleep — with a countdown to it, last night, and the last 30 days'
+average. Open it for the rest — the day on the dial with the suggested window
+marked — the last 24 hours, the 30- and 90-day averages
 split into night and naps, two weeks as a chart over the recommended range, and
 the last week hour by hour, the way a sleep diary on paper draws it.
 
