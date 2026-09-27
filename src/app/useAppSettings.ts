@@ -23,18 +23,19 @@ export type ThemeChoice = "light" | "dark" | "system";
  * Not everyone tracks everything: a formula-fed four-month-old has no food
  * regimen yet, a family that writes diapers on the fridge does not want the
  * log, and someone who only opened the app for the vaccination card should
- * not have to swipe past three tabs to reach it. Each id is both a switch
- * and — for the three that have one — the tab the bar drops when it is off.
+ * not have to swipe past four tabs to reach it. Each id is both a switch and
+ * the tab the bar drops when it is off.
  *
  * Today is deliberately not on the list: it is the home screen, and the
  * child's age is true whatever else is tracked.
  */
-export type FeatureId = "diapers" | "growth" | "food" | "vaccines";
+export type FeatureId = "diapers" | "sleep" | "growth" | "food" | "vaccines";
 
 /** In the bottom bar's order, which is the order the toggles are listed in
  *  so the Settings rows read like the bar they govern. */
 export const FEATURES: readonly FeatureId[] = [
   "diapers",
+  "sleep",
   "growth",
   "food",
   "vaccines",
@@ -48,6 +49,7 @@ export type Features = Record<FeatureId, boolean>;
  *  whole app. */
 export const ALL_FEATURES: Features = {
   diapers: true,
+  sleep: true,
   growth: true,
   food: true,
   vaccines: true,

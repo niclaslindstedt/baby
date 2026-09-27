@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 // The app's data model: one child, and the few things the app records about
-// them — growth measurements, diaper changes, the food regimen, and the
-// vaccinations given. Everything the screens *say* about that data — the
+// them — growth measurements, diaper changes, sleeps, the food regimen, and
+// the vaccinations given. Everything the screens *say* about that data — the
 // child's age, where a reading sits on the growth curve, whether the regimen
-// still covers the day's needs, which vaccination is next — is derived at
-// read time (see `growth.ts`, `nutrition.ts`, `vaccines.ts`, `diapers.ts`);
+// still covers the day's needs, how much of the day was slept, which
+// vaccination is next — is derived at read time (see `growth.ts`,
+// `nutrition.ts`, `vaccines.ts`, `diapers.ts`, `sleep.ts`);
 // nothing about those answers is stored, so a corrected reading re-derives
 // every downstream number.
 //
@@ -63,6 +64,29 @@ export type DiaperChange = {
   /** ISO timestamp of the change. Recorded automatically at the tap; the
    *  day it falls on is derived from it in local time (see `diapers.ts`). */
   at: string;
+};
+
+/** Which of the two kinds of sleep a session is. The parent says so with the
+ *  button they tap — "Nap" or "Night" — because nothing about a start time
+ *  can: a newborn's longest sleep is as likely at noon as at midnight, and a
+ *  toddler's 18:30 is bedtime in one family and a late nap in another. The
+ *  split is read by the day/night averages and by the bedtime the next-sleep
+ *  suggestion aims for (see `sleep.ts`). */
+export type SleepKind = "nap" | "night";
+
+/** One sleep: a kind, when it began, and when it ended — or `null` while the
+ *  child is still asleep. One tap starts it and one tap ends it; both times
+ *  can be corrected afterwards (a sleep noticed late, a "woke up" tapped at
+ *  breakfast), which is why it carries an `updatedAt` where a diaper change
+ *  does not. */
+export type SleepSession = {
+  id: string;
+  kind: SleepKind;
+  /** ISO timestamp the sleep began. */
+  start: string;
+  /** ISO timestamp it ended, or null while it is still going. */
+  end: string | null;
+  updatedAt: string;
 };
 
 /** The nutrient content of a food, per 100 g (or per 100 ml). Calories are
@@ -204,14 +228,16 @@ export type AppData = {
   child: Child | null;
   measurements: Record<string, Measurement>;
   diapers: Record<string, DiaperChange>;
+  sleeps: Record<string, SleepSession>;
   foods: Record<string, Food>;
   milk: MilkFeeding;
   vaccinations: Record<string, Vaccination>;
 };
 
 /** The current document schema version. v1 is the first published shape;
- *  v2 added `MilkFeeding.formulaType`; v3 added `Food.times`. */
-export const DOC_VERSION = 3;
+ *  v2 added `MilkFeeding.formulaType`; v3 added `Food.times`; v4 added
+ *  `sleeps`. */
+export const DOC_VERSION = 4;
 
 /** The milk feeding a new document starts on. Breast, because it is what
  *  most newborns in Sweden start on and what the nutrition screen's
@@ -232,6 +258,7 @@ export function emptyDoc(): AppData {
     child: null,
     measurements: {},
     diapers: {},
+    sleeps: {},
     foods: {},
     milk: defaultMilk(),
     vaccinations: {},
@@ -259,6 +286,13 @@ export function sortedMeasurements(data: AppData): Measurement[] {
 export function sortedDiapers(data: AppData): DiaperChange[] {
   return Object.values(data.diapers).sort(
     (a, b) => b.at.localeCompare(a.at) || a.id.localeCompare(b.id),
+  );
+}
+
+/** Every sleep, newest first — the order a log is read. */
+export function sortedSleeps(data: AppData): SleepSession[] {
+  return Object.values(data.sleeps).sort(
+    (a, b) => b.start.localeCompare(a.start) || a.id.localeCompare(b.id),
   );
 }
 

@@ -32,7 +32,7 @@ is connected:
 
 ```jsonc
 {
-  "version": 3,
+  "version": 4,
   "child": {
     "name": "Alva", // "" when none was given
     "birthDate": "2026-01-15",
@@ -53,6 +53,15 @@ is connected:
   },
   "diapers": {
     "<id>": { "id": "<id>", "kind": "both", "at": "2026-09-12T06:40:00.000Z" },
+  },
+  "sleeps": {
+    "<id>": {
+      "id": "<id>",
+      "kind": "night", // "nap" | "night" — the button that was tapped
+      "start": "2026-09-12T17:05:00.000Z",
+      "end": "2026-09-13T04:10:00.000Z", // null while still asleep
+      "updatedAt": "2026-09-13T04:10:00.000Z",
+    },
   },
   "foods": {
     "<id>": {
@@ -88,11 +97,13 @@ is connected:
 Two invariants shape everything else:
 
 - **Derive, don't store.** No z-score, no "regimen sufficient", no diaper
-  verdict, no vaccination status is persisted. Every screen recomputes from
+  verdict, no sleep average or suggested nap time, no vaccination status is
+  persisted. Every screen recomputes from
   the records at render, so a corrected reading fixes every downstream number
   and there is no cache to invalidate.
 - **Every record is keyed by id and stamped.** That is what makes two
-  devices' copies mergeable record by record (see [sync.md](sync.md)).
+  devices' copies mergeable record by record (see [sync.md](sync.md)). A
+  sleep is stamped too — ending one, or correcting its times, is an edit.
   Diaper changes are the exception — immutable events with no `updatedAt`,
   merged as a union.
 
@@ -123,27 +134,29 @@ loads on demand.
 
 ```
 App.tsx
-├── TopBar          the mark, the sync glyph, `+` (diaper sheet), ⚙ (Settings)
+├── TopBar          the mark, the sync glyph, `+` (quick-log sheet), ⚙ (Settings)
 ├── <main>          one scrolling region; the swipe is measured across it
 │   ├── TodayScreen     the age line, then one headline card per tracker
 │   │   ├── DiapersModal    last 24 h against the floor for the age, the week chart
+│   │   ├── SleepModal      now and the next sleep, averages vs. the age, SleepChart, SleepDiary
 │   │   ├── GrowthModal     indicator tabs, GrowthChart, trend, forecast, adult height
 │   │   ├── FoodModal       the verdict, DayCoverageChart, the target, the regimen, nutrients
 │   │   └── VaccinesModal   the card at a glance: visits, ticks, the count
 │   ├── DiapersScreen   DiaperButtons, then the last seven days of changes
+│   ├── SleepScreen     SleepButtons, then the last seven days of sleeps (SleepForm)
 │   ├── GrowthScreen    the readings list, and MeasurementForm
 │   ├── FoodScreen      the regimen (FoodForm), then milk feeding
 │   ├── VaccinesScreen  the programme timeline, the extras, the record form
 │   ├── ChildScreen     first run, and Settings → Your child
 │   └── SettingsScreen
-├── BottomNav       Today · Diapers · Growth · Food · Vaccines (minus the trackers that are off)
-├── DiaperSheet     the `+` sheet — the same DiaperButtons the Diapers tab renders
+├── BottomNav       Today · Diapers · Sleep · Growth · Food · Vaccines (minus the trackers that are off)
+├── QuickLogSheet   the `+` sheet — the same DiaperButtons and SleepButtons the tabs render
 └── SyncDetailsModal, ToastViewport, UpdateToast
 ```
 
-**Input on the tabs, answers on Today.** The four destinations beside Today
-are where a record goes in — a change, a reading, a food, a dose marked given
-— and each of Today's
+**Input on the tabs, answers on Today.** The five destinations beside Today
+are where a record goes in — a change, a sleep, a reading, a food, a dose
+marked given — and each of Today's
 headline cards opens the matching _view_ over the screen instead of
 navigating to it (`ViewModal.tsx`, which is the framework's `Modal` in its
 non-centred mode: full screen on a phone, a card over a blurred page from
@@ -156,15 +169,18 @@ parent on a tab to navigate out of.
 The bottom bar carries _destinations_ in a fixed order, and a swipe moves
 along it; the two off-bar screens cross-fade in and go back where they came
 from. Logging a diaper is one code path: both places render `DiaperButtons`
-and both write through `addDiaper`.
+and both write through `addDiaper`. Logging a sleep is too: the Sleep tab and
+the sheet both render `SleepButtons`, and starting, ending and correcting a
+sleep all write through `saveSleep`.
 
 **Trackers switch off.** Settings → What you track carries a switch per
-tracker — diapers, growth, food, vaccines — stored in `useAppSettings.ts`
-(`Features`, defaulting to all on, and only an explicit `false` reads as
-off). Each of the four has a tab of its own, so a switched-off tracker loses
-it (`navTabs()` filters `TABS`, so the order survives and the swipe closes
-over the gap) along with its card on Today, and — for diapers — the top bar's
-`+` and the sheet behind it. Today is
+tracker — diapers, sleep, growth, food, vaccines — stored in
+`useAppSettings.ts` (`Features`, defaulting to all on, and only an explicit
+`false` reads as off). Each of the five has a tab of its own, so a
+switched-off tracker loses it (`navTabs()` filters `TABS`, so the order
+survives and the swipe closes over the gap) along with its card on Today,
+and — for diapers and sleep — its half of the sheet behind the top bar's `+`,
+which leaves the bar when both are off. Today is
 never one of them: it is the home screen, the tab the shell falls back to
 when the screen someone is on disappears under them, and with every tracker
 off it still says how old the child is.

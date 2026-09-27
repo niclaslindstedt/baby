@@ -58,6 +58,19 @@ than usual for the age and feeding, the card warms and the view says what to
 look at. See [`diapers.md`](diapers.md) for the floors and where they come
 from.
 
+## Log a sleep
+
+Under **Sleep** (or behind the **+**), tap **Nap** or **Night** when the baby
+falls asleep and **Woke up** when they wake. A sleep noticed late or a wake
+tapped at breakfast is one edit away in the list under the buttons, and
+**Add a sleep** covers one nobody logged.
+
+Today's **Sleep** card says whether the baby is asleep or awake and for how
+long, and — while awake — when the next nap or bedtime is likely to suit.
+Tapping it opens the averages over 30 and 90 days against the recommendation
+for the age, two weeks as a chart and the week hour by hour. See
+[`sleep.md`](sleep.md) for the sources and how the suggestion is made.
+
 ## Add a reading
 
 Under **Growth**, tap **Add a reading**: a date and whichever of weight,
@@ -95,9 +108,10 @@ under **Outside the programme**. See [`vaccinations.md`](vaccinations.md).
 
 Everything is on out of the box, and **Settings → What you track** switches
 off what you don't. Each tracker has a tab of its own, and a switched-off one
-leaves the bottom bar — taking its card on Today with it, and, for diapers,
-the **+** as well — so an app opened only for the vaccination card is one tab
-deep. Nothing is deleted: the
+leaves the bottom bar — taking its card on Today with it, and, for diapers
+and sleep, its buttons in the sheet behind the **+** (the **+** itself goes
+when both are off) — so an app opened only for the vaccination card is one
+tab deep. Nothing is deleted: the
 records stay, they keep syncing, and switching the tracker back on puts
 everything where you left it. The choice is per device, like the theme.
 

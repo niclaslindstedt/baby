@@ -15,8 +15,8 @@ device can read it too:
   sign in to: the record is a file in a **Baby** folder the Files app can
   open, and every Apple device on the same account reads it.
 
-Two devices reconcile record by record — the later edit of a reading, a food
-or a vaccination wins, and diaper changes from both are kept — with no
+Two devices reconcile record by record — the later edit of a reading, a
+sleep, a food or a vaccination wins, and diaper changes from both are kept — with no
 prompt and no server in between. There is nothing to sign up for; the cloud
 account is yours, and the app sees only the file it made. The details are in
 [the sync documentation](../sync.md).
