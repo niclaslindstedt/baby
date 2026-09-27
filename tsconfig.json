@@ -7,7 +7,7 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     // The references registry, `docs/references.json`, is data the app
-    // imports (`useReferences.ts`) as well as a document.
+    // imports (`references.ts`) as well as a document.
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     // The runtime is Preact. `jsxImportSource` points the automatic JSX
