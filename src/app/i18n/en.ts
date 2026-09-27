@@ -89,7 +89,7 @@ export const en = {
   child: {
     setupTitle: "Your child",
     setupIntro:
-      "A birth date and a sex are all the app needs to place readings on the growth curves and to date the vaccination programme. Everything stays on this device.",
+      "A birth date and a sex are all the app needs to place readings on the growth curves and to date the vaccination program. Everything stays on this device.",
     editTitle: "Your child",
     name: "Name",
     namePlaceholder: "optional",
@@ -101,7 +101,7 @@ export const en = {
       "The growth standards publish one curve per sex, and the expected adult height is computed differently for each.",
     parents: "Parents' heights",
     parentsHint:
-      "Both, in centimetres, for the expected adult height. Optional — leave blank to skip it.",
+      "Both, in centimeters, for the expected adult height. Optional — leave blank to skip it.",
     motherHeight: "Mother's height (cm)",
     fatherHeight: "Father's height (cm)",
     save: "Save",
@@ -130,7 +130,7 @@ export const en = {
     noReadings: "No readings yet.",
     nextDue: "{dose} — was expected {date}",
     nextUpcoming: "{dose} — {date}",
-    allGiven: "Every programme dose is recorded.",
+    allGiven: "Every program dose is recorded.",
   },
 
   // The sheet behind the top bar's `+`: the diaper buttons and the sleep
@@ -306,7 +306,7 @@ export const en = {
       how: "How is this worked out?",
       dialLabel: "The last 24 hours on a clock face",
       dialDesc:
-        "A 24-hour dial, midnight at the top: each sleep in the last day drawn where it fell, nights in the accent colour and naps lighter, and a dot at the time now.",
+        "A 24-hour dial, midnight at the top: each sleep in the last day drawn where it fell, nights in the accent color and naps lighter, and a dot at the time now.",
       viewDialDesc:
         "A 24-hour dial, midnight at the top: each sleep in the last day drawn where it fell, the window the next sleep is suggested in dashed, and a dot at the time now.",
     },
@@ -400,7 +400,7 @@ export const en = {
     legendRecommended: "Recommended",
     diary: "Hour by hour",
     diaryDesc:
-      "The last seven days, one row per day from midnight to midnight, with each logged sleep drawn where it fell: nights in the accent colour, naps lighter.",
+      "The last seven days, one row per day from midnight to midnight, with each logged sleep drawn where it fell: nights in the accent color, naps lighter.",
     sources:
       "Sources: WHO, Guidelines on physical activity, sedentary behaviour and sleep for children under 5 (2019); Galland et al., Sleep Medicine Reviews (2012); awake times from Tresillian and Karitane (NSW Health); 1177.",
   },
@@ -419,7 +419,7 @@ export const en = {
     legendReadings: "Readings",
     legendForecast: "Likely range ahead",
     empty:
-      "Add the readings from the child health centre — or from a scale at home, as often as you like — and they appear here on the growth curve.",
+      "Add the readings from the child health center — or from a scale at home, as often as you like — and they appear here on the growth curve.",
     add: "Add a reading",
     readings: "Readings",
     readingsHint:
@@ -473,7 +473,7 @@ export const en = {
     // head curves for Northern European children
     // [ref:rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser].
     headCaveat:
-      "Swedish child health care does not use the WHO curves for head circumference: they fit children in Northern Europe poorly, those with larger heads most of all. Read the channel here with that in mind — the child health centre's own curve is the one to go by.",
+      "Swedish child health care does not use the WHO curves for head circumference: they fit children in Northern Europe poorly, those with larger heads most of all. Read the channel here with that in mind — the child health center's own curve is the one to go by.",
     outOfRange:
       "The standards cover the first five years; later readings are listed but not placed.",
     form: {
@@ -639,9 +639,9 @@ export const en = {
 
   vaccines: {
     title: "Vaccinations",
-    programme: "The childhood vaccination programme",
+    programme: "The childhood vaccination program",
     programmeHint:
-      "Sweden's general programme, as Folkhälsomyndigheten publishes it. The child health centre calls you in; this is what each visit is for, and what comes after it.",
+      "Sweden's general program, as Folkhälsomyndigheten publishes it. The child health center calls you in; this is what each visit is for, and what comes after it.",
     given: "Given",
     recordedCount: "{given} of {total} recorded",
     due: "Expected by now",
@@ -656,7 +656,7 @@ export const en = {
       school: "School year {grade}",
     },
     where: {
-      bvc: "at the child health centre",
+      bvc: "at the child health center",
       school: "at school",
     },
     oral: "oral drops",
@@ -689,14 +689,14 @@ export const en = {
         "The third dose applies to the three-dose vaccine (RotaTeq, the national product since 2023).",
       // [ref:fohm-vaccination-mot-hepatit-b]
       hepatitisBRegional:
-        "Hepatitis B is offered free by every region as part of the same injection, though not formally in the national programme.",
+        "Hepatitis B is offered free by every region as part of the same injection, though not formally in the national program.",
       // [ref:fohm-vaccination-mot-hpv]; 1177 says "årskurs 5-6"
       // [ref:1177-vaccinationsprogrammet-for-barn].
       hpvGrade:
         "Two doses at least six months apart, in school year 5 (some regions say 5–6).",
     },
     markGiven: "Mark as given",
-    extras: "Outside the programme",
+    extras: "Outside the program",
     extrasHint:
       "Offered to risk groups, by a region, or as a self-paid extra. Record one to keep the card complete.",
     recordExtra: "Record a vaccination",
@@ -726,7 +726,7 @@ export const en = {
       optional: "self-paid",
       // [ref:regeringen-2026-ikappvaccination-vattkoppor]
       programmeFrom2027:
-        "in the programme from 2027 for children born from July 2025, with a free catch-up for older children from March 2027; self-paid before",
+        "in the program from 2027 for children born from July 2025, with a free catch-up for older children from March 2027; self-paid before",
     },
     form: {
       title: "Record a vaccination",
@@ -744,7 +744,7 @@ export const en = {
     saved: "Vaccination recorded",
     removed: "Record removed",
     sources:
-      "Schedule: Folkhälsomyndigheten, Barnvaccinationsprogram (2026). Ages are the programme's; the child health centre may adjust them.",
+      "Schedule: Folkhälsomyndigheten, Barnvaccinationsprogram (2026). Ages are the program's; the child health center may adjust them.",
   },
 
   settings: {
@@ -777,7 +777,7 @@ export const en = {
         "Weight, length and head readings on the WHO curves, with the trend and the forecast.",
       food: "The daily food regimen and the milk, checked against the recommendation for the age and weight.",
       vaccines:
-        "The Swedish childhood programme, what is given and what comes next.",
+        "The Swedish childhood program, what is given and what comes next.",
     },
     child: "Your child",
     // Read back on the page rather than behind the button: what the app
@@ -851,7 +851,7 @@ export const en = {
     privacy:
       "Everything stays on this device unless you connect a folder or a cloud account yourself, and a copy there is encrypted with your passphrase first. There is no server, no account, and no analytics.",
     disclaimer:
-      "A notebook, not medical advice. The app records what you enter and compares it with published recommendations; questions about your child's health belong with the child health centre.",
+      "A notebook, not medical advice. The app records what you enter and compares it with published recommendations; questions about your child's health belong with the child health center.",
   },
 
   // The About screen, behind Settings → About: what the app is, and every
