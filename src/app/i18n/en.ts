@@ -494,7 +494,9 @@ export const en = {
 
   food: {
     title: "Food",
-    // Before six months the screen stays out of the way, and says why.
+    // Before six months the screen stays out of the way, and says why:
+    // solid food at about six months, tiny tastes from four
+    // [ref:livsmedelsverket-spadbarn].
     milkOnly:
       "Before about four months, breast milk or formula is everything {name} needs, and there is nothing to track here. The regimen starts at about six months, when solid foods are introduced.",
     tastes:
@@ -510,9 +512,14 @@ export const en = {
     formulaType: "Which formula",
     formulaInfant: "Infant formula",
     formulaFollowOn: "Follow-on formula",
+    // Follow-on formula from six months, with more iron
+    // [ref:1177-brostmjolksersattning-och-tillskottsnaring]; infant formula
+    // the whole first year [ref:livsmedelsverket-spadbarn]; 0.4 against
+    // 1.0 mg per 100 ml [ref:semper-babysemp-1] [ref:semper-babysemp-2].
     formulaTypeHint:
       "Follow-on formula (tillskottsnäring) is sold from six months and carries about two and a half times the iron of infant formula, so which one is in the bottle moves the iron figure below. Infant formula is fine for the whole first year — say what {name} actually gets, not what the age suggests.",
     formulaMl: "Amount per day (ml)",
+    // [ref:rikshandboken-d-vitamin] [ref:1177-barnets-mat-upp-till-ett-ar]
     dDrops:
       "The D-drops — five drops, 10 µg a day, from about one week until two years — cover vitamin D on their own. The vitamin D figure in the food view is what the food adds on top of them.",
     // The regimen list.
@@ -542,8 +549,9 @@ export const en = {
     weightReference:
       "No weight recorded yet, so the WHO median weight for age stands in. Add a reading under Growth for a figure that is {name}'s own.",
     nutrients: "The rest",
+    // [ref:blomhoff-2023], and DHA against [ref:efsa-nda-2013].
     nutrientsHint:
-      "Compared against the Nordic Nutrition Recommendations 2023 for this age. A nutrient no food states is unknown — never read as zero.",
+      "Compared against the Nordic Nutrition Recommendations 2023 for this age, and DHA against the EU food safety authority's. A nutrient no food states is unknown — never read as zero.",
     nutrientsBreastNote:
       "Breast milk is not measured, so what it contributes is not counted below. For iron that changes little — breast milk carries almost none, which is why food takes over at around six months.",
     nutrient: {

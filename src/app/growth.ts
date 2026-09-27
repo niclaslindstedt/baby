@@ -308,14 +308,15 @@ export type ForecastOptions = {
    *  channels mostly settles within a season. The total drift the projection
    *  ever carries is `slope × driftDecayDays`. */
   driftDecayDays: number;
-  /** Floor on the reading scatter, in SD. A tenth of an SD is roughly what a
-   *  careful measurement is good to; two agreeing readings cannot claim
+  /** Floor on the reading scatter, in SD. A tenth of an SD — the app's
+   *  choice, not a measured precision: two agreeing readings cannot claim
    *  better. */
   minScatterZ: number;
   /** Uncertainty the channel itself gains per month ahead, in SD. A quarter
-   *  of an SD a month is the order of channel movement seen in the first two
-   *  years, so a three-month projection is about half an SD wide from this
-   *  term alone. */
+   *  of an SD a month, the app's choice: a three-month projection is about
+   *  half an SD wide from this term alone, and its 95% band (about ±0.85 SD)
+   *  sits inside the movement BVC treats as normal over three months in the
+   *  first year [ref:rikshandboken-avvikande-langdtillvaxt]. */
   driftSdPerMonth: number;
   /** How far ahead to project, in days. */
   horizonDays: number;

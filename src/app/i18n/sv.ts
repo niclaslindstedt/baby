@@ -472,7 +472,7 @@ export const sv: Catalog = {
       "Ingen vikt sparad än, så WHO:s medianvikt för åldern får duga. Lägg in ett mätvärde under Tillväxt för en siffra som är {name}s egen.",
     nutrients: "Resten",
     nutrientsHint:
-      "Jämfört med de nordiska näringsrekommendationerna 2023 för den här åldern. Ett näringsämne som inget livsmedel anger är okänt — räknas aldrig som noll.",
+      "Jämfört med de nordiska näringsrekommendationerna 2023 för den här åldern, och DHA med EU:s livsmedelssäkerhetsmyndighets. Ett näringsämne som inget livsmedel anger är okänt — räknas aldrig som noll.",
     nutrientsBreastNote:
       "Bröstmjölk mäts inte, så det den bidrar med räknas inte nedan. För järn spelar det liten roll — bröstmjölk innehåller nästan inget, vilket är skälet till att maten tar över vid ungefär sex månader.",
     nutrient: {

@@ -69,6 +69,46 @@
       "note": "Senast uppdaterad 2022-11-07. The canonical URL carries the /sv-se-x-ll/ prefix; the plain /barn--gravid/ path returns 404. The pages that link it call it 'Här kan du se bilder på hur barnets kiss och bajs ändrar färg den första veckan efter förlossningen'.",
       "usedBy": ["src/app/diapers.ts"]
     },
+    "1177-barnets-mat-upp-till-ett-ar": {
+      "evidence": "health-service",
+      "organization": "1177 (Inera)",
+      "title": "Barnets mat och dryck upp till ett år",
+      "container": "1177.se",
+      "year": 2025,
+      "url": "https://www.1177.se/barn--gravid/att-ta-hand-om-barn/mat-och-dryck-for-barn/barnets-mat-upp-till-ett-ar/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Barn behöver få D-droppar från att de är cirka en vecka gamla."
+        },
+        {
+          "text": "Barn behöver få D-droppar tills de är två år. En del barn behöver det ännu längre.",
+          "at": "D-droppar och extra fett i maten"
+        },
+        {
+          "text": "Barnet kan få börja med pyttesmå smakprover vid fyra månaders ålder. Det gäller om hen visar intresse för maten som familjen äter."
+        },
+        {
+          "text": "Barnet behöver mer näring och energi vid sex månader. Då är det dags att börja med smakportioner."
+        },
+        {
+          "text": "Lägg extra fett i maten om den är hemlagad, om det inte redan ingår fett i maträtten. Till exempel en tesked rapsolja per portion"
+        },
+        {
+          "text": "Barn som äter varierad mat behöver inga kosttillskott förutom D-droppar. Små barn kan få för mycket av vissa näringsämnen exempelvis vitaminer om de får extra tillskott, vilket kan vara skadligt. Ge därför inte andra tillskott än D-droppar till barn utan att rådgöra med BVC först.",
+          "at": "Undvik kosttillskott för barn"
+        }
+      ],
+      "supports": "The D-drops line's 'from about one week until two years' (food.dDrops), tastes from four months and the regimen from six (TASTES_FROM_DAYS, COMPLEMENTARY_FROM_DAYS), the teaspoon of rapeseed oil, and why DHA is informational (no supplement but D-drops).",
+      "summary": {
+        "en": "When to start D-drops and solid food, and why small children need no supplement other than D-drops.",
+        "sv": "När D-droppar och vanlig mat börjar, och varför små barn inte behöver andra tillskott än D-droppar."
+      },
+      "topics": ["food"],
+      "note": "Senast uppdaterad 2025-09-16; fact-checked by a Livsmedelsverket nutritionist.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
     "1177-barns-somn-i-olika-aldrar": {
       "evidence": "health-service",
       "organization": "1177 (Inera)",
@@ -125,16 +165,28 @@
         {
           "text": "Tillskottsnäring är anpassad för barn från 6 månader och innehåller mer järn än bröstmjölksersättning.",
           "at": "Från sex månader"
+        },
+        {
+          "text": "När du har börjat ge barnet vanlig mat kan du fortsätta att komplettera med antingen bröstmjölksersättning eller tillskottsnäring.",
+          "at": "Från sex månader"
+        },
+        {
+          "text": "Tillskottsnäring är anpassad för barn från 6 månader och innehåller mer järn än bröstmjölksersättning. Om barnet inte får så mycket järnberikad mat, till exempel gröt eller välling, kan tillskottsnäring vara ett alternativ.",
+          "at": "Från sex månader"
         }
       ],
-      "supports": "The six-a-day wet floor for a formula-fed baby (the `newborn` band), and in nutrition.ts the age from which follow-on formula is sold and why it carries more iron (FOLLOW_ON_FORMULA_PER_100ML).",
+      "supports": "Six wet diapers a day on formula (the diaper floor from day five), and that follow-on formula is for children from six months and carries more iron than infant formula (FOLLOW_ON_FORMULA_PER_100ML, the formula-type hint).",
       "summary": {
-        "en": "Formula and follow-on formula: how to tell a bottle-fed baby is getting enough, and from what age follow-on formula is given.",
-        "sv": "Bröstmjölksersättning och tillskottsnäring: hur du märker att ett flaskmatat barn får tillräckligt och från vilken ålder tillskottsnäring ges."
+        "en": "How many wet diapers a formula-fed baby usually has, and that follow-on formula is for babies from six months and carries more iron.",
+        "sv": "Hur många kissblöjor ett barn som får ersättning brukar ha, och att tillskottsnäring är till för barn från sex månader och innehåller mer järn."
       },
       "topics": ["diapers", "food"],
       "note": "Senast uppdaterad 2026-06-11. Also cited in prose by src/app/nutrition.ts (the follow-on formula block).",
-      "usedBy": ["src/app/diapers.ts"]
+      "usedBy": [
+        "src/app/diapers.ts",
+        "src/app/i18n/en.ts",
+        "src/app/nutrition.ts"
+      ]
     },
     "1177-det-nyfodda-barnets-kropp": {
       "evidence": "health-service",
@@ -357,6 +409,259 @@
       "topics": ["growth"],
       "note": "Open access. Table rows are copied cell by cell from the PMC HTML table; '|' separates cells. Proposed, not yet cited by the code.",
       "usedBy": ["src/app/growth.ts", "src/app/i18n/en.ts"]
+    },
+    "blomhoff-2023": {
+      "evidence": "guideline",
+      "authors": [
+        "Blomhoff R",
+        "Andersen R",
+        "Arnesen EK",
+        "Christensen JJ",
+        "Eneroth H",
+        "Erkkola M",
+        "Gudanaviciene I",
+        "Halldorsson TI",
+        "Høyer-Lund A",
+        "Lemming EW",
+        "Meltzer HM",
+        "Pitsi T",
+        "Schwab U",
+        "Siksna I",
+        "Thorsdottir I",
+        "Trolle E"
+      ],
+      "title": "Nordic Nutrition Recommendations 2023: integrating environmental aspects",
+      "container": "Nordic Council of Ministers, Copenhagen (Nord 2023:003)",
+      "year": 2023,
+      "doi": "10.6027/nord2023-003",
+      "isbn": "9789289375337",
+      "url": "https://pub.norden.org/nord2023-003/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "RI for minerals – all life-stage groups … Age group Calcium mg Iron mg Zinc mg Copper µg … 7-11 mo 310 10 3.0 220 … 1-3 y 450 7 4.5 340 … 4-6 y 800 7 5.8 400",
+          "at": "Table 14, p. 71 (footnote markers omitted)"
+        },
+        {
+          "text": "RI for vitamins – all life-stage groups … Vitamin A RE Vitamin D µg … 7-11 mo 250 10 … 1-3 y 300 10",
+          "at": "Table 12, p. 69"
+        },
+        {
+          "text": "From 1-2 weeks of age, infants should receive 10 µg vitamin D3 per day as a supplement.",
+          "at": "Table 12, footnote 3, p. 69"
+        },
+        {
+          "text": "6–11 months … Fat 30–45 … 12–23 months … Fat 30–40",
+          "at": "Box 4, recommended intake of fat, carbohydrates and proteins, E%, p. 62"
+        },
+        {
+          "text": "n-6 fatty acids should contribute at least 4 % of the total energy intake (E%) for children 6–11 months and 3 E % for children 12–23 months of age. n-3 fatty acids should contribute at least 1 E% for children 6–11 months and 0.5 E% for children 12–23 months.",
+          "at": "Box 3, p. 61"
+        },
+        {
+          "text": "From 12 months, the recommendation on saturated and trans fatty acids for older children and adults should be used.",
+          "at": "Box 3, p. 61"
+        },
+        {
+          "text": "N-3 fatty acids should provide at least 1 E%. … Intake of saturated fatty acids should be limited to less than 10 E%. … The total fat recommendation is 25–40 E% … Linoleic (n-6) and alpha-linolenic (n-3) acids are essential fatty acids and should contribute at least 3 E%, including at least 0.5 E% as alpha-linolenic acid.",
+          "at": "Box 5, age groups 2 years and older, p. 63"
+        },
+        {
+          "text": "Reference values for estimated average daily energy requirements per kg body weight for children 6-12 months, assuming partial breastfeeding. … Age, months … kJ/kg body weight BOYS GIRLS 6 339 342 12 337 333",
+          "at": "Table 9, p. 59"
+        },
+        {
+          "text": "1-3 y 13.6 3.3 4.6",
+          "at": "Table 10, p. 59 (reference weight kg, REE MJ/d, estimated energy requirement MJ/d)"
+        },
+        {
+          "text": "the estimated daily energy requirement (per kg body weight) for infants was based upon the approach of FAO/WHO/UNU (Table 3).",
+          "at": "Appendix 4, p. 338"
+        },
+        {
+          "text": "1-3 y 13.6 789 1099",
+          "at": "Appendix 4, Table 7, p. 341 (reference weight kg, BEE kcal/d, estimated energy requirement kcal/d)"
+        },
+        {
+          "text": "Exclusive breastfeeding for about 6 months is advised, with continued breastfeeding parallel to giving complementary foods from that age until 12 months of age, or longer if it suits mother and child.",
+          "at": "p. 61"
+        },
+        {
+          "text": "Giving various complementary foods of the correct consistence for age, from about 6 months of age (not before 4 months), stimulate the child’s development and learning to eat a variable diet.",
+          "at": "Complementary feeding summary, p. 193"
+        }
+      ],
+      "supports": "The iron target (10 mg under 12 months, 7 mg after), vitamin D 10 µg, the total-fat ranges by age (fatE), saturated fat under 10 E% from 12 months (saturatedMaxE), the n-6 and n-3 floors (omega6MinE, omega3MinE), and the ≈81 kcal/kg 1–3 year energy reference in kcalPerKg — all in requirements().",
+      "summary": {
+        "en": "The Nordic recommendations the food view compares against: iron, vitamin D, fat and the essential fatty acids for each age.",
+        "sv": "De nordiska näringsrekommendationer som matvyn jämför med: järn, D-vitamin, fett och de livsnödvändiga fettsyrorna för varje ålder."
+      },
+      "topics": ["food"],
+      "note": "Page numbers are the printed ones in the PDF (https://pub.norden.org/nord2023-003/nord2023-003.pdf; the PDF's colophon lists updates up to 7.3.2025). The minerals table labels the infant row '7-11 mo'; the iron background paper (domellof-sjoberg-2024) defines it as 6.0–11.9 months. Table 9's infant energy figures (339/342 kJ/kg at 6 months ≈ 81.0/81.7 kcal; 337/333 at 12 months ≈ 80.5/79.6 kcal) are NNR's own, 'adapted from Cloetens & Ellegård', not the FAO/WHO/UNU rows verbatim. 4.6 MJ / 13.6 kg (Table 10) = 1099 kcal / 13.6 kg ≈ 80.8 kcal/kg for 1–3 years. The main report does not state the NNR2012 iron values.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
+    "domellof-sjoberg-2024": {
+      "evidence": "review",
+      "authors": ["Domellöf M", "Sjöberg A"],
+      "title": "Iron – a background article for the Nordic Nutrition Recommendations 2023",
+      "container": "Food & Nutrition Research",
+      "year": 2024,
+      "volume": "68",
+      "doi": "10.29219/fnr.v68.10451",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10870973/",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "During this period, iron is transferred from hemoglobin to iron stores, making the infant self-sufficient with regard to iron until the infant has doubled his or her birth weight, which occurs at about 6 months of age in a term, normal-birth-weight infant. Thus, exclusive breast-feeding during this period will meet iron requirements despite the low concentration of iron in breast milk (0.3 mg/L).",
+          "at": "Iron needs for growth"
+        },
+        {
+          "text": "For 6–12 months, based on an estimated average requirement of absorbed iron of 0.74 mg/day and 10% bioavailability, the calculated average iron requirement is 7.4 mg/day. Assuming a CV of 15 %, this results in a tentative RI of 9.6 mg/day. The NNR2012 did not specify iron recommendations for this age range.",
+          "at": "Infants and toddlers"
+        },
+        {
+          "text": "For 1–3 years, similar factorial calculations result in a tentative RI of 7 mg/day, which is slightly lower than the NNR2012 (8 mg/day) but equal to the EFSA recommendation.",
+          "at": "Infants and toddlers"
+        },
+        {
+          "text": "a 6.0–11.9 months. b 1.0–3.9 years, 4.0–6.9 years, 7.0–10.9 years etc. … aa 2–5 years",
+          "at": "Table 4, footnotes (the NNR 2012 RI column shows 8 for 1–3 years with footnote aa, and nothing for 6–12 months)"
+        }
+      ],
+      "supports": "Why iron is the nutrient that changes at six months — the stores a term baby is born with last until about then — and that breast milk carries little iron (FOLLOW_ON_FORMULA_PER_100ML comment, food.nutrientsBreastNote); the ages the 10 mg and 7 mg iron targets cover.",
+      "summary": {
+        "en": "Why iron matters from six months: the stores a baby is born with last until about then, and breast milk carries little.",
+        "sv": "Varför järn blir viktigt från sex månader: förråden barnet föds med räcker ungefär dit, och bröstmjölk innehåller lite järn."
+      },
+      "topics": ["food"],
+      "note": "Published 8 February 2024, article 10451. Read via Europe PMC full text. This paper contradicts the code's claim that NNR2023's 10 mg for infants was 'raised from the 8 mg of NNR2012': it says NNR2012 gave no infant figure, and its NNR2012 column puts 8 mg against 2–5 years. NNR2012 itself could not be fetched (norden.diva-portal.org reset the connection; pub.norden.org/nord2014-002 returned 404).",
+      "usedBy": ["src/app/nutrition.ts"]
+    },
+    "efsa-nda-2013": {
+      "evidence": "consensus",
+      "organization": "EFSA Panel on Dietetic Products, Nutrition and Allergies (NDA)",
+      "title": "Scientific Opinion on nutrient requirements and dietary intakes of infants and young children in the European Union",
+      "container": "EFSA Journal",
+      "year": 2013,
+      "volume": "11",
+      "issue": "10",
+      "pages": "3408",
+      "doi": "10.2903/j.efsa.2013.3408",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "DHA can be considered a conditionally essential fatty acid for infants, and an AI of 100 mg per day was set for 7- to 24-month-old infants and young children in the Panel‘s previous Opinion (EFSA NDA Panel, 2010f).",
+          "at": "section 4.3, p. 17"
+        },
+        {
+          "text": "The AI of 100 mg DHA per day for infants older than six months of age and young children below the age of 24 months derived previously by the Panel was based on intervention studies with DHA-enriched formula or complementary foods from age 1.5 to 12 months in formerly and continuing breast-fed infants and which was found to be effective for visual function",
+          "at": "section 4.3, 6 to < 36 months, p. 19"
+        },
+        {
+          "text": "Age (months) Total fat (E%) LA (E%) ALA (E%) DHA (mg/day) DHA + EPA (mg/day) ARA (mg/day) 0 to < 6 50–55 4 0.5 100 – 140 6 to < 12 40 4 0.5 100 – – 12 to < 24 35–40 4 0.5 100 – – 24 to < 36 35–40 4 0.5 – 250 –",
+          "at": "Table 4, p. 19"
+        }
+      ],
+      "supports": "The 100 mg/day DHA line (dhaMg in requirements()), shown for information.",
+      "summary": {
+        "en": "The amount of DHA, an omega-3 fat, considered enough for a child from six months to two years.",
+        "sv": "Den mängd DHA, ett omega-3-fett, som anses räcka för ett barn från sex månader till två år."
+      },
+      "topics": ["food"],
+      "note": "Wiley and efsa.europa.eu answered with a bot challenge; the text was read from the open copy in the University of Milan repository (https://air.unimi.it/handle/2434/257720, file 3408.pdf). The band is 6 to < 24 months (Table 4); from 24 months the Panel gives DHA + EPA 250 mg instead.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
+    "eu-2016-127": {
+      "evidence": "guideline",
+      "organization": "European Commission",
+      "title": "Commission Delegated Regulation (EU) 2016/127 of 25 September 2015 supplementing Regulation (EU) No 609/2013 of the European Parliament and of the Council as regards the specific compositional and information requirements for infant formula and follow-on formula and as regards requirements on information relating to infant and young child feeding",
+      "container": "Official Journal of the European Union, L 25, 2.2.2016, p. 1",
+      "year": 2016,
+      "url": "https://eur-lex.europa.eu/eli/reg_del/2016/127/oj",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "10. MINERAL SUBSTANCES 10.1. Infant formula manufactured from cows' milk or goats' milk proteins or protein hydrolysates … Per 100 kJ … Per 100 kcal … Iron (mg) 0,07 0,31 0,3 1,3",
+          "at": "Annex I, point 10.1 (minimum and maximum per 100 kJ, then per 100 kcal)"
+        },
+        {
+          "text": "8. MINERAL SUBSTANCES 8.1. Follow-on formula manufactured from cows' milk or goats' milk proteins or protein hydrolysates … Iron (mg) 0,14 0,48 0,6 2",
+          "at": "Annex II, point 8.1"
+        },
+        {
+          "text": "5.6. Docosahexaenoic acid Minimum Maximum 4,8 mg/100 kJ 12 mg/100 kJ (20 mg/100 kcal) (50 mg/100 kcal)",
+          "at": "Annex I, point 5.6 (infant formula)"
+        },
+        {
+          "text": "4.6. Docosahexaenoic acid Minimum Maximum 4,8 mg/100 kJ 12 mg/100 kJ (20 mg/100 kcal) (50 mg/100 kcal)",
+          "at": "Annex II, point 4.6 (follow-on formula)"
+        },
+        {
+          "text": "Vitamin D (μg) 0,48 0,72 2 3",
+          "at": "Annex I, point 11 and Annex II, point 9 (same values)"
+        },
+        {
+          "text": "It shall apply from 22 February 2020, except in respect of infant formula and follow-on formula manufactured from protein hydrolysates, to which it shall apply from 22 February 2021.",
+          "at": "Article 13"
+        }
+      ],
+      "supports": "The iron floors that separate infant formula (0.3 mg/100 kcal) from follow-on formula (0.6 mg/100 kcal), and the DHA minimum of 20 mg/100 kcal behind dhaG in INFANT_FORMULA_PER_100ML (13.2 mg at 66 kcal) and FOLLOW_ON_FORMULA_PER_100ML (13.8 mg at 69 kcal), and the 'formula' preset in data/foods.ts.",
+      "summary": {
+        "en": "The EU law that sets what infant formula and follow-on formula must contain, including their minimum iron and DHA.",
+        "sv": "EU-lagen som bestämmer vad modersmjölksersättning och tillskottsnäring måste innehålla, bland annat lägsta mängd järn och DHA."
+      },
+      "topics": ["food"],
+      "note": "Law, not a recommendation; the evidence vocabulary has no closer kind than 'guideline'. EUR-Lex served an empty bot-challenge response, so the original Official Journal text (English XHTML) was read from the Publications Office (https://publications.europa.eu/resource/celex/32016R0127). Later amendments in the consolidated version were not checked. The regulation's primary unit is per 100 kJ; the per-100 kcal figures are in parentheses (DHA) or the second pair of columns (minerals). Soya-based formula has higher iron floors: 0,45 mg/100 kcal (Annex I 10.2) and 0,9 mg/100 kcal (Annex II 8.2).",
+      "usedBy": ["src/app/data/foods.ts", "src/app/nutrition.ts"]
+    },
+    "fao-who-unu-2004": {
+      "evidence": "consensus",
+      "organization": "FAO/WHO/UNU Joint Expert Consultation",
+      "title": "Human energy requirements: report of a Joint FAO/WHO/UNU Expert Consultation, Rome, 17–24 October 2001",
+      "container": "FAO Food and Nutrition Technical Report Series 1, Rome",
+      "year": 2004,
+      "isbn": "9251052123",
+      "url": "https://www.fao.org/4/y5686e/y5686e00.htm",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Boys … 4-5 81; 5-6 81; 6-7 79; 7-8 79; 8-9 79; 9-10 80; 10-11 80; 11-12 81. Girls … 4-5 83; 5-6 82; 6-7 78; 7-8 78; 8-9 78; 9-10 79; 10-11 79; 11-12 79",
+          "at": "Chapter 3, Table 3.2 'Energy requirements of infants during the first year of life', age in months, daily energy requirement kcal/kg/d"
+        },
+        {
+          "text": "Table 3.2 shows the average energy requirements of infants from one to 12 months of age, combining the needs of breastfed and formula-fed infants.",
+          "at": "Chapter 3, section 3.4"
+        },
+        {
+          "text": "1-2 11.5 … 345 82.4 1.43; 2-3 13.5 … 350 83.6 1.45",
+          "at": "Chapter 4, Table 4.2 (boys), age years, weight kg … daily energy requirement kJ/kg/d, kcal/kg/d, PAL"
+        },
+        {
+          "text": "1-2 10.8 … 335 80.1 1.42; 2-3 13.0 … 337 80.6 1.42",
+          "at": "Chapter 4, Table 4.3 (girls), same columns"
+        },
+        {
+          "text": "3-4 15.7 … 334 79.7",
+          "at": "Chapter 4, Table 4.2 (boys), for comparison with the code's 81 from 36 months"
+        },
+        {
+          "text": "3-4 15.1 … 320 76.5",
+          "at": "Chapter 4, Table 4.3 (girls), for comparison with the code's 81 from 36 months"
+        }
+      ],
+      "supports": "kcalPerKg: 79/78 kcal/kg at 6–8 months and 80/79 at 9–11 months (Table 3.2), 82.4/80.1 at 12–23 months and 83.6/80.6 at 24–35 months (Tables 4.2/4.3), boys/girls.",
+      "summary": {
+        "en": "How much energy a baby or toddler needs per kilogram of body weight, which sets the day's calorie estimate.",
+        "sv": "Hur mycket energi ett spädbarn eller småbarn behöver per kilo kroppsvikt, vilket ger dagens uppskattade kaloribehov."
+      },
+      "topics": ["food"],
+      "note": "Chapter 3 is https://www.fao.org/4/y5686e/y5686e05.htm, chapter 4 https://www.fao.org/4/y5686e/y5686e06.htm. The code's '< 6 months' row (81/82) matches only the 5–6 month row (and boys' 4–5); the 0–4 month rows are 113–82 (boys) and 107–84 (girls). The boys' 11–12 month row is 81, not the 80 the code uses for all of 9–11 months. Table 4.5/4.6 give the same 1–3 year figures rounded (82, 84 / 80, 81).",
+      "usedBy": ["src/app/nutrition.ts"]
     },
     "fohm-2026-pneumokockvaccination-riskgrupper": {
       "evidence": "guideline",
@@ -1027,6 +1332,142 @@
       "topics": ["sleep"],
       "usedBy": ["src/app/i18n/en.ts"]
     },
+    "livsmedelsverket-d-vitamin": {
+      "evidence": "health-service",
+      "organization": "Livsmedelsverket",
+      "title": "D-vitamin",
+      "container": "livsmedelsverket.se",
+      "year": 2025,
+      "url": "https://www.livsmedelsverket.se/livsmedel-och-innehall/naringsamne/vitaminer-och-antioxidanter/d-vitamin/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Spädbarn 7–11 mån* | 10 mikrogram | Barn 1–17 år | 10 mikrogram",
+          "at": "Hur mycket D-vitamin behöver vi få i oss? (rekommenderat intag per dag)"
+        },
+        {
+          "text": "*Helamning rekommenderas som näring för spädbarn under de första sex månaderna. Men från 1–2 veckors ålder bör alla spädbarn få 10 mikrogram vitamin D3 per dag som tillskott.",
+          "at": "table footnote"
+        },
+        {
+          "text": "Alla barn under 2 år | 10 mikrogram",
+          "at": "Vissa behöver ta tillskott av D-vitamin (rekommenderat tillskott per dag)"
+        }
+      ],
+      "supports": "vitaminDUg = 10 in requirements(), and the D-drops line (food.dDrops): 10 µg a day as a supplement until two years.",
+      "summary": {
+        "en": "The Swedish vitamin D advice: 10 micrograms a day, and D-drops for every child under two.",
+        "sv": "Livsmedelsverkets råd om D-vitamin: 10 mikrogram om dagen och D-droppar till alla barn under två år."
+      },
+      "topics": ["food"],
+      "note": "Senast granskad 2025-11-11. Livsmedelsverket says from 1–2 weeks of age and gives the dose in micrograms, not drops; the five drops are Rikshandboken's (rikshandboken-d-vitamin).",
+      "usedBy": ["src/app/nutrition.ts"]
+    },
+    "livsmedelsverket-livsmedelsdatabasen": {
+      "evidence": "dataset",
+      "organization": "Livsmedelsverket",
+      "title": "Livsmedelsdatabasen",
+      "container": "Livsmedelsverkets Livsmedelsdatabas version 2026-07-01",
+      "year": 2026,
+      "url": "https://soknaringsinnehall.livsmedelsverket.se/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Livsmedelsverkets Livsmedelsdatabas version 2026-07-01. När uppgifterna används, får data inte förändras.",
+          "at": "soknaringsinnehall.livsmedelsverket.se, 'Använd gärna uppgifterna'"
+        },
+        {
+          "text": "Modersmjölksersättning: Energi (kcal) 66 kcal; Järn, Fe 0.4 mg; Vitamin D 1.37 µg; Fett, totalt 3.5 g; Summa mättade fettsyror 1.1 g; Summa enkelomättade fettsyror 1.6 g; Summa fleromättade fettsyror 0.6 g; Linolsyra C18:2 0.6 g; Linolensyra C18:3 0.1 g; DHA (C22:6) 0.0 g",
+          "at": "livsmedel 6552, per 100 g ätlig del (API version 2026-06-29T02:04:51)"
+        },
+        {
+          "text": "Barngröt ätf. naturell fullkorn osötad berikad: Energi (kcal) 104 kcal; Järn, Fe 1.7 mg; Vitamin D 1.79 µg; Fett, totalt 3.7 g; Summa mättade fettsyror 0.7 g; Summa enkelomättade fettsyror 1.7 g; Summa fleromättade fettsyror 1.1 g; Linolsyra C18:2 0.9 g; Linolensyra C18:3 0.2 g",
+          "at": "livsmedel 6263, per 100 g"
+        },
+        {
+          "text": "Välling för barn drickf. fullkorn osötad berikad: Energi (kcal) 59 kcal; Järn, Fe 1.1 mg; Vitamin D 0.96 µg; Fett, totalt 1.9 g; Summa mättade fettsyror 0.4 g; Summa enkelomättade fettsyror 0.8 g; Summa fleromättade fettsyror 0.6 g; Linolsyra C18:2 0.5 g; Linolensyra C18:3 0.1 g",
+          "at": "livsmedel 6257, per 100 g"
+        },
+        {
+          "text": "Ägg kokt: Energi (kcal) 136 kcal; Järn, Fe 1.8 mg; Vitamin D 1.92 µg; Fett, totalt 9.8 g; Summa mättade fettsyror 2.6 g; Summa enkelomättade fettsyror 3.9 g; Summa fleromättade fettsyror 1.5 g; Linolsyra C18:2 1.2 g; Arakidonsyra C20:4 0.1 g; Linolensyra C18:3 0.1 g; EPA (C20:5) 0.0 g; DPA (C22:5) 0.0 g; DHA (C22:6) 0.1 g",
+          "at": "livsmedel 2205, per 100 g"
+        },
+        {
+          "text": "Lax kokt m. salt: Energi (kcal) 246 kcal; Järn, Fe 0.2 mg; Vitamin D 6.91 µg; Fett, totalt 16.6 g; Summa mättade fettsyror 2.2 g; Summa enkelomättade fettsyror 7.9 g; Summa fleromättade fettsyror 4.8 g; Linolsyra C18:2 2.1 g; Arakidonsyra C20:4 0.2 g; Linolensyra C18:3 0.9 g; EPA (C20:5) 0.4 g; DPA (C22:5) 0.2 g; DHA (C22:6) 0.7 g",
+          "at": "livsmedel 1317, per 100 g"
+        },
+        {
+          "text": "Banan: Energi (kcal) 95 kcal; Järn, Fe 0.0 mg; Vitamin D 0.0 µg; Fett, totalt 0.1 g",
+          "at": "livsmedel 553, per 100 g"
+        },
+        {
+          "text": "Avokado: Energi (kcal) 197 kcal; Järn, Fe 0.3 mg; Vitamin D 0.0 µg; Fett, totalt 19.6 g; Summa mättade fettsyror 3.4 g; Summa enkelomättade fettsyror 12.7 g; Summa fleromättade fettsyror 2.6 g; Linolsyra C18:2 2.4 g; Linolensyra C18:3 0.2 g",
+          "at": "livsmedel 320, per 100 g"
+        },
+        {
+          "text": "Rapsolja: Energi (kcal) 884 kcal; Järn, Fe 0.0 mg; Fett, totalt 100.0 g; Summa mättade fettsyror 7.1 g; Summa enkelomättade fettsyror 61.3 g; Summa fleromättade fettsyror 27.4 g; Linolsyra C18:2 18.8 g; Linolensyra C18:3 8.5 g",
+          "at": "livsmedel 2189, per 100 g"
+        }
+      ],
+      "supports": "The food presets in data/foods.ts (porridge 6263, välling 6257, egg 2205, salmon 1317, banana 553, avocado 320, rapeseed oil 2189, infant formula 6552) and INFANT_FORMULA_PER_100ML in nutrition.ts.",
+      "summary": {
+        "en": "The Swedish food composition database behind the typical values the food form fills in.",
+        "sv": "Livsmedelsverkets livsmedelsdatabas, som de typiska värdena i matformuläret kommer från."
+      },
+      "topics": ["food"],
+      "note": "Values read from the open API (https://dataportal.livsmedelsverket.se/livsmedel/api/v1/livsmedel/<nummer>/naringsvarden?sprak=1); each item's own version stamp is 2026-06-29, while the site's citation line is 'version 2026-07-01'. All values are per 100 g ätlig del, including the formula the code reads per 100 ml. The formula's DHA 0.0 g carries the comment 'Mean value of Nan Pro1, BabySemp1 and Hipp Combiotic 1' (product information, rounded to 0.1 g). The database gives no omega-3/omega-6 sums; the presets' omega3G/omega6G are sums of the listed fatty acids. CC BY 4.0.",
+      "usedBy": ["src/app/data/foods.ts", "src/app/nutrition.ts"]
+    },
+    "livsmedelsverket-spadbarn": {
+      "evidence": "health-service",
+      "organization": "Livsmedelsverket",
+      "title": "Spädbarn",
+      "container": "livsmedelsverket.se",
+      "year": 2026,
+      "url": "https://www.livsmedelsverket.se/matvanor-halsa--miljo/kostrad/barn-och-ungdomar/spadbarn/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Vid cirka sex månader är det dags att börja vänja barnet att äta vanlig mat.",
+          "at": "Från cirka sex månader"
+        },
+        {
+          "text": "Tidigast från fyra månaders ålder kan du låta barnet få smaka små prov av vanlig mat, så länge det är så små mängder att de inte konkurrerar med amningen.",
+          "at": "Pyttesmå smakprov – smaksensationer"
+        },
+        {
+          "text": "Du kan till exempel ta lite av din egen mat, motsvarande ungefär ett kryddmått, med en sked eller på fingret och låta barnet få lite på tungan.",
+          "at": "Pyttesmå smakprov – smaksensationer"
+        },
+        {
+          "text": "Det går också bra att fortsätta med modersmjölksersättning under hela första året.",
+          "at": "Hur länge ska man fortsätta amma eller ge ersättning?"
+        },
+        {
+          "text": "Barn under två år behöver lite fetare mat än vuxna, eftersom de växer så fort. Till hemlagad mat är det lagom med en tesked flytande margarin eller olja, gärna rapsolja, per portion, om det inte redan ingår fett i maträtten. Sammanlagt bör det inte bli mer än en matsked extra fett per dag.",
+          "at": "Lunch och middag"
+        },
+        {
+          "text": "Därför behöver alla barn tillskott med D-droppar varje dag under de första två åren.",
+          "at": "D-droppar"
+        },
+        {
+          "text": "Det är svårt att nå upp till det rekommenderade järnintaget utan att använda järnberikade produkter. I Sverige berikas barngröt och välling med järn.",
+          "at": "Lunch och middag"
+        }
+      ],
+      "supports": "COMPLEMENTARY_FROM_DAYS (about six months) and TASTES_FROM_DAYS (tiny tastes from four months) in nutrition.ts, the food.milkOnly/food.tastes copy, the advice that infant formula may be used for the whole first year (food.formulaTypeHint; why the app never infers follow-on formula from age), and the rapeseed-oil preset and fat advice.",
+      "summary": {
+        "en": "When solid food starts, why tiny tastes from four months are fine, that infant formula can be used all year, and how much extra fat a small child's food needs.",
+        "sv": "När vanlig mat börjar, varför pyttesmå smakprov från fyra månader går bra, att modersmjölksersättning kan ges hela första året och hur mycket extra fett små barns mat behöver."
+      },
+      "topics": ["food"],
+      "note": "Senast granskad 2026-02-12. Livsmedelsverket calls the four-month tastes 'smakprov' / 'smaksensationer'; 'smakportioner' start at about six months — the app's sv copy already follows this.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
     "lll-is-baby-getting-enough": {
       "evidence": "health-service",
       "organization": "La Leche League International",
@@ -1433,6 +1874,38 @@
       "note": "Godkänd 2025-12-12.",
       "usedBy": ["src/app/vaccines.ts"]
     },
+    "rikshandboken-d-vitamin": {
+      "evidence": "health-service",
+      "organization": "Rikshandboken barnhälsovård (Inera)",
+      "title": "D-vitamin",
+      "container": "Rikshandboken i barnhälsovård",
+      "year": 2023,
+      "url": "https://www.rikshandboken-bhv.se/amning-och-nutrition/mat-och-dryck---oversikt/d-vitamin/",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Alla barn från 1 veckas ålder och upp till 2 år rekommenderas tillskott med 5 droppar D-vitamin (D3) dagligen, i vatten- eller oljelösning (400 IE = 10 mikrogram vitamin D).",
+          "at": "D-vitamin i form av D-droppar, För alla"
+        },
+        {
+          "text": "Mängden 5 droppar per dag gäller de läkemedelsklassade preparaten (D vitamin 80 IE/ml) och kan vara annorlunda om kosttillskott används.",
+          "at": "Val av D-droppar"
+        },
+        {
+          "text": "Livsmedelsverket anser dock att det är enklast är att ge rådet om 5 D-droppar (10µg) till alla barn oavsett om det får bröstmjölk eller BME.",
+          "at": "D-droppar till barn som får bröstmjölksersättning"
+        }
+      ],
+      "supports": "The 'five drops, 10 µg a day, from about one week until two years' in food.dDrops, and why the drops are asked about regardless of formula.",
+      "summary": {
+        "en": "Swedish child health care's D-drop advice: five drops, 10 micrograms, every day from one week to two years.",
+        "sv": "Barnhälsovårdens råd om D-droppar: fem droppar, 10 mikrogram, varje dag från en veckas ålder till två år."
+      },
+      "topics": ["food"],
+      "note": "Godkänd 2023-06-20. Five drops is for the medicine-classified drops used in Swedish child health care; the page says the count can differ for dietary-supplement drops. '80 IE/ml' is as printed (five drops of 80 IE each would make 400 IE, so it presumably means per drop).",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
     "rikshandboken-forstoppning": {
       "evidence": "health-service",
       "organization": "Rikshandboken barnhälsovård (Inera)",
@@ -1538,6 +2011,112 @@
         "src/app/growth.ts",
         "src/app/i18n/en.ts"
       ]
+    },
+    "semper-babysemp-1": {
+      "evidence": "dataset",
+      "organization": "Semper (Hero Group)",
+      "title": "BabySemp 1 800 g — näringsvärde",
+      "container": "semper.se",
+      "year": 2026,
+      "url": "https://www.semper.se/barnmat/produkter/modersmjolksersattning/babysemp-1-800g-0",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "100 ml blandning ger Energi | 276 kJ (66 kcal) | Fett | 3,5 g | – varav mättat fett | 1,3 g | – varav enkelomättat fett | 1,4 g | – varav fleromättat fett | 0,6 g | Linolsyra | 530 mg | a-linolensyra | 59 mg | Dokosahexaensyra (DHA) | 14 mg",
+          "at": "Näringsvärde"
+        },
+        {
+          "text": "Vitamin D | 1,5 μg",
+          "at": "Näringsvärde, per 100 ml"
+        },
+        {
+          "text": "Järn | 0,40 mg",
+          "at": "Näringsvärde, per 100 ml"
+        }
+      ],
+      "supports": "The 'Swedish tins print 14 mg' DHA remark beside INFANT_FORMULA_PER_100ML, and docs/nutrition.md's 'Semper BabySemp 1 and 2' comparison (iron 0.4 vs 1.0 mg).",
+      "summary": {
+        "en": "The label of a typical Swedish infant formula, for comparison with the follow-on formula.",
+        "sv": "Innehållsdeklarationen för en typisk svensk modersmjölksersättning, som jämförelse med tillskottsnäringen."
+      },
+      "topics": ["food"],
+      "note": "Optional — the app's infant-formula figures come from Livsmedelsdatabasen 6552, not this label. The label's vitamin D (1.5 µg) and saturated fat (1.3 g) differ from the database's 1.37 µg and 1.1 g.",
+      "usedBy": ["src/app/i18n/en.ts", "src/app/nutrition.ts"]
+    },
+    "semper-babysemp-2": {
+      "evidence": "dataset",
+      "organization": "Semper (Hero Group)",
+      "title": "BabySemp 2 800 g — näringsvärde",
+      "container": "semper.se",
+      "year": 2026,
+      "url": "https://www.semper.se/barnmat/produkter/tillskottsnaring/babysemp-2-800g",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Närdingsvärde 100 ml blandning ger Energi | 291 kJ (69 kcal | Fett | 3,4 g | – varav mättat fett | 1,2 g | – varav enkelomättat fett | 1,3 g | – varav fleromättat fett | 0,6 g | Linolsyra | 520 mg | a-linolensyra | 57 mg | Dokosahexaensyra (DHA) | 14 mg | Arakidonsyra (ARA) | 3,5 mg",
+          "at": "Näringsvärde"
+        },
+        {
+          "text": "Vitamin D | 1,5 μg",
+          "at": "Näringsvärde, per 100 ml"
+        },
+        {
+          "text": "Järn | 1,0 mg",
+          "at": "Näringsvärde, per 100 ml"
+        },
+        {
+          "text": "BabySemp 2 är en tillskottsnäring baserad på mjölk och är lämplig endast för barn över 6 månaders ålder."
+        }
+      ],
+      "supports": "FOLLOW_ON_FORMULA_PER_100ML in nutrition.ts and the 'follow-on-formula' preset in data/foods.ts: 69 kcal, iron 1.0 mg, vitamin D 1.5 µg, fat 3.4 g (saturated 1.2, monounsaturated 1.3, polyunsaturated 0.6), linoleic acid 0.52 g, ALA 57 mg, DHA 14 mg per 100 ml.",
+      "summary": {
+        "en": "The label of a typical Swedish follow-on formula, which the app uses when a parent says the bottle holds follow-on formula.",
+        "sv": "Innehållsdeklarationen för en typisk svensk tillskottsnäring, som appen använder när en förälder anger att flaskan innehåller tillskottsnäring."
+      },
+      "topics": ["food"],
+      "note": "The page shows no date. 'Närdingsvärde' and the missing ')' after 69 kcal are as printed. The code's dhaG 0.0138 is the EU minimum at 69 kcal, not the label's 14 mg — a rounding-level difference. Rikshandboken's formula table (tabell-brostmjolksersattningar-inkl-neo-230901.pdf) lists BabySemp 2 at 69 kcal, 1 mg iron and 1,5 µg vitamin D per 100 ml, which agrees.",
+      "usedBy": [
+        "src/app/data/foods.ts",
+        "src/app/i18n/en.ts",
+        "src/app/nutrition.ts"
+      ]
+    },
+    "semper-babysemp-3": {
+      "evidence": "dataset",
+      "organization": "Semper (Hero Group)",
+      "title": "BabySemp 3 mjölkdryck 800 g — näringsvärde",
+      "container": "semper.se",
+      "year": 2026,
+      "url": "https://www.semper.se/barnmat/produkter/mjolkdryck/babysemp-3-800g",
+      "language": "sv",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "Näringsvärde per 100 ml blandning Energi | 267 kJ (64 kcal) | Fett | 2,8 g | – varav mättat fett | 0,5 g | – varav enkel omättat fett | 1,5 g | – varav fleromättat fett | 0,6 g",
+          "at": "Näringsvärde"
+        },
+        {
+          "text": "Vitamin D | 1,6 μg (23%*)",
+          "at": "Näringsvärde"
+        },
+        {
+          "text": "Järn | 1,2 mg",
+          "at": "Näringsvärde"
+        },
+        {
+          "text": "0,56 g mjölkfett, 3,9 mg DHA, 80 mg ALA och 0,55 g LA per 100 ml blandning."
+        }
+      ],
+      "supports": "The 'toddler-milk' preset in data/foods.ts (64 kcal, iron 1.2 mg, vitamin D 1.6 µg, fat 2.8 g, polyunsaturated 0.6 g, ALA 0.08 g, DHA 0.0039 g, LA 0.55 g).",
+      "summary": {
+        "en": "The label of a typical Swedish milk drink for children from one year.",
+        "sv": "Innehållsdeklarationen för en typisk svensk mjölkdryck för barn från ett år."
+      },
+      "topics": ["food"],
+      "note": "The preset's saturated (0.9 g) and monounsaturated (1.2 g) fat do not match this label (0.5 g and 1.5 g); everything else matches.",
+      "usedBy": ["src/app/data/foods.ts"]
     },
     "tanner-1956": {
       "evidence": "cohort",
@@ -1772,7 +2351,11 @@
       },
       "topics": ["growth", "food"],
       "note": "PDF: https://iris.who.int/server/api/core/bitstreams/b9a488f7-c337-4c75-a254-8a7d11846f8c/content (coordinating team: Mercedes de Onis et al.). The weight-based z-score has a second step the app does not apply: beyond ±3 SD the WHO replaces the LMS tail with a linear one (z*_ind, p. 302).",
-      "usedBy": ["src/app/data/whoGrowth.ts", "src/app/growth.ts"]
+      "usedBy": [
+        "src/app/data/whoGrowth.ts",
+        "src/app/growth.ts",
+        "src/app/nutrition.ts"
+      ]
     },
     "who-2007": {
       "evidence": "dataset",
@@ -1837,6 +2420,35 @@
       },
       "topics": ["sleep"],
       "usedBy": ["src/app/i18n/en.ts", "src/app/sleep.ts"]
+    },
+    "who-2023-complementary-feeding": {
+      "evidence": "guideline",
+      "organization": "World Health Organization",
+      "title": "WHO Guideline for complementary feeding of infants and young children 6–23 months of age",
+      "container": "World Health Organization, Geneva",
+      "year": 2023,
+      "isbn": "9789240081864",
+      "url": "https://iris.who.int/handle/10665/373358",
+      "language": "en",
+      "accessed": "2026-09-27",
+      "quotes": [
+        {
+          "text": "A recent systematic review reported that, on average, breastfed children 6–8 months, 9–11 months, and 12–23 months of age received 77%, 63%, and 44% of their energy from breast milk, respectively (52).",
+          "at": "section 3.1.2, pp. 11–12"
+        },
+        {
+          "text": "Breastfeeding should continue up to 2 years or beyond (strong, very low certainty evidence).",
+          "at": "Recommendation 1, section 3.1.1, p. 11"
+        }
+      ],
+      "supports": "breastMilkEnergyShare: 0.77 at 6–8 months, 0.63 at 9–11 and 0.44 at 12–23 — the part of a breastfed child's day the regimen is not held to. The 0.15 for 24–35 months is not from this guideline.",
+      "summary": {
+        "en": "How much of a breastfed child's energy is expected to come from breast milk at each age, and so how much food has to cover.",
+        "sv": "Hur stor del av ett ammat barns energi som väntas komma från bröstmjölk i varje ålder, och alltså hur mycket maten behöver täcka."
+      },
+      "topics": ["food"],
+      "note": "Reference (52) is Rios-Leyvraz M, Yao Q. The Volume of Breast Milk Intake in Infants and Young Children: A Systematic Review and Meta-Analysis. Breastfeed Med 2023;18(3):188–197, doi 10.1089/bfm.2022.0281, which covers 0–3 years; its abstract gives no energy share past 23 months. The guideline's scope stops at 23 months.",
+      "usedBy": ["src/app/nutrition.ts"]
     },
     "who-child-growth-standards": {
       "evidence": "dataset",

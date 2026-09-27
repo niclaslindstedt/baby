@@ -123,9 +123,10 @@ DOI / URL / ISBN, the kind of evidence, the verbatim quotes the numbers were
 taken from, what the app uses each for, and which files cite it — and code
 points into it with a `[ref:<id>]` tag in the comment beside the number.
 `tests/references_test.ts` keeps the two in step both ways, and
-`oss-spec validate` checks the same rules (OSS_SPEC.md §24). `sleep.ts` is the
-first module cited this way; the others still cite in prose and move over as
-they are touched.
+`oss-spec validate` checks the same rules (OSS_SPEC.md §24). Every tracker's module is cited this way — `sleep.ts`, `growth.ts`,
+`nutrition.ts`, `diapers.ts` and `vaccines.ts`, with the WHO tables, the WHO
+month in `age.ts` and the food presets — and a claim in a catalog string
+carries its tag in a comment above the key.
 
 The registry is also what a parent reads. The framework's `references`
 module is its typed face — the shape, the evidence vocabulary ranked
@@ -135,9 +136,9 @@ app: the trackers as topics, the two summary languages, and the loader. The
 About screen, behind Settings → About, lists every entry from it: grouped by the tracker it serves (the entry's `topics`),
 with a line for a parent in either language (`summary`), the citation, a link
 to the DOI or page, and the quotes one tap down. Nothing is copied by hand, so
-an entry added for a new number is on that screen in the same change. The
-trackers whose modules still cite in prose are named there as still to come,
-rather than let a short list pass for a whole one.
+an entry added for a new number is on that screen in the same change. Should a tracker ever have no source listed, the screen names it as still to
+come rather than let a short list pass for a whole one; the test holds every
+tracker to having one.
 
 ## What loads when
 

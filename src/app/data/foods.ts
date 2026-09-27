@@ -2,7 +2,11 @@
 // A handful of common Swedish baby foods with typical nutrient content per
 // 100 g, so a parent can fill a regimen row with one tap and adjust to the
 // label. Values from Livsmedelsverket's food database (Livsmedelsdatabasen,
-// version 2026-06-29) unless noted; fatty acids are rounded to 0.1 g there.
+// version 2026-07-01 [ref:livsmedelsverket-livsmedelsdatabasen]) unless
+// noted; fatty acids are rounded to 0.1 g there, and omega-3 and omega-6 are
+// the sums of the database's own fatty acid rows. The database gives its
+// values per 100 g; the formula is entered per 100 ml as they are, a few
+// per cent off the made-up bottle's density.
 // A typing aid, not a formulary — anything can be entered by hand, and no
 // byte of what is typed leaves the device. Rides in its own chunk behind
 // `import()`.
@@ -11,12 +15,17 @@
 //   - Fortified whole-grain välling, ready to drink (id 6257)
 //   - Boiled egg (id 2205)
 //   - Boiled salmon (id 1317)
-//   - Banana (id 553; iron 0.0 is the database's value)
+//   - Banana (id 553; the database's iron and vitamin D of 0.0 are left
+//     unstated, so a banana never turns a line from "at least" into "low")
 //   - Avocado (id 320)
 //   - Rapeseed oil (id 2189)
-//   - Infant formula (id 6552), DHA at the EU minimum the database rounds away
+//   - Infant formula (id 6552), except DHA: the database gives 0.0 g, and the
+//     preset carries the EU minimum instead [ref:eu-2016-127] — not the
+//     database's value
 //   - Follow-on formula (tillskottsnäring) and the milk drink that follows it
-//     from a year, both from the Swedish label rather than the database
+//     from a year, both from the Swedish label rather than the database —
+//     Semper's BabySemp 2 [ref:semper-babysemp-2] and BabySemp 3
+//     [ref:semper-babysemp-3]
 
 import type { Nutrients } from "../types.ts";
 
@@ -84,8 +93,8 @@ export const FOOD_PRESETS: FoodPreset[] = [
       saturatedG: 2.6,
       monounsaturatedG: 3.9,
       polyunsaturatedG: 1.5,
-      omega3G: 0.19,
-      omega6G: 1.32,
+      omega3G: 0.2,
+      omega6G: 1.3,
       dhaG: 0.1,
     },
   },
@@ -203,8 +212,8 @@ export const FOOD_PRESETS: FoodPreset[] = [
       ironMg: 1.2,
       vitaminDUg: 1.6,
       fatG: 2.8,
-      saturatedG: 0.9,
-      monounsaturatedG: 1.2,
+      saturatedG: 0.5,
+      monounsaturatedG: 1.5,
       polyunsaturatedG: 0.6,
       omega3G: 0.084,
       omega6G: 0.55,

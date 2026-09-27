@@ -55,10 +55,11 @@ health care quotes. Copy must not imply medical authority: a reading outside
 the band is "a reason to look, not a verdict", a thin diaper day names the
 sign to look for, and the disclaimer in Settings exists for this reason and
 must not be quietly dropped. Every threshold in the code cites its source in
-a comment — and, in the modules moved over so far (`sleep.ts`), with a
-`[ref:<id>]` tag into `docs/references.json`, which Settings → About lists
-for the parent, citation, quotes and all (see "Every threshold cites its
-source" below).
+a comment with a `[ref:<id>]` tag into `docs/references.json`, which
+Settings → About lists for the parent, citation, quotes and all (see "Every
+threshold cites its source" below). A number no source gives — a floor the
+sources leave open, an extrapolation past where a guideline stops — says in
+its comment that it is the app's own.
 
 ## Build and test commands
 
@@ -369,10 +370,11 @@ runs the framework's `auditReferences` over `src/`, and fails on a tag with
 no entry, an entry nothing cites, a `usedBy` that doesn't match the tags, an
 incomplete entry, or one without its `summary` in both languages and a
 `topics` tracker. A new source means
-an entry and a tag in the same change; a module whose comments still cite
-in prose alone (`growth.ts`, `nutrition.ts`, `diapers.ts`, `vaccines.ts`)
-moves over when it is next touched, the goal being every module in the
-registry.
+an entry and a tag in the same change. Every tracker's module is in the
+registry — `sleep.ts`, `growth.ts` (with `data/whoGrowth.ts` and `age.ts`'s
+WHO month), `nutrition.ts` (with `data/foods.ts`), `diapers.ts` and
+`vaccines.ts` — and the test pins that every tracker has sources listed, so
+a new one arrives with its own.
 
 ## Where new code goes
 

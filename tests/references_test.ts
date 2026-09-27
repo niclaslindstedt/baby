@@ -84,6 +84,8 @@ describe("the references, as the Sources screen lists them", () => {
   it("ranks within a kind by who published it, then when", () => {
     const consensus = list.filter((r) => r.evidence === "consensus");
     expect(consensus.map((r) => r.id)).toEqual([
+      "efsa-nda-2013",
+      "fao-who-unu-2004",
       "hirshkowitz-2015",
       "paruthi-2016",
     ]);

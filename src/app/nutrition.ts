@@ -19,7 +19,8 @@
 // the regimen against the *complementary* need: the share of the day's energy
 // that foods other than breast milk are expected to cover at that age. WHO's
 // 2023 guideline puts breast milk at 77% of energy at 6–8 months, 63% at
-// 9–11 and 44% at 12–23 — the remainder is the target the regimen is held to.
+// 9–11 and 44% at 12–23 [ref:who-2023-complementary-feeding] — the remainder
+// is the target the regimen is held to.
 // Formula is measurable, so a formula-fed child's bottles are part of the
 // regimen (`MilkFeeding.formulaMlPerDay`) and the target is the whole day.
 //
@@ -41,25 +42,39 @@
 //
 // ## The numbers
 //
-// Energy: the Nordic Nutrition Recommendations 2023 (which adopt FAO/WHO/UNU
-// 2004 for infants) — about 81 kcal per kilogram per day from 6 months
-// through the second year, with the small sex difference the FAO table
-// carries. The child's own latest weight is used when there is one; the WHO
-// median weight for age stands in when there isn't.
+// Every source is an entry in `docs/references.json`, cited here by its
+// `[ref:<id>]` tag — the verbatim quotes live there, and `docs/nutrition.md`
+// is the prose account.
 //
-// Iron: NNR2023 recommended intake 10 mg/day at 7–11 months, 7 mg/day at
-// 1–3 years (raised and lowered respectively from the 8 mg of NNR2012).
-// Vitamin D: 10 µg/day, which the Swedish D-drops (5 drops = 10 µg, from
-// about one week until two years) supply on their own — so the regimen's
-// vitamin D is shown for information, and the drops are what the app asks
-// about.
-// Fat: 30–45 E% at 6–11 months, 30–40 E% at 12–23 months, 25–40 E% from
-// two years; saturated fat under 10 E% from 12 months; omega-6 (linoleic
-// acid) at least 4 E% at 6–11 months and 3 E% after; omega-3 at least 1 E%
-// at 6–11 months and 0.5 E% after. Livsmedelsverket's practical advice for
-// the same thing — a teaspoon of rapeseed oil per home-made portion, at most
-// a tablespoon of extra fat a day — is why the regimen has an "oil" entry.
-// DHA: EFSA's adequate intake of 100 mg/day at 7–24 months, informational.
+// Energy: FAO/WHO/UNU 2004's requirement per kilogram for each age, with the
+// small sex difference its tables carry [ref:fao-who-unu-2004] — the approach
+// the Nordic Nutrition Recommendations 2023 base theirs on, landing at about
+// 81 kcal per kilogram per day at 1–3 years [ref:blomhoff-2023]. The child's
+// own latest weight is used when there is one; the WHO median weight for age
+// stands in when there isn't [ref:who-2006].
+//
+// Iron: NNR2023 recommended intake 10 mg/day at 7–11 months (the background
+// paper's 6.0–11.9 months), 7 mg/day at 1–3 years [ref:blomhoff-2023]
+// [ref:domellof-sjoberg-2024].
+// Vitamin D: 10 µg/day [ref:blomhoff-2023], which the Swedish D-drops (5
+// drops = 10 µg, from about one week until two years) supply on their own
+// [ref:rikshandboken-d-vitamin] [ref:livsmedelsverket-d-vitamin] — so the
+// regimen's vitamin D is shown for information, and the drops are what the
+// app asks about.
+// Fat (NNR2023 [ref:blomhoff-2023]): 30–45 E% at 6–11 months, 30–40 E% at
+// 12–23 months, 25–40 E% from two years; saturated fat under 10 E% from 12
+// months; omega-6 at least 4 E% at 6–11 months and 3 E% at 12–23; omega-3 at
+// least 1 E% at 6–11 months, 0.5 E% at 12–23 and 1 E% again from two years.
+// From two NNR2023 sets no omega-6 floor of its own, only linoleic and
+// alpha-linolenic acid together at 3 E% or more, at least 0.5 of it
+// alpha-linolenic — so the app holds omega-6 to the 2.5 E% that leaves.
+// Livsmedelsverket's practical advice for the same thing — a teaspoon of
+// rapeseed oil per home-made portion, at most a tablespoon of extra fat a
+// day [ref:livsmedelsverket-spadbarn] — is why the regimen has an "oil"
+// entry.
+// DHA: EFSA's adequate intake of 100 mg/day from 6 to 24 months
+// [ref:efsa-nda-2013], informational — no supplement is recommended beside
+// the D-drops [ref:1177-barnets-mat-upp-till-ett-ar].
 //
 // ## What the assessment says, and refuses to say
 //
@@ -101,9 +116,11 @@ export type FeedingStage =
   | "complementary";
 
 /** The age, in days, from which the app tracks a regimen at all. Six WHO
- *  months: Livsmedelsverket's "vid cirka sex månader". */
+ *  months: Livsmedelsverket's "vid cirka sex månader"
+ *  [ref:livsmedelsverket-spadbarn]. */
 export const COMPLEMENTARY_FROM_DAYS = Math.round(6 * 30.4375);
-/** Four months — the earliest tiny tastes. */
+/** Four months — the earliest tiny tastes ("Tidigast från fyra månaders
+ *  ålder" [ref:livsmedelsverket-spadbarn]). */
 export const TASTES_FROM_DAYS = Math.round(4 * 30.4375);
 
 export function feedingStage(ageDays: number): FeedingStage {
@@ -112,22 +129,28 @@ export function feedingStage(ageDays: number): FeedingStage {
   return "milkOnly";
 }
 
-/** Energy per kilogram per day (kcal), by age. FAO/WHO/UNU 2004 for 6–12
- *  months (NNR2023 adopts it), the 1–2 and 2–3 year rows from the same
- *  table, and the NNR2023 1–3 year reference (≈81 kcal/kg) beyond. */
+/** Energy per kilogram per day (kcal), by age and sex: FAO/WHO/UNU 2004,
+ *  table 3.2 by month for the first year (the 5–6 month row standing in
+ *  before six months, where nothing is assessed) and tables 4.2 and 4.3 by
+ *  year after it [ref:fao-who-unu-2004]. The 3–4 year row is held past the
+ *  fourth birthday: the app follows a baby, and the standards stop at five. */
 export function kcalPerKg(ageMonths: number, sex: Sex): number {
   const male = sex === "male";
   if (ageMonths < 6) return male ? 81 : 82;
   if (ageMonths < 9) return male ? 79 : 78;
-  if (ageMonths < 12) return male ? 80 : 79;
+  if (ageMonths < 11) return male ? 80 : 79;
+  if (ageMonths < 12) return male ? 81 : 79;
   if (ageMonths < 24) return male ? 82.4 : 80.1;
   if (ageMonths < 36) return male ? 83.6 : 80.6;
-  return 81;
+  return male ? 79.7 : 76.5;
 }
 
 /** The share of the day's energy breast milk is expected to supply at this
- *  age (WHO 2023), for a child who is breastfed. Tails off after two years,
- *  where the guideline stops — a nursing three-year-old is topping up. */
+ *  age, for a child who is breastfed: 77, 63 and 44 % at 6–8, 9–11 and 12–23
+ *  months [ref:who-2023-complementary-feeding]. The guideline stops at two;
+ *  the 15 % for the third year is the app's own, not a quoted figure — a
+ *  nursing two-year-old is topping up, and a three-year-old is counted as
+ *  eating. */
 export function breastMilkEnergyShare(ageMonths: number): number {
   if (ageMonths < 6) return 1;
   if (ageMonths < 9) return 0.77;
@@ -166,7 +189,7 @@ export type Requirements = {
   saturatedMaxE: number | null;
   omega6MinE: number;
   omega3MinE: number;
-  /** EFSA adequate intake, mg/day; null outside 7–24 months. */
+  /** EFSA adequate intake, mg/day; null outside 6–23 months. */
   dhaMg: number | null;
 };
 
@@ -223,17 +246,19 @@ export function requirements(
         ? { min: 30, max: 40 }
         : { min: 25, max: 40 },
     saturatedMaxE: under12 ? null : 10,
-    omega6MinE: under12 ? 4 : 3,
-    omega3MinE: under12 ? 1 : 0.5,
-    dhaMg: ageMonths >= 7 && ageMonths <= 24 ? 100 : null,
+    omega6MinE: under12 ? 4 : under24 ? 3 : 2.5,
+    omega3MinE: under12 ? 1 : under24 ? 0.5 : 1,
+    dhaMg: ageMonths >= 6 && ageMonths < 24 ? 100 : null,
   };
 }
 
 /** Standard infant formula (modersmjölksersättning), per 100 ml —
- *  Livsmedelsverket's database entry (id 6552), with DHA at the EU-mandated
- *  minimum since the database rounds it away. That minimum is 20 mg per 100
- *  *kcal* (Regulation (EU) 2016/127 Annex I §5.6), which at 66 kcal is
- *  13.2 mg per 100 ml — the figure Swedish tins print as 14 mg. Used for the
+ *  Livsmedelsverket's database entry (id 6552)
+ *  [ref:livsmedelsverket-livsmedelsdatabasen], except DHA, which the database
+ *  gives as 0.0 g: the app carries the EU-mandated minimum instead. That
+ *  minimum is 20 mg per 100 *kcal* (Regulation (EU) 2016/127 Annex I §5.6
+ *  [ref:eu-2016-127]), which at 66 kcal is 13.2 mg per 100 ml — the figure
+ *  Swedish tins print as 14 mg [ref:semper-babysemp-1]. Used for the
  *  formula the child gets, so a parent never has to type a bottle's label in. */
 export const INFANT_FORMULA_PER_100ML: Nutrients = {
   kcal: 66,
@@ -249,14 +274,16 @@ export const INFANT_FORMULA_PER_100ML: Nutrients = {
 };
 
 /** Follow-on formula (tillskottsnäring), per 100 ml made up — the declaration
- *  a Swedish tin carries, taken from Semper BabySemp 2 and matched within
- *  rounding by the other brands on the shelf. Iron is the reason the product
- *  exists: 1.0 mg against infant formula's 0.4, because the fetal iron stores
- *  start to run out at around six months, which is the age from which this
- *  product is sold (1177, "Bröstmjölksersättning och tillskottsnäring").
- *  Regulation (EU) 2016/127 Annex II sets the floor at 0.6 mg per 100 kcal
- *  against Annex I's 0.3, so no tillskottsnäring is as iron-poor as an infant
- *  formula may be. DHA is the same EU minimum, at 69 kcal. Labels differ by a
+ *  a Swedish tin carries, taken from Semper BabySemp 2 [ref:semper-babysemp-2]
+ *  and matched within rounding by the other brands on the shelf. Iron is the
+ *  reason the product exists: 1.0 mg against infant formula's 0.4, because a
+ *  term baby is self-sufficient in iron until about six months
+ *  [ref:domellof-sjoberg-2024], which is the age from which this product is
+ *  sold [ref:1177-brostmjolksersattning-och-tillskottsnaring]. Regulation
+ *  (EU) 2016/127 Annex II sets the floor at 0.6 mg per 100 kcal against
+ *  Annex I's 0.3 [ref:eu-2016-127], so no tillskottsnäring is as iron-poor as
+ *  an infant formula may be. DHA is the same EU minimum (Annex II §4.6), at
+ *  69 kcal. Labels differ by a
  *  tenth or two between brands and pack formats — a parent who wants their own
  *  tin exactly enters it as a food in the regimen instead. */
 export const FOLLOW_ON_FORMULA_PER_100ML: Nutrients = {
