@@ -31,6 +31,7 @@ import {
   type ScreenEnter,
   type Tab,
 } from "./app/BottomNav.tsx";
+import { AboutScreen } from "./app/AboutScreen.tsx";
 import { ChildScreen } from "./app/ChildScreen.tsx";
 import { demoBackendModule, useDemoData } from "./app/dev/useDemoData.ts";
 import { DiapersScreen } from "./app/DiapersScreen.tsx";
@@ -140,7 +141,7 @@ export function App() {
     [tab, tabs],
   );
   const toggle = useCallback(
-    (next: "child" | "settings") => {
+    (next: "child" | "settings" | "about") => {
       const target = tab === next ? home : next;
       setEnter(screenEnter(tab, target, tabs));
       setTab(target);
@@ -148,9 +149,9 @@ export function App() {
     [tab, home, tabs],
   );
 
-  // A swipe moves one tab along the bar, and stops at its ends. From Child
-  // or Settings — which are not on the bar — it goes back to the tab they
-  // were opened from.
+  // A swipe moves one tab along the bar, and stops at its ends. From Child,
+  // Settings or About — which are not on the bar — it goes back to the tab
+  // they were opened from.
   const main = useRef<HTMLElement>(null);
   const swipe = useCallback(
     (direction: 1 | -1) => {
@@ -181,7 +182,12 @@ export function App() {
   // The demo toggle can swap in a document with a child while the setup
   // screen is up, or take one away; follow it.
   useEffect(() => {
-    if (store.data.child === null && tab !== "child" && tab !== "settings") {
+    if (
+      store.data.child === null &&
+      tab !== "child" &&
+      tab !== "settings" &&
+      tab !== "about"
+    ) {
       setTab("child");
     }
   }, [store.data.child, tab]);
@@ -394,10 +400,12 @@ export function App() {
               sync={sync}
               demoData={demo}
               onEditChild={() => toggle("child")}
+              onOpenAbout={() => toggle("about")}
               pin={pin}
               onNotice={notice}
             />
           )}
+          {tab === "about" && <AboutScreen onBack={() => show("settings")} />}
         </div>
       </main>
 

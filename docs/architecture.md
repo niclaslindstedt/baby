@@ -122,18 +122,31 @@ is the registry of those sources — authors, title, journal or publisher,
 DOI / URL / ISBN, the kind of evidence, the verbatim quotes the numbers were
 taken from, what the app uses each for, and which files cite it — and code
 points into it with a `[ref:<id>]` tag in the comment beside the number.
-`tests/references_test.ts` keeps the two in step both ways. `sleep.ts` is the
+`tests/references_test.ts` keeps the two in step both ways, and
+`oss-spec validate` checks the same rules (OSS_SPEC.md §24). `sleep.ts` is the
 first module cited this way; the others still cite in prose and move over as
 they are touched.
+
+The registry is also what a parent reads. `src/app/references.ts` is its
+typed face — the shape, the evidence vocabulary ranked strongest first, and
+how an entry is cited — and the About screen, behind Settings → About, lists
+every entry from it: grouped by the tracker it serves (the entry's `topics`),
+with a line for a parent in either language (`summary`), the citation, a link
+to the DOI or page, and the quotes one tap down. Nothing is copied by hand, so
+an entry added for a new number is on that screen in the same change. The
+trackers whose modules still cite in prose are named there as still to come,
+rather than let a short list pass for a whole one.
 
 ## What loads when
 
 Everything on the entry path is downloaded before the user sees anything, so
-three things ride in their own chunks behind `import()`:
+four things ride in their own chunks behind `import()`:
 
 - the WHO growth standards (`data/whoGrowth.ts`, loaded once through
   `useGrowthStandards.ts` and shared by the Today, Growth and Food screens);
 - the food presets (`data/foods.ts`, fetched when the food form opens);
+- the references registry (`docs/references.json`, loaded through
+  `useReferences.ts` when the About screen opens);
 - the demo document and its backend (`dev/`), fetched only when the toggle
   turns on — or, in a build made with `VITE_SEED=demo` (`make demo`, the App
   Store screenshots), before the first render, so the first frame is already
@@ -162,7 +175,8 @@ App.tsx
 │   ├── FoodScreen      the regimen (FoodForm), then milk feeding
 │   ├── VaccinesScreen  the programme timeline, the extras, the record form
 │   ├── ChildScreen     first run, and Settings → Your child
-│   └── SettingsScreen
+│   ├── SettingsScreen
+│   └── AboutScreen     Settings → About: the disclaimer, and every source from the registry
 ├── BottomNav       Today · Diapers · Sleep · Growth · Food · Vaccines (minus the trackers that are off)
 ├── QuickLogSheet   the `+` sheet — the same DiaperButtons and SleepButtons the tabs render
 └── SyncDetailsModal, ToastViewport, UpdateToast
@@ -181,8 +195,8 @@ view never writes; closing one returns to Today rather than leaving the
 parent on a tab to navigate out of.
 
 The bottom bar carries _destinations_ in a fixed order, and a swipe moves
-along it; the two off-bar screens cross-fade in and go back where they came
-from. Logging a diaper is one code path: both places render `DiaperButtons`
+along it; the three off-bar screens — the child, Settings, and About behind
+it — cross-fade in and go back where they came from. Logging a diaper is one code path: both places render `DiaperButtons`
 and both write through `addDiaper`. Logging a sleep is too: the Sleep tab and
 the sheet both render `SleepButtons`, and starting, ending and correcting a
 sleep all write through `saveSleep`.

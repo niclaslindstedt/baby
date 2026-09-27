@@ -781,6 +781,39 @@ export const en = {
       "A notebook, not medical advice. The app records what you enter and compares it with published recommendations; questions about your child's health belong with the child health centre.",
   },
 
+  // The About screen, behind Settings → About: what the app is, and every
+  // published source its numbers rest on, read from the references registry
+  // (`docs/references.json`, see `references.ts`). It is the one place a
+  // parent can check the app's claims against the words they came from.
+  about: {
+    title: "About",
+    open: "About and sources",
+    openHint: "The guidelines and studies behind the app's numbers",
+    sources: "Sources",
+    sourcesIntro:
+      "The published guidelines, studies and child health service pages behind the app's numbers, the strongest evidence first — each with the words the app took from it.",
+    pending:
+      "{trackers}: their sources are named in their own views for now, and are added here as their numbers are checked against the sources again.",
+    loading: "Loading the sources…",
+    quotes: "What the app took from it",
+    accessed: "Read {date}",
+    openSource: "Open the source",
+    isbn: "ISBN {isbn}",
+    evidence: {
+      guideline: "Guideline",
+      consensus: "Consensus statement",
+      "systematic-review": "Systematic review",
+      "meta-analysis": "Meta-analysis",
+      "randomized-trial": "Randomised trial",
+      cohort: "Cohort study",
+      "clinical-study": "Clinical study",
+      review: "Review",
+      method: "Method",
+      dataset: "Reference data",
+      "health-service": "Health service advice",
+    },
+  },
+
   // The line under every screen that compares a record with a reference —
   // Today and the four views behind it. Settings → About says it at length;
   // this is where the comparison is actually read.

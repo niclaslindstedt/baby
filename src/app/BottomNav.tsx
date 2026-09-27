@@ -49,7 +49,8 @@ export type Tab =
   | "food"
   | "vaccines"
   | "child"
-  | "settings";
+  | "settings"
+  | "about";
 
 /** The screens that are *destinations* — the ones the bottom bar carries and
  *  a swipe moves between. Five of them share their name with the tracker

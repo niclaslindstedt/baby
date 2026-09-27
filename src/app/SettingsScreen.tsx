@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
 import {
   Button,
+  ChevronRightIcon,
   ConfirmDialog,
   SegmentedControl,
   Section,
@@ -49,9 +50,11 @@ import {
 } from "./useSyncEngine.ts";
 
 // One scrolling page: appearance, language, what you track, the child, where
-// the record lives, backup, the developer knobs, and About. The screen owns no state of
-// its own beyond the confirm dialog — every knob reads and writes the
-// caller's stores, so what is on screen is always what is persisted.
+// the record lives, backup, the developer knobs, and About — whose last row
+// opens the About screen and the sources behind the app's numbers. The
+// screen owns no state of its own beyond the confirm dialog — every knob
+// reads and writes the caller's stores, so what is on screen is always what
+// is persisted.
 //
 // The child section spells the profile out rather than offering a door to
 // it. It is four facts, every screen in the app derives from them, and
@@ -72,6 +75,8 @@ type Props = {
    *  document. */
   demoData: DemoDataToggle;
   onEditChild: () => void;
+  /** Open About, with the sources the app's numbers rest on. */
+  onOpenAbout: () => void;
   /** The app lock, for its section. */
   pin: PinLock;
   onNotice: (message: string) => void;
@@ -86,6 +91,7 @@ export function SettingsScreen({
   sync,
   demoData,
   onEditChild,
+  onOpenAbout,
   pin,
   onNotice,
 }: Props) {
@@ -424,6 +430,19 @@ export function SettingsScreen({
         <p className="text-xs leading-snug text-muted">
           {t("settings.disclaimer")}
         </p>
+        <button
+          type="button"
+          onClick={onOpenAbout}
+          className="-mx-1 flex items-center gap-3 rounded-lg px-1 py-1.5 text-left hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-accent"
+        >
+          <span className="flex min-w-0 flex-1 flex-col">
+            <span className="text-sm font-medium text-fg-bright">
+              {t("about.open")}
+            </span>
+            <span className="text-xs text-muted">{t("about.openHint")}</span>
+          </span>
+          <ChevronRightIcon className="h-4 w-4 shrink-0 text-muted" />
+        </button>
       </Section>
 
       <ConfirmDialog
