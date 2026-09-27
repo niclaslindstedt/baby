@@ -594,7 +594,7 @@ export const en = {
       "Shows the demo document, the log capture switch, the app log, and the raw document size.",
     demoData: "Demo data",
     demoDataHint:
-      "Swap your record for an invented eight-month-old with readings, diapers, a regimen and a vaccination card. In memory only: nothing is saved, nothing is synced, and reloading brings your own record back.",
+      "Swap your record for an invented baby of seven and a half months with readings, diapers, a regimen and a vaccination card. In memory only: nothing is saved, nothing is synced, and reloading brings your own record back.",
     demoDataOn: "Showing demo data — reload to get yours back",
     demoDataOff: "Back to your own record",
     captureLogs: "Capture console output",

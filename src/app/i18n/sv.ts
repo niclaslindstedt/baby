@@ -548,7 +548,7 @@ export const sv: Catalog = {
       "Visar demodokumentet, loggfångsten, appens logg och dokumentets råstorlek.",
     demoData: "Demodata",
     demoDataHint:
-      "Byt ut din journal mot en påhittad åttamånaders bebis med mätvärden, blöjor, en regim och ett vaccinationskort. Bara i minnet: inget sparas, inget synkas, och en omladdning tar tillbaka din egen journal.",
+      "Byt ut din journal mot en påhittad bebis på sju och en halv månad med mätvärden, blöjor, en regim och ett vaccinationskort. Bara i minnet: inget sparas, inget synkas, och en omladdning tar tillbaka din egen journal.",
     demoDataOn: "Visar demodata — ladda om för att få tillbaka din egen",
     demoDataOff: "Tillbaka till din egen journal",
     captureLogs: "Fånga konsolutskrifter",

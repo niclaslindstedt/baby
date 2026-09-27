@@ -223,8 +223,10 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   folder, Dropbox. Suspended wholesale while demo data has
   taken over storage.
 - `src/app/dev/` — the developer "Demo data" switch: an invented
-  eight-month-old (`demoData.ts`, pure, seeded PRNG, every date an offset
-  from `today`), the in-memory `DocBackend` that serves it, and the
+  baby of seven and a half months (`demoData.ts`, pure, every date an
+  offset from the moment it opens — also the store screenshots' data,
+  booted before the first render by `VITE_SEED=demo` / `make demo`,
+  with tests in `tests/demoData_test.ts`), the in-memory `DocBackend` that serves it, and the
   never-persisted flag. Behind `import()`.
 - `src/app/TodayScreen.tsx`, `DiapersScreen.tsx`, `GrowthScreen.tsx`,
   `FoodScreen.tsx`, `VaccinesScreen.tsx` — the five tabs; `ChildScreen.tsx`
@@ -296,7 +298,7 @@ same PR.
 | A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                           |
 | A new feature switch                   | `FeatureId` in `useAppSettings.ts`, guards on the screens it owns, and `navTabs()` if it has a tab                              |
 | A new storage backend                  | The framework, if generic; `useSyncEngine.ts` wires adapters up, and `idbAdapter.ts` is the one app-local adapter               |
-| A change to what the demo shows        | `src/app/dev/demoData.ts` (offsets from `today`, never fixed dates)                                                             |
+| A change to what the demo shows        | `src/app/dev/demoData.ts` (offsets from `now`, never fixed dates), with tests in `tests/demoData_test.ts`                       |
 | Any user-facing string                 | `src/app/i18n/en.ts` **and** `sv.ts`, never inline in a component                                                               |
 | A shared UI primitive                  | The framework, if it is domain-free; `src/app/ui.tsx` only for this app's layout pieces                                         |
 | Tests                                  | `tests/<module>_test.ts`                                                                                                        |

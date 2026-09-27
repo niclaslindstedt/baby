@@ -211,12 +211,16 @@ export function SettingsScreen({
             where there is one and is absent in a browser. */}
         <SegmentedControl<SyncBackendId>
           value={sync.backend}
+          // Demo data is showing: connecting or disconnecting would change the
+          // reader's real backend from a session that is not theirs, and the
+          // first save after a connect would copy the demo into their cloud.
           options={sync.available.map((id) => ({
             value: id,
             label: t(`settings.backendName.${id}` as const),
+            disabled: demoData.on && id !== sync.backend,
           }))}
           onChange={(next) => {
-            if (next === sync.backend) return;
+            if (next === sync.backend || demoData.on) return;
             // Coming home to this device is a disconnect: the credentials
             // and the folder grant go, and the copy left behind stays where
             // it is.
@@ -279,7 +283,11 @@ export function SettingsScreen({
             {/* Nothing to disconnect *from* on this device: there are no
                 credentials and no grant, and the copy is the browser's own. */}
             {sync.remote && (
-              <Button variant="danger" onClick={sync.disconnect}>
+              <Button
+                variant="danger"
+                onClick={sync.disconnect}
+                disabled={demoData.on}
+              >
                 {t("settings.disconnect")}
               </Button>
             )}

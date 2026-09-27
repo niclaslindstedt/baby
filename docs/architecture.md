@@ -110,7 +110,11 @@ three things ride in their own chunks behind `import()`:
   `useGrowthStandards.ts` and shared by the Today, Growth and Food screens);
 - the food presets (`data/foods.ts`, fetched when the food form opens);
 - the demo document and its backend (`dev/`), fetched only when the toggle
-  turns on;
+  turns on — or, in a build made with `VITE_SEED=demo` (`make demo`, the App
+  Store screenshots), before the first render, so the first frame is already
+  the demo and the device's own document is never read, cached or synced;
+  there the switch cannot be turned off and Settings refuses to connect or
+  disconnect a backend while it shows;
 
 plus the Swedish catalog (`i18n/sv.ts`), which the framework's i18n runtime
 loads on demand.

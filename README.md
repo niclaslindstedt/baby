@@ -102,8 +102,11 @@ you change a diaper, and the last 24 hours count up. Add a reading under
 common-foods chips fill in typical values from Livsmedelsverket's database.
 
 To see every screen populated, turn on **Settings → Developer mode → Demo
-data**: an invented eight-month-old with readings, diapers, a regimen and a
+data**: an invented baby of seven and a half months with readings, diapers, a regimen and a
 vaccination card, in memory only.
+
+To open it on the demo instead — held in memory, never written to the
+browser — run `make demo` (`VITE_SEED=demo`).
 
 To try the production build the way it deploys:
 
