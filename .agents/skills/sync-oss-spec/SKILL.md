@@ -31,7 +31,7 @@ git diff --name-only "${BASELINE:-$(git rev-list --max-parents=0 HEAD)}"..HEAD -
    ```
 
 2. Read the **whole** output: the "Structural violations" list names a spec section and an exact path per line; the "Agent review checklist" is the qualitative half the script cannot check, and it is part of the run.
-3. Leave §11.3's SEO mandates unmet on purpose — no `seo`/`lighthouse` workflows, sitemap, JSON-LD, `llms.txt` or page-weight budget: no SEO and no size budgets, by owner decision, and the site carries `noindex`.
+3. The website is unlisted: the `oss-spec:unlisted-website:` marker in `AGENTS.md` exempts it from §11.3.1–§11.3.11 and §11.4.7 (§11.3.12), so no `seo`/`lighthouse` workflow, sitemap, JSON-LD, `llms.txt` or page-weight budget is owed. What the validator checks instead is the `noindex` meta on every page and a `robots.txt` that allows crawling — keep both, and never add a sitemap, `llms.txt`, JSON-LD or a canonical link.
 4. Compare the spec version in `OSS_SPEC.md`'s front matter with the one the script says it is pinned against; a newer spec may carry mandates the script does not check yet — read its changelog section.
 
 ## Mapping
