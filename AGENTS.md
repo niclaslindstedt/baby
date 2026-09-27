@@ -226,11 +226,12 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   union.
 - `src/app/migrations.ts` — parse / normalise / serialize; the only module
   that trusts stored bytes.
-- `src/app/references.ts` — the references registry's typed face (see
-  "Every threshold cites its source"): the entry shape, the evidence
-  vocabulary ranked strongest first, and how the About screen lists and
-  cites an entry. The registry itself rides in its own chunk through
-  `useReferences.ts`.
+- `src/app/references.ts` — the references registry bound to this app (see
+  "Every threshold cites its source"): the framework's `references` types
+  with the trackers as topics, the summary languages, and `useReferences`,
+  which loads `docs/references.json` in its own chunk. The machinery — the
+  evidence ranking, the citation helpers, the audit and `ReferenceCard` — is
+  the framework's `references` module, shared with the sibling apps.
 - `src/app/useDocStore.ts` — the document store over a `DocBackend` seam
   (which is what demo data swaps). Its edits are the app's whole write
   vocabulary.
@@ -320,7 +321,8 @@ same PR.
 source the app's numbers and claims rest on, keyed by a stable id — the
 shape OSS_SPEC.md §24 prescribes, which `oss-spec validate` checks too:
 authors or organization, title, where it was published, the DOI / URL / ISBN,
-the language, the kind of evidence (`EVIDENCE` in `src/app/references.ts`:
+the language, the kind of evidence (`EVIDENCE` in the framework's
+`references` module:
 `guideline`, `consensus`, `systematic-review`, `meta-analysis`,
 `randomized-trial`, `cohort`, `clinical-study`, `review`, `method`,
 `dataset`, or `health-service` for practitioner guidance), the verbatim
@@ -332,9 +334,11 @@ screen, which lists every entry straight from the registry through
 `references.ts` — so a new source is shown to parents in the same change
 that cites it, with no second list to keep. Code cites an entry with a
 `[ref:<id>]` tag in the comment beside the number (a claim in a catalog
-string gets its tag in a comment above the key). `tests/references_test.ts` fails on a tag with no entry, an entry
-nothing cites, a `usedBy` that doesn't match the tags, or an entry without
-its `summary` in both languages and a `topics` tracker. A new source means
+string gets its tag in a comment above the key). `tests/references_test.ts`
+runs the framework's `auditReferences` over `src/`, and fails on a tag with
+no entry, an entry nothing cites, a `usedBy` that doesn't match the tags, an
+incomplete entry, or one without its `summary` in both languages and a
+`topics` tracker. A new source means
 an entry and a tag in the same change; a module whose comments still cite
 in prose alone (`growth.ts`, `nutrition.ts`, `diapers.ts`, `vaccines.ts`)
 moves over when it is next touched, the goal being every module in the

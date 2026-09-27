@@ -127,10 +127,12 @@ points into it with a `[ref:<id>]` tag in the comment beside the number.
 first module cited this way; the others still cite in prose and move over as
 they are touched.
 
-The registry is also what a parent reads. `src/app/references.ts` is its
-typed face — the shape, the evidence vocabulary ranked strongest first, and
-how an entry is cited — and the About screen, behind Settings → About, lists
-every entry from it: grouped by the tracker it serves (the entry's `topics`),
+The registry is also what a parent reads. The framework's `references`
+module is its typed face — the shape, the evidence vocabulary ranked
+strongest first, how an entry is cited, the audit the test runs, and the
+card each entry is shown on — and `src/app/references.ts` binds it to this
+app: the trackers as topics, the two summary languages, and the loader. The
+About screen, behind Settings → About, lists every entry from it: grouped by the tracker it serves (the entry's `topics`),
 with a line for a parent in either language (`summary`), the citation, a link
 to the DOI or page, and the quotes one tap down. Nothing is copied by hand, so
 an entry added for a new number is on that screen in the same change. The
@@ -146,7 +148,7 @@ four things ride in their own chunks behind `import()`:
   `useGrowthStandards.ts` and shared by the Today, Growth and Food screens);
 - the food presets (`data/foods.ts`, fetched when the food form opens);
 - the references registry (`docs/references.json`, loaded through
-  `useReferences.ts` when the About screen opens);
+  `useReferences` in `references.ts` when the About screen opens);
 - the demo document and its backend (`dev/`), fetched only when the toggle
   turns on — or, in a build made with `VITE_SEED=demo` (`make demo`, the App
   Store screenshots), before the first render, so the first frame is already

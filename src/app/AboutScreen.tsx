@@ -1,35 +1,32 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 import {
   ArrowLeftIcon,
-  ExternalLinkIcon,
   SpinnerIcon,
 } from "@niclaslindstedt/oss-framework/components";
-import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
-
-import { formatDayYear } from "./format.ts";
-import { useLang, useT } from "./i18n/index.ts";
 import {
-  byline,
   byTopic,
-  publication,
-  sourceLink,
+  EVIDENCE,
+  ReferenceCard,
   unlistedTopics,
-  type Reference,
-} from "./references.ts";
+  type Evidence,
+  type ReferenceCardLabels,
+} from "@niclaslindstedt/oss-framework/references";
+
+import { useLang, useT } from "./i18n/index.ts";
+import { useReferences } from "./references.ts";
 import { Card, Heading } from "./ui.tsx";
 import { FEATURES } from "./useAppSettings.ts";
-import { useReferences } from "./useReferences.ts";
 
 // About, behind Settings: what the app is, and every published source its
 // numbers rest on (OSS_SPEC.md §24.4). The list is the references registry
 // itself, read through `references.ts` — never a copy kept by hand — grouped
 // by the tracker each source serves and ranked strongest evidence first.
 //
-// Each source is cited the way a reference list cites it, with a parent's
-// line on what in the app rests on it, and — one tap down — the source's own
-// words the numbers were taken from, so the claim can be checked against
-// them. The link out is the only way this screen reaches the network, and
-// only when it is tapped.
+// Each source is the framework's `ReferenceCard` in this app's words: cited
+// the way a reference list cites it, with a parent's line on what in the app
+// rests on it, and — one tap down — the source's own words the numbers were
+// taken from, so the claim can be checked against them. The link out is the
+// only way this screen reaches the network, and only when it is tapped.
 //
 // Read-only: like the views behind Today, it writes nothing.
 
@@ -45,6 +42,15 @@ export function AboutScreen({ onBack }: Props) {
   const locale = lang === "sv" ? "sv-SE" : "en-GB";
 
   const pending = refs ? unlistedTopics(refs, FEATURES) : [];
+  const labels: ReferenceCardLabels = {
+    quotes: t("about.quotes"),
+    openSource: t("about.openSource"),
+    isbn: (isbn) => t("about.isbn", { isbn }),
+    accessed: (date) => t("about.accessed", { date }),
+    evidence: Object.fromEntries(
+      EVIDENCE.map((kind) => [kind, t(`about.evidence.${kind}` as const)]),
+    ) as Record<Evidence, string>,
+  };
 
   return (
     <div className="flex flex-col gap-3 px-3 py-3">
@@ -100,97 +106,17 @@ export function AboutScreen({ onBack }: Props) {
               {t(`nav.${group.topic}` as const)}
             </h2>
             {group.refs.map((ref) => (
-              <ReferenceCard key={ref.id} reference={ref} locale={locale} />
+              <ReferenceCard
+                key={ref.id}
+                reference={ref}
+                lang={lang}
+                locale={locale}
+                labels={labels}
+              />
             ))}
           </section>
         ))
       )}
     </div>
-  );
-}
-
-function ReferenceCard({
-  reference: ref,
-  locale,
-}: {
-  reference: Reference;
-  locale: string;
-}) {
-  const t = useT();
-  const lang = useLang();
-  const link = sourceLink(ref);
-  const where = publication(ref);
-
-  return (
-    <Card>
-      <div className="flex flex-wrap items-center gap-2 text-xs">
-        <span className="rounded-full bg-accent/15 px-2 py-0.5 font-medium text-accent">
-          {t(`about.evidence.${ref.evidence}` as const)}
-        </span>
-        <span className="text-muted">{ref.year}</span>
-      </div>
-      <p
-        lang={ref.language}
-        className="mt-2 text-sm leading-snug font-semibold text-fg-bright"
-      >
-        {ref.title}
-      </p>
-      <p className="mt-1 text-xs leading-snug text-muted">
-        {byline(ref)}
-        {where && ` · ${where}`}
-      </p>
-      <p className="mt-2 text-sm leading-snug text-fg">
-        {lang === "sv" ? ref.summary.sv : ref.summary.en}
-      </p>
-
-      <details className="mt-2">
-        <summary className="cursor-pointer text-xs font-medium text-accent">
-          {t("about.quotes")}
-        </summary>
-        <ul className="mt-2 flex flex-col gap-2">
-          {ref.quotes.map((quote, i) => (
-            <li key={i}>
-              <blockquote
-                lang={ref.language}
-                className="border-l-2 border-line pl-3 text-xs leading-snug text-fg"
-              >
-                “{quote.text}”
-              </blockquote>
-              {quote.at && (
-                <p lang="en" className="mt-0.5 pl-3 text-[11px] text-muted">
-                  {quote.at}
-                </p>
-              )}
-            </li>
-          ))}
-        </ul>
-      </details>
-
-      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-        {link && (
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 font-medium text-accent hover:underline"
-          >
-            {ref.doi ? `doi:${ref.doi}` : t("about.openSource")}
-            <ExternalLinkIcon className="h-3 w-3" />
-          </a>
-        )}
-        {!link && ref.isbn && (
-          <span className="text-muted">
-            {t("about.isbn", { isbn: ref.isbn })}
-          </span>
-        )}
-        {ref.accessed && (
-          <span className="text-muted">
-            {t("about.accessed", {
-              date: formatDayYear(ref.accessed as DayKey, locale),
-            })}
-          </span>
-        )}
-      </div>
-    </Card>
   );
 }
