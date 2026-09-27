@@ -563,6 +563,10 @@ export const sv: Catalog = {
       "En anteckningsbok, inte medicinsk rådgivning. Appen sparar det du fyller i och jämför det med publicerade rekommendationer; frågor om ditt barns hälsa hör hemma på BVC.",
   },
 
+  advice: {
+    note: "En anteckningsbok, inte medicinsk rådgivning: det du fyller i, jämfört med publicerade referenser. Frågor om ditt barns hälsa hör hemma på BVC.",
+  },
+
   sync: {
     syncedTo: "Synkad till {name}",
   },

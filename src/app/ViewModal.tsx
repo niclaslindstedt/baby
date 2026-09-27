@@ -96,7 +96,12 @@ export function ViewModal({
           safe-area spacer under it either, so without this the last card would
           end under the home indicator. */}
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-page-bg px-4 pt-4 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
-        <div className="mx-auto flex max-w-2xl flex-col gap-3">{children}</div>
+        <div className="mx-auto flex max-w-2xl flex-col gap-3">
+          {children}
+          {/* Every view compares a record with a published reference, so
+              every view says what that comparison is not. */}
+          <p className="px-1 text-xs text-muted">{t("advice.note")}</p>
+        </div>
       </div>
     </Modal>
   );

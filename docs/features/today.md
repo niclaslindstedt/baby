@@ -25,3 +25,9 @@ things _in_: a change, a reading, a food, a dose marked given.
 The point of gathering the answers here is that a parent with fifteen seconds
 gets the whole picture without visiting four tabs — and never has to navigate
 back out of one.
+
+Under the cards, and at the foot of every view behind them, one line says
+what all of it is: a notebook, not medical advice — what you entered,
+compared with published references — and that questions about the child's
+health belong with their nurse or doctor. Settings → About says the same at
+length; this line is where the comparisons are actually read.

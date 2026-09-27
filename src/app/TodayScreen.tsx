@@ -263,6 +263,10 @@ export function TodayScreen({ data, today, standards, features }: Props) {
         </HeadlineCard>
       )}
 
+      {/* The cards above are comparisons with published references; say
+          what they are not where they are read. */}
+      <p className="px-1 text-xs text-muted">{t("advice.note")}</p>
+
       {/* The views. Mounted here rather than in the shell because every one
           of them reads the same derivations this screen already summarises —
           the card is the headline and the modal is the rest of the sentence. */}

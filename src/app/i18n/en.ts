@@ -609,6 +609,13 @@ export const en = {
       "A notebook, not medical advice. The app records what you enter and compares it with published recommendations; questions about your child's health belong with the child health centre.",
   },
 
+  // The line under every screen that compares a record with a reference —
+  // Today and the four views behind it. Settings → About says it at length;
+  // this is where the comparison is actually read.
+  advice: {
+    note: "A notebook, not medical advice: what you enter, compared with published references. Questions about your child's health belong with their nurse or doctor.",
+  },
+
   sync: {
     syncedTo: "Synced to {name}",
   },
