@@ -12,15 +12,17 @@ the moment of the tap. Until the second tap the sleep is _open_ (`end: null`)
 and the child reads as asleep.
 
 A sleep rarely starts with a hand free — the child drops off in a pram or on
-an arm, and the phone comes out twenty minutes later — so the buttons carry a
-**When** row: **Now**, **5**, **10**, **15**, **30** or **45 min ago**, **1 h
-ago**, or **Pick a time**. Whatever is picked applies to the next tap, start
-or wake, shows the clock time it stands for, and then goes back to **Now**. A
-picked clock time is its latest occurrence, so 23:50 picked just after
-midnight is last night (`latestClockTime`). A time that can't be right is
-refused before anything is written (`sleepTimeProblem`): one in the future, a
-wake before the sleep began, or a start before the last sleep ended. The toast
-names the time that was logged.
+an arm, and the phone comes out twenty minutes later — so each tap opens a
+"when?" sheet (`WhenModal.tsx`, shared with the diaper buttons): a large
+**Now**, tiles for **5**, **10**, **15**, **30** and **45 min** and **1 h**
+ago, each showing the clock time it stands for, and **Another time**, a
+single handle on the 24-hour dial that reaches back a day, landing on five
+minutes and running past midnight into yesterday (`when.ts`). The times that
+can't be right — a wake before the sleep began, a start before the last sleep
+ended — are dimmed on the tiles and out of the dial's reach, with a line
+saying why (`sleepEarliest`); the moment is checked once more as it is written
+(`sleepTimeProblem`), which also refuses one in the future. The toast names
+the time that was logged.
 
 The kind is the parent's tap rather than the app's guess. Nothing about a
 start time says which it is — a newborn's longest sleep is as likely at noon as

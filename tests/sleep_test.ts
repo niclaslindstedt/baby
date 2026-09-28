@@ -33,8 +33,8 @@ import {
   type SleepAverage,
 } from "../src/app/sleep.ts";
 import {
-  latestClockTime,
   sleepDraft,
+  sleepEarliest,
   sleepEditProblem,
   sleepTimeProblem,
 } from "../src/app/sleepEdit.ts";
@@ -560,20 +560,6 @@ describe("the diary", () => {
 });
 
 describe("logging after the fact", () => {
-  it("reads a picked clock time as its latest occurrence", () => {
-    // 13:05 picked at 13:40 is today; 23:50 picked at 00:10 is last night.
-    expect(latestClockTime("13:05", local("2026-09-27", 13, 40))).toEqual(
-      local("2026-09-27", 13, 5),
-    );
-    expect(latestClockTime("23:50", local("2026-09-27", 0, 10))).toEqual(
-      local("2026-09-26", 23, 50),
-    );
-    // The minute of the tap itself is now, not yesterday.
-    expect(latestClockTime("09:41", local("2026-09-27", 9, 41))).toEqual(
-      local("2026-09-27", 9, 41),
-    );
-  });
-
   it("refuses a start before the last sleep ended, and a time in the future", () => {
     const data = docWith([sleep("nap", "2026-09-27", [9, 0], [10, 0])]);
     const now = local("2026-09-27", 12, 30);
@@ -598,6 +584,34 @@ describe("logging after the fact", () => {
     expect(sleepTimeProblem(data, local("2026-09-27", 12, 10), now)).toBe(
       "beforeStart",
     );
+  });
+
+  it("bounds the when-sheet where the refusals begin", () => {
+    // Awake since a nap that ended at 10:00: a start no earlier than that.
+    const ended = docWith([sleep("nap", "2026-09-27", [9, 0], [10, 0])]);
+    const noon = local("2026-09-27", 12, 30);
+    const afterNap = sleepEarliest(ended, noon);
+    expect(afterNap).toEqual({
+      at: local("2026-09-27", 10, 0).getTime(),
+      reason: "beforeLastSleep",
+    });
+    expect(sleepTimeProblem(ended, new Date(afterNap!.at), noon)).toBeNull();
+    expect(sleepTimeProblem(ended, new Date(afterNap!.at - 60_000), noon)).toBe(
+      "beforeLastSleep",
+    );
+
+    // Asleep since 12:10: a wake strictly after it.
+    const running = docWith([sleep("nap", "2026-09-27", [12, 10], null)]);
+    const two = local("2026-09-27", 14, 0);
+    const wake = sleepEarliest(running, two);
+    expect(wake?.reason).toBe("beforeStart");
+    expect(sleepTimeProblem(running, new Date(wake!.at), two)).toBeNull();
+    expect(sleepTimeProblem(running, new Date(wake!.at - 1), two)).toBe(
+      "beforeStart",
+    );
+
+    // Nothing logged: nothing bounds it.
+    expect(sleepEarliest(docWith([]), two)).toBeNull();
   });
 });
 

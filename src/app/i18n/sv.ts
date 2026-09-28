@@ -109,12 +109,21 @@ export const sv: Catalog = {
     allGiven: "Alla programmets doser är noterade.",
   },
 
+  when: {
+    now: "Nu",
+    earlier: "Tidigare",
+    ago: "för {duration} sedan",
+    agoAt: "för {duration} sedan, kl. {time}",
+    other: "En annan tid",
+    back: "Tillbaka",
+    logAt: "Logga kl. {time}",
+  },
+
   quickLog: {
     title: "Logga",
     titleDiaper: "Logga en blöja",
     titleSleep: "Logga sömn",
-    subtitle:
-      "Ett tryck. Tiden är nu — om du inte väljer en tidigare för sömnen.",
+    subtitle: "Tryck på vad som hände — sedan när.",
     diaper: "Blöja",
     sleep: "Sömn",
   },
@@ -123,11 +132,12 @@ export const sv: Catalog = {
     title: "Blöjor",
     log: "Logga ett byte",
     logHint:
-      "Tryck på vad blöjan innehöll. Tiden sparas åt dig, och samma tre knappar finns bakom + i toppraden från vilken skärm som helst.",
+      "Tryck på vad blöjan innehöll, sedan när. Samma tre knappar finns bakom + i toppraden från vilken skärm som helst.",
+    when: "När bytte du blöjan?",
     pee: "Kiss",
     poo: "Bajs",
     both: "Båda",
-    logged: "Loggat",
+    logged: "Loggat kl. {time}",
     removed: "Borttaget",
     removeChange: "Ta bort det här bytet",
     recent: "Senaste 7 dagarna",
@@ -169,12 +179,14 @@ export const sv: Catalog = {
     nap: "Tupplur",
     night: "Natt",
     when: {
-      fell: "Somnade",
-      woke: "Vaknade",
-      now: "Nu",
-      ago: "för {duration} sedan",
-      pick: "Välj tid",
-      at: "kl. {time}",
+      fell: "När somnade {name}?",
+      woke: "När vaknade {name}?",
+      limit: {
+        beforeStart:
+          "Sömnen började kl. {start} — uppvaknandet kan inte vara tidigare.",
+        beforeLastSleep:
+          "Förra sömnen slutade kl. {end}. Rätta den i listan först för att börja tidigare.",
+      },
       problem: {
         future: "Den tiden har inte varit än.",
         beforeStart: "Det är före sömnen började kl. {start}.",

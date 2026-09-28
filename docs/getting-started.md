@@ -45,8 +45,9 @@ through them one at a time.
 
 ## Log a diaper
 
-Under **Diapers**, tap **Pee**, **Poo** or **Both**. That is the whole flow —
-the time is recorded for you, and the last seven days are listed under the
+Under **Diapers**, tap **Pee**, **Poo** or **Both**, then **Now** — or how
+long ago it was, when the phone came out later. That is the whole flow, and
+the last seven days are listed under the
 buttons so a mistap is one tap to remove. The **+** in the top bar opens the
 same three buttons as a sheet from any screen, so a change never costs you
 the chart you had open.

@@ -5,7 +5,8 @@
 // mis-picked time is refused rather than logged and corrected later.
 //
 // Two ways in. A tap on the sleep buttons records one moment, now or a
-// picked lag before it (`sleepTimeProblem`). A correction on the Sleep tab's
+// picked time before it (`sleepTimeProblem`, and `sleepEarliest` for the
+// bound the "when?" sheet reads). A correction on the Sleep tab's
 // dial records a whole span at once (`sleepEditProblem`, and `sleepDraft`
 // for where the dial opens). Pure and clock-free: `now` is a parameter.
 
@@ -14,19 +15,6 @@ import type { AppData, SleepKind, SleepSession } from "./types.ts";
 
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
-
-/**
- * The latest moment at or before `now` whose local wall clock reads `time`
- * (`HH:MM`): today's, or yesterday's when today's has not come yet. A parent
- * who picks 23:50 just after midnight means last night, not tonight.
- */
-export function latestClockTime(time: string, now: Date): Date {
-  const [h, m] = time.split(":").map(Number);
-  const at = new Date(now);
-  at.setHours(h ?? 0, m ?? 0, 0, 0);
-  if (at.getTime() > now.getTime()) at.setDate(at.getDate() - 1);
-  return at;
-}
 
 /** Why a time can't be used for the next tap. */
 export type SleepTimeProblem = "future" | "beforeStart" | "beforeLastSleep";
@@ -47,6 +35,24 @@ export function sleepTimeProblem(
   if (current) return t <= Date.parse(current.start) ? "beforeStart" : null;
   const last = lastEndedSleep(data, now);
   return last !== null && t < last ? "beforeLastSleep" : null;
+}
+
+/**
+ * The earliest moment the next tap may stand for, and why nothing before it
+ * can: a wake just after the running sleep began, a start no earlier than
+ * the last sleep ended. Null when nothing bounds it. The "when?" sheet reads
+ * it to leave out the lags that `sleepTimeProblem` would refuse.
+ */
+export function sleepEarliest(
+  data: AppData,
+  now: Date,
+): { at: number; reason: "beforeStart" | "beforeLastSleep" } | null {
+  const current = currentSleep(data, now);
+  if (current) {
+    return { at: Date.parse(current.start) + 1, reason: "beforeStart" };
+  }
+  const last = lastEndedSleep(data, now);
+  return last === null ? null : { at: last, reason: "beforeLastSleep" };
 }
 
 /** A sleep as the dial edits it: two instants, the second null while the

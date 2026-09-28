@@ -9,7 +9,8 @@ import type { AppData, DiaperKind, SleepKind } from "./types.ts";
 // The sheet behind the top bar's `+`: the two things logged several times a
 // day — a diaper and a sleep — from any screen. A modal rather than a screen
 // on purpose: logging a change must not cost the chart someone was reading
-// on Growth. One tap logs and closes.
+// on Growth. A tap on a button asks when (`WhenModal.tsx`, over this
+// sheet), and the answer logs and closes both.
 //
 // Each half is a tracker a parent can switch off, and a switched-off one
 // takes its half with it; with both off the `+` is not on the bar at all
@@ -21,7 +22,7 @@ type Props = {
   /** Which halves to show — the trackers that are on. */
   diapers: boolean;
   sleep: boolean;
-  onLogDiaper: (kind: DiaperKind) => void;
+  onLogDiaper: (kind: DiaperKind, at: Date) => void;
   /** The document, which the sleep half reads its state from. */
   data: AppData;
   onStartSleep: (kind: SleepKind, at: Date) => void;
@@ -79,8 +80,8 @@ export function QuickLogSheet({
               </h3>
             )}
             <DiaperButtons
-              onLog={(kind) => {
-                onLogDiaper(kind);
+              onLog={(kind, at) => {
+                onLogDiaper(kind, at);
                 onClose();
               }}
               large

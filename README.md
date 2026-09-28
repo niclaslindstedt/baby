@@ -13,8 +13,8 @@ that matter most, without turning childcare into data entry. It runs
 entirely in your browser and is built around one principle: **minimal
 input, useful output.**
 
-- **Diapers.** Three buttons — pee, poo, both — and the time is recorded for
-  you, from the Diapers tab or the **+** on any screen. The app knows how many
+- **Diapers.** Three buttons — pee, poo, both — then **Now** or how long
+  ago, from the Diapers tab or the **+** on any screen. The app knows how many
   wet and dirty diapers a baby of that age usually produces (from the first days' ramp to the Swedish "minst sex kissblöjor per
   dygn") and says so when the last 24 hours look thin, naming the sign to look
   for rather than a diagnosis.
@@ -158,7 +158,7 @@ The five views Today opens:
 
 | Button | What it does                                                                                                                                                                                                                                                                            |
 | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **+**  | Log a diaper or a sleep without leaving the screen you are on: a sheet with the same buttons as the two tabs. One tap logs and closes. Gone while both are off.                                                                                                                         |
+| **+**  | Log a diaper or a sleep without leaving the screen you are on: a sheet with the same buttons as the two tabs; a tap asks when — now, a few minutes ago, or a time on the dial — and logs and closes. Gone while both are off.                                                           |
 | **⚙**  | Settings: theme, language, what you track, the child's profile, where the record lives and its encryption passphrase, the PIN app lock, backup / restore / delete, and About — the disclaimer, and every published source the app's numbers rest on with the words each was taken from. |
 
 ## Configuration

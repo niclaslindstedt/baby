@@ -21,7 +21,7 @@ import { Card, Heading } from "./ui.tsx";
 // (`DiapersModal.tsx`). Nothing on this screen is derived.
 //
 // The buttons are still reachable from anywhere without coming here: the
-// top bar's `+` opens the same three (see `DiaperSheet.tsx`), and both write
+// top bar's `+` opens the same three (see `QuickLogSheet.tsx`), and both write
 // through the same `addDiaper` edit. This screen is where you come to *look*
 // at what was logged and take back a mistap.
 //
@@ -37,7 +37,7 @@ const LIST_DAYS = 7;
 type Props = {
   data: AppData;
   today: DayKey;
-  onLog: (kind: DiaperKind) => void;
+  onLog: (kind: DiaperKind, at: Date) => void;
   onRemove: (id: string) => void;
 };
 

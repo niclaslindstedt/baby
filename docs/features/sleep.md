@@ -2,9 +2,11 @@
 
 A sleep is two taps: **Nap** or **Night** when your child falls asleep, and
 **Woke up** when they wake. The buttons are on the **Sleep** tab and in the
-sheet behind the top bar's **+**, from any screen, and the time is recorded
-for you — or, when you only get to the phone later, pick **5 min ago**
-through **1 h ago** or a time on the clock above the buttons first.
+sheet behind the top bar's **+**, from any screen. Each tap asks when:
+**Now** fills the top of the sheet, and under it are **5 min** through
+**1 h** ago, each showing the time it stands for, and **Another time** on a
+dial for anything further back. Times that can't be right — waking before
+the sleep began — are dimmed rather than refused after the tap.
 
 **A clock that is running.** The top of the tab is a 24-hour dial — midnight at
 the top, noon at the bottom — with the last day's sleeps drawn round it where

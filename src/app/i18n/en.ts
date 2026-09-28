@@ -133,14 +133,25 @@ export const en = {
     allGiven: "Every program dose is recorded.",
   },
 
+  // The "when?" sheet every logging button opens once it knows what
+  // happened (`WhenModal.tsx`): now, a lag, or a time on the dial.
+  when: {
+    now: "Now",
+    earlier: "Earlier",
+    ago: "{duration} ago",
+    agoAt: "{duration} ago, at {time}",
+    other: "Another time",
+    back: "Back",
+    logAt: "Log at {time}",
+  },
+
   // The sheet behind the top bar's `+`: the diaper buttons and the sleep
   // buttons, from anywhere.
   quickLog: {
     title: "Log",
     titleDiaper: "Log a diaper",
     titleSleep: "Log a sleep",
-    subtitle:
-      "One tap. The time is now — unless you pick an earlier one for a sleep.",
+    subtitle: "Tap what happened — then when.",
     diaper: "Diaper",
     sleep: "Sleep",
   },
@@ -151,11 +162,12 @@ export const en = {
     title: "Diapers",
     log: "Log a change",
     logHint:
-      "Tap what the diaper held. The time is recorded for you, and the same three buttons sit behind the + in the top bar from any screen.",
+      "Tap what the diaper held, then when. The same three buttons sit behind the + in the top bar from any screen.",
+    when: "When was the change?",
     pee: "Pee",
     poo: "Poop",
     both: "Both",
-    logged: "Logged",
+    logged: "Logged at {time}",
     removed: "Removed",
     removeChange: "Remove this change",
     recent: "The last 7 days",
@@ -208,15 +220,17 @@ export const en = {
     title: "Sleep",
     nap: "Nap",
     night: "Night",
-    // The **When** row above the sleep buttons: the time the next tap
-    // stands for, for the sleep that is logged after it happened.
+    // The question the sleep buttons' "when?" sheet asks, the line under
+    // it when the log rules some times out, and the refusal if a time
+    // turns out wrong as it is written.
     when: {
-      fell: "Fell asleep",
-      woke: "Woke up",
-      now: "Now",
-      ago: "{duration} ago",
-      pick: "Pick a time",
-      at: "at {time}",
+      fell: "When did {name} fall asleep?",
+      woke: "When did {name} wake up?",
+      limit: {
+        beforeStart: "The sleep began at {start} — waking can't be earlier.",
+        beforeLastSleep:
+          "The last sleep ended at {end}. To start earlier, correct that one in the list first.",
+      },
       problem: {
         future: "That time hasn't happened yet.",
         beforeStart: "That is before the sleep began at {start}.",

@@ -218,19 +218,21 @@ export function App() {
     });
   }, [store.writeFailures, t]);
 
+  // Every log is written at the moment the "when?" sheet was answered with
+  // (`WhenModal.tsx`): the tap itself, or a time before it. The toasts name
+  // that time, so a lag picked by mistake is seen at once.
   const logDiaper = useCallback(
-    (kind: DiaperKind) => {
-      store.addDiaper({ id: newId(), kind, at: new Date().toISOString() });
-      notice(t("diapers.logged"));
+    (kind: DiaperKind, at: Date) => {
+      store.addDiaper({ id: newId(), kind, at: at.toISOString() });
+      notice(
+        t("diapers.logged", { time: formatInstant(at.getTime(), locale) }),
+      );
     },
-    [store, notice, t],
+    [store, notice, t, locale],
   );
 
   // Sleep's two taps. Both are the one `saveSleep` edit — a start writes an
-  // open sleep, a wake closes the one running — at the moment the buttons'
-  // **When** row says: the tap itself, or a few minutes before it (see
-  // `SleepButtons.tsx`). The toast names the time, so a lag picked by
-  // mistake is seen at once.
+  // open sleep, a wake closes the one running (see `SleepButtons.tsx`).
   const startSleep = useCallback(
     (kind: SleepKind, at: Date) => {
       const stamp = new Date().toISOString();
