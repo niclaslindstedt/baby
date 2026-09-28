@@ -4,9 +4,11 @@ import { useMemo } from "react";
 import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
 
 import { childName } from "./copy.ts";
-import { clockLabel, DayCoverageChart } from "./DayCoverageChart.tsx";
+import { DayCoverageChart } from "./DayCoverageChart.tsx";
 import {
   formatAmount,
+  formatMinuteOfDay,
+  formatTimeOfDay,
   formatWeight,
   formatPercent,
   formatWhole,
@@ -168,7 +170,7 @@ export function FoodModal({ open, onClose, data, today, standards }: Props) {
                   ),
                 })
               : t("food.coverage.metAt", {
-                  time: clockLabel(coverage.metAtMinutes),
+                  time: formatMinuteOfDay(coverage.metAtMinutes, locale),
                 })}
           </p>
           {coverage.spreadKcal > 0 && (
@@ -212,7 +214,9 @@ export function FoodModal({ open, onClose, data, today, standards }: Props) {
                     {food.times.length > 0 ? (
                       <>
                         <ClockIcon className="h-3 w-3" />
-                        {food.times.join(" · ")}
+                        {food.times
+                          .map((time) => formatTimeOfDay(time, locale))
+                          .join(" · ")}
                       </>
                     ) : (
                       t("food.coverage.anytime")

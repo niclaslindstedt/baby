@@ -10,7 +10,8 @@ import {
 } from "@niclaslindstedt/oss-framework/charts";
 import { useMeasuredSize } from "@niclaslindstedt/oss-framework/hooks";
 
-import { useT } from "./i18n/index.ts";
+import { formatAxisHour, formatMinuteOfDay, isTwelveHour } from "./format.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import type { DayCoverage } from "./nutrition.ts";
 
 // The day as a curve: energy accumulating from the morning to the evening
@@ -50,6 +51,9 @@ const MAX_Y_TICKS = 4;
 const HOUR_STEP_WIDE = 2;
 const HOUR_STEP_NARROW = 4;
 const NARROW_PLOT = 300;
+/** A 12-hour label ("10 AM") is about twice a 24-hour one ("10"), so it
+ *  takes the wider step up to twice the width. */
+const NARROW_PLOT_12H = 2 * NARROW_PLOT;
 
 export function DayCoverageChart({
   coverage,
@@ -59,6 +63,7 @@ export function DayCoverageChart({
   height = 190,
 }: Props) {
   const t = useT();
+  const locale = useLocale();
   const { ref, size } = useMeasuredSize<HTMLDivElement>();
   const width = Math.max(240, Math.round(size?.width ?? FALLBACK_WIDTH));
   const [cursor, setCursor] = useState<number | null>(null);
@@ -86,7 +91,8 @@ export function DayCoverageChart({
   const projected: PathPoint[] = points.map((p) => [x(p.minutes), y(p.kcal)]);
   const targetY = y(targetKcal);
 
-  const hourStep = plot.width < NARROW_PLOT ? HOUR_STEP_NARROW : HOUR_STEP_WIDE;
+  const narrowBelow = isTwelveHour(locale) ? NARROW_PLOT_12H : NARROW_PLOT;
+  const hourStep = plot.width < narrowBelow ? HOUR_STEP_NARROW : HOUR_STEP_WIDE;
   const hours: number[] = [];
   for (
     let h = Math.ceil(from / 60 / hourStep) * hourStep;
@@ -114,7 +120,7 @@ export function DayCoverageChart({
             cursor !== null ? "text-fg-bright" : "text-accent"
           }`}
         >
-          {clockLabel(at)}
+          {formatMinuteOfDay(at, locale)}
         </span>
         <span className="text-xs text-fg tabular-nums">
           {t("food.coverage.readout", {
@@ -222,7 +228,7 @@ export function DayCoverageChart({
               }
               className="fill-muted text-[10px] tabular-nums"
             >
-              {String(h).padStart(2, "0")}
+              {formatAxisHour(h, locale)}
             </text>
           ))}
 
@@ -292,13 +298,4 @@ function kcalAt(coverage: DayCoverage, minutes: number): number {
     return a.kcal + share * (b.kcal - a.kcal);
   }
   return points[points.length - 1]!.kcal;
-}
-
-/** Minutes past midnight as "08:00". A wall clock is the same shape in every
- *  locale this app ships, so it is spelled rather than formatted. */
-export function clockLabel(minutes: number): string {
-  const m = Math.round(minutes);
-  const hh = String(Math.floor(m / 60)).padStart(2, "0");
-  const mm = String(m % 60).padStart(2, "0");
-  return `${hh}:${mm}`;
 }

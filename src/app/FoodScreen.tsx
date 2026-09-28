@@ -12,7 +12,7 @@ import {
 
 import { childName } from "./copy.ts";
 import { FoodForm } from "./FoodForm.tsx";
-import { formatAmount, formatWhole } from "./format.ts";
+import { formatAmount, formatTimeOfDay, formatWhole } from "./format.ts";
 import { ageInDays } from "./age.ts";
 import { BowlIcon, ClockIcon, TrashIcon } from "./icons.tsx";
 import { useLocale, useT } from "./i18n/index.ts";
@@ -190,7 +190,9 @@ export function FoodScreen({
                   {food.times.length > 0 && (
                     <p className="flex items-center gap-1 text-xs text-muted tabular-nums">
                       <ClockIcon className="h-3 w-3" />
-                      {food.times.join(" · ")}
+                      {food.times
+                        .map((time) => formatTimeOfDay(time, locale))
+                        .join(" · ")}
                     </p>
                   )}
                 </div>

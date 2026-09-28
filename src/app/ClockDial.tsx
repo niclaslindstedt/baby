@@ -2,6 +2,8 @@
 import type { PointerEvent as ReactPointerEvent, ReactNode, Ref } from "react";
 
 import { arcPath, minuteOfDay, pointAt } from "./dial.ts";
+import { hourParts } from "./format.ts";
+import { useLocale } from "./i18n/index.ts";
 import { MoonIcon, SunIcon } from "./icons.tsx";
 
 // The 24-hour dial, drawn: a face with midnight at the top and noon at the
@@ -150,8 +152,12 @@ export function ClockDial({
 
 /** The face: an hour tick every hour and a quarter tick between, the even
  *  hours numbered, and — when nothing sits in the middle — the moon under
- *  midnight and the sun over noon. */
+ *  midnight and the sun over noon. The numerals are the locale's clock: 0 to
+ *  22 on a 24-hour one, and on a 12-hour one 12, 2, 4 … twice round, with the
+ *  half of the day written small under midnight, 6, noon and 6 again, so the
+ *  two sixes are never confused. */
 function Face({ glyphs }: { glyphs: boolean }) {
+  const locale = useLocale();
   const ticks = [];
   for (let q = 0; q < 96; q++) {
     const minute = q * 15;
@@ -174,18 +180,32 @@ function Face({ glyphs }: { glyphs: boolean }) {
   const numerals = [];
   for (let h = 0; h < 24; h += 2) {
     const p = pointAt(DIAL_C, DIAL_C, NUMERAL_R, h * 60);
+    const major = h % 6 === 0;
+    const { numeral, period } = hourParts(h, locale);
+    const stacked = major && period !== null;
     numerals.push(
       <text
         key={h}
         x={p.x}
         y={p.y}
-        dy="0.35em"
+        dy={stacked ? "0.05em" : "0.35em"}
         textAnchor="middle"
-        className={`tabular-nums ${h % 6 === 0 ? "fill-fg-bright" : "fill-muted"}`}
-        fontSize={h % 6 === 0 ? 14 : 11}
-        fontWeight={h % 6 === 0 ? 600 : 400}
+        className={`tabular-nums ${major ? "fill-fg-bright" : "fill-muted"}`}
+        fontSize={major ? 14 : 11}
+        fontWeight={major ? 600 : 400}
       >
-        {h}
+        {numeral}
+        {stacked && (
+          <tspan
+            x={p.x}
+            dy="1.05em"
+            fontSize={8}
+            fontWeight={500}
+            className="fill-muted"
+          >
+            {period}
+          </tspan>
+        )}
       </text>,
     );
   }

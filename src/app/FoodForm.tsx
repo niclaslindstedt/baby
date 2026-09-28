@@ -8,7 +8,8 @@ import {
 
 import type { FoodPreset } from "./data/foods.ts";
 import { ClockIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { formatTimeOfDay } from "./format.ts";
+import { useLang, useLocale, useT } from "./i18n/index.ts";
 import {
   newId,
   NUTRIENT_KEYS,
@@ -65,6 +66,7 @@ const TIME_CHIPS = [
 
 export function FoodForm({ initial, onSave, onCancel }: Props) {
   const t = useT();
+  const locale = useLocale();
   const lang = useLang();
   const [name, setName] = useState(initial?.name ?? "");
   const [amount, setAmount] = useState(initial ? String(initial.amount) : "");
@@ -244,7 +246,7 @@ export function FoodForm({ initial, onSave, onCancel }: Props) {
                     : "border-line text-fg hover:bg-surface-2"
                 }`}
               >
-                {time}
+                {formatTimeOfDay(time, locale)}
               </button>
             );
           })}

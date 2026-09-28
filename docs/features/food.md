@@ -15,7 +15,8 @@ drinks sold from a year.
 A food may also carry **the times of day it is usually given**. That is still
 not a diary — the times describe a typical day, like the amount beside them,
 and you change them when the normal day changes. Leave them off for something
-given whenever it suits.
+given whenever it suits. The times read in your phone's clock: "2:00 PM" on a
+US phone, "14:00" in Sweden.
 
 Today's **Food regimen** card then answers the app's central question:
 **does the regimen cover the day?** Energy first — against the recommendation

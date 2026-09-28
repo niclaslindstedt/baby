@@ -127,7 +127,8 @@ because children under two need somewhat fattier food than adults.
 ## Over the day
 
 The same comparison, drawn with the clock on the x axis. A food may carry the
-**times of day it is typically given** (`Food.times`, `HH:MM`, ascending), and
+**times of day it is typically given** (`Food.times`, `HH:MM`, ascending —
+stored on the 24-hour clock, shown in the device's), and
 the daily amount is split evenly across them — "porridge, 150 g a day, at
 08:00 and 18:00" is two 78 kcal steps, not two 156 kcal meals. That is still
 the regimen and not a diary: the times describe a typical day and are edited

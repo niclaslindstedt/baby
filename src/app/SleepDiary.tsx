@@ -2,7 +2,8 @@
 import { linearScale } from "@niclaslindstedt/oss-framework/charts";
 import { useMeasuredSize } from "@niclaslindstedt/oss-framework/hooks";
 
-import { useT } from "./i18n/index.ts";
+import { formatAxisHour } from "./format.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import type { DiaryDay } from "./sleep.ts";
 
 // The sleep diary: one row per calendar day, midnight to midnight, with each
@@ -28,6 +29,7 @@ const HOURS = [0, 6, 12, 18, 24];
 
 export function SleepDiary({ days, labels, ariaLabel, desc }: Props) {
   const t = useT();
+  const locale = useLocale();
   const { ref, size } = useMeasuredSize<HTMLDivElement>();
   const width = Math.max(240, Math.round(size?.width ?? FALLBACK_WIDTH));
   const plotLeft = LABEL_WIDTH;
@@ -63,7 +65,7 @@ export function SleepDiary({ days, labels, ariaLabel, desc }: Props) {
               textAnchor={h === 0 ? "start" : h === 24 ? "end" : "middle"}
               className="fill-muted text-[10px] tabular-nums"
             >
-              {String(h).padStart(2, "0")}
+              {formatAxisHour(h, locale)}
             </text>
           </g>
         ))}

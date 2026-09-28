@@ -166,7 +166,11 @@ Sweden's formats in Swedish, and in English the device's own English — a US
 phone reads "Sep 21" and "9:03 PM", a British one "21 Sept" and "21:03", and a
 device with no English keeps the British formats. The `format.ts` helpers take
 that tag as a required argument, so no screen or chart can format in a locale
-of its own. The same tag picks the units a body is read and typed in
+of its own — and that holds for times of no particular day too: a food's
+`HH:MM` times (`formatTimeOfDay`), the minute its coverage is met
+(`formatMinuteOfDay`), the charts' hour axes (`formatAxisHour`) and the
+dial's numerals (`hourParts`) are all written in the locale's clock, 12-hour
+on a US phone. The same tag picks the units a body is read and typed in
 (`units.ts`): pounds, ounces and inches for a US locale, converted at the
 edge — the document stays metric.
 

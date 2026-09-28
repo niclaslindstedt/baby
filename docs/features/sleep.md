@@ -16,7 +16,9 @@ when a nap's wake was never tapped, **Usual morning** for a night's — as one
 tap.
 
 **A clock that is running.** The top of the tab is a 24-hour dial — midnight at
-the top, noon at the bottom — with the last day's sleeps drawn round it where
+the top, noon at the bottom, numbered in your phone's clock (0 to 22 in
+Sweden; 12, 2, 4 … twice round on a US phone, with AM and PM under midnight,
+six, noon and six) — with the last day's sleeps drawn round it where
 they fell and a dot pulsing at the time now. While your child sleeps, the sleep
 grows round the face and a stopwatch in the middle counts it to the second;
 while they are awake, it counts the time since they woke.

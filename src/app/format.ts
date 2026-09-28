@@ -17,7 +17,7 @@ import {
   formatNumber,
 } from "@niclaslindstedt/oss-framework/format";
 
-import type { Measurement } from "./types.ts";
+import { isClockTime, minutesOfClock, type Measurement } from "./types.ts";
 import { cmToFtIn, cmToIn, kgToLbOz, unitSystemFor } from "./units.ts";
 
 /** A `DayKey` as a local `Date` at midnight, or null when it isn't a real
@@ -47,12 +47,76 @@ export function formatDayYear(day: DayKey, locale: string): string {
   );
 }
 
+/** The shape every wall-clock time in the app is written in: the locale's
+ *  own clock, so "21:03" in Sweden and "9:03 PM" on a US phone. */
+const WALL_CLOCK: Intl.DateTimeFormatOptions = {
+  hour: "numeric",
+  minute: "2-digit",
+};
+
 /** An ISO timestamp as a wall-clock time ("21:03" / "9:03 PM"), local time,
  *  because that is when the tap happened for the person who tapped. */
 export function formatClock(iso: string, locale: string): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "";
-  return formatDate(date, locale, { hour: "numeric", minute: "2-digit" });
+  return formatDate(date, locale, WALL_CLOCK);
+}
+
+/** Minutes past midnight on no day in particular — the moment a day's food
+ *  covers its need — in the same clock as `formatClock`: "14:00" / "2:00 PM". */
+export function formatMinuteOfDay(minutes: number, locale: string): string {
+  const m = ((Math.round(minutes) % 1440) + 1440) % 1440;
+  // Any date will do; the first of January has no daylight-saving jump in
+  // it anywhere the app is used, so every minute of it exists.
+  const date = new Date(2000, 0, 1, Math.floor(m / 60), m % 60);
+  return formatDate(date, locale, WALL_CLOCK);
+}
+
+/** A food's usual time (`HH:MM`, as the document keeps it) in the locale's
+ *  clock. A string that is not one is shown as it is. */
+export function formatTimeOfDay(time: string, locale: string): string {
+  return isClockTime(time)
+    ? formatMinuteOfDay(minutesOfClock(time), locale)
+    : time;
+}
+
+/** An hour of the day split the way the locale's clock says it: the numeral,
+ *  and on a 12-hour clock the half of the day ("6" and "AM"). `period` is
+ *  null on a 24-hour clock. `hour` 24 is midnight again. */
+export function hourParts(
+  hour: number,
+  locale: string,
+): { numeral: string; period: string | null } {
+  const h = ((Math.round(hour) % 24) + 24) % 24;
+  const parts = hourFormat(locale).formatToParts(new Date(2000, 0, 1, h));
+  const period = parts.find((p) => p.type === "dayPeriod")?.value ?? null;
+  if (period === null) return { numeral: String(h), period: null };
+  const numeral = parts.find((p) => p.type === "hour")?.value ?? String(h);
+  return { numeral, period };
+}
+
+/** Whether the locale's clock runs 1–12 twice rather than 0–23. */
+export function isTwelveHour(locale: string): boolean {
+  return hourParts(12, locale).period !== null;
+}
+
+/** An hour on a chart's time axis: "06" on a 24-hour clock, as a timetable
+ *  prints it, and "6 AM" on a 12-hour one. 24 is the midnight that ends the
+ *  day — "24" and "12 AM". */
+export function formatAxisHour(hour: number, locale: string): string {
+  const { numeral, period } = hourParts(hour, locale);
+  if (period === null) return String(Math.round(hour)).padStart(2, "0");
+  return `${numeral} ${period}`;
+}
+
+const hourFormats = new Map<string, Intl.DateTimeFormat>();
+function hourFormat(locale: string): Intl.DateTimeFormat {
+  let format = hourFormats.get(locale);
+  if (!format) {
+    format = new Intl.DateTimeFormat(locale, { hour: "numeric" });
+    hourFormats.set(locale, format);
+  }
+  return format;
 }
 
 /** An instant in milliseconds as a wall-clock time — `formatClock` for the
