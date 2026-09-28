@@ -123,11 +123,38 @@ function encodePng(width, height, rgba) {
     raw[y * (width * 4 + 1)] = 0; // filter: none
     rgba.copy(raw, y * (width * 4 + 1) + 1, y * width * 4, (y + 1) * width * 4);
   }
+  return pngFile(width, height, 6, raw); // colour type 6: RGBA
+}
+
+// The same pixels with no alpha channel at all (colour type 2, RGB), for the
+// one image that must not have one: the App Store rejects an app icon with an
+// alpha channel even when every pixel is opaque. The tile must actually be
+// opaque — a pixel with any transparency throws rather than being flattened
+// onto a colour nobody chose.
+function encodeOpaquePng(width, height, rgba) {
+  const raw = Buffer.alloc((width * 3 + 1) * height);
+  for (let y = 0; y < height; y++) {
+    const row = y * (width * 3 + 1);
+    raw[row] = 0; // filter: none
+    for (let x = 0; x < width; x++) {
+      const at = (y * width + x) * 4;
+      if (rgba[at + 3] !== 255) {
+        throw new Error(`opaque icon: pixel ${x},${y} is not fully opaque`);
+      }
+      raw[row + 1 + x * 3] = rgba[at];
+      raw[row + 2 + x * 3] = rgba[at + 1];
+      raw[row + 3 + x * 3] = rgba[at + 2];
+    }
+  }
+  return pngFile(width, height, 2, raw); // colour type 2: RGB
+}
+
+function pngFile(width, height, colourType, raw) {
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(width, 0);
   ihdr.writeUInt32BE(height, 4);
   ihdr[8] = 8; // bit depth
-  ihdr[9] = 6; // colour type: RGBA
+  ihdr[9] = colourType;
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
     chunk("IHDR", ihdr),
@@ -363,7 +390,8 @@ console.log(
 // than two that resemble each other. Written here rather than kept as a
 // separate set of files precisely so they cannot drift.
 //   icon          — iOS wants a square, fully opaque icon and applies its own
-//                   mask, so the tile is not pre-rounded.
+//                   mask, so the tile is not pre-rounded, and the PNG carries
+//                   no alpha channel (the App Store refuses one that does).
 //   adaptive-icon — Android masks the foreground to whatever shape the
 //                   launcher uses, so the mark is inset to the safe zone and
 //                   the tile runs to the edges (app.config.js paints the same
@@ -372,7 +400,10 @@ console.log(
 //                   corners.
 const nativeAssets = join(root, "native", "assets");
 mkdirSync(nativeAssets, { recursive: true });
-writeFileSync(join(nativeAssets, "icon.png"), renderIcon(1024, { radius: 0 }));
+writeFileSync(
+  join(nativeAssets, "icon.png"),
+  encodeOpaquePng(1024, 1024, renderIconRgba(1024, { radius: 0 })),
+);
 writeFileSync(
   join(nativeAssets, "adaptive-icon.png"),
   renderIcon(1024, { pad: 0.18, radius: 0 }),
