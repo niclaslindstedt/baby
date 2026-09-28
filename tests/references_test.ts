@@ -3,9 +3,8 @@
 // cites it. Every threshold in the app cites its source (AGENTS.md, rule
 // three); a module does it with a `[ref:<id>]` tag beside the number, and the
 // registry carries the full record — who, where, the DOI or URL, the words
-// the number was taken from, and how strong the evidence is. OSS_SPEC.md §24
-// asks for the same, and `oss-spec validate` checks it too; this test is the
-// one a contributor sees first.
+// the number was taken from, and how strong the evidence is. This test is
+// what holds the two together.
 //
 // The rules are the framework's `auditReferences`: every tag in `src/` names
 // an entry; every entry is cited somewhere; each entry's `usedBy` lists

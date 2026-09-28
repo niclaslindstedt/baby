@@ -5,20 +5,6 @@ repo. `CLAUDE.md`, `.cursorrules`, `.windsurfrules`, `GEMINI.md`,
 `.aider.conf.md`, and `.github/copilot-instructions.md` are symlinks to this
 file.
 
-## OSS Spec conformance
-
-This repository adheres to [`OSS_SPEC.md`](OSS_SPEC.md), a prescriptive
-specification for open source project layout, documentation, automation, and
-governance. A copy of the spec lives at the repository root so contributors and
-AI agents can consult it without leaving the repo; its version is recorded in
-the YAML front matter at the top of the file.
-
-Run `oss-spec validate .` (or the standalone
-[`validate.sh`](https://github.com/niclaslindstedt/oss-spec/blob/main/scripts/validate.sh))
-to verify conformance. When in doubt about a layout, naming, or workflow
-decision, consult the relevant section of `OSS_SPEC.md` — it is the source of
-truth for the conventions this repo follows.
-
 ## What this app is, and the three rules that follow from it
 
 A baby tracker holds health data about a child. The whole design premise is
@@ -306,7 +292,7 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
 - `src/app/units.ts` — US units at the edge: pounds/ounces and inches for a
   US locale, converted on display (`format.ts`) and in the forms' drafts, the
   document always metric and the WHO curves drawn by a linear scale.
-- `src/output.ts` — the §19.4 central output module.
+- `src/output.ts` — the central output module.
 - `pwa-plugin.ts` — emits the service worker + version/precache manifests
   the framework's `usePwaUpdate` consumes.
 
@@ -364,9 +350,8 @@ citation next to the value, and update `docs/` (see the sync table) in the
 same PR.
 
 **The references registry.** `docs/references.json` is the one list of every
-source the app's numbers and claims rest on, keyed by a stable id — the
-shape OSS_SPEC.md §24 prescribes, which `oss-spec validate` checks too:
-authors or organization, title, where it was published, the DOI / URL / ISBN,
+source the app's numbers and claims rest on, keyed by a stable id. Each
+entry carries its authors or organization, title, where it was published, the DOI / URL / ISBN,
 the language, the kind of evidence (`EVIDENCE` in the framework's
 `references` module:
 `guideline`, `consensus`, `systematic-review`, `meta-analysis`,
@@ -421,7 +406,7 @@ a new one arrives with its own.
 
 ## Test conventions
 
-Tests live in `tests/` with a `_test` suffix (OSS_SPEC §20.2) and run under
+Tests live in `tests/` with a `_test` suffix and run under
 Vitest in the `node` environment — they cover the pure domain modules
 (`age`, `growth`, `nutrition`, `diapers`, `sleep` — `sleepEdit` included —,
 `dial`, `vaccines`, `merge`, `migrations`, `references` — which also holds
@@ -439,10 +424,11 @@ a reading under Growth, and check that the Today cards move with it.
 
 ## Source file size
 
-- Non-test source files must stay under **1000 physical lines** (§20.5 of
-  `OSS_SPEC.md`). Prefer splitting by concern over relaxing the cap.
-- A file may opt out with `oss-spec:allow-large-file: <reason>` in its first
-  20 lines; the reason must be real.
+- Non-test source files must stay under **1000 physical lines**. Prefer
+  splitting by concern over relaxing the cap.
+- A file may opt out with `guidelines:allow-large-file: <reason>` in its first
+  20 lines; the reason must be real, and a marked file is split when it is
+  next touched.
 
 ## Changelog and feature docs
 
@@ -532,28 +518,26 @@ references live under `docs/` proper.
 
 ## Website staleness
 
-The app _is_ the website (OSS_SPEC §11.2 / §11.4) — `pages.yml` builds it and
+The app _is_ the website — `pages.yml` builds it and
 deploys `dist/`. There is no separate marketing site to drift out of date, but
 the copy in `index.html` does: when the app's description changes, update
 `index.html`'s title/description/Open Graph tags and the manifest copy in
 `pwa-plugin.ts` together.
 
-oss-spec:unlisted-website: the web build is a testing surface; users install the app from its store listing
-
-That makes the site unlisted (OSS_SPEC §11.3.12): every page carries
+The website is a testing surface, not where people get the app: they install
+it from its store listing. So the site is unlisted — every page carries
 `<meta name="robots" content="noindex">`, `robots.txt` keeps allowing the fetch
 that reads it, and there is no SEO and no size budget.
 
 ## Maintenance skills
 
-Skills live under `.agents/skills/` (OSS_SPEC §21); `.claude/skills` is a
+Skills live under `.agents/skills/`; `.claude/skills` is a
 symlink to that tree. Each has a `SKILL.md` with its discovery process, its
 source→output mapping, and a `.last-updated` marker.
 
-| Skill             | Runs when                                                                 |
-| ----------------- | ------------------------------------------------------------------------- |
-| `maintenance`     | The registry and run order for every other skill — start here             |
-| `write-changeset` | Any user-visible change, before opening the PR                            |
-| `update-docs`     | `src/app/` changed in a way a `docs/` topic describes                     |
-| `update-readme`   | Commands, configuration, or the feature set changed                       |
-| `sync-oss-spec`   | `validate.sh` reports violations, or the spec copy at the root was bumped |
+| Skill             | Runs when                                                     |
+| ----------------- | ------------------------------------------------------------- |
+| `maintenance`     | The registry and run order for every other skill — start here |
+| `write-changeset` | Any user-visible change, before opening the PR                |
+| `update-docs`     | `src/app/` changed in a way a `docs/` topic describes         |
+| `update-readme`   | Commands, configuration, or the feature set changed           |

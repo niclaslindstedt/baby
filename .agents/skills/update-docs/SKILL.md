@@ -5,7 +5,7 @@ description: "Use when source under src/ has changed and the docs/ topics that d
 
 # Update docs
 
-Keeps `docs/` honest (OSS_SPEC §11.1). The docs in this repo describe _behaviour that is derived_, not stored, and quote the recommendations the code compares against — so a one-line change to a floor in `diapers.ts` or a target in `nutrition.ts` can silently falsify a paragraph in `docs/diapers.md` or `docs/nutrition.md` without breaking a single test. That is the specific drift this skill exists to catch.
+Keeps `docs/` honest. The docs in this repo describe _behaviour that is derived_, not stored, and quote the recommendations the code compares against — so a one-line change to a floor in `diapers.ts` or a target in `nutrition.ts` can silently falsify a paragraph in `docs/diapers.md` or `docs/nutrition.md` without breaking a single test. That is the specific drift this skill exists to catch.
 
 ## When to run
 

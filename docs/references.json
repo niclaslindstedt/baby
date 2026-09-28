@@ -1,5 +1,5 @@
 {
-  "$comment": "Every source the app's numbers and claims rest on, keyed by the id code cites as [ref:<id>]. usedBy lists the files that cite each entry; tests/references_test.ts keeps it and the tags in step (OSS_SPEC.md §24). summary and topics are the app's own: the parent-facing line the Sources screen shows, in both languages, and the tracker it is listed under. See AGENTS.md, 'Every threshold cites its source'.",
+  "$comment": "Every source the app's numbers and claims rest on, keyed by the id code cites as [ref:<id>]. usedBy lists the files that cite each entry; tests/references_test.ts keeps it and the tags in step. summary and topics are the app's own: the parent-facing line the Sources screen shows, in both languages, and the tracker it is listed under. See AGENTS.md, 'Every threshold cites its source'.",
   "references": {
     "1177-amning": {
       "evidence": "health-service",

@@ -2,7 +2,7 @@
 // The references: every source the app's numbers and claims rest on, as the
 // app reads them.
 //
-// The registry itself is `docs/references.json` (OSS_SPEC.md §24): one entry
+// The registry itself is `docs/references.json`: one entry
 // per source, keyed by the id the code cites as `[ref:<id>]` beside the
 // number it supports. The machinery over it — the shape, the evidence
 // vocabulary and its ranking, how an entry is cited, the audit that holds

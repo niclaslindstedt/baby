@@ -18,7 +18,7 @@ import { Card, Heading } from "./ui.tsx";
 import { FEATURES } from "./useAppSettings.ts";
 
 // About, behind Settings: what the app is, and every published source its
-// numbers rest on (OSS_SPEC.md §24.4). The list is the references registry
+// numbers rest on. The list is the references registry
 // itself, read through `references.ts` — never a copy kept by hand — grouped
 // by the tracker each source serves and ranked strongest evidence first.
 //

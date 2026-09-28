@@ -62,7 +62,7 @@ make demo         # the dev server on the demo document (VITE_SEED=demo)
 
 ## Tests
 
-Tests live in `tests/` with a `_test` suffix (OSS_SPEC §20.2) and cover the
+Tests live in `tests/` with a `_test` suffix and cover the
 pure domain modules — the growth standards and forecast, the nutrition
 assessment, the diaper norms, the vaccination timeline, the document merge,
 and the storage migrations. Run one file with

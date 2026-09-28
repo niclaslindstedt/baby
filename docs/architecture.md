@@ -122,8 +122,7 @@ is the registry of those sources — authors, title, journal or publisher,
 DOI / URL / ISBN, the kind of evidence, the verbatim quotes the numbers were
 taken from, what the app uses each for, and which files cite it — and code
 points into it with a `[ref:<id>]` tag in the comment beside the number.
-`tests/references_test.ts` keeps the two in step both ways, and
-`oss-spec validate` checks the same rules (OSS_SPEC.md §24). Every tracker's module is cited this way — `sleep.ts`, `growth.ts`,
+`tests/references_test.ts` keeps the two in step both ways. Every tracker's module is cited this way — `sleep.ts`, `growth.ts`,
 `nutrition.ts`, `diapers.ts` and `vaccines.ts`, with the WHO tables, the WHO
 month in `age.ts` and the food presets — and a claim in a catalog string
 carries its tag in a comment above the key.
