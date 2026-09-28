@@ -53,6 +53,10 @@ jobs:
           cache-dependency-path: native/package-lock.json
       - run: npm ci
       - run: npm run typecheck
+      # Expo's own health check — dependency versions against the SDK, the
+      # config schema, duplicate native modules — so a drift fails here rather
+      # than on an EAS builder.
+      - run: npm run doctor
 
   changeset:
     # Enforces that every PR touching user-visible code drops a

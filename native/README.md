@@ -66,6 +66,7 @@ make native-install      # or: npm --prefix native install
 make native-bundle       # build the web app into assets/webroot.zip
 make native-typecheck
 make native-prebuild     # inspect what the config generates
+npm --prefix native run doctor   # expo-doctor, as CI's native job runs it
 ```
 
 Then run it on a device or simulator (needs Xcode / Android Studio):
