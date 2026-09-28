@@ -102,13 +102,16 @@ listener that lets Dropbox sign in (`tauri/shell/src/oauth.rs`,
 it** — no injected global, no Tauri command. `tauri/shell/` holds every
 decision and needs no GUI toolkit; `tauri/src-tauri/` holds every effect. One
 seam reaches back into this tree, `VITE_SHELL_BUILD`, set by the shell's site
-build, which switches off the service-worker half of `appPwa` and — through
-`__SHELL_BUILD__` — the in-app update prompt. A desktop build updates by being replaced.
-Both store builds (this shell's and the phone wrapper's) also set
+build — and by the phone wrapper's — which switches off the service-worker
+half of `appPwa` and — through `__SHELL_BUILD__` — the in-app update prompt. A
+desktop or phone build updates by being replaced, never by a worker. Both
+store builds also set
 `VITE_EMBEDDED_BUILD`, which leaves the Open Graph / Twitter Card tags and the
 Pages `CNAME` out: **a store app carries no link back to the source** — no
 repository, issues, releases or sponsor link, and not the author's handle
-anywhere — and both `bundle-web.mjs` scripts refuse a bundle that names it. The package's
+anywhere — and both `bundle-web.mjs` scripts refuse a bundle that names it,
+or that holds a `sw.js`. Only the phone's sets `VITE_NATIVE_BUILD`, which is
+what gives its top bar the store listing's name (`app-name.ts`). The package's
 name and identifier come from `APP_DISPLAY_NAME` and `APP_BUNDLE_ID` at
 packaging time (`tauri/scripts/package.mjs`), like the phone app's. The macOS
 package is signed and notarized by `.github/actions/apple-signing` when its six

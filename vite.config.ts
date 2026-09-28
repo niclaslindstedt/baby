@@ -71,14 +71,16 @@ const version = process.env.GITHUB_SHA
   ? buildLabel
   : `${buildLabel}+${new Date().toISOString()}`;
 
-// A build for the DESKTOP SHELL (tauri/), set by `tauri/scripts/bundle-web.mjs`.
+// A build for a SHELL — the desktop app (tauri/) and the phone app (native/),
+// set by both `bundle-web.mjs` scripts.
 //
 // It changes exactly one thing, and it is about the medium rather than the
 // audience: the service worker is left out (`serviceWorker: false` below —
-// everything else `appPwa` writes into the `<head>` still applies). A desktop
+// everything else `appPwa` writes into the `<head>` still applies). A shell
 // build has no deployment to discover an update from — a new version arrives
-// as a new binary — so a worker here would precache a copy of files already on
-// local disk and then serve the page from ITS copy. `__SHELL_BUILD__` carries
+// as a new binary, from GitHub Releases or the store — so a worker here would
+// precache a copy of files already on local disk and then serve the page from
+// ITS copy. `__SHELL_BUILD__` carries
 // the same fact into the app, where it switches off the update prompt that has
 // nothing left to prompt about.
 const shellBuild = process.env.VITE_SHELL_BUILD === "on";

@@ -14,7 +14,11 @@ import { appName, PROJECT_NAME } from "../app-name.ts";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("appName", () => {
-  const phone = { VITE_EMBEDDED_BUILD: "on" };
+  const phone = {
+    VITE_NATIVE_BUILD: "on",
+    VITE_SHELL_BUILD: "on",
+    VITE_EMBEDDED_BUILD: "on",
+  };
 
   it("is the listing name in the phone build", () => {
     expect(appName({ ...phone, APP_DISPLAY_NAME: "Nird Baby" })).toBe(
@@ -47,7 +51,19 @@ describe("appName", () => {
       "utf8",
     );
     expect(script).toMatch(/APP_DISPLAY_NAME: DISPLAY_NAME/);
+    // The phone's own flag, the medium's (no service worker, no update
+    // prompt) and the store app's (no link to the source).
+    expect(script).toMatch(/VITE_NATIVE_BUILD: "on"/);
+    expect(script).toMatch(/VITE_SHELL_BUILD: "on"/);
     expect(script).toMatch(/VITE_EMBEDDED_BUILD: "on"/);
-    expect(script).not.toMatch(/VITE_SHELL_BUILD/);
+  });
+
+  it("is not what the desktop bundle is built with", () => {
+    const script = readFileSync(
+      join(root, "tauri", "scripts", "bundle-web.mjs"),
+      "utf8",
+    );
+    expect(script).not.toMatch(/VITE_NATIVE_BUILD/);
+    expect(script).not.toMatch(/APP_DISPLAY_NAME/);
   });
 });

@@ -8,10 +8,20 @@
 // The web build is a plain `npm run build` at the repo root — base `/`, which
 // is exactly what a localhost origin wants — and NOTHING in `src/` is changed
 // for the app. If the wrapper ever needs the web app to behave differently,
-// that is a sign it has stopped being thin. The one flag it sets,
-// VITE_EMBEDDED_BUILD, leaves the web edition's link-preview tags and its
-// GitHub Pages `CNAME` out of the build (see `vite.config.ts`). The one value
-// it passes is the name: APP_DISPLAY_NAME, resolved by `identifiers.js`
+// that is a sign it has stopped being thin. It sets three flags (see
+// `vite.config.ts`):
+//
+//   - VITE_SHELL_BUILD is about the medium, exactly as for the desktop shell:
+//     the files ship inside the binary and a new version arrives from the
+//     store, so there is no service worker (it would only put a staler cache
+//     in front of files already on the device) and no update prompt nobody
+//     can act on.
+//   - VITE_EMBEDDED_BUILD leaves the web edition's link-preview tags and its
+//     GitHub Pages `CNAME` out: a store app carries no link to the source.
+//   - VITE_NATIVE_BUILD says which store app this is — the phone's, the one
+//     that ships under a store listing and so takes the listing's name.
+//
+// The one value it passes is the name: APP_DISPLAY_NAME, resolved by `identifiers.js`
 // exactly as `app.config.js` resolves the name under the icon — the listing
 // name when it is set, the project's own name ("Baby") in a plain checkout —
 // so the wordmark inside the app is always the name outside it
@@ -27,6 +37,11 @@
 // build today — the web app has no profile-dependent output — but the seam is
 // where a "strip the developer menu from store builds" knob would land, and
 // having the plumbing already correct is cheaper than retrofitting it.
+//
+// The flags are build-time, so `--skip-build` re-zips whatever the last build
+// left in `dist/` — and a website build there carries the service worker
+// (`sw.js`) and the link-preview tags. The zip is refused when the webroot
+// holds either (`webroot-guard.mjs`).
 //
 // The zip is a build artifact (gitignored). Generate it before `eas build`;
 // the root `.easignore` is what keeps it in the EAS upload despite that.
@@ -44,6 +59,8 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { zipSync } from "fflate";
+
+import { webrootProblems } from "./webroot-guard.mjs";
 
 const APP_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const REPO_DIR = resolve(APP_DIR, "..");
@@ -84,6 +101,8 @@ if (!skipBuild) {
     env: {
       ...process.env,
       VITE_EMBEDDED_BUILD: "on",
+      VITE_NATIVE_BUILD: "on",
+      VITE_SHELL_BUILD: "on",
       APP_DISPLAY_NAME: DISPLAY_NAME,
     },
   });
@@ -123,24 +142,16 @@ if (count === 0 || !files["index.html"]) {
   );
 }
 
-// A store app carries no link back to the source — no repository, issues,
-// releases or sponsor link, and no trace of the author's GitHub handle at all,
-// not even the web edition's host. That is an owner decision with no
-// exceptions, and VITE_EMBEDDED_BUILD is what strips the site's own traces, so
-// this is the check that nothing else carries one: any file that names the
-// handle refuses the bundle.
-const FORBIDDEN = "niclaslindstedt";
-const tainted = Object.entries(files)
-  .filter(([, bytes]) =>
-    Buffer.from(bytes).toString("latin1").toLowerCase().includes(FORBIDDEN),
-  )
-  .map(([path]) => path);
-if (tainted.length) {
+// Refuse a webroot the phone app must not ship: one holding a service worker
+// (`sw.js` — VITE_SHELL_BUILD=on leaves it out) or naming the author's handle
+// (a store app carries no link to the source). A `dist/` left by a website
+// build, which `--skip-build` would re-zip, carries both.
+const problems = webrootProblems(files);
+if (problems.length) {
   console.error(
-    `\n✗ refusing the bundle: ${tainted.join(", ")} name(s) "${FORBIDDEN}". ` +
-      `A store app carries no link to the source. Rebuild through this ` +
-      `script (not --skip-build over a plain site build), or remove the ` +
-      `trace at build time.\n`,
+    `\n✗ refusing the bundle:\n  ${problems.join("\n  ")}\n` +
+      `Rebuild through this script (not --skip-build over a plain site ` +
+      `build), so the flags compile them out.\n`,
   );
   process.exit(1);
 }

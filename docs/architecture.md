@@ -270,3 +270,8 @@ framework toast's say-so — never mid-use. The cache id is derived from the
 deploy base (`src/app/pwa.ts`) so the `/` and `/preview/` channels never share
 a precache, and the root worker disowns the preview path so each channel's own
 worker serves its pages.
+
+The desktop and phone apps carry no worker at all: their bundle scripts build
+with `VITE_SHELL_BUILD=on`, which leaves `sw.js` and the update prompt out —
+a new version arrives as a new binary — and refuse a webroot that still holds
+one.
