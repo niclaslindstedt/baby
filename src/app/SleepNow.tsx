@@ -5,7 +5,7 @@ import { ClockDial, type DialArc } from "./ClockDial.tsx";
 import { sleepNowLine } from "./copy.ts";
 import { formatInstant } from "./format.ts";
 import { MoonIcon, SunIcon, SunriseIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { Elapsed, FillRing, ProgressRing } from "./live.tsx";
 import {
   currentSleep,
@@ -39,8 +39,7 @@ type Props = {
 
 export function SleepNow({ data, now, name }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const current = currentSleep(data, now);
   const lastEnd = lastEndedSleep(data, now);
   const awakeSince =

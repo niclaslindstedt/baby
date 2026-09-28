@@ -25,7 +25,7 @@ import {
 } from "./growth.ts";
 import { GrowthChart } from "./GrowthChart.tsx";
 import { GrowthIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { sortedMeasurements, type AppData } from "./types.ts";
 import { Card, Heading } from "./ui.tsx";
 import { ViewModal } from "./ViewModal.tsx";
@@ -52,8 +52,7 @@ type Props = {
 
 export function GrowthModal({ open, onClose, data, today, standards }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const child = data.child;
   const [indicator, setIndicator] = useState<Indicator>("weight");
 

@@ -6,7 +6,7 @@ import { CheckIcon } from "@niclaslindstedt/oss-framework/components";
 
 import { formatDayYear } from "./format.ts";
 import { SyringeIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import type { AppData } from "./types.ts";
 import { Card, Heading } from "./ui.tsx";
 import {
@@ -41,8 +41,7 @@ type Visit = { due: DayKey; timing: DoseTiming; entries: TimelineEntry[] };
 
 export function VaccinesModal({ open, onClose, data, today }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
 
   const entries = useMemo(() => timeline(data, today), [data, today]);
   const extras = useMemo(() => extraRecords(data), [data]);

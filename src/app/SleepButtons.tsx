@@ -4,7 +4,7 @@ import { useState, type ComponentType } from "react";
 import { childName, durationLabel } from "./copy.ts";
 import { formatClock, formatInstant } from "./format.ts";
 import { MoonIcon, SunIcon, SunriseIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { Elapsed } from "./live.tsx";
 import { currentSleep, lastEndedSleep } from "./sleep.ts";
 import {
@@ -77,8 +77,7 @@ export function SleepButtons({
   showStatus = true,
 }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const now = useNow(data);
   const current = currentSleep(data, now);
   const name = childName(t, data.child);

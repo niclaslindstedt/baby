@@ -11,7 +11,7 @@ import {
 import { childName, durationLabel } from "./copy.ts";
 import { formatClock, formatDay } from "./format.ts";
 import { AlertIcon, MoonIcon, SunIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { Elapsed } from "./live.tsx";
 import { currentSleep, recentSleepsByDay, unfinishedSleeps } from "./sleep.ts";
 import { SleepButtons } from "./SleepButtons.tsx";
@@ -66,8 +66,7 @@ export function SleepScreen({
   onRemove,
 }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const name = childName(t, data.child);
   const now = useNow(data);
   const [editing, setEditing] = useState<Editing | null>(null);

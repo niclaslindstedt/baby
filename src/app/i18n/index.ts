@@ -11,11 +11,14 @@
 // health centre uses ("BVC", "MPR", "årskurs") are the words a parent looks
 // for.
 
+import { useMemo } from "react";
+
 import {
   createI18n,
   detectBrowserLanguage,
 } from "@niclaslindstedt/oss-framework/i18n";
 
+import { deviceLanguages, localeFor } from "../locale.ts";
 import { en, type Catalog } from "./en.ts";
 
 export type Lang = "en" | "sv";
@@ -27,14 +30,23 @@ export const i18n = createI18n<Lang, Catalog>({
   fallbackLang: "en",
   fallbackCatalog: en,
   loaders: { sv: () => import("./sv.ts").then((m) => m.sv) },
-  // Two-letter codes → concrete BCP-47 tags for `<html lang>` / Intl.
-  toBcp47: (lang) => (lang === "sv" ? "sv-SE" : "en-GB"),
+  // Two-letter codes → concrete BCP-47 tags for `<html lang>` / Intl: the
+  // same tag every formatter in the app takes (`useLocale`).
+  toBcp47: (lang) => localeFor(lang, deviceLanguages()),
   storageKey: "baby:language",
   eventName: "baby:language",
 });
 
 export const { LanguageRoot, useT, useLang, setLanguage, supportedLangs } =
   i18n;
+
+/** The locale every date, time and number is formatted in — the language's
+ *  words in the device's formats (see `locale.ts`). The one source of it:
+ *  no component names a tag of its own. */
+export function useLocale(): string {
+  const lang = useLang();
+  return useMemo(() => localeFor(lang, deviceLanguages()), [lang]);
+}
 
 /** The language a first run opens in: the browser's, when it is one the app
  *  speaks, else English. Read once, before the persisted choice exists. */

@@ -11,7 +11,7 @@ import {
 
 import { formatDayYear } from "./format.ts";
 import { SyringeIcon, TrashIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { doseName } from "./TodayScreen.tsx";
 import { newId, type AppData, type Vaccination } from "./types.ts";
 import { Card, DateField, Field, Heading, TextInput } from "./ui.tsx";
@@ -47,8 +47,7 @@ export function VaccinesScreen({
   onNotice,
 }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const entries = useMemo(() => timeline(data, today), [data, today]);
   const extras = useMemo(() => extraRecords(data), [data]);
   const [draft, setDraft] = useState<Draft | null>(null);

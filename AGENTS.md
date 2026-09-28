@@ -300,6 +300,9 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   `areaPath`, `barPath`, `linearScale`, `niceTicks`), not its finished chart
   components.
 - `src/app/i18n/en.ts` — every user-facing string; `sv.ts` must satisfy it.
+- `src/app/locale.ts` — the one locale every date, time and number is
+  formatted in (the language's words, the device's formats), read through
+  `useLocale()`; never name a BCP-47 tag in a component.
 - `src/output.ts` — the §19.4 central output module.
 - `pwa-plugin.ts` — emits the service worker + version/precache manifests
   the framework's `usePwaUpdate` consumes.

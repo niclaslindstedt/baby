@@ -160,6 +160,14 @@ four things ride in their own chunks behind `import()`:
 plus the Swedish catalog (`i18n/sv.ts`), which the framework's i18n runtime
 loads on demand.
 
+The language picks the words; the device picks the formats. Every date, time
+and number is formatted in one tag, `useLocale()` (over the pure `locale.ts`):
+Sweden's formats in Swedish, and in English the device's own English — a US
+phone reads "Sep 21" and "9:03 PM", a British one "21 Sept" and "21:03", and a
+device with no English keeps the British formats. The `format.ts` helpers take
+that tag as a required argument, so no screen or chart can format in a locale
+of its own.
+
 ## The shell
 
 ```

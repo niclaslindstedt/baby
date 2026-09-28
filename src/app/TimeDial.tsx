@@ -24,7 +24,7 @@ import {
   wrapDelta,
 } from "./dial.ts";
 import { formatInstant } from "./format.ts";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { useTick } from "./live.tsx";
 import { WHEN_STEP, whenDrag } from "./when.ts";
 
@@ -61,8 +61,7 @@ type Drag = { origin: number; last: number; delta: number };
 
 export function TimeDial({ value, onChange, earliest, icon, label }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const now = useTick(30_000);
   const svgRef = useRef<SVGSVGElement>(null);
   const drag = useRef<Drag | null>(null);

@@ -8,7 +8,7 @@ import { assessDiapers, dailyCounts, lastChange } from "./diapers.ts";
 import { DiaperChart } from "./DiaperChart.tsx";
 import { formatClock, formatDay } from "./format.ts";
 import { AlertIcon, DiaperIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import type { AppData } from "./types.ts";
 import { Card, Heading } from "./ui.tsx";
 import { ViewModal } from "./ViewModal.tsx";
@@ -38,8 +38,7 @@ type Props = {
 
 export function DiapersModal({ open, onClose, data, today, now }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const child = data.child;
   const breastfed = data.milk.kind === "breast" || data.milk.kind === "mixed";
 

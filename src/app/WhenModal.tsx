@@ -12,7 +12,7 @@ import {
 import { durationLabel, relativeDay } from "./copy.ts";
 import { formatInstant } from "./format.ts";
 import { ClockIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { useTick } from "./live.tsx";
 import { TimeDial } from "./TimeDial.tsx";
 import {
@@ -215,8 +215,7 @@ function Choices({
   onDial: (now: number) => void;
 }) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   // The tiles' times move with the clock; a tap reads the clock itself.
   const now = useTick(10_000);
   const nowAllowed = whenAllowed(now, now, earliest);
@@ -347,8 +346,7 @@ function DialConfirm({
   onPick: () => void;
 }) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const now = useTick(30_000);
   return (
     <Button

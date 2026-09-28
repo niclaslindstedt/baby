@@ -28,7 +28,7 @@ import {
 } from "./dial.ts";
 import { formatInstant } from "./format.ts";
 import { MoonIcon, SunIcon, SunriseIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { Elapsed, useTick } from "./live.tsx";
 import type { SleepDraft, SleepEditProblem } from "./sleepEdit.ts";
 
@@ -76,8 +76,7 @@ type Drag = {
 
 export function SleepClock({ draft, onChange, today, problem }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   // The open end grows with the clock; a half-minute is fine enough for an
   // arc and the notch, and the running digits tick on their own.
   const now = useTick(30_000);

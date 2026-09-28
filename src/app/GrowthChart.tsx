@@ -11,7 +11,7 @@ import {
 import { useMeasuredSize } from "@niclaslindstedt/oss-framework/hooks";
 
 import { DAYS_PER_MONTH } from "./age.ts";
-import { formatDay } from "./format.ts";
+import { formatDay, formatZ } from "./format.ts";
 import {
   curveAtZ,
   MAX_STANDARD_DAYS,
@@ -19,7 +19,7 @@ import {
   type Reading,
 } from "./growth.ts";
 import type { WhoTable } from "./data/whoGrowth.ts";
-import { useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import type { Sex } from "./types.ts";
 
 // The growth chart: the child's readings on the WHO standard, drawn the way
@@ -78,6 +78,7 @@ export function GrowthChart({
   height = 260,
 }: Props) {
   const t = useT();
+  const locale = useLocale();
   const { ref, size } = useMeasuredSize<HTMLDivElement>();
   const width = Math.max(240, Math.round(size?.width ?? FALLBACK_WIDTH));
   const [cursor, setCursor] = useState<number | null>(null);
@@ -186,11 +187,13 @@ export function GrowthChart({
             <span
               className={`text-sm font-bold ${cursor !== null ? "text-fg-bright" : "text-accent"}`}
             >
-              {formatDay(active.date)}
+              {formatDay(active.date, locale)}
             </span>
             <span className="text-xs text-fg">{formatValue(active.value)}</span>
             {active.z !== null && (
-              <span className="text-xs text-muted">{formatSd(active.z)}</span>
+              <span className="text-xs text-muted">
+                {formatZ(active.z, locale)}
+              </span>
             )}
           </>
         ) : (
@@ -417,10 +420,4 @@ function ageSpan(
   if (to - from >= MIN_SPAN_DAYS) return { from, to };
   const wideTo = Math.min(MAX_STANDARD_DAYS, from + MIN_SPAN_DAYS);
   return { from: Math.max(0, wideTo - MIN_SPAN_DAYS), to: wideTo };
-}
-
-/** "+0.4 SD" for the readout. */
-function formatSd(z: number): string {
-  const sign = z < -0.05 ? "−" : z > 0.05 ? "+" : "±";
-  return `${sign}${Math.abs(z).toFixed(1)} SD`;
 }

@@ -12,7 +12,7 @@ import {
   type ReferenceCardLabels,
 } from "@niclaslindstedt/oss-framework/references";
 
-import { useLang, useT } from "./i18n/index.ts";
+import { useLang, useLocale, useT } from "./i18n/index.ts";
 import { useReferences } from "./references.ts";
 import { Card, Heading } from "./ui.tsx";
 import { FEATURES } from "./useAppSettings.ts";
@@ -39,7 +39,7 @@ export function AboutScreen({ onBack }: Props) {
   const t = useT();
   const lang = useLang();
   const refs = useReferences();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
 
   const pending = refs ? unlistedTopics(refs, FEATURES) : [];
   const labels: ReferenceCardLabels = {

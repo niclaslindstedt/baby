@@ -15,7 +15,7 @@ import { FoodForm } from "./FoodForm.tsx";
 import { formatAmount, formatWhole } from "./format.ts";
 import { ageInDays } from "./age.ts";
 import { BowlIcon, ClockIcon, TrashIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { feedingStage, foodKcal } from "./nutrition.ts";
 import {
   sortedFoods,
@@ -58,8 +58,7 @@ export function FoodScreen({
   onNotice,
 }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const name = childName(t, data.child);
   const [editing, setEditing] = useState<Food | null | "new">(null);
   const [confirmDelete, setConfirmDelete] = useState<Food | null>(null);

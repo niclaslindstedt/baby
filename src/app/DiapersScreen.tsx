@@ -7,7 +7,7 @@ import { CloseIcon } from "@niclaslindstedt/oss-framework/components";
 import { DiaperButtons } from "./DiaperButtons.tsx";
 import { recentByDay } from "./diapers.ts";
 import { formatClock, formatDay } from "./format.ts";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import type { AppData, DiaperKind } from "./types.ts";
 import { Card, Heading } from "./ui.tsx";
 
@@ -43,8 +43,7 @@ type Props = {
 
 export function DiapersScreen({ data, today, onLog, onRemove }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
 
   const days = useMemo(
     () => recentByDay(data, today, LIST_DAYS),

@@ -12,7 +12,7 @@ import {
 import { ageLabel } from "./copy.ts";
 import { formatDayYear, measurementValues } from "./format.ts";
 import { GrowthIcon, TrashIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { MeasurementForm } from "./MeasurementForm.tsx";
 import { sortedMeasurements, type AppData, type Measurement } from "./types.ts";
 import { Card, EmptyState, Heading } from "./ui.tsx";
@@ -46,8 +46,7 @@ export function GrowthScreen({
   onNotice,
 }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const child = data.child!;
   const [editing, setEditing] = useState<Measurement | null | "new">(null);
   const [confirmDelete, setConfirmDelete] = useState<Measurement | null>(null);

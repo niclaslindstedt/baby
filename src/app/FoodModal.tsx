@@ -13,7 +13,7 @@ import {
 } from "./format.ts";
 import type { GrowthStandards } from "./growth.ts";
 import { AlertIcon, BowlIcon, ClockIcon } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import {
   assess,
   dayCoverage,
@@ -47,8 +47,7 @@ type Props = {
 
 export function FoodModal({ open, onClose, data, today, standards }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const name = childName(t, data.child);
 
   const assessment = useMemo(

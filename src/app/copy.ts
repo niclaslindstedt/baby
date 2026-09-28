@@ -22,7 +22,7 @@ export function ageLabel(
   t: TFn,
   birthDate: DayKey,
   today: DayKey,
-  locale?: string,
+  locale: string,
 ): string {
   if (today < birthDate) {
     return t("age.notBornYet", { date: formatDayYear(birthDate, locale) });
@@ -75,7 +75,7 @@ export function durationLabel(t: TFn, minutes: number): string {
 /** Where the child is right now, as the Sleep card and view open with it:
  *  "Asleep since 12:40 — 1 h 5 min", "Awake since 9:25 — 16 min", or a night
  *  waking. */
-export function sleepNowLine(t: TFn, next: NextSleep, locale?: string): string {
+export function sleepNowLine(t: TFn, next: NextSleep, locale: string): string {
   const time = formatInstant(next.since, locale);
   if (next.state === "nightWaking") return t("sleep.nightWaking", { time });
   return t(next.state === "asleep" ? "sleep.nowAsleep" : "sleep.nowAwake", {
@@ -89,7 +89,7 @@ export function sleepNowLine(t: TFn, next: NextSleep, locale?: string): string {
 export function sleepNextLine(
   t: TFn,
   next: NextSleep,
-  locale?: string,
+  locale: string,
 ): string | null {
   if (next.state !== "awake" || next.suggestion === null) return null;
   const s = next.suggestion;
@@ -110,7 +110,7 @@ export function relativeDay(
   t: TFn,
   ms: number,
   today: DayKey,
-  locale?: string,
+  locale: string,
 ): string {
   const day = dayKeyOf(new Date(ms));
   if (day === today) return t("sleep.clock.today");

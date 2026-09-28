@@ -12,7 +12,7 @@ import {
 } from "./copy.ts";
 import { formatAmount, formatDay, formatInstant } from "./format.ts";
 import { MoonIcon } from "./icons.tsx";
-import { useLang, useT, type TFn } from "./i18n/index.ts";
+import { useLocale, useT, type TFn } from "./i18n/index.ts";
 import {
   averageSleep,
   nextSleep,
@@ -65,8 +65,7 @@ type Props = {
 
 export function SleepModal({ open, onClose, data, today, now }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const child = data.child;
   const name = childName(t, child);
   const ageDays = child ? ageInDays(child.birthDate, today) : -1;

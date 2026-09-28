@@ -23,12 +23,12 @@ import type { Measurement } from "./types.ts";
 export const toDate = dayKeyToDate;
 
 /** "5 Jul" — how this app names a date in a list row or a chart tick. */
-export function formatDay(day: DayKey, locale?: string): string {
+export function formatDay(day: DayKey, locale: string): string {
   return formatDayKey(day, { day: "numeric", month: "short" }, locale);
 }
 
 /** "Sun, 5 Jul 2026" — the same date in full, for a heading. */
-export function formatFullDay(day: DayKey, locale?: string): string {
+export function formatFullDay(day: DayKey, locale: string): string {
   return formatDayKey(
     day,
     { weekday: "short", day: "numeric", month: "short", year: "numeric" },
@@ -37,7 +37,7 @@ export function formatFullDay(day: DayKey, locale?: string): string {
 }
 
 /** "5 Jul 2026" — a date with its year, for a record row. */
-export function formatDayYear(day: DayKey, locale?: string): string {
+export function formatDayYear(day: DayKey, locale: string): string {
   return formatDayKey(
     day,
     { day: "numeric", month: "short", year: "numeric" },
@@ -47,7 +47,7 @@ export function formatDayYear(day: DayKey, locale?: string): string {
 
 /** An ISO timestamp as a wall-clock time ("21:03" / "9:03 PM"), local time,
  *  because that is when the tap happened for the person who tapped. */
-export function formatClock(iso: string, locale?: string): string {
+export function formatClock(iso: string, locale: string): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "";
   return formatDate(date, locale, { hour: "numeric", minute: "2-digit" });
@@ -55,13 +55,13 @@ export function formatClock(iso: string, locale?: string): string {
 
 /** An instant in milliseconds as a wall-clock time — `formatClock` for the
  *  moments the derivations compute rather than read off a record. */
-export function formatInstant(ms: number, locale?: string): string {
+export function formatInstant(ms: number, locale: string): string {
   return formatClock(new Date(ms).toISOString(), locale);
 }
 
 /** A weight in kilograms, to the gram-ish precision a scale gives: two
  *  decimals under 10 kg, one above. */
-export function formatKg(kg: number, locale?: string): string {
+export function formatKg(kg: number, locale: string): string {
   const digits = kg < 10 ? 2 : 1;
   return `${formatNumber(kg, locale, {
     minimumFractionDigits: digits,
@@ -70,7 +70,7 @@ export function formatKg(kg: number, locale?: string): string {
 }
 
 /** A length in centimetres, to one decimal. */
-export function formatCm(cm: number, locale?: string): string {
+export function formatCm(cm: number, locale: string): string {
   return `${formatNumber(cm, locale, {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
@@ -84,7 +84,7 @@ export function formatCm(cm: number, locale?: string): string {
  *  mark because it is the second measurement in centimetres on the line.
  *
  *  The array, not a joined string, so a caller picks its own separator. */
-export function measurementValues(m: Measurement, locale?: string): string[] {
+export function measurementValues(m: Measurement, locale: string): string[] {
   const parts: string[] = [];
   if (m.weightKg !== null) parts.push(formatKg(m.weightKg, locale));
   if (m.lengthCm !== null) parts.push(formatCm(m.lengthCm, locale));
@@ -93,7 +93,7 @@ export function measurementValues(m: Measurement, locale?: string): string[] {
 }
 
 /** A z-score with its sign ("+0.4 SD", "−1.2 SD"), to one decimal. */
-export function formatZ(z: number, locale?: string): string {
+export function formatZ(z: number, locale: string): string {
   const abs = formatNumber(Math.abs(z), locale, {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
@@ -103,17 +103,17 @@ export function formatZ(z: number, locale?: string): string {
 }
 
 /** A whole number with the locale's grouping ("1 234"). */
-export function formatWhole(value: number, locale?: string): string {
+export function formatWhole(value: number, locale: string): string {
   return formatNumber(Math.round(value), locale, { maximumFractionDigits: 0 });
 }
 
 /** A number to at most one decimal, for nutrient amounts ("8.5", "10"). */
-export function formatAmount(value: number, locale?: string): string {
+export function formatAmount(value: number, locale: string): string {
   return formatNumber(value, locale, { maximumFractionDigits: 1 });
 }
 
 /** A share as a whole percent ("45%"). */
-export function formatPercent(share: number, locale?: string): string {
+export function formatPercent(share: number, locale: string): string {
   return formatNumber(share, locale, {
     style: "percent",
     maximumFractionDigits: 0,

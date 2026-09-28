@@ -24,7 +24,7 @@ import {
   MoonIcon,
   SyringeIcon,
 } from "./icons.tsx";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { FoodModal } from "./FoodModal.tsx";
 import { GrowthModal } from "./GrowthModal.tsx";
 import { assess, outgrown, regimenApplies } from "./nutrition.ts";
@@ -85,8 +85,7 @@ type View = "diapers" | "sleep" | "growth" | "food" | "vaccines";
 
 export function TodayScreen({ data, today, standards, features }: Props) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const child = data.child!;
   const name = childName(t, child);
   const ageDays = ageInDays(child.birthDate, today);

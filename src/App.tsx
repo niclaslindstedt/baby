@@ -38,7 +38,7 @@ import { DiapersScreen } from "./app/DiapersScreen.tsx";
 import { FoodScreen } from "./app/FoodScreen.tsx";
 import { GrowthScreen } from "./app/GrowthScreen.tsx";
 import { formatInstant } from "./app/format.ts";
-import { useLang, useT } from "./app/i18n/index.ts";
+import { useLocale, useT } from "./app/i18n/index.ts";
 import { appearanceFor } from "./app/look.ts";
 import { logStore } from "./app/log.ts";
 import { cacheIdForBase } from "./app/pwa.ts";
@@ -82,7 +82,7 @@ const RELOCK_AFTER_MS = 5 * 60_000;
 
 export function App() {
   const t = useT();
-  const locale = useLang() === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const { settings, update, setFeature } = useAppSettings();
   useApplyTheme(useMemo(() => appearanceFor(settings.theme), [settings.theme]));
 

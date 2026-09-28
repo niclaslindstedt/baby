@@ -18,7 +18,7 @@ import {
 } from "@niclaslindstedt/oss-framework/calendar";
 
 import { formatDayYear } from "./format.ts";
-import { useLang, useT } from "./i18n/index.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { sanitizeDecimal } from "./number.ts";
 
 /** The bordered-field look, matching the framework's own fields.
@@ -197,8 +197,7 @@ export function DateField({
   invalid?: boolean;
 }) {
   const t = useT();
-  const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   return (
     <DatePicker
       value={value === "" ? null : (value as DayKey)}

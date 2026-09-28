@@ -30,7 +30,13 @@ import { ageLabel, childName } from "./copy.ts";
 import type { DemoDataToggle } from "./dev/useDemoData.ts";
 import { formatCm, formatDayYear } from "./format.ts";
 import { BabyIcon } from "./icons.tsx";
-import { setLanguage, useLang, useT, type Lang } from "./i18n/index.ts";
+import {
+  setLanguage,
+  useLang,
+  useLocale,
+  useT,
+  type Lang,
+} from "./i18n/index.ts";
 import { mergeDocs } from "./merge.ts";
 import { useEncryptionLabels, usePinControlLabels } from "./SyncEncryption.tsx";
 import { serializeDoc } from "./migrations.ts";
@@ -101,7 +107,7 @@ export function SettingsScreen({
   );
   const pinControlLabels = usePinControlLabels();
   const lang = useLang();
-  const locale = lang === "sv" ? "sv-SE" : "en-GB";
+  const locale = useLocale();
   const child = store.data.child;
   const [confirmClear, setConfirmClear] = useState(false);
   const [busy, setBusy] = useState(false);
