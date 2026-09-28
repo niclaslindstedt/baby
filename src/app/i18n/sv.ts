@@ -185,6 +185,11 @@ export const sv: Catalog = {
         mistaps:
           "De senaste {count} sömnerna, fram till kl. {end}, varade under en minut var.",
       },
+      usual: {
+        bedtime: "Vanlig läggdags",
+        napLength: "Efter en vanlig tupplur, {duration}",
+        morning: "Vanlig morgon",
+      },
       removeMistap: "Ta bort den",
       removeMistaps: "Ta bort de {count}",
       problem: {
@@ -196,6 +201,7 @@ export const sv: Catalog = {
     },
     wokeUp: "Vaknade",
     takenBack: "Under en minut — inget loggat",
+    resumed: "Somnade om — samma sömn fortsätter",
     asleepNap: "Sover middag sedan {time}",
     asleepNight: "Sover för natten sedan {time}",
     startedNap: "Tupplur från {time}",

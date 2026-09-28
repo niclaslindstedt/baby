@@ -209,8 +209,9 @@ tile per usual lag showing the clock time it stands for and **Another time**
 on a single-handle dial (`TimeDial.tsx`) — whose arithmetic is the pure
 `when.ts`. Nothing is on show before it is wanted: the sheet seen most is two
 rows tall. The sheet takes an
-icon, a title, a question and an optional lower bound (`sleepEarliest` for a
-sleep), so the next tracker that logs a moment opens it as it is.
+icon, a title, a question, an optional lower bound (`sleepEarliest` for a
+sleep) and an optional usual time (`sleepDefault`: the child's own bedtime, nap
+length or morning), so the next tracker that logs a moment opens it as it is.
 
 **Live, and the dial.** A record that is still running shows its clock
 running. `live.tsx` holds the pieces: `useTick`, a clock that re-renders only

@@ -229,6 +229,12 @@ export const en = {
         mistaps:
           "The last {count} sleeps, up to {end}, each lasted under a minute.",
       },
+      // The usual time offered under **Now**, read from the child's own log.
+      usual: {
+        bedtime: "Usual bedtime",
+        napLength: "After a usual nap, {duration}",
+        morning: "Usual morning",
+      },
       removeMistap: "Remove it",
       removeMistaps: "Remove those {count}",
       problem: {
@@ -240,6 +246,7 @@ export const en = {
     },
     wokeUp: "Woke up",
     takenBack: "Under a minute — nothing logged",
+    resumed: "Back asleep — the same sleep goes on",
     asleepNap: "Napping since {time}",
     asleepNight: "Asleep for the night since {time}",
     startedNap: "Nap from {time}",

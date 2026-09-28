@@ -401,7 +401,7 @@ a new one arrives with its own.
 | A new way to log a diaper              | Never a second write path — render `DiaperButtons` and write through `addDiaper`                                                         |
 | A new way to log a sleep               | Never a second write path — render `SleepButtons` and write through `saveSleep`                                                          |
 | A running clock, a ring, a pulse       | `live.tsx` (`Elapsed`, `ProgressRing`, `FillRing`, `useTick`) and the "Live" block of `styles.css` — never a per-screen `setInterval`    |
-| When a tapped thing happened           | `WhenModal.tsx` (icon, title, question, optional `earliest`) over `when.ts` — never a per-button time row or a second picker             |
+| When a tapped thing happened           | `WhenModal.tsx` (icon, title, question, optional `earliest` and `usual`) over `when.ts` — never a per-button time row or a second picker |
 | A time span to show or drag            | `ClockDial.tsx` over `dial.ts` (with tests in `tests/dial_test.ts`); `SleepClock.tsx` is the worked example of dragging one              |
 | A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                                    |
 | A new feature switch                   | `FeatureId` in `useAppSettings.ts`, guards on the screens it owns, and `navTabs()` if it has a tab                                       |

@@ -10,7 +10,15 @@
 // dial records a whole span at once (`sleepEditProblem`, and `sleepDraft`
 // for where the dial opens). Pure and clock-free: `now` is a parameter.
 
-import { currentSleep, lastEndedSleep, STALE_SLEEP_HOURS } from "./sleep.ts";
+import {
+  currentSleep,
+  HISTORY_DAYS,
+  lastEndedSleep,
+  median,
+  sleepDayOf,
+  sleepSpans,
+  STALE_SLEEP_HOURS,
+} from "./sleep.ts";
 import type { AppData, SleepKind, SleepSession } from "./types.ts";
 
 const MINUTE = 60_000;
@@ -97,6 +105,147 @@ export function blockingMistaps(data: AppData, now: Date): SleepSession[] {
   return mistaps
     .filter((s) => Date.parse(s.end!) > realEnd)
     .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
+}
+
+/**
+ * The sleep a start picks back up: the last one, if it ended less than a
+ * minute before `at`. **Woke up** and then **Nap** in the same breath is a
+ * wake taken back, not a second sleep — the same sleep goes on, as a work
+ * session restarted within a minute does in the sibling `time` app.
+ */
+export function resumableSleep(
+  data: AppData,
+  at: Date,
+  now: Date,
+): SleepSession | null {
+  if (currentSleep(data, now)) return null;
+  const last = lastEndedSleep(data, now);
+  if (last === null) return null;
+  const gap = at.getTime() - last;
+  if (gap < 0 || gap >= MISTAP_MS) return null;
+  for (const s of Object.values(data.sleeps)) {
+    if (s.end !== null && Date.parse(s.end) === last) return s;
+  }
+  return null;
+}
+
+/** How many of the child's own sleeps a usual time is read from. The app's
+ *  own floor, as `MIN_HISTORY_NIGHTS` is for the suggestion. */
+export const USUAL_MIN_COUNT = 3;
+
+/** How far back the usual bedtime is offered: far enough to reach last
+ *  night from the next morning, not so far that an afternoon tap on
+ *  **Night** is offered yesterday evening. The app's own. */
+export const USUAL_REACH_HOURS = 16;
+
+/** A usual time closer to now than this is **Now** by another name, and not
+ *  offered beside it. */
+const USUAL_MIN_AGO = 5 * MINUTE;
+
+/** What the child's last two weeks say a sleep usually is: a nap's length
+ *  in minutes, the bedtime in minutes past noon, the morning in minutes past
+ *  midnight — each the median, and null until `USUAL_MIN_COUNT` of them. */
+export type UsualSleep = {
+  napMinutes: number | null;
+  bedtime: number | null;
+  morning: number | null;
+};
+
+/**
+ * The child's usual sleep, read from the log — the defaults the "when?"
+ * sheet offers, as a break's usual length is in the `time` app. A night is
+ * the spans of one sleep day (`sleepDayOf`): its bedtime the first start,
+ * its morning the last end, and the newest night has no morning yet — it
+ * may only have paused for a waking. Taps taken back (`isMistap`) are no
+ * nap at all.
+ */
+export function usualSleep(data: AppData, now: Date): UsualSleep {
+  const since = now.getTime() - HISTORY_DAYS * 24 * HOUR;
+  const spans = sleepSpans(data, now).filter(
+    (s) => s.end > since && !s.ongoing,
+  );
+  const naps: number[] = [];
+  const bedtimes = new Map<string, number>();
+  const mornings = new Map<string, number>();
+  for (const span of spans) {
+    if (span.kind === "nap") {
+      if (span.end - span.start >= MISTAP_MS) {
+        naps.push((span.end - span.start) / MINUTE);
+      }
+      continue;
+    }
+    const day = sleepDayOf(span);
+    if (!bedtimes.has(day)) bedtimes.set(day, span.start);
+    mornings.set(day, span.end);
+  }
+  const newest = [...mornings.keys()].sort().at(-1);
+  if (newest !== undefined) mornings.delete(newest);
+  const enough = (xs: number[]) =>
+    xs.length >= USUAL_MIN_COUNT ? median(xs) : null;
+  return {
+    napMinutes: enough(naps),
+    bedtime: enough([...bedtimes.values()].map(minutesSinceNoon)),
+    morning: enough([...mornings.values()].map(minutesPastMidnight)),
+  };
+}
+
+/** Which usual time a default is. */
+export type SleepDefaultReason = "bedtime" | "napLength" | "morning";
+
+/**
+ * The usual time for the tap the sheet is asking about, when there is one
+ * worth offering beside **Now**: the usual bedtime for **Night** (the
+ * latest one, if within `USUAL_REACH_HOURS`), a usual nap's length after
+ * the start for a nap's **Woke up**, the usual morning for a night's. Only
+ * a moment already past by more than a few minutes, after the sleep began,
+ * and one `sleepTimeProblem` would pass. **Nap** has none: nothing about a
+ * day says when its naps begin. On the minute.
+ */
+export function sleepDefault(
+  data: AppData,
+  what: SleepKind | "wake",
+  now: Date,
+): { at: number; reason: SleepDefaultReason } | null {
+  const usual = usualSleep(data, now);
+  const current = currentSleep(data, now);
+  const t = now.getTime();
+  let found: { at: number; reason: SleepDefaultReason } | null = null;
+  if (what === "night" && !current && usual.bedtime !== null) {
+    const at = latestAt(t, 12 * 60 + usual.bedtime);
+    if (t - at <= USUAL_REACH_HOURS * HOUR) found = { at, reason: "bedtime" };
+  } else if (what === "wake" && current) {
+    const start = Date.parse(current.start);
+    if (current.kind === "nap" && usual.napMinutes !== null) {
+      const at =
+        Math.floor((start + usual.napMinutes * MINUTE) / MINUTE) * MINUTE;
+      found = { at, reason: "napLength" };
+    } else if (current.kind === "night" && usual.morning !== null) {
+      found = { at: latestAt(t, usual.morning), reason: "morning" };
+    }
+  }
+  if (found === null || t - found.at < USUAL_MIN_AGO) return null;
+  if (sleepTimeProblem(data, new Date(found.at), now) !== null) return null;
+  return found;
+}
+
+/** The latest moment at or before `now` whose wall clock reads `minutes`
+ *  past midnight (past 1440 runs into the next morning). */
+function latestAt(now: number, minutes: number): number {
+  const d = new Date(now);
+  d.setHours(0, 0, 0, 0);
+  d.setMinutes(Math.round(minutes) % (24 * 60));
+  if (d.getTime() > now) d.setDate(d.getDate() - 1);
+  return d.getTime();
+}
+
+function minutesSinceNoon(instant: number): number {
+  const d = new Date(instant);
+  return (d.getHours() * 60 + d.getMinutes() - 720 + 1440) % 1440;
+}
+
+function minutesPastMidnight(instant: number): number {
+  const d = new Date(instant);
+  return d.getHours() * 60 + d.getMinutes();
 }
 
 /** A sleep as the dial edits it: two instants, the second null while the

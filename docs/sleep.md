@@ -32,7 +32,24 @@ behind it — last night could not be logged the next morning past a blip at
 7:00. The minute is the app's own line; no source draws one. Blips already in
 the log (`isMistap`) are offered for removal by the "when?" sheet when they
 are all that stands between a start and an earlier time
-(`blockingMistaps`).
+(`blockingMistaps`). The other direction is the same: **Nap** or **Night**
+within a minute of **Woke up** picks the sleep back up rather than starting a
+second one (`resumableSleep`) — a mis-pressed button costs nothing either way,
+as it does on the sibling `time` app's clock.
+
+### The usual time
+
+Under **Now** the sheet offers the time this child usually does what was
+tapped, read from the last two weeks of the log (`usualSleep`,
+`sleepDefault`) — the way a break in the `time` app is offered its usual
+length: **Usual bedtime** for **Night**, the median first start of a night
+(offered back to sixteen hours, so the morning after reaches last night and an
+afternoon tap doesn't reach the evening before); **After a usual nap** for a
+nap's **Woke up**, the start plus the median nap; **Usual morning** for a
+night's, the median last end of a night. Each needs three of its kind, and is
+only offered when it has passed by more than five minutes and would be
+accepted. **Another time** opens the dial on it. The thresholds are the app's
+own; these are the child's medians, not a recommendation.
 
 The kind is the parent's tap rather than the app's guess. Nothing about a
 start time says which it is — a newborn's longest sleep is as likely at noon as

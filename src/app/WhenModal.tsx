@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 import { useState, type ComponentType } from "react";
 
+import { dayKeyOf } from "@niclaslindstedt/oss-framework/calendar";
 import {
   Button,
   ChevronDownIcon,
@@ -8,7 +9,7 @@ import {
   Modal,
 } from "@niclaslindstedt/oss-framework/components";
 
-import { durationLabel } from "./copy.ts";
+import { durationLabel, relativeDay } from "./copy.ts";
 import { formatInstant } from "./format.ts";
 import { ClockIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
@@ -20,6 +21,7 @@ import {
   WHEN_STEP,
   whenAllowed,
   whenDialStart,
+  whenDrag,
 } from "./when.ts";
 
 // "When?" — the sheet every logging button opens once it knows *what*
@@ -28,7 +30,10 @@ import {
 // wherever the tap was.
 //
 // Three depths, and only the first is on show until it is asked past.
-// **Now** is the sheet: most taps are, and they cost one more tap than they
+// **Now** is the sheet, with — when the caller knows one — the usual time
+// for this tap under it (`usual`: last night's bedtime, a nap's usual
+// length), the way a break's usual length is offered in the sibling `time`
+// app: most taps are, and they cost one more tap than they
 // used to and nothing else. **Earlier** under it opens the usual lags —
 // five minutes to an hour — each a tile with the clock time it stands for,
 // so "15 min" reads as "12:30" before it is tapped; a tap on a tile logs and
@@ -60,6 +65,10 @@ type Props = {
   earliest?: number | null;
   /** Why nothing before `earliest` can be picked. */
   earliestNote?: string;
+  /** The usual time for this tap, when the caller knows one worth offering
+   *  beside **Now** — named ("Usual bedtime") and shown as the second choice,
+   *  and where the dial opens. Left out, the sheet has no such row. */
+  usual?: { label: string; at: number };
   /** A way past the bound, when there is one, shown with the note — a
    *  button, never a write of its own: the caller's `onClick` does it. */
   earliestAction?: { label: string; onClick: () => void };
@@ -77,6 +86,7 @@ export function WhenModal({
   earliest = null,
   earliestNote,
   earliestAction,
+  usual,
   onPick,
   onClose,
 }: Props) {
@@ -152,8 +162,15 @@ export function WhenModal({
             earliest={earliest}
             earliestNote={earliestNote}
             earliestAction={earliestAction}
+            usual={usual}
             onPick={pick}
-            onDial={(now) => setDial(whenDialStart(now, earliest))}
+            onDial={(now) =>
+              setDial(
+                usual
+                  ? whenDrag(usual.at, 0, now, earliest)
+                  : whenDialStart(now, earliest),
+              )
+            }
           />
         ) : (
           <>
@@ -184,6 +201,7 @@ function Choices({
   earliest,
   earliestNote,
   earliestAction,
+  usual,
   onPick,
   onDial,
 }: {
@@ -192,6 +210,7 @@ function Choices({
   earliest: number | null;
   earliestNote?: string;
   earliestAction?: Props["earliestAction"];
+  usual?: Props["usual"];
   onPick: (at: number) => void;
   onDial: (now: number) => void;
 }) {
@@ -218,6 +237,25 @@ function Choices({
           {formatInstant(now, locale)}
         </span>
       </button>
+
+      {usual && (
+        <button
+          type="button"
+          onClick={() => onPick(usual.at)}
+          className="flex min-h-12 w-full items-center justify-between gap-3 rounded-2xl border border-accent/60 bg-accent/10 px-5 text-fg-bright transition-colors hover:bg-accent/20 active:bg-accent/30"
+        >
+          <span className="text-sm font-medium">{usual.label}</span>
+          <span className="text-sm tabular-nums">
+            {formatInstant(usual.at, locale)}
+            {dayKeyOf(new Date(usual.at)) !== dayKeyOf(new Date(now)) && (
+              <span className="text-muted">
+                {" · "}
+                {relativeDay(t, usual.at, dayKeyOf(new Date(now)), locale)}
+              </span>
+            )}
+          </span>
+        </button>
+      )}
 
       {!more ? (
         <button

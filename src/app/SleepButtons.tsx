@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 import { useState, type ComponentType } from "react";
 
-import { childName } from "./copy.ts";
+import { childName, durationLabel } from "./copy.ts";
 import { formatClock, formatInstant } from "./format.ts";
 import { MoonIcon, SunIcon, SunriseIcon } from "./icons.tsx";
 import { useLang, useT } from "./i18n/index.ts";
@@ -9,6 +9,7 @@ import { Elapsed } from "./live.tsx";
 import { currentSleep, lastEndedSleep } from "./sleep.ts";
 import {
   blockingMistaps,
+  sleepDefault,
   sleepEarliest,
   sleepTimeProblem,
   type SleepTimeProblem,
@@ -109,6 +110,7 @@ export function SleepButtons({
   const lastEnd = lastEndedSleep(data, now);
   const earliest = sleepEarliest(data, now);
   const mistaps = blockingMistaps(data, now);
+  const usual = asking === null ? null : sleepDefault(data, asking, now);
   const problemArgs = {
     start: current ? formatClock(current.start, locale) : "",
     end: lastEnd === null ? "" : formatInstant(lastEnd, locale),
@@ -202,6 +204,23 @@ export function SleepButtons({
                     count: String(mistaps.length),
                   })
                 : t(`sleep.when.limit.${earliest.reason}` as const, problemArgs)
+        }
+        usual={
+          usual
+            ? {
+                at: usual.at,
+                label:
+                  usual.reason === "napLength"
+                    ? t("sleep.when.usual.napLength", {
+                        duration: durationLabel(
+                          t,
+                          (usual.at - Date.parse(current?.start ?? "")) /
+                            60_000,
+                        ),
+                      })
+                    : t(`sleep.when.usual.${usual.reason}` as const),
+              }
+            : undefined
         }
         earliestAction={
           mistaps.length > 0

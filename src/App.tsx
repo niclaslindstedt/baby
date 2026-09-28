@@ -49,7 +49,7 @@ import {
   usePinGateLabels,
 } from "./app/SyncEncryption.tsx";
 import { currentSleep } from "./app/sleep.ts";
-import { wakeTakesBack } from "./app/sleepEdit.ts";
+import { resumableSleep, wakeTakesBack } from "./app/sleepEdit.ts";
 import { SleepScreen } from "./app/SleepScreen.tsx";
 import { TodayScreen } from "./app/TodayScreen.tsx";
 import { TopBar } from "./app/TopBar.tsx";
@@ -236,10 +236,19 @@ export function App() {
   // open sleep, a wake closes the one running (see `SleepButtons.tsx`). A
   // wake within a minute of the start takes the start back instead
   // (`wakeTakesBack`): a sleep of no length is a mistap, and left in the log
-  // it would bar every earlier start behind it.
+  // it would bar every earlier start behind it. Both directions cost
+  // nothing, as a mis-pressed clock does in the sibling `time` app.
   const startSleep = useCallback(
     (kind: SleepKind, at: Date) => {
       const stamp = new Date().toISOString();
+      // A start within a minute of the last wake picks that sleep back up
+      // (`resumableSleep`): the wake was the mistap, not the sleep.
+      const resumed = resumableSleep(store.data, at, new Date());
+      if (resumed) {
+        store.saveSleep({ ...resumed, end: null, updatedAt: stamp });
+        notice(t("sleep.resumed"));
+        return;
+      }
       store.saveSleep({
         id: newId(),
         kind,

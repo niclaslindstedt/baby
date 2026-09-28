@@ -8,8 +8,12 @@ through **1 h** ago, each showing the time it stands for, and **Another time** o
 dial for anything further back. Times that can't be right — waking before
 the sleep began — are dimmed rather than refused after the tap. Tapping
 **Woke up** within a minute of **Nap** or **Night** takes the sleep back
-rather than logging one of no length, so last night can still be set the
-morning after, back to yesterday evening on the dial.
+rather than logging one of no length, and **Nap** or **Night** within a
+minute of **Woke up** carries on the same sleep. Once a few days are logged,
+the sheet also offers your child's usual time under **Now** — **Usual
+bedtime** when you tap **Night** the morning after, **After a usual nap**
+when a nap's wake was never tapped, **Usual morning** for a night's — as one
+tap.
 
 **A clock that is running.** The top of the tab is a 24-hour dial — midnight at
 the top, noon at the bottom — with the last day's sleeps drawn round it where
