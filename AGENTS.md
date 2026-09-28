@@ -5,6 +5,8 @@ repo. `CLAUDE.md`, `.cursorrules`, `.windsurfrules`, `GEMINI.md`,
 `.aider.conf.md`, and `.github/copilot-instructions.md` are symlinks to this
 file.
 
+Fleet guidelines: APP_GUIDELINES 1.0.1
+
 ## What this app is, and the three rules that follow from it
 
 A baby tracker holds health data about a child. The whole design premise is
