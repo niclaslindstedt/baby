@@ -10,7 +10,12 @@
 // for the app. If the wrapper ever needs the web app to behave differently,
 // that is a sign it has stopped being thin. The one flag it sets,
 // VITE_EMBEDDED_BUILD, leaves the web edition's link-preview tags and its
-// GitHub Pages `CNAME` out of the build (see `vite.config.ts`).
+// GitHub Pages `CNAME` out of the build (see `vite.config.ts`). The one value
+// it passes is the name: APP_DISPLAY_NAME, resolved by `identifiers.js`
+// exactly as `app.config.js` resolves the name under the icon — the listing
+// name when it is set, the project's own name ("Baby") in a plain checkout —
+// so the wordmark inside the app is always the name outside it
+// (`app-name.ts` at the root).
 //
 // Usage:
 //   node scripts/bundle-web.mjs                 # build the site, then zip it
@@ -34,6 +39,7 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -53,14 +59,33 @@ const profile =
   process.env.EAS_BUILD_PROFILE ??
   "preview";
 
+// A store build ships under the listing name, so a production bundle without
+// one would put the project's name in the top bar of the released app.
+if (profile === "production" && !process.env.APP_DISPLAY_NAME?.trim()) {
+  console.error(
+    "\n✗ APP_DISPLAY_NAME is not set. A production bundle carries the " +
+      "listing name into the app — set it (the build workflow forwards the " +
+      "secret). See RELEASING.md.\n",
+  );
+  process.exit(1);
+}
+const { DISPLAY_NAME } = createRequire(import.meta.url)("../identifiers.js");
+
 if (!skipBuild) {
-  console.log(`• building the web app (npm run build) — profile ${profile}…`);
+  console.log(
+    `• building the web app (npm run build) — profile ${profile}, ` +
+      `named "${DISPLAY_NAME}"…`,
+  );
   execFileSync(NPM, ["run", "build"], {
     cwd: REPO_DIR,
     stdio: "inherit",
     // npm on Windows is a batch shim, which Node cannot execute directly.
     shell: WINDOWS,
-    env: { ...process.env, VITE_EMBEDDED_BUILD: "on" },
+    env: {
+      ...process.env,
+      VITE_EMBEDDED_BUILD: "on",
+      APP_DISPLAY_NAME: DISPLAY_NAME,
+    },
   });
 }
 

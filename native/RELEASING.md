@@ -22,6 +22,11 @@ instead:
   (Settings → Secrets and variables → Actions → Secrets).
 - **Locally**: `native/.env` (`cp .env.example .env`).
 
+`APP_DISPLAY_NAME` (the listing name) and `APP_BUNDLE_ID` travel the same way,
+as secrets under those names and as EAS environment variables. The listing
+name is also the app's name in its own top bar: `scripts/bundle-web.mjs`
+bakes it into the web bundle, and refuses a `production` bundle without it.
+
 ### 2. The CI token
 
 Create a **robot** access token at

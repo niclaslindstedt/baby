@@ -9,6 +9,7 @@ import preact from "@preact/preset-vite";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, type Plugin } from "vite";
 
+import { appName } from "./app-name.ts";
 import { appPwa } from "./pwa-plugin.ts";
 
 // The base path is injected by the deploy workflow via VITE_BASE, one per
@@ -122,6 +123,9 @@ export default defineConfig({
   base,
   define: {
     __SHELL_BUILD__: JSON.stringify(shellBuild),
+    // The wordmark: the listing name in the phone build, the project name
+    // elsewhere (see `app-name.ts`).
+    __APP_NAME__: JSON.stringify(appName(process.env)),
     __APP_VERSION__: JSON.stringify(appVersion),
     __BUILD_LABEL__: JSON.stringify(buildLabel),
     __BUILD_COMMIT__: JSON.stringify(commit),

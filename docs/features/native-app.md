@@ -21,7 +21,9 @@ the safe-area bands take the page's own theme. Links out of the app open in
 the system browser. On Android the hardware back button drives the WebView's
 history.
 
-There is **no native UI**. Everything you see is the web app, unchanged.
+There is **no native UI**. Everything you see is the web app, unchanged —
+except its name: the top bar says the name the app has in the store, the same
+one under its icon.
 
 ## No iCloud
 

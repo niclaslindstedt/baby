@@ -9,10 +9,6 @@
 import type { Catalog } from "./en.ts";
 
 export const sv: Catalog = {
-  app: {
-    name: "Baby",
-  },
-
   nav: {
     today: "Idag",
     diapers: "Blöjor",

@@ -15,10 +15,6 @@
 import type { Widen } from "@niclaslindstedt/oss-framework/i18n";
 
 export const en = {
-  app: {
-    name: "Baby",
-  },
-
   nav: {
     today: "Today",
     diapers: "Diapers",

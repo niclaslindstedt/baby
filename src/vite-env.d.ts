@@ -38,3 +38,7 @@ interface ImportMeta {
 // True only when `tauri/scripts/bundle-web.mjs` built it: no service worker was
 // emitted, so there is no update lifecycle for the app to drive.
 declare const __SHELL_BUILD__: boolean;
+
+// The app's name in its top bar, resolved in `app-name.ts`: `APP_DISPLAY_NAME`
+// in the phone build, the project name everywhere else.
+declare const __APP_NAME__: string;

@@ -34,6 +34,7 @@
     "tests",
     "vite.config.ts",
     "vitest.config.ts",
-    "pwa-plugin.ts"
+    "pwa-plugin.ts",
+    "app-name.ts"
   ]
 }

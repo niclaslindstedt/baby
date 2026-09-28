@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { CogIcon, PlusIcon } from "@niclaslindstedt/oss-framework/components";
 
+import { APP_NAME } from "./appName.ts";
 import { AppMarkIcon } from "./icons.tsx";
 import { useT } from "./i18n/index.ts";
 import type { Tab } from "./BottomNav.tsx";
@@ -60,7 +61,7 @@ export function TopBar({
     <header className="app-header flex shrink-0 items-center justify-between gap-2 border-b border-line bg-surface-3 px-4 pb-3">
       <h1 className="app-wordmark flex min-w-0 items-center gap-2 text-accent">
         <AppMarkIcon className="h-6 w-6 shrink-0" />
-        <span className="truncate">{t("app.name")}</span>
+        <span className="truncate">{APP_NAME}</span>
       </h1>
       <div className="flex shrink-0 items-center gap-2">
         {syncSlot}

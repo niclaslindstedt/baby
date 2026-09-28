@@ -14,6 +14,7 @@ import {
   MoonIcon,
   SyringeIcon,
 } from "./icons.tsx";
+import { APP_NAME } from "./appName.ts";
 import { useT } from "./i18n/index.ts";
 import type { AppData } from "./types.ts";
 import type { Features } from "./useAppSettings.ts";
@@ -157,7 +158,7 @@ export function BottomNav({
       items={items}
       active={active}
       onSelect={onSelect}
-      label={t("app.name")}
+      label={APP_NAME}
       className="app-bottom-nav"
     />
   );
