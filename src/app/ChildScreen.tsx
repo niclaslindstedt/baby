@@ -7,10 +7,24 @@ import {
   SegmentedControl,
 } from "@niclaslindstedt/oss-framework/components";
 
-import { useT } from "./i18n/index.ts";
-import { parseNumber } from "./number.ts";
+import { unitLabel } from "./format.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import type { Child, Sex } from "./types.ts";
-import { Card, DateField, Field, Heading, TextInput } from "./ui.tsx";
+import {
+  Card,
+  DateField,
+  Field,
+  Heading,
+  PairInput,
+  TextInput,
+} from "./ui.tsx";
+import {
+  heightDraft,
+  keepIfUnchanged,
+  parseHeight,
+  unitSystemFor,
+  type Draft,
+} from "./units.ts";
 
 // The child: the first screen of an empty install, and the profile editor
 // behind Settings. Four facts and two optional ones — a birth date and a sex
@@ -32,19 +46,19 @@ type Props = {
 
 export function ChildScreen({ initial, today, onSave, onCancel }: Props) {
   const t = useT();
+  const locale = useLocale();
+  const units = unitSystemFor(locale);
   const [name, setName] = useState(initial?.name ?? "");
   const [birthDate, setBirthDate] = useState<string>(initial?.birthDate ?? "");
   const [sex, setSex] = useState<Sex>(initial?.sex ?? "female");
-  const [mother, setMother] = useState(
-    initial?.motherHeightCm === null || initial === null
-      ? ""
-      : String(initial.motherHeightCm),
-  );
-  const [father, setFather] = useState(
-    initial?.fatherHeightCm === null || initial === null
-      ? ""
-      : String(initial.fatherHeightCm),
-  );
+  // Typed in the locale's units (feet and inches on a US phone), stored in
+  // centimetres; an untouched height is saved exactly as stored.
+  const [opened] = useState(() => ({
+    mother: heightDraft(initial?.motherHeightCm ?? null, units),
+    father: heightDraft(initial?.fatherHeightCm ?? null, units),
+  }));
+  const [mother, setMother] = useState<Draft>(opened.mother);
+  const [father, setFather] = useState<Draft>(opened.father);
   const [dateMissing, setDateMissing] = useState(false);
 
   const save = () => {
@@ -56,8 +70,18 @@ export function ChildScreen({ initial, today, onSave, onCancel }: Props) {
       name: name.trim(),
       birthDate: birthDate as DayKey,
       sex,
-      motherHeightCm: parseNumber(mother),
-      fatherHeightCm: parseNumber(father),
+      motherHeightCm: keepIfUnchanged(
+        initial?.motherHeightCm ?? null,
+        opened.mother,
+        mother,
+        parseHeight(mother, units),
+      ),
+      fatherHeightCm: keepIfUnchanged(
+        initial?.fatherHeightCm ?? null,
+        opened.father,
+        father,
+        parseHeight(father, units),
+      ),
       updatedAt: new Date().toISOString(),
     });
   };
@@ -122,12 +146,32 @@ export function ChildScreen({ initial, today, onSave, onCancel }: Props) {
             </span>
             <span className="text-xs text-muted">{t("child.parentsHint")}</span>
             <div className="mt-1 grid grid-cols-2 gap-2">
-              <Field label={t("child.motherHeight")}>
-                <TextInput type="decimal" value={mother} onChange={setMother} />
-              </Field>
-              <Field label={t("child.fatherHeight")}>
-                <TextInput type="decimal" value={father} onChange={setFather} />
-              </Field>
+              {(
+                [
+                  ["child.motherHeight", mother, setMother],
+                  ["child.fatherHeight", father, setFather],
+                ] as const
+              ).map(([key, value, set]) => {
+                const label = t(key, { unit: unitLabel("height", locale) });
+                return (
+                  <Field key={key} label={label}>
+                    {units === "us" ? (
+                      <PairInput
+                        label={label}
+                        value={value}
+                        units={["ft", "in"]}
+                        onChange={set}
+                      />
+                    ) : (
+                      <TextInput
+                        type="decimal"
+                        value={value.main}
+                        onChange={(main) => set({ main, sub: "" })}
+                      />
+                    )}
+                  </Field>
+                );
+              })}
             </div>
           </div>
           <div className="flex gap-2">

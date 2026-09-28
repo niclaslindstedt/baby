@@ -7,7 +7,7 @@ import { childName } from "./copy.ts";
 import { clockLabel, DayCoverageChart } from "./DayCoverageChart.tsx";
 import {
   formatAmount,
-  formatKg,
+  formatWeight,
   formatPercent,
   formatWhole,
 } from "./format.ts";
@@ -85,7 +85,7 @@ export function FoodModal({ open, onClose, data, today, standards }: Props) {
             formulaKcal: kcal(req.formulaKcal),
             target: kcal(req.targetKcal),
             total: kcal(req.kcalPerDay),
-            weight: formatKg(req.weightKg, locale),
+            weight: formatWeight(req.weightKg, locale),
           })
         : nursing
           ? t("food.targetBreast", {
@@ -93,7 +93,7 @@ export function FoodModal({ open, onClose, data, today, standards }: Props) {
               share: formatPercent(req.targetKcal / req.kcalPerDay, locale),
               target: kcal(req.targetKcal),
               total: kcal(req.kcalPerDay),
-              weight: formatKg(req.weightKg, locale),
+              weight: formatWeight(req.weightKg, locale),
             })
           : t(
               data.milk.kind === "formula"
@@ -101,7 +101,7 @@ export function FoodModal({ open, onClose, data, today, standards }: Props) {
                 : "food.targetWholeDay",
               {
                 total: kcal(req.kcalPerDay),
-                weight: formatKg(req.weightKg, locale),
+                weight: formatWeight(req.weightKg, locale),
               },
             );
 

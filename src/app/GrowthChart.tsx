@@ -43,7 +43,11 @@ type Props = {
   forecast: Forecast | null;
   /** The reading's unit, for the readout and the axis. */
   formatValue: (value: number) => string;
+  /** Ticks are in display units: the stored value times `scale`. */
   formatTick: (value: number) => string;
+  /** Display units per stored unit (pounds per kilogram, inches per
+   *  centimetre); 1 draws the stored unit. */
+  scale?: number;
   ariaLabel: string;
   desc: string;
   height?: number;
@@ -73,6 +77,7 @@ export function GrowthChart({
   forecast,
   formatValue,
   formatTick,
+  scale = 1,
   ariaLabel,
   desc,
   height = 260,
@@ -109,8 +114,9 @@ export function GrowthChart({
     ...(forecast?.points.flatMap((p) => p.bands.map((b) => b.upper)) ?? []),
     ...(forecast?.points.flatMap((p) => p.bands.map((b) => b.lower)) ?? []),
   ];
-  const lo = Math.min(...values);
-  const hi = Math.max(...values);
+  // …in display units: the domain and the ticks are what the axis reads.
+  const lo = Math.min(...values) * scale;
+  const hi = Math.max(...values) * scale;
   const margin = Math.max((hi - lo) * 0.06, 0.1);
   const domain: [number, number] = [lo - margin, hi + margin];
   const axis = niceTicks(domain, MAX_TICKS);
@@ -130,7 +136,9 @@ export function GrowthChart({
   };
   const baseline = plot.top + plot.height;
   const x = linearScale([from, to], [plot.left, plot.left + plot.width]);
-  const y = linearScale(domain, [baseline, plot.top]);
+  const yShown = linearScale(domain, [baseline, plot.top]);
+  /** A stored value's height on the plot. */
+  const y = (value: number) => yShown(value * scale);
 
   const toPoints = (pts: { ageDays: number; value: number }[]): PathPoint[] =>
     pts.map((p) => [x(p.ageDays), y(p.value)]);
@@ -261,7 +269,7 @@ export function GrowthChart({
 
           {/* The y axis. */}
           {axis.values.map((value) => {
-            const ty = y(value);
+            const ty = yShown(value);
             return (
               <text
                 key={`y-${value}`}

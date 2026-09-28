@@ -7,6 +7,12 @@ readings from the child health centre, or a scale at home every morning. The
 its weight falls on the standard — and opens the curves, with a tab each for
 weight, length and head circumference.
 
+On a phone set to US English the readings are typed and read in pounds and
+ounces and inches, and the parents' heights in feet and inches; everywhere
+else in kilograms and centimeters. The record itself always keeps the metric
+values, so the curves, the trend and the forecast are exactly the same either
+way, and a record synced between two phones means the same child on both.
+
 There the readings sit on the WHO growth standard for your child's sex, drawn
 the way Swedish child health care draws its curves: a median and the ±1 and ±2
 SD channels. Head circumference is drawn on the WHO standard too, with a line

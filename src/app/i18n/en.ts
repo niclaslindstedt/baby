@@ -97,9 +97,9 @@ export const en = {
       "The growth standards publish one curve per sex, and the expected adult height is computed differently for each.",
     parents: "Parents' heights",
     parentsHint:
-      "Both, in centimeters, for the expected adult height. Optional — leave blank to skip it.",
-    motherHeight: "Mother's height (cm)",
-    fatherHeight: "Father's height (cm)",
+      "Both, for the expected adult height. Optional — leave blank to skip it.",
+    motherHeight: "Mother's height ({unit})",
+    fatherHeight: "Father's height ({unit})",
     save: "Save",
     saved: "Saved",
     birthDateMissing: "Pick a birth date first",
@@ -475,7 +475,7 @@ export const en = {
     targetValue: "About {cm} — roughly {low} to {high}.",
     // [ref:luo-1998] [ref:rikshandboken-tillvaxtkurvor-och-tillvaxtreferenser]
     targetHint:
-      "From both parents' heights, with the formula Swedish child health care uses (Luo, Albertsson-Wikland & Karlberg 1998). The range is wide because it is: about ±10 cm for 19 children in 20.",
+      "From both parents' heights, with the formula Swedish child health care uses (Luo, Albertsson-Wikland & Karlberg 1998). The range is wide because it is: about ±{spread} for 19 children in 20.",
     targetMissing:
       "Add both parents' heights under Your child to see the expected adult height.",
     projection: "Projected adult height from {name}'s own growth",
@@ -498,9 +498,9 @@ export const en = {
       addTitle: "New reading",
       editTitle: "Edit reading",
       date: "Date",
-      weight: "Weight (kg)",
-      length: "Length (cm)",
-      head: "Head circumference (cm)",
+      weight: "Weight ({unit})",
+      length: "Length ({unit})",
+      head: "Head circumference ({unit})",
       hint: "Enter what was measured — one field is enough.",
       nothing: "Enter at least one measurement",
       save: "Save reading",

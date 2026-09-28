@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 // Presentation. The domain speaks `DayKey` (`YYYY-MM-DD`), ISO timestamps,
 // kilograms, centimetres and z-scores everywhere; this module is the single
-// place any of them turns into something readable.
+// place any of them turns into something readable — in the locale's units
+// (`units.ts`) as well as its formats.
 //
 // The framework owns the `Intl` formatter cache and the `DayKey` → local-date
 // conversion; what stays here is which *shapes* this app names a value in.
@@ -17,6 +18,7 @@ import {
 } from "@niclaslindstedt/oss-framework/format";
 
 import type { Measurement } from "./types.ts";
+import { cmToFtIn, cmToIn, kgToLbOz, unitSystemFor } from "./units.ts";
 
 /** A `DayKey` as a local `Date` at midnight, or null when it isn't a real
  *  day. */
@@ -59,9 +61,16 @@ export function formatInstant(ms: number, locale: string): string {
   return formatClock(new Date(ms).toISOString(), locale);
 }
 
-/** A weight in kilograms, to the gram-ish precision a scale gives: two
- *  decimals under 10 kg, one above. */
-export function formatKg(kg: number, locale: string): string {
+/** A weight, stored in kilograms, in the locale's units: to the gram-ish
+ *  precision a scale gives in kilograms (two decimals under 10 kg, one
+ *  above), or as pounds and ounces to a tenth of an ounce where the locale
+ *  weighs that way ("16 lb 5.7 oz"). */
+export function formatWeight(kg: number, locale: string): string {
+  if (unitSystemFor(locale) === "us") {
+    const { lb, oz } = kgToLbOz(kg);
+    const ounces = formatNumber(oz, locale, { maximumFractionDigits: 1 });
+    return `${formatWhole(lb, locale)} lb ${ounces} oz`;
+  }
   const digits = kg < 10 ? 2 : 1;
   return `${formatNumber(kg, locale, {
     minimumFractionDigits: digits,
@@ -69,12 +78,42 @@ export function formatKg(kg: number, locale: string): string {
   })} kg`;
 }
 
-/** A length in centimetres, to one decimal. */
-export function formatCm(cm: number, locale: string): string {
-  return `${formatNumber(cm, locale, {
+/** A child's length or head circumference, stored in centimetres, in the
+ *  locale's units, to one decimal ("68.5 cm", "27.0 in"). */
+export function formatLength(cm: number, locale: string): string {
+  const us = unitSystemFor(locale) === "us";
+  return `${formatNumber(us ? cmToIn(cm) : cm, locale, {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
-  })} cm`;
+  })} ${us ? "in" : "cm"}`;
+}
+
+/** An adult's height, stored in centimetres: "172.0 cm", or "5 ft 8 in"
+ *  where the locale measures a person that way. */
+export function formatHeight(cm: number, locale: string): string {
+  if (unitSystemFor(locale) !== "us") return formatLength(cm, locale);
+  const { ft, in: inches } = cmToFtIn(cm);
+  return `${formatWhole(ft, locale)} ft ${formatWhole(inches, locale)} in`;
+}
+
+/** A spread of centimetres in whole units ("10 cm", "4 in"), for the width
+ *  of a range said in a sentence. */
+export function formatSpread(cm: number, locale: string): string {
+  const us = unitSystemFor(locale) === "us";
+  return `${formatWhole(us ? cmToIn(cm) : cm, locale)} ${us ? "in" : "cm"}`;
+}
+
+/** The unit a form field is typed in, for its label: "kg" / "lb, oz" for a
+ *  weight, "cm" / "in" for a child's length, "cm" / "ft, in" for an adult's
+ *  height. Symbols, so the same in every language. */
+export function unitLabel(
+  quantity: "weight" | "length" | "height",
+  locale: string,
+): string {
+  const us = unitSystemFor(locale) === "us";
+  if (quantity === "weight") return us ? "lb, oz" : "kg";
+  if (quantity === "height") return us ? "ft, in" : "cm";
+  return us ? "in" : "cm";
 }
 
 /** The values one reading holds, in the order a parent reads them off the
@@ -86,9 +125,9 @@ export function formatCm(cm: number, locale: string): string {
  *  The array, not a joined string, so a caller picks its own separator. */
 export function measurementValues(m: Measurement, locale: string): string[] {
   const parts: string[] = [];
-  if (m.weightKg !== null) parts.push(formatKg(m.weightKg, locale));
-  if (m.lengthCm !== null) parts.push(formatCm(m.lengthCm, locale));
-  if (m.headCm !== null) parts.push(`${formatCm(m.headCm, locale)} ↺`);
+  if (m.weightKg !== null) parts.push(formatWeight(m.weightKg, locale));
+  if (m.lengthCm !== null) parts.push(formatLength(m.lengthCm, locale));
+  if (m.headCm !== null) parts.push(`${formatLength(m.headCm, locale)} ↺`);
   return parts;
 }
 

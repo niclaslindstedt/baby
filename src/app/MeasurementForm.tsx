@@ -4,14 +4,27 @@ import { useState } from "react";
 import type { DayKey } from "@niclaslindstedt/oss-framework/calendar";
 import { Button } from "@niclaslindstedt/oss-framework/components";
 
-import { useT } from "./i18n/index.ts";
+import { unitLabel } from "./format.ts";
+import { useLocale, useT } from "./i18n/index.ts";
 import { newId, type Measurement } from "./types.ts";
-import { parseNumber } from "./number.ts";
-import { DateField, Field, TextInput } from "./ui.tsx";
+import { DateField, Field, PairInput, TextInput } from "./ui.tsx";
+import {
+  keepIfUnchanged,
+  lengthDraft,
+  parseLength,
+  parseWeight,
+  unitSystemFor,
+  weightDraft,
+} from "./units.ts";
 
 // One growth reading: a date and whichever of the three measurements was
 // taken. One field is enough — a home scale gives one number, a BVC visit
 // three — and the form insists on nothing but that there is at least one.
+//
+// Typed in the locale's units — pounds and ounces and inches on a US phone —
+// and saved in kilograms and centimetres, which is all the document holds. A
+// value the parent didn't touch is saved exactly as stored, so opening a
+// reading never moves it by a conversion's rounding.
 
 type Props = {
   initial: Measurement | null;
@@ -22,22 +35,39 @@ type Props = {
 
 export function MeasurementForm({ initial, today, onSave, onCancel }: Props) {
   const t = useT();
+  const locale = useLocale();
+  const units = unitSystemFor(locale);
   const [date, setDate] = useState<string>(initial?.date ?? today);
-  const [weight, setWeight] = useState(
-    initial?.weightKg === null || !initial ? "" : String(initial.weightKg),
-  );
-  const [length, setLength] = useState(
-    initial?.lengthCm === null || !initial ? "" : String(initial.lengthCm),
-  );
-  const [head, setHead] = useState(
-    initial?.headCm === null || !initial ? "" : String(initial.headCm),
-  );
+  // What the fields opened with, to tell an untouched value from a typed one.
+  const [opened] = useState(() => ({
+    weight: weightDraft(initial?.weightKg ?? null, units),
+    length: lengthDraft(initial?.lengthCm ?? null, units),
+    head: lengthDraft(initial?.headCm ?? null, units),
+  }));
+  const [weight, setWeight] = useState(opened.weight);
+  const [length, setLength] = useState(opened.length);
+  const [head, setHead] = useState(opened.head);
   const [error, setError] = useState<string | null>(null);
 
   const save = () => {
-    const weightKg = parseNumber(weight);
-    const lengthCm = parseNumber(length);
-    const headCm = parseNumber(head);
+    const weightKg = keepIfUnchanged(
+      initial?.weightKg ?? null,
+      opened.weight,
+      weight,
+      parseWeight(weight, units),
+    );
+    const lengthCm = keepIfUnchanged(
+      initial?.lengthCm ?? null,
+      opened.length,
+      length,
+      parseLength(length, units),
+    );
+    const headCm = keepIfUnchanged(
+      initial?.headCm ?? null,
+      opened.head,
+      head,
+      parseLength(head, units),
+    );
     if (weightKg === null && lengthCm === null && headCm === null) {
       setError(t("growth.form.nothing"));
       return;
@@ -70,18 +100,37 @@ export function MeasurementForm({ initial, today, onSave, onCancel }: Props) {
         />
       </Field>
       <p className="text-xs text-muted">{t("growth.form.hint")}</p>
-      <Field label={t("growth.form.weight")}>
-        <TextInput
-          type="decimal"
-          value={weight}
-          onChange={(v) => {
-            setWeight(v);
-            setError(null);
-          }}
-          autoFocus
-        />
+      <Field
+        label={t("growth.form.weight", { unit: unitLabel("weight", locale) })}
+      >
+        {units === "us" ? (
+          <PairInput
+            label={t("growth.form.weight", {
+              unit: unitLabel("weight", locale),
+            })}
+            value={weight}
+            units={["lb", "oz"]}
+            onChange={(v) => {
+              setWeight(v);
+              setError(null);
+            }}
+            autoFocus
+          />
+        ) : (
+          <TextInput
+            type="decimal"
+            value={weight.main}
+            onChange={(v) => {
+              setWeight({ main: v, sub: "" });
+              setError(null);
+            }}
+            autoFocus
+          />
+        )}
       </Field>
-      <Field label={t("growth.form.length")}>
+      <Field
+        label={t("growth.form.length", { unit: unitLabel("length", locale) })}
+      >
         <TextInput
           type="decimal"
           value={length}
@@ -91,7 +140,10 @@ export function MeasurementForm({ initial, today, onSave, onCancel }: Props) {
           }}
         />
       </Field>
-      <Field label={t("growth.form.head")} error={error ?? undefined}>
+      <Field
+        label={t("growth.form.head", { unit: unitLabel("length", locale) })}
+        error={error ?? undefined}
+      >
         <TextInput
           type="decimal"
           value={head}

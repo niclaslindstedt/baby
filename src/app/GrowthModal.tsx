@@ -7,10 +7,13 @@ import { SegmentedControl } from "@niclaslindstedt/oss-framework/components";
 import { ageInMonths } from "./age.ts";
 import { channelKey, childName } from "./copy.ts";
 import {
-  formatCm,
+  formatAmount,
   formatDayYear,
-  formatKg,
+  formatHeight,
+  formatLength,
   formatPercent,
+  formatSpread,
+  formatWeight,
   formatZ,
 } from "./format.ts";
 import {
@@ -28,6 +31,7 @@ import { GrowthIcon } from "./icons.tsx";
 import { useLocale, useT } from "./i18n/index.ts";
 import { sortedMeasurements, type AppData } from "./types.ts";
 import { Card, Heading } from "./ui.tsx";
+import { displayScale, unitSystemFor } from "./units.ts";
 import { ViewModal } from "./ViewModal.tsx";
 
 // Growth, read rather than entered: the curve for each of the three
@@ -86,9 +90,23 @@ export function GrowthModal({ open, onClose, data, today, standards }: Props) {
   const target = targetHeight(child);
   const all = sortedMeasurements(data);
   const format = (value: number) =>
-    indicator === "weight" ? formatKg(value, locale) : formatCm(value, locale);
+    indicator === "weight"
+      ? formatWeight(value, locale)
+      : formatLength(value, locale);
+  // The chart is drawn in the unit a parent reads — pounds or inches on a US
+  // phone — by scaling the stored kilograms and centimetres, curves and
+  // readings alike. A linear scale, so the WHO channels are the same curves.
+  const units = unitSystemFor(locale);
+  const scale = displayScale(
+    indicator === "weight" ? "weight" : "length",
+    units,
+  );
   const tick = (value: number) =>
-    indicator === "weight" ? value.toFixed(1) : String(Math.round(value));
+    units === "us"
+      ? formatAmount(value, locale)
+      : indicator === "weight"
+        ? value.toFixed(1)
+        : String(Math.round(value));
 
   return (
     <ViewModal
@@ -129,6 +147,7 @@ export function GrowthModal({ open, onClose, data, today, standards }: Props) {
               forecast={projection}
               formatValue={format}
               formatTick={tick}
+              scale={scale}
               ariaLabel={t(`growth.${indicator}` as const)}
               desc={t("growth.chartDesc", {
                 indicator: t(`growth.${indicator}` as const),
@@ -215,13 +234,15 @@ export function GrowthModal({ open, onClose, data, today, standards }: Props) {
               <>
                 <p className="mt-1 text-sm text-fg-bright">
                   {t("growth.targetValue", {
-                    cm: formatCm(target.cm, locale),
-                    low: formatCm(target.low, locale),
-                    high: formatCm(target.high, locale),
+                    cm: formatHeight(target.cm, locale),
+                    low: formatHeight(target.low, locale),
+                    high: formatHeight(target.high, locale),
                   })}
                 </p>
                 <p className="mt-1 text-xs text-muted">
-                  {t("growth.targetHint")}
+                  {t("growth.targetHint", {
+                    spread: formatSpread(10, locale),
+                  })}
                 </p>
               </>
             ) : (
@@ -237,9 +258,9 @@ export function GrowthModal({ open, onClose, data, today, standards }: Props) {
               <>
                 <p className="mt-1 text-sm text-fg-bright">
                   {t("growth.projectionValue", {
-                    cm: formatCm(adultProjection.cm, locale),
-                    low: formatCm(adultProjection.low, locale),
-                    high: formatCm(adultProjection.high, locale),
+                    cm: formatHeight(adultProjection.cm, locale),
+                    low: formatHeight(adultProjection.low, locale),
+                    high: formatHeight(adultProjection.high, locale),
                   })}
                 </p>
                 <p className="mt-1 text-xs text-muted">

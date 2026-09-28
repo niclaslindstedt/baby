@@ -303,6 +303,9 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
 - `src/app/locale.ts` — the one locale every date, time and number is
   formatted in (the language's words, the device's formats), read through
   `useLocale()`; never name a BCP-47 tag in a component.
+- `src/app/units.ts` — US units at the edge: pounds/ounces and inches for a
+  US locale, converted on display (`format.ts`) and in the forms' drafts, the
+  document always metric and the WHO curves drawn by a linear scale.
 - `src/output.ts` — the §19.4 central output module.
 - `pwa-plugin.ts` — emits the service worker + version/precache manifests
   the framework's `usePwaUpdate` consumes.

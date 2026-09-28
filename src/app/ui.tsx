@@ -20,6 +20,7 @@ import {
 import { formatDayYear } from "./format.ts";
 import { useLocale, useT } from "./i18n/index.ts";
 import { sanitizeDecimal } from "./number.ts";
+import type { Draft } from "./units.ts";
 
 /** The bordered-field look, matching the framework's own fields.
  *
@@ -126,6 +127,7 @@ export function TextInput({
   min,
   max,
   autoFocus,
+  ariaLabel,
 }: {
   value: string;
   onChange: (next: string) => void;
@@ -137,6 +139,8 @@ export function TextInput({
   min?: string;
   max?: string;
   autoFocus?: boolean;
+  /** For a field its enclosing `Field` label doesn't name on its own. */
+  ariaLabel?: string;
 }) {
   const decimal = type === "decimal";
   return (
@@ -149,6 +153,7 @@ export function TextInput({
       min={decimal ? undefined : min}
       max={decimal ? undefined : max}
       autoFocus={autoFocus}
+      aria-label={ariaLabel}
       autoComplete="off"
       enterKeyHint="done"
       aria-invalid={invalid || undefined}
@@ -163,6 +168,42 @@ export function TextInput({
       }}
       className={invalid ? INPUT_INVALID_CLASS : INPUT_CLASS}
     />
+  );
+}
+
+/** A measurement typed as two numbers — pounds and ounces, feet and inches —
+ *  each field with its unit beside it. Only where the locale measures that
+ *  way (`units.ts`); everywhere else a form keeps its one decimal field. */
+export function PairInput({
+  label,
+  value,
+  onChange,
+  units,
+  autoFocus,
+}: {
+  label: string;
+  value: Draft;
+  onChange: (next: Draft) => void;
+  units: readonly [string, string];
+  autoFocus?: boolean;
+}) {
+  const half = (key: keyof Draft, unit: string, focus?: boolean) => (
+    <span className="flex min-w-0 flex-1 items-center gap-1.5">
+      <TextInput
+        type="decimal"
+        value={value[key]}
+        onChange={(next) => onChange({ ...value, [key]: next })}
+        ariaLabel={`${label}, ${unit}`}
+        autoFocus={focus}
+      />
+      <span className="shrink-0 text-xs text-muted">{unit}</span>
+    </span>
+  );
+  return (
+    <span className="flex items-center gap-2">
+      {half("main", units[0], autoFocus)}
+      {half("sub", units[1])}
+    </span>
   );
 }
 

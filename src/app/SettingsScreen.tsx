@@ -28,7 +28,7 @@ import { logStore } from "./log.ts";
 import { downloadBackup, readBackupFile } from "./backup.ts";
 import { ageLabel, childName } from "./copy.ts";
 import type { DemoDataToggle } from "./dev/useDemoData.ts";
-import { formatCm, formatDayYear } from "./format.ts";
+import { formatHeight, formatDayYear } from "./format.ts";
 import { BabyIcon } from "./icons.tsx";
 import {
   setLanguage,
@@ -207,11 +207,11 @@ export function SettingsScreen({
                     mother:
                       child.motherHeightCm === null
                         ? t("common.noData")
-                        : formatCm(child.motherHeightCm, locale),
+                        : formatHeight(child.motherHeightCm, locale),
                     father:
                       child.fatherHeightCm === null
                         ? t("common.noData")
-                        : formatCm(child.fatherHeightCm, locale),
+                        : formatHeight(child.fatherHeightCm, locale),
                   })}
             </dd>
           </dl>
