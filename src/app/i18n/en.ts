@@ -840,7 +840,8 @@ export const en = {
     reload: "Reload from the backend",
     data: "Your data",
     export: "Export a backup",
-    exportHint: "Downloads the whole record as a JSON file.",
+    exportHint: "Saves the whole record as a JSON file.",
+    exportFailed: "The backup could not be saved. Try again.",
     import: "Restore from a backup",
     importHint:
       "Merges the file into what is already here — nothing on this device is dropped.",

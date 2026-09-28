@@ -21,6 +21,10 @@ the safe-area bands take the page's own theme. Links out of the app open in
 the system browser. On Android the hardware back button drives the WebView's
 history.
 
+**Export a backup** opens the phone's share sheet on the backup file — save it
+to Files, AirDrop it, mail it to yourself — where the website downloads it.
+The file is the same either way.
+
 There is **no native UI**. Everything you see is the web app, unchanged —
 except its name: the top bar says the name the app has in the store, the same
 one under its icon.

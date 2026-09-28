@@ -25,7 +25,7 @@ import {
 import { LogViewer } from "@niclaslindstedt/oss-framework/logging";
 
 import { logStore } from "./log.ts";
-import { downloadBackup, readBackupFile } from "./backup.ts";
+import { readBackupFile, saveBackup } from "./backup.ts";
 import { ageLabel, childName } from "./copy.ts";
 import type { DemoDataToggle } from "./dev/useDemoData.ts";
 import { formatHeight, formatDayYear } from "./format.ts";
@@ -111,6 +111,14 @@ export function SettingsScreen({
   const child = store.data.child;
   const [confirmClear, setConfirmClear] = useState(false);
   const [busy, setBusy] = useState(false);
+
+  const exportBackup = async () => {
+    try {
+      await saveBackup(store.data);
+    } catch {
+      onNotice(t("settings.exportFailed"));
+    }
+  };
 
   const importBackup = async (file: File) => {
     try {
@@ -339,7 +347,7 @@ export function SettingsScreen({
       >
         <div className="flex flex-col gap-1">
           <div>
-            <Button onClick={() => downloadBackup(store.data)}>
+            <Button onClick={() => void exportBackup()}>
               {t("settings.export")}
             </Button>
           </div>

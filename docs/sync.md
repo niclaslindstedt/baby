@@ -118,7 +118,10 @@ repeat, so the trade is worth it. It is still a real limitation.
 
 ## Backups
 
-**Settings → Your data → Export a backup** downloads the document as a
-pretty-printed JSON file — the same bytes the backends hold. **Restore from a
+**Settings → Your data → Export a backup** saves the document as a
+pretty-printed JSON file — the same bytes the backends hold. In a browser it
+is a download; in the phone app it opens the share sheet (Save to Files,
+AirDrop, Mail), through the framework's `saveFile` and the wrapper's
+save-file bridge. **Restore from a
 backup** merges a file in with the same merge sync uses, so restoring an old
 backup onto a live phone never drops this month.

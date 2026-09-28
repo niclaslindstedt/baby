@@ -20,7 +20,10 @@ Thin is the design, not an aspiration. The wrapper:
   the WebView's history;
 - opens Dropbox's sign-in in an **authentication session** when the page asks
   for one (`src/authSessionBridge.ts` → `src/authSession.ts` →
-  `expo-web-browser`) — see [Signing in to Dropbox](#signing-in-to-dropbox).
+  `expo-web-browser`) — see [Signing in to Dropbox](#signing-in-to-dropbox);
+- hands a backup export to the **share sheet** — see
+  [Exporting a backup](#exporting-a-backup). A `blob:` or `data:` URL is
+  never sent to the system browser: it only exists inside the WebView.
 
 That is the entire list, and it is deliberately not empty: **App Store
 guideline 4.2 rejects a build that is only a viewer for a website**, so the
@@ -52,6 +55,8 @@ devices' edits reconcile, are the web app's, in `src/app/migrations.ts` and
 | `src/injected.ts`          | The theme reporter injected into the page, the status-bar style it drives, and the service-worker teardown. |
 | `src/authSessionBridge.ts` | **Pure.** The injected sign-in provider (`window.__ossAuthSession`) and its plumbing. Tested from the root. |
 | `src/authSession.ts`       | Opens one sign-in in an authentication session (`expo-web-browser`) and hands back where it ended.          |
+| `src/saveFileProtocol.ts`  | **Pure.** The save-file contract: the descriptor injected before load, the request check, the answer.       |
+| `src/saveFileBridge.ts`    | Writes an export to the cache and opens the share sheet (`expo-file-system`, `expo-sharing`).               |
 | `src/scriptText.ts`        | **Import-free.** Splicing text safely into an injected script.                                              |
 | `scripts/bundle-web.mjs`   | Builds the web app and packs `dist/` into `assets/webroot.zip`.                                             |
 
@@ -136,6 +141,34 @@ and the desktop app's. Without it Dropbox shows "Invalid redirect_uri" in the
 sheet.
 
 Other off-origin links are unchanged: they still leave for the system browser.
+
+## Exporting a backup
+
+In a browser, **Settings → Your data → Export a backup** is a download: an
+anchor clicked at a `blob:` URL. Inside the WebView that click goes nowhere,
+so the page exports through the framework's `saveFile`, which checks for a
+**capability** first: the `save-file` entry in `window.__ossShell`, which
+`App.tsx` injects before the page loads (`SAVE_FILE_DESCRIPTOR`). With it, the
+page posts the file as base64 instead of downloading it:
+
+```
+page: saveFile({ text, filename, mimeType })
+   │  postMessage {type: "oss-framework/save-file", version: 1, id, filename, mimeType, base64}
+   ▼
+App.tsx onMessage → isSaveFileRequest → answerSaveFile (src/saveFileBridge.ts)
+   │  writes <cache>/exports/<id>/<name>, opens the share sheet (expo-sharing)
+   ▼
+window event "oss-framework/save-file-result" {id, ok}  → the page's promise settles
+```
+
+The contract is the framework's (`docs/native-shell.md` in oss-framework), and
+`tests/native_save_file_test.ts` pins this side against it, running the
+injected descriptor and the answer script against a stand-in window. The file
+is the child's whole record: it is never logged, only the latest export stays
+in the cache (the next one clears it), and it goes to nothing but the share
+sheet. `expo-sharing` needs no config plugin for this — its plugin is for a
+share _extension_, receiving files from other apps, which this app does not
+offer.
 
 ## Things that will bite you
 

@@ -3,8 +3,9 @@
 //
 // This is a deliberately thin wrapper. It starts a loopback server, points a
 // WebView at it, keeps the native chrome in step with the page's theme, sends
-// off-origin links to the system browser, and opens a provider's sign-in in an
-// authentication session when the page asks for one. There is no native UI at
+// off-origin links to the system browser, opens a provider's sign-in in an
+// authentication session when the page asks for one, and hands a backup
+// export to the share sheet. There is no native UI at
 // all beyond a spinner and a failure screen — everything a reader sees is the
 // web app, unchanged.
 //
@@ -54,6 +55,11 @@ import {
   isAuthSessionRequest,
 } from "./src/authSessionBridge";
 import { answerAuthSession, authRedirectUri } from "./src/authSession";
+import {
+  SAVE_FILE_DESCRIPTOR,
+  answerSaveFile,
+  isSaveFileRequest,
+} from "./src/saveFileBridge";
 
 // Hold the native splash until the WebView actually paints. Called at module
 // scope so the auto-hide never wins the race; a rejection only means the
@@ -177,6 +183,14 @@ export default function App() {
         void signIn(parsed.id, parsed.url);
         return;
       }
+      // A backup export: write it out and open the share sheet on it (see
+      // `src/saveFileBridge.ts`). The page waits for the answer.
+      if (isSaveFileRequest(parsed)) {
+        void answerSaveFile(parsed, (script) =>
+          webViewRef.current?.injectJavaScript(script),
+        );
+        return;
+      }
       if (!isThemeReport(parsed)) return;
 
       // The native chrome follows the page's theme so the status bar and the
@@ -213,9 +227,15 @@ export default function App() {
   // authentication session instead (see `src/authSessionBridge.ts`), since a
   // consent page in Safari redirects back to Safari, not to the app. This
   // stays the fallback for a page that finds no session provider.
+  //
+  // A `blob:` or `data:` URL is never handed on: it only exists inside the
+  // WebView, so the system browser could not open it. An export reaches the
+  // share sheet through the save-file bridge instead, and nothing should
+  // navigate there at all.
   const onShouldStartLoadWithRequest = useCallback(
     (request: WebViewNavigation) => {
       if (!origin) return false;
+      if (/^(blob|data):/i.test(request.url)) return false;
       if (request.url.startsWith(origin)) return true;
       if (request.url.startsWith("about:")) return true;
       void Linking.openURL(request.url);
@@ -272,7 +292,10 @@ export default function App() {
             incognito={false}
             allowsBackForwardNavigationGestures
             setSupportMultipleWindows={false}
-            injectedJavaScriptBeforeContentLoaded={BEFORE_LOAD_SCRIPT}
+            // Before the page's scripts run: the service-worker teardown, and
+            // the shell descriptor that tells the framework this wrapper can
+            // take a file to the share sheet.
+            injectedJavaScriptBeforeContentLoaded={`${BEFORE_LOAD_SCRIPT}\n${SAVE_FILE_DESCRIPTOR}`}
             // Two scripts, one prop: the theme reporter the chrome follows,
             // and the auth-session provider its Dropbox sign-in looks for.
             // Both run once the page has loaded, and both are guarded against

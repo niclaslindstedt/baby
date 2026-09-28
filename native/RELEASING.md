@@ -54,7 +54,8 @@ For submission, fill in the placeholders in `eas.json` →
 
 ### 4. iOS capabilities
 
-None. The app declares no entitlements, and in particular **no iCloud**: App
+None. The app declares no entitlements (the backup export's share sheet
+needs none), and in particular **no iCloud**: App
 Store guideline 5.1.3(ii) says apps "may not store personal health information
 in iCloud", and the record is a child's health data. Leave the iCloud
 capability off the App ID in the Apple Developer portal.
@@ -115,3 +116,7 @@ build without it launches to a blank screen.
 - [ ] Settings → Where the record lives → Dropbox opens Dropbox in a sheet over the app (not in
       Safari), and approving closes the sheet and connects. Closing the sheet
       instead leaves nothing connected and shows no error.
+- [ ] Settings → Your data → Export a backup opens the share sheet on
+      `baby-backup-<date>.json`, and Save to Files writes a file that
+      Restore from a backup reads back. Not yet tried on a device: until it
+      has been, the store listing does not mention export.

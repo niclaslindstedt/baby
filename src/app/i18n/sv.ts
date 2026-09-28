@@ -743,7 +743,8 @@ export const sv: Catalog = {
     reload: "Läs om från lagringen",
     data: "Dina data",
     export: "Exportera en säkerhetskopia",
-    exportHint: "Laddar ner hela journalen som en JSON-fil.",
+    exportHint: "Sparar hela journalen som en JSON-fil.",
+    exportFailed: "Säkerhetskopian kunde inte sparas. Försök igen.",
     import: "Återställ från en säkerhetskopia",
     importHint:
       "Slår ihop filen med det som redan finns här — inget på den här enheten tas bort.",
