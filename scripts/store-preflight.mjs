@@ -294,33 +294,51 @@ if (/^[A-Z0-9]{10}$/i.test(String(iosSubmit.appleTeamId ?? ""))) {
   );
 }
 
-// THE BUNDLE ID IS DEFINED ONCE AND REPEATED ONCE. app.config.js owns it; the
-// fastlane Appfile restates it and cannot import a JavaScript module, so a
-// drift would upload this listing onto a different app. Checked rather than
-// derived, for exactly that reason.
+// THE BUNDLE ID IS A BUILD VARIABLE, NEVER A COMMITTED LITERAL.
+// native/identifiers.js resolves it from APP_BUNDLE_ID, with a committed
+// development fallback, and the fastlane Appfile reads the same variable. So
+// the check is that the variable is set — a build without it runs under the
+// development id, which no store record carries — and that the Appfile still
+// reads it: an Appfile that spells a literal can drift onto a different app.
 const appConfig = readFileSync(at("native", "app.config.js"), "utf8");
-const configBundle = /const BUNDLE_ID = "([^"]+)"/.exec(appConfig)?.[1];
+const identifiersPath = at("native", "identifiers.js");
+const devBundle = existsSync(identifiersPath)
+  ? /const DEV_BUNDLE_ID = "([^"]+)"/.exec(
+      readFileSync(identifiersPath, "utf8"),
+    )?.[1]
+  : undefined;
+const bundleId = env.value("APP_BUNDLE_ID");
 const appfilePath = at("native", "fastlane", "Appfile");
-if (!configBundle) {
-  fail("could not read BUNDLE_ID from native/app.config.js");
-} else if (!existsSync(appfilePath)) {
+if (!devBundle) {
+  fail("could not read DEV_BUNDLE_ID from native/identifiers.js");
+} else if (!bundleId) {
+  warn(
+    "APP_BUNDLE_ID is not set",
+    `a build without it runs as ${devBundle}, the development id, which no ` +
+      "store record carries. Set it in native/.env (and as the build " +
+      "workflow's secret and the EAS environment variable).",
+  );
+}
+if (!existsSync(appfilePath)) {
   warn(
     `no ${rel(appfilePath)} — fastlane cannot upload without one`,
-    `it names the same bundle id app.config.js does (${configBundle}) plus the ` +
+    "it reads the bundle id from APP_BUNDLE_ID, as every build does, plus the " +
       "Apple account. See native/store/README.md.",
     "apple",
   );
 } else {
-  const appfileBundle = /app_identifier\("([^"]+)"\)/.exec(
-    readFileSync(appfilePath, "utf8"),
-  )?.[1];
-  if (appfileBundle === configBundle)
-    ok(`bundle id ${configBundle}, agreed by fastlane`);
-  else {
+  const appfile = readFileSync(appfilePath, "utf8");
+  const appfileBundle = /app_identifier\("([^"]+)"\)/.exec(appfile)?.[1];
+  if (/app_identifier\(ENV\.fetch\("APP_BUNDLE_ID"\)\)/.test(appfile)) {
+    if (bundleId) ok(`bundle id ${bundleId}, read by fastlane as by the build`);
+  } else if (appfileBundle && appfileBundle === bundleId) {
+    ok(`bundle id ${bundleId}, agreed by fastlane`);
+  } else {
     fail(
-      `bundle id drift: app.config.js says ${configBundle}, the Appfile says ${appfileBundle}`,
-      "the Appfile is Ruby and cannot import app.config.js, so the two are kept in " +
-        "step by hand. app.config.js is the source of truth.",
+      `bundle id drift: the build says ${bundleId || devBundle}, the Appfile ` +
+        `says ${appfileBundle ?? "nothing it can read"}`,
+      "the Appfile should read the same variable the build does: " +
+        'app_identifier(ENV.fetch("APP_BUNDLE_ID")).',
     );
   }
 }
