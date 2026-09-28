@@ -12,7 +12,7 @@
 // recommendation with every wake window inside the band for the age, the
 // regimen covers the day with some room, and the vaccination card is up to
 // date with the next visit months away. Nothing on Today reads as a warning;
-// `tests/demoData_test.ts` walks a year of opening moments and says so
+// `tests/demo_test.ts` walks a year of opening moments and says so
 // through the app's own `growth.ts`, `diapers.ts`, `sleep.ts`,
 // `nutrition.ts` and `vaccines.ts`.
 //
