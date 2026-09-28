@@ -70,10 +70,21 @@ export function wrapDelta(from: number, to: number): number {
   return d > MINUTES_PER_DAY / 2 ? d - MINUTES_PER_DAY : d;
 }
 
+/** Below this span, in minutes, an arc is drawn as its chord. */
+export const CHORD_MINUTES = 10;
+
 /**
  * An SVG path along the circle, clockwise from `from` to `to` (times of day,
  * in minutes). A span of a whole day or more draws the full circle; one of
  * nothing draws nothing.
+ *
+ * A span under `CHORD_MINUTES` is drawn as a straight segment. At the dial's
+ * size the two are the same to the eye — ten minutes on a 122-unit circle
+ * bows by a few hundredths of a unit — but an arc command whose ends nearly
+ * meet is one WebKit places wrongly: it recovers the arc's centre from the
+ * two ends in single precision, and with them a fraction of a unit apart it
+ * draws a large stray arc across the face (a one-minute sleep on the edit
+ * dial, on an iPhone).
  */
 export function arcPath(
   cx: number,
@@ -94,6 +105,9 @@ export function arcPath(
   }
   const a = pointAt(cx, cy, r, from);
   const b = pointAt(cx, cy, r, from + span);
+  if (span < CHORD_MINUTES) {
+    return `M${f(a.x)} ${f(a.y)}L${f(b.x)} ${f(b.y)}`;
+  }
   const large = span > MINUTES_PER_DAY / 2 ? 1 : 0;
   return `M${f(a.x)} ${f(a.y)}A${r} ${r} 0 ${large} 1 ${f(b.x)} ${f(b.y)}`;
 }

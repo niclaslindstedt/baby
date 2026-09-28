@@ -219,8 +219,9 @@ stopwatch (or a countdown) to the second; `ProgressRing`; and `FillRing`,
 stacked shares filling a ring over a track that washes in a reference band —
 the sleep rings, and the shape any "how much of the recommended amount" is to
 take. The 24-hour dial
-is `ClockDial.tsx` over the pure `dial.ts` — the face, the arcs on its track,
-the now dot — and the sleep module uses it three ways: showing the last day on
+is `ClockDial.tsx` over the pure `dial.ts` — the face, the arcs on its track
+(a span under ten minutes drawn as its chord, which WebKit can't misplace the
+way it does a near-closed arc), the now dot — and the sleep module uses it three ways: showing the last day on
 the Sleep tab (`SleepNow.tsx`), showing it with the suggested window on the
 view, and editing one sleep by dragging its ends (`SleepClock.tsx`); and the
 "when?" sheet sets one moment on it with a single handle (`TimeDial.tsx`). A running
