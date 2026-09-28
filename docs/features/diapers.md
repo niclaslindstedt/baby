@@ -2,8 +2,8 @@
 
 Logging a diaper is **Pee**, **Poo** or **Both**, on the **Diapers** tab or
 in the sheet behind the top bar's **+**, from any screen — and then when:
-**Now**, one of the usual lags from **5 min** to **1 h** ago with the time
-each stands for, or **Another time** on a dial for a change you only get to
+**Now**, or under **Earlier** one of the usual lags from **5 min** to **1 h**
+ago with the time each stands for, or **Another time** on a dial for a change you only get to
 log later. There is nothing else to enter. The tab lists the last
 seven days under the buttons, newest first, so a mistap is one tap to remove
 — including yesterday's, which a list of today's changes could never reach.

@@ -267,8 +267,10 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   three off-bar screens;
   `QuickLogSheet.tsx` — the sheet behind the top bar's `+`.
   `WhenModal.tsx` is the "when?" sheet both logging buttons open after the
-  tap — **Now**, the usual lags as tiles, and a single-handle dial
-  (`TimeDial.tsx`) for any other time — over the pure `when.ts`.
+  tap — **Now**, and behind **Earlier** the usual lags as tiles and a
+  single-handle dial (`TimeDial.tsx`) for any other time — over the pure
+  `when.ts`. Show a control when it is wanted, not all the time: the app
+  stays uncluttered by keeping the rarer choices one tap away.
   `DiaperButtons.tsx` is the app's only diaper-logging control and
   `SleepButtons.tsx` its only sleep-logging one, and every place that logs
   either renders it; `SleepForm.tsx` is the sheet that corrects a sleep on

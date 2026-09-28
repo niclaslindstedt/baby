@@ -14,8 +14,9 @@ and the child reads as asleep.
 A sleep rarely starts with a hand free — the child drops off in a pram or on
 an arm, and the phone comes out twenty minutes later — so each tap opens a
 "when?" sheet (`WhenModal.tsx`, shared with the diaper buttons): a large
-**Now**, tiles for **5**, **10**, **15**, **30** and **45 min** and **1 h**
-ago, each showing the clock time it stands for, and **Another time**, a
+**Now**, and behind **Earlier** tiles for **5**, **10**, **15**, **30** and
+**45 min** and **1 h** ago, each showing the clock time it stands for, and
+**Another time**, a
 single handle on the 24-hour dial that reaches back a day, landing on five
 minutes and running past midnight into yesterday (`when.ts`). The times that
 can't be right — a wake before the sleep began, a start before the last sleep

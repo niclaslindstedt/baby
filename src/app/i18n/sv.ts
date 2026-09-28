@@ -123,7 +123,6 @@ export const sv: Catalog = {
     title: "Logga",
     titleDiaper: "Logga en blöja",
     titleSleep: "Logga sömn",
-    subtitle: "Tryck på vad som hände — sedan när.",
     diaper: "Blöja",
     sleep: "Sömn",
   },
@@ -131,8 +130,6 @@ export const sv: Catalog = {
   diapers: {
     title: "Blöjor",
     log: "Logga ett byte",
-    logHint:
-      "Tryck på vad blöjan innehöll, sedan när. Samma tre knappar finns bakom + i toppraden från vilken skärm som helst.",
     when: "När bytte du blöjan?",
     pee: "Kiss",
     poo: "Bajs",
@@ -141,8 +138,6 @@ export const sv: Catalog = {
     removed: "Borttaget",
     removeChange: "Ta bort det här bytet",
     recent: "Senaste 7 dagarna",
-    recentHint:
-      "Det som loggats, senaste först. Ta bort en rad som blev en felaktig tryckning — räkningen följer med.",
     dayToday: "Idag",
     noneToday: "Inget loggat idag.",
     noneYet: "Tryck på en knapp när du byter blöja — tiden sparas åt dig.",

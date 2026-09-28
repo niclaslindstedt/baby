@@ -67,9 +67,6 @@ export function QuickLogSheet({
               ? t("quickLog.titleSleep")
               : t("quickLog.titleDiaper")}
         </h2>
-        <p className="mt-0.5 text-sm text-fg-bright">
-          {t("quickLog.subtitle")}
-        </p>
       </div>
       <div className="flex flex-col gap-4 px-4 py-4">
         {diapers && (

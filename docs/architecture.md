@@ -204,9 +204,11 @@ it — cross-fade in and go back where they came from. Logging a diaper is one c
 and both write through `addDiaper`. Logging a sleep is too: the Sleep tab and
 the sheet both render `SleepButtons`, and starting, ending and correcting a
 sleep all write through `saveSleep`. Both sets of buttons ask _when_ the same
-way: the tap opens `WhenModal.tsx` — **Now**, a tile per usual lag showing the
-clock time it stands for, and **Another time** on a single-handle dial
-(`TimeDial.tsx`) — whose arithmetic is the pure `when.ts`. The sheet takes an
+way: the tap opens `WhenModal.tsx` — **Now**, and only behind **Earlier** a
+tile per usual lag showing the clock time it stands for and **Another time**
+on a single-handle dial (`TimeDial.tsx`) — whose arithmetic is the pure
+`when.ts`. Nothing is on show before it is wanted: the sheet seen most is two
+rows tall. The sheet takes an
 icon, a title, a question and an optional lower bound (`sleepEarliest` for a
 sleep), so the next tracker that logs a moment opens it as it is.
 

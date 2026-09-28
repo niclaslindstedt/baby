@@ -56,7 +56,6 @@ export function DiapersScreen({ data, today, onLog, onRemove }: Props) {
     <div className="flex flex-col gap-3 px-3 py-3">
       <Card>
         <Heading>{t("diapers.log")}</Heading>
-        <p className="mt-1 text-xs text-muted">{t("diapers.logHint")}</p>
         <div className="mt-3">
           <DiaperButtons onLog={onLog} />
         </div>
@@ -64,7 +63,6 @@ export function DiapersScreen({ data, today, onLog, onRemove }: Props) {
 
       <Card>
         <Heading>{t("diapers.recent")}</Heading>
-        <p className="mt-1 text-xs text-muted">{t("diapers.recentHint")}</p>
         {/* Today always gets a line, even with nothing under it: an empty
             today is a prompt to tap, not a gap in the list. */}
         {!hasToday && (

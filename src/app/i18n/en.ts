@@ -151,7 +151,6 @@ export const en = {
     title: "Log",
     titleDiaper: "Log a diaper",
     titleSleep: "Log a sleep",
-    subtitle: "Tap what happened — then when.",
     diaper: "Diaper",
     sleep: "Sleep",
   },
@@ -161,8 +160,6 @@ export const en = {
   diapers: {
     title: "Diapers",
     log: "Log a change",
-    logHint:
-      "Tap what the diaper held, then when. The same three buttons sit behind the + in the top bar from any screen.",
     when: "When was the change?",
     pee: "Pee",
     poo: "Poop",
@@ -171,8 +168,6 @@ export const en = {
     removed: "Removed",
     removeChange: "Remove this change",
     recent: "The last 7 days",
-    recentHint:
-      "What was logged, newest first. Remove a row that was a mistap — the counts follow it.",
     dayToday: "Today",
     noneToday: "Nothing logged today.",
     noneYet:
