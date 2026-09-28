@@ -11,6 +11,7 @@ import {
   formatLength,
   formatSpread,
   formatWeight,
+  formatWeightEstimate,
   measurementValues,
   unitLabel,
 } from "../src/app/format.ts";
@@ -22,7 +23,10 @@ import {
   displayScale,
   heightDraft,
   keepIfUnchanged,
+  KG_PER_LB,
   kgToLbOz,
+  kgToLbOzWhole,
+  kgToQuarterLb,
   lbOzToKg,
   lengthDraft,
   parseHeight,
@@ -116,7 +120,7 @@ describe("saying a measurement", () => {
 
   it("reads pounds, ounces and inches on a US phone", () => {
     expect(measurementValues(reading, US)).toEqual([
-      "16 lb 5.7 oz",
+      "16 lb 6 oz",
       "27.0 in",
       "17.3 in ↺",
     ]);
@@ -142,6 +146,45 @@ describe("saying a measurement", () => {
     expect(unitLabel("height", US)).toBe("ft, in");
     expect(unitLabel("weight", GB)).toBe("kg");
     expect(unitLabel("height", GB)).toBe("cm");
+  });
+});
+
+describe("a weight said in pounds", () => {
+  /** Pounds and ounces as kilograms, exactly — no gram rounding. */
+  const exact = (lb: number, oz: number) => (lb + oz / 16) * KG_PER_LB;
+
+  it("reads a reading to the whole ounce", () => {
+    expect(formatWeight(lbOzToKg(17, 11.2), US)).toBe("17 lb 11 oz");
+    expect(formatWeight(lbOzToKg(17, 11.6), US)).toBe("17 lb 12 oz");
+    expect(kgToLbOzWhole(7.42)).toEqual({ lb: 16, oz: 6 });
+  });
+
+  it("carries half an ounce short of a pound into the pound", () => {
+    expect(kgToLbOzWhole(exact(15, 15.5))).toEqual({ lb: 16, oz: 0 });
+    expect(formatWeight(exact(15, 15.5), US)).toBe("16 lb 0 oz");
+    expect(kgToLbOzWhole(exact(15, 15.4))).toEqual({ lb: 15, oz: 15 });
+  });
+
+  it("keeps a tenth of an ounce in the form, so a typed weight reads back", () => {
+    expect(weightDraft(lbOzToKg(17, 11.2), "us")).toEqual({
+      main: "17",
+      sub: "11.2",
+    });
+  });
+
+  it("says a forecast to the nearest quarter pound", () => {
+    // The forecast that read "about 20 lb 1.2 oz (likely 18 lb 8.8 oz–
+    // 21 lb 12.1 oz)": a band three pounds wide has no ounces in it.
+    expect(formatWeightEstimate(exact(20, 1.2), US)).toBe("20 lb");
+    expect(formatWeightEstimate(exact(18, 8.8), US)).toBe("18½ lb");
+    expect(formatWeightEstimate(exact(21, 12.1), US)).toBe("21¾ lb");
+    expect(formatWeightEstimate(exact(20, 3), US)).toBe("20¼ lb");
+    expect(kgToQuarterLb(exact(19, 14.5))).toBe(20);
+  });
+
+  it("leaves a forecast in kilograms as a reading reads", () => {
+    expect(formatWeightEstimate(9.12, GB)).toBe(formatWeight(9.12, GB));
+    expect(formatWeightEstimate(9.12, GB)).toBe("9.12 kg");
   });
 });
 

@@ -9,7 +9,9 @@ weight, length and head circumference.
 
 On a phone set to US English the readings are typed and read in pounds and
 ounces and inches, and the parents' heights in feet and inches; everywhere
-else in kilograms and centimeters. The record itself always keeps the metric
+else in kilograms and centimeters. A reading is said to the whole ounce, and
+the forecast to the nearest quarter pound ("about 20¼ lb"), because a
+forecast months out is pounds wide. The record itself always keeps the metric
 values, so the curves, the trend and the forecast are exactly the same either
 way, and a record synced between two phones means the same child on both.
 

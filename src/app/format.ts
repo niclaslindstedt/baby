@@ -18,7 +18,13 @@ import {
 } from "@niclaslindstedt/oss-framework/format";
 
 import { isClockTime, minutesOfClock, type Measurement } from "./types.ts";
-import { cmToFtIn, cmToIn, kgToLbOz, unitSystemFor } from "./units.ts";
+import {
+  cmToFtIn,
+  cmToIn,
+  kgToLbOzWhole,
+  kgToQuarterLb,
+  unitSystemFor,
+} from "./units.ts";
 
 /** A `DayKey` as a local `Date` at midnight, or null when it isn't a real
  *  day. */
@@ -127,19 +133,37 @@ export function formatInstant(ms: number, locale: string): string {
 
 /** A weight, stored in kilograms, in the locale's units: to the gram-ish
  *  precision a scale gives in kilograms (two decimals under 10 kg, one
- *  above), or as pounds and ounces to a tenth of an ounce where the locale
- *  weighs that way ("16 lb 5.7 oz"). */
+ *  above), or as pounds and whole ounces where the locale weighs that way
+ *  ("16 lb 6 oz") — a clinic's card and a home scale read to the ounce. */
 export function formatWeight(kg: number, locale: string): string {
   if (unitSystemFor(locale) === "us") {
-    const { lb, oz } = kgToLbOz(kg);
-    const ounces = formatNumber(oz, locale, { maximumFractionDigits: 1 });
-    return `${formatWhole(lb, locale)} lb ${ounces} oz`;
+    const { lb, oz } = kgToLbOzWhole(kg);
+    return `${formatWhole(lb, locale)} lb ${formatWhole(oz, locale)} oz`;
   }
   const digits = kg < 10 ? 2 : 1;
   return `${formatNumber(kg, locale, {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   })} kg`;
+}
+
+/** Quarter pounds as a US reader writes them. */
+const QUARTERS = ["", "¼", "½", "¾"] as const;
+
+/** A forecast weight — a point or a band's edge — in the locale's units.
+ *  In kilograms it reads as a reading does. In pounds it is said to the
+ *  nearest quarter pound ("about 20¼ lb (likely 18½ lb–21¾ lb)"), not in
+ *  ounces: the likely band a few months out is pounds wide, so an ounce
+ *  figure would claim a precision the forecast does not have, and "lb oz"
+ *  would read like something a scale said. A quarter pound is the coarsest
+ *  step that still moves when the forecast does from one reading to the
+ *  next, and a fraction reads as the estimate it is. */
+export function formatWeightEstimate(kg: number, locale: string): string {
+  if (unitSystemFor(locale) !== "us") return formatWeight(kg, locale);
+  const pounds = kgToQuarterLb(kg);
+  const whole = Math.floor(pounds);
+  const quarter = QUARTERS[Math.round((pounds - whole) * 4)]!;
+  return `${whole === 0 && quarter ? "" : formatWhole(whole, locale)}${quarter} lb`;
 }
 
 /** A child's length or head circumference, stored in centimetres, in the

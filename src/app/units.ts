@@ -44,11 +44,31 @@ function round(value: number, digits: number): number {
 }
 
 /** A weight as whole pounds and the ounces left over, the ounces to one
- *  decimal, the way a US scale and a clinic's card read it. */
+ *  decimal — what a form's fields open with, so a weight typed to a tenth
+ *  of an ounce reads back as it was typed. For saying a weight, see
+ *  {@link kgToLbOzWhole}. */
 export function kgToLbOz(kg: number): { lb: number; oz: number } {
   const totalOz = round((kg / KG_PER_LB) * OZ_PER_LB, 1);
   const lb = Math.floor(totalOz / OZ_PER_LB);
   return { lb, oz: round(totalOz - lb * OZ_PER_LB, 1) };
+}
+
+/** A weight as whole pounds and whole ounces — how a reading is said. A
+ *  tenth of an ounce is about three grams, finer than a baby scale is steady
+ *  to, so "17 lb 11.2 oz" claims a precision no reading has. The ounces carry:
+ *  15.5 oz rounds up to the next pound, never to "16 oz". */
+export function kgToLbOzWhole(kg: number): { lb: number; oz: number } {
+  const totalOz = Math.round((kg / KG_PER_LB) * OZ_PER_LB);
+  return {
+    lb: Math.floor(totalOz / OZ_PER_LB),
+    oz: totalOz % OZ_PER_LB,
+  };
+}
+
+/** A weight in pounds, to the nearest quarter pound — how a forecast is
+ *  said. */
+export function kgToQuarterLb(kg: number): number {
+  return Math.round((kg / KG_PER_LB) * 4) / 4;
 }
 
 /** Pounds and ounces as kilograms, to the gram — finer than any scale reads

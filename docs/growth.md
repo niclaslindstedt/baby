@@ -9,7 +9,11 @@ computed in them. On a US phone (`units.ts`, from the locale `locale.ts`
 resolves) the forms take pounds and ounces, inches, and a parent's height in
 feet and inches, and convert on save — to the gram and the hundredth of a
 centimetre, so a value reads back as it was typed, and an untouched value is
-saved exactly as stored. The chart is scaled by the same constant factor
+saved exactly as stored. Said back, a reading is rounded to the whole ounce
+(15.5 oz carries into the next pound) and a forecast weight to the nearest
+quarter pound (`formatWeightEstimate`): its likely band is pounds wide, so
+ounces would claim a precision it does not have. Only the display rounds;
+the stored value and the form's fields do not. The chart is scaled by the same constant factor
 (1 lb = 0.45359237 kg, 1 in = 2.54 cm), so the WHO channels drawn in pounds
 are the same curves.
 

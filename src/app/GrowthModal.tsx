@@ -14,6 +14,7 @@ import {
   formatPercent,
   formatSpread,
   formatWeight,
+  formatWeightEstimate,
   formatZ,
 } from "./format.ts";
 import {
@@ -92,6 +93,13 @@ export function GrowthModal({ open, onClose, data, today, standards }: Props) {
   const format = (value: number) =>
     indicator === "weight"
       ? formatWeight(value, locale)
+      : formatLength(value, locale);
+  // A forecast is said more coarsely than a reading where the unit is fine
+  // enough to pretend otherwise — pounds to the quarter, not the ounce (see
+  // `formatWeightEstimate`).
+  const estimate = (value: number) =>
+    indicator === "weight"
+      ? formatWeightEstimate(value, locale)
       : formatLength(value, locale);
   // The chart is drawn in the unit a parent reads — pounds or inches on a US
   // phone — by scaling the stored kilograms and centimetres, curves and
@@ -211,9 +219,9 @@ export function GrowthModal({ open, onClose, data, today, standards }: Props) {
                   <p className="mt-1 text-sm text-fg-bright">
                     {t("growth.forecastAt", {
                       date: formatDayYear(date, locale),
-                      value: format(last.value),
-                      low: format(band.lower),
-                      high: format(band.upper),
+                      value: estimate(last.value),
+                      low: estimate(band.lower),
+                      high: estimate(band.upper),
                     })}
                   </p>
                 );
