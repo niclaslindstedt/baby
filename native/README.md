@@ -55,8 +55,8 @@ devices' edits reconcile, are the web app's, in `src/app/migrations.ts` and
 | `src/injected.ts`          | The theme reporter injected into the page, the status-bar style it drives, and the service-worker teardown. |
 | `src/authSessionBridge.ts` | **Pure.** The injected sign-in provider (`window.__ossAuthSession`) and its plumbing. Tested from the root. |
 | `src/authSession.ts`       | Opens one sign-in in an authentication session (`expo-web-browser`) and hands back where it ended.          |
-| `src/saveFileProtocol.ts`  | **Pure.** The save-file contract: the descriptor injected before load, the request check, the answer.       |
-| `src/saveFileBridge.ts`    | Writes an export to the cache and opens the share sheet (`expo-file-system`, `expo-sharing`).               |
+| `src/saveFileBridge.ts`    | **Pure.** The save-file contract: the descriptor injected before load, the request check, the answer.       |
+| `src/saveFile.ts`          | Writes an export to the cache and opens the share sheet (`expo-file-system`, `expo-sharing`).               |
 | `src/scriptText.ts`        | **Import-free.** Splicing text safely into an injected script.                                              |
 | `scripts/bundle-web.mjs`   | Builds the web app and packs `dist/` into `assets/webroot.zip`.                                             |
 
@@ -155,7 +155,7 @@ page posts the file as base64 instead of downloading it:
 page: saveFile({ text, filename, mimeType })
    │  postMessage {type: "oss-framework/save-file", version: 1, id, filename, mimeType, base64}
    ▼
-App.tsx onMessage → isSaveFileRequest → answerSaveFile (src/saveFileBridge.ts)
+App.tsx onMessage → isSaveFileRequest → answerSaveFile (src/saveFile.ts)
    │  writes <cache>/exports/<id>/<name>, opens the share sheet (expo-sharing)
    ▼
 window event "oss-framework/save-file-result" {id, ok}  → the page's promise settles

@@ -55,11 +55,8 @@ import {
   isAuthSessionRequest,
 } from "./src/authSessionBridge";
 import { answerAuthSession, authRedirectUri } from "./src/authSession";
-import {
-  SAVE_FILE_DESCRIPTOR,
-  answerSaveFile,
-  isSaveFileRequest,
-} from "./src/saveFileBridge";
+import { SAVE_FILE_DESCRIPTOR, isSaveFileRequest } from "./src/saveFileBridge";
+import { answerSaveFile } from "./src/saveFile";
 
 // Hold the native splash until the WebView actually paints. Called at module
 // scope so the auto-hide never wins the race; a rejection only means the
@@ -184,7 +181,7 @@ export default function App() {
         return;
       }
       // A backup export: write it out and open the share sheet on it (see
-      // `src/saveFileBridge.ts`). The page waits for the answer.
+      // `src/saveFile.ts`). The page waits for the answer.
       if (isSaveFileRequest(parsed)) {
         void answerSaveFile(parsed, (script) =>
           webViewRef.current?.injectJavaScript(script),

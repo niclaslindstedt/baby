@@ -1,74 +1,84 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
-// WHAT THE WRAPPER DOES WITH A SAVE-FILE REQUEST FROM THE PAGE.
+// THE SAVE-FILE CONTRACT, THE WRAPPER'S SIDE OF THE WORDS.
 //
-// The page's backup export arrives as base64 (see `saveFileProtocol.ts` for
-// the contract); this writes it to a file in the cache directory and opens
-// the iOS / Android share sheet on it — Save to Files, AirDrop, Mail — then
-// tells the page the sheet closed. The payload is the child's whole record:
-// it is never logged, only the latest export is kept on disk (in the cache,
-// which the next export clears and the OS may purge), and it is handed to
-// nothing but the share sheet.
+// A backup export in a browser is a download: an anchor clicked at a `blob:`
+// URL. Inside the WebView that click goes nowhere, so the framework's
+// `saveFile` (`@niclaslindstedt/oss-framework/files`) sends the bytes here
+// instead — but only when this wrapper has said it can take them, in the
+// descriptor below. The contract is the framework's
+// (`docs/native-shell.md`, "Contract `save-file`"); the names here are its
+// names, and `tests/native_save_file_test.ts` pins them against it.
 //
-// This is the framework's reference (`docs/native-shell.md` in
-// oss-framework), with its pure half in `saveFileProtocol.ts` so the root
-// test suite can run it without `expo` installed.
+// This file exports STRINGS for the page (dependency-free, ES5-ish — nothing
+// in them is transpiled) plus the pure narrowing and settling helpers. It is
+// exercised from the root test suite, so it imports nothing that reaches
+// `expo`; the effect — writing the file and opening the share sheet — is
+// `saveFile.ts`.
 
-import * as FileSystem from "expo-file-system/legacy";
-import * as Sharing from "expo-sharing";
+export const SAVE_FILE_TYPE = "oss-framework/save-file";
+const RESULT_EVENT = "oss-framework/save-file-result";
 
-import {
-  UTI,
-  bareName,
-  saveFileResultScript,
-  type SaveFileRequest,
-} from "./saveFileProtocol";
+/** Injected before the page loads, beside the other before-load script: it
+ *  adds `save-file` to the shell descriptor the framework reads. */
+export const SAVE_FILE_DESCRIPTOR = `(function () {
+  var shell = window.__ossShell || { version: 1, capabilities: [] };
+  if (shell.capabilities.indexOf("save-file") < 0) shell.capabilities.push("save-file");
+  window.__ossShell = shell;
+})(); true;`;
 
-export {
-  SAVE_FILE_DESCRIPTOR,
-  SAVE_FILE_TYPE,
-  isSaveFileRequest,
-  saveFileResultScript,
-  type SaveFileRequest,
-} from "./saveFileProtocol";
+export type SaveFileRequest = {
+  type: string;
+  version: number;
+  id: string;
+  filename: string;
+  mimeType: string;
+  base64: string;
+};
 
-/** Write the bytes to the cache, open the share sheet, answer. */
-export async function answerSaveFile(
-  request: SaveFileRequest,
-  inject: (script: string) => void,
-): Promise<void> {
-  if (request.version !== 1) {
-    inject(saveFileResultScript(request.id, false, "Unsupported version."));
-    return;
-  }
-  // One directory per request, so the file keeps exactly the name the user
-  // sees in the sheet. The previous export's directory goes first: it is not
-  // deleted when its sheet closes, because an Android target may still be
-  // reading it after the chooser has returned.
-  const root = `${FileSystem.cacheDirectory}exports/`;
-  const dir = `${root}${request.id.replace(/[^\w-]/g, "_")}/`;
-  const uri = dir + bareName(request.filename);
-  try {
-    if (!(await Sharing.isAvailableAsync())) {
-      throw new Error("Sharing is not available on this device.");
-    }
-    await FileSystem.deleteAsync(root, { idempotent: true });
-    await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
-    await FileSystem.writeAsStringAsync(uri, request.base64, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-    await Sharing.shareAsync(uri, {
-      mimeType: request.mimeType,
-      UTI: UTI[request.mimeType],
-      dialogTitle: bareName(request.filename),
-    });
-    inject(saveFileResultScript(request.id, true));
-  } catch (error) {
-    inject(
-      saveFileResultScript(
-        request.id,
-        false,
-        error instanceof Error ? error.message : String(error),
-      ),
-    );
-  }
+export function isSaveFileRequest(value: unknown): value is SaveFileRequest {
+  const m = value as Partial<SaveFileRequest> | null;
+  return (
+    typeof m === "object" &&
+    m !== null &&
+    m.type === SAVE_FILE_TYPE &&
+    typeof m.id === "string" &&
+    typeof m.filename === "string" &&
+    typeof m.mimeType === "string" &&
+    typeof m.base64 === "string"
+  );
+}
+
+/** iOS picks share targets by UTI, not MIME type. The backup is JSON; the
+ *  rest are the framework reference's, kept so a later export needs no
+ *  change here. */
+export const UTI: Record<string, string> = {
+  "application/json": "public.json",
+  "application/pdf": "com.adobe.pdf",
+  "application/zip": "public.zip-archive",
+  "image/jpeg": "public.jpeg",
+  "image/png": "public.png",
+  "image/svg+xml": "public.svg-image",
+  "text/calendar": "public.calendar-event",
+  "text/csv": "public.comma-separated-values-text",
+  "text/markdown": "net.daringfireball.markdown",
+  "text/plain": "public.plain-text",
+  "text/vcard": "public.vcard",
+};
+
+/** Never trust the name: its last path component, or `file`. */
+export function bareName(name: string): string {
+  const last = name.split(/[\\/]/).pop()?.trim() ?? "";
+  return last === "" || last === "." || last === ".." ? "file" : last;
+}
+
+/** The script that settles the page's promise. */
+export function saveFileResultScript(
+  id: string,
+  ok: boolean,
+  error?: string,
+): string {
+  const detail = ok ? { id, ok } : { id, ok, error };
+  return `window.dispatchEvent(new CustomEvent(${JSON.stringify(
+    RESULT_EVENT,
+  )}, { detail: ${JSON.stringify(detail)} })); true;`;
 }

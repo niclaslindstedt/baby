@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
-// The save-file bridge (`native/src/saveFileProtocol.ts`) against the
+// The save-file bridge (`native/src/saveFileBridge.ts`) against the
 // framework's side of the contract (`saveFile` in
 // `@niclaslindstedt/oss-framework/files`).
 //
@@ -31,7 +31,7 @@ import {
   bareName,
   isSaveFileRequest,
   saveFileResultScript,
-} from "../native/src/saveFileProtocol.ts";
+} from "../native/src/saveFileBridge.ts";
 import { saveBackup } from "../src/app/backup.ts";
 import { emptyDoc } from "../src/app/types.ts";
 
@@ -91,7 +91,7 @@ describe("the descriptor", () => {
 
   it("imports nothing, since the root tests load it without native/'s dependencies", () => {
     const source = readFileSync(
-      join(native, "src", "saveFileProtocol.ts"),
+      join(native, "src", "saveFileBridge.ts"),
       "utf8",
     );
     expect(source).not.toMatch(/^\s*import\b/m);
