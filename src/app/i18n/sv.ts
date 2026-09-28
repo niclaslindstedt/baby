@@ -181,7 +181,12 @@ export const sv: Catalog = {
           "Sömnen började kl. {start} — uppvaknandet kan inte vara tidigare.",
         beforeLastSleep:
           "Förra sömnen slutade kl. {end}. Rätta den i listan först för att börja tidigare.",
+        mistap: "Förra sömnen, kl. {end}, varade under en minut.",
+        mistaps:
+          "De senaste {count} sömnerna, fram till kl. {end}, varade under en minut var.",
       },
+      removeMistap: "Ta bort den",
+      removeMistaps: "Ta bort de {count}",
       problem: {
         future: "Den tiden har inte varit än.",
         beforeStart: "Det är före sömnen började kl. {start}.",
@@ -190,6 +195,7 @@ export const sv: Catalog = {
       },
     },
     wokeUp: "Vaknade",
+    takenBack: "Under en minut — inget loggat",
     asleepNap: "Sover middag sedan {time}",
     asleepNight: "Sover för natten sedan {time}",
     startedNap: "Tupplur från {time}",

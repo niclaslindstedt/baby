@@ -225,7 +225,12 @@ export const en = {
         beforeStart: "The sleep began at {start} — waking can't be earlier.",
         beforeLastSleep:
           "The last sleep ended at {end}. To start earlier, correct that one in the list first.",
+        mistap: "The last sleep, at {end}, lasted under a minute.",
+        mistaps:
+          "The last {count} sleeps, up to {end}, each lasted under a minute.",
       },
+      removeMistap: "Remove it",
+      removeMistaps: "Remove those {count}",
       problem: {
         future: "That time hasn't happened yet.",
         beforeStart: "That is before the sleep began at {start}.",
@@ -234,6 +239,7 @@ export const en = {
       },
     },
     wokeUp: "Woke up",
+    takenBack: "Under a minute — nothing logged",
     asleepNap: "Napping since {time}",
     asleepNight: "Asleep for the night since {time}",
     startedNap: "Nap from {time}",

@@ -55,6 +55,50 @@ export function sleepEarliest(
   return last === null ? null : { at: last, reason: "beforeLastSleep" };
 }
 
+/**
+ * The shortest sleep that is a sleep: anything under a minute is a tap
+ * taken back — **Nap** then **Woke up** in the same breath — not something
+ * the child did. The app's own line; no source draws one.
+ */
+export const MISTAP_MS = 60_000;
+
+/** Whether an ended sleep is a tap taken back rather than a sleep. */
+export function isMistap(s: SleepSession): boolean {
+  if (s.end === null) return false;
+  return Date.parse(s.end) - Date.parse(s.start) < MISTAP_MS;
+}
+
+/** Whether a wake at `at` takes back the sleep that began at `start`,
+ *  rather than ending it: the tap came within a minute of the start. */
+export function wakeTakesBack(start: number, at: number): boolean {
+  return at - start < MISTAP_MS;
+}
+
+/**
+ * The taken-back sleeps that stand between the next start and an earlier
+ * time: the sub-minute sleeps ending after the last real one did, while
+ * nobody is asleep. They bound a start as hard as a real sleep would —
+ * a start before one would run over it — so the "when?" sheet offers to
+ * remove them rather than leave "correct that one in the list first" as
+ * the only way on. Oldest first.
+ */
+export function blockingMistaps(data: AppData, now: Date): SleepSession[] {
+  if (currentSleep(data, now)) return [];
+  const t = now.getTime();
+  let realEnd = -Infinity;
+  const mistaps: SleepSession[] = [];
+  for (const s of Object.values(data.sleeps)) {
+    if (s.end === null) continue;
+    const end = Date.parse(s.end);
+    if (Number.isNaN(end) || end > t) continue;
+    if (isMistap(s)) mistaps.push(s);
+    else realEnd = Math.max(realEnd, end);
+  }
+  return mistaps
+    .filter((s) => Date.parse(s.end!) > realEnd)
+    .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
+}
+
 /** A sleep as the dial edits it: two instants, the second null while the
  *  child is still asleep. */
 export type SleepDraft = { kind: SleepKind; start: number; end: number | null };

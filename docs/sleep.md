@@ -25,6 +25,15 @@ saying why (`sleepEarliest`); the moment is checked once more as it is written
 (`sleepTimeProblem`), which also refuses one in the future. The toast names
 the time that was logged.
 
+A **Woke up** less than a minute after the start takes the start back rather
+than ending it (`wakeTakesBack`): a sleep of no length is a mistap, not
+something the child did, and left in the log it would bar every earlier start
+behind it — last night could not be logged the next morning past a blip at
+7:00. The minute is the app's own line; no source draws one. Blips already in
+the log (`isMistap`) are offered for removal by the "when?" sheet when they
+are all that stands between a start and an earlier time
+(`blockingMistaps`).
+
 The kind is the parent's tap rather than the app's guess. Nothing about a
 start time says which it is — a newborn's longest sleep is as likely at noon as
 at midnight, and a toddler's 18:30 is bedtime in one family and a late nap in

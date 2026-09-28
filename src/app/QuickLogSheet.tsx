@@ -27,6 +27,8 @@ type Props = {
   data: AppData;
   onStartSleep: (kind: SleepKind, at: Date) => void;
   onWake: (at: Date) => void;
+  /** Clears taken-back sleeps out of the way of an earlier start. */
+  onRemoveSleep: (ids: string[]) => void;
   onClose: () => void;
 };
 
@@ -40,6 +42,7 @@ export function QuickLogSheet({
   data,
   onStartSleep,
   onWake,
+  onRemoveSleep,
   onClose,
 }: Props) {
   const t = useT();
@@ -102,6 +105,7 @@ export function QuickLogSheet({
                 onWake(at);
                 onClose();
               }}
+              onRemoveMistaps={onRemoveSleep}
               large
             />
           </section>

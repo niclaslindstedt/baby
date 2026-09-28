@@ -6,7 +6,10 @@ sheet behind the top bar's **+**, from any screen. Each tap asks when:
 **Now** fills the top of the sheet, and **Earlier** under it opens **5 min**
 through **1 h** ago, each showing the time it stands for, and **Another time** on a
 dial for anything further back. Times that can't be right — waking before
-the sleep began — are dimmed rather than refused after the tap.
+the sleep began — are dimmed rather than refused after the tap. Tapping
+**Woke up** within a minute of **Nap** or **Night** takes the sleep back
+rather than logging one of no length, so last night can still be set the
+morning after, back to yesterday evening on the dial.
 
 **A clock that is running.** The top of the tab is a 24-hour dial — midnight at
 the top, noon at the bottom — with the last day's sleeps drawn round it where

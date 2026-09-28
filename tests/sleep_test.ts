@@ -33,10 +33,13 @@ import {
   type SleepAverage,
 } from "../src/app/sleep.ts";
 import {
+  blockingMistaps,
+  isMistap,
   sleepDraft,
   sleepEarliest,
   sleepEditProblem,
   sleepTimeProblem,
+  wakeTakesBack,
 } from "../src/app/sleepEdit.ts";
 import {
   emptyDoc,
@@ -612,6 +615,56 @@ describe("logging after the fact", () => {
 
     // Nothing logged: nothing bounds it.
     expect(sleepEarliest(docWith([]), two)).toBeNull();
+  });
+
+  it("takes a wake within a minute of the start as a mistap", () => {
+    const start = local("2026-09-28", 6, 59).getTime();
+    expect(wakeTakesBack(start, start + 20_000)).toBe(true);
+    expect(wakeTakesBack(start, start + 59_999)).toBe(true);
+    expect(wakeTakesBack(start, start + 60_000)).toBe(false);
+    const blip = sleep("nap", "2026-09-28", [6, 59], [6, 59]);
+    expect(isMistap(blip)).toBe(true);
+    expect(isMistap(sleep("nap", "2026-09-28", [6, 59], [7, 0]))).toBe(false);
+    expect(isMistap(sleep("nap", "2026-09-28", [6, 59], null))).toBe(false);
+  });
+
+  it("names the taken-back sleeps that bar last night being logged", () => {
+    // The morning after: yesterday's nap ended at 16:00, and two taps were
+    // taken back just now. Logging last night from 19:45 is barred by the
+    // two blips alone, and they are what the sheet offers to remove.
+    const blipA = sleep("nap", "2026-09-28", [6, 58], [6, 58], "blipA");
+    const blipB = sleep("nap", "2026-09-28", [6, 59], [6, 59], "blipB");
+    const data = docWith([
+      sleep("nap", "2026-09-27", [14, 30], [16, 0]),
+      blipB,
+      blipA,
+    ]);
+    const now = local("2026-09-28", 7, 51);
+    expect(sleepTimeProblem(data, local("2026-09-27", 19, 45), now)).toBe(
+      "beforeLastSleep",
+    );
+    expect(blockingMistaps(data, now).map((s) => s.id)).toEqual([
+      "blipA",
+      "blipB",
+    ]);
+    // With them gone, 19:45 yesterday is a start like any other.
+    const cleared = docWith([sleep("nap", "2026-09-27", [14, 30], [16, 0])]);
+    expect(
+      sleepTimeProblem(cleared, local("2026-09-27", 19, 45), now),
+    ).toBeNull();
+    expect(blockingMistaps(cleared, now)).toEqual([]);
+    // A blip before the last real sleep is in nobody's way.
+    const old = docWith([
+      sleep("nap", "2026-09-27", [9, 0], [9, 0]),
+      sleep("nap", "2026-09-27", [14, 30], [16, 0]),
+    ]);
+    expect(blockingMistaps(old, now)).toEqual([]);
+    // Nor while a sleep is running.
+    const running = docWith([
+      blipA,
+      sleep("night", "2026-09-28", [7, 10], null),
+    ]);
+    expect(blockingMistaps(running, now)).toEqual([]);
   });
 });
 

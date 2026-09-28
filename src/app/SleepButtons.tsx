@@ -8,6 +8,7 @@ import { useLang, useT } from "./i18n/index.ts";
 import { Elapsed } from "./live.tsx";
 import { currentSleep, lastEndedSleep } from "./sleep.ts";
 import {
+  blockingMistaps,
   sleepEarliest,
   sleepTimeProblem,
   type SleepTimeProblem,
@@ -30,7 +31,10 @@ import { WhenModal } from "./WhenModal.tsx";
 // and a dial for anything further back. The lags that can't be right — a
 // wake before the sleep began, a start before the last one ended — are
 // dimmed before they can be tapped (`sleepEarliest`), and the moment is
-// checked once more as it is written (`sleepTimeProblem`). A whole sleep
+// checked once more as it is written (`sleepTimeProblem`). When all that
+// stands in the way is a sleep of under a minute — a tap taken back — the
+// sheet offers to remove it there and then (`blockingMistaps`), so last
+// night can still be logged the morning after. A whole sleep
 // that was never tapped is **Add a sleep** on the Sleep tab.
 //
 // Big for the same reason the diaper buttons are: the tap happens in a dark
@@ -41,6 +45,10 @@ type Props = {
   data: AppData;
   onStart: (kind: SleepKind, at: Date) => void;
   onWake: (at: Date) => void;
+  /** Removes taken-back sleeps (`blockingMistaps`) that stand in the way
+   *  of an earlier start — the one thing the "when?" sheet offers to do
+   *  besides answer. */
+  onRemoveMistaps: (ids: string[]) => void;
   /** Taller buttons, for the sheet. */
   large?: boolean;
   /** The running sleep's line, with its clock. Off on the Sleep tab, whose
@@ -63,6 +71,7 @@ export function SleepButtons({
   data,
   onStart,
   onWake,
+  onRemoveMistaps,
   large,
   showStatus = true,
 }: Props) {
@@ -99,6 +108,7 @@ export function SleepButtons({
   const icon = large ? "h-7 w-7" : "h-5 w-5";
   const lastEnd = lastEndedSleep(data, now);
   const earliest = sleepEarliest(data, now);
+  const mistaps = blockingMistaps(data, now);
   const problemArgs = {
     start: current ? formatClock(current.start, locale) : "",
     end: lastEnd === null ? "" : formatInstant(lastEnd, locale),
@@ -182,8 +192,28 @@ export function SleepButtons({
         })}
         earliest={earliest?.at ?? null}
         earliestNote={
-          earliest
-            ? t(`sleep.when.limit.${earliest.reason}` as const, problemArgs)
+          !earliest
+            ? undefined
+            : mistaps.length === 1
+              ? t("sleep.when.limit.mistap", problemArgs)
+              : mistaps.length > 1
+                ? t("sleep.when.limit.mistaps", {
+                    ...problemArgs,
+                    count: String(mistaps.length),
+                  })
+                : t(`sleep.when.limit.${earliest.reason}` as const, problemArgs)
+        }
+        earliestAction={
+          mistaps.length > 0
+            ? {
+                label:
+                  mistaps.length === 1
+                    ? t("sleep.when.removeMistap")
+                    : t("sleep.when.removeMistaps", {
+                        count: String(mistaps.length),
+                      }),
+                onClick: () => onRemoveMistaps(mistaps.map((s) => s.id)),
+              }
             : undefined
         }
         onPick={commit}

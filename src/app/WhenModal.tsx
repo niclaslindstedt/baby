@@ -60,6 +60,9 @@ type Props = {
   earliest?: number | null;
   /** Why nothing before `earliest` can be picked. */
   earliestNote?: string;
+  /** A way past the bound, when there is one, shown with the note — a
+   *  button, never a write of its own: the caller's `onClick` does it. */
+  earliestAction?: { label: string; onClick: () => void };
   onPick: (at: Date) => void;
   onClose: () => void;
 };
@@ -73,6 +76,7 @@ export function WhenModal({
   question,
   earliest = null,
   earliestNote,
+  earliestAction,
   onPick,
   onClose,
 }: Props) {
@@ -147,6 +151,7 @@ export function WhenModal({
             onMore={() => setMore(true)}
             earliest={earliest}
             earliestNote={earliestNote}
+            earliestAction={earliestAction}
             onPick={pick}
             onDial={(now) => setDial(whenDialStart(now, earliest))}
           />
@@ -162,7 +167,7 @@ export function WhenModal({
             {earliestNote &&
               earliest !== null &&
               dial - earliest < WHEN_STEP * 60_000 && (
-                <p className="text-center text-xs text-muted">{earliestNote}</p>
+                <Limit note={earliestNote} action={earliestAction} />
               )}
           </>
         )}
@@ -178,6 +183,7 @@ function Choices({
   onMore,
   earliest,
   earliestNote,
+  earliestAction,
   onPick,
   onDial,
 }: {
@@ -185,6 +191,7 @@ function Choices({
   onMore: () => void;
   earliest: number | null;
   earliestNote?: string;
+  earliestAction?: Props["earliestAction"];
   onPick: (at: number) => void;
   onDial: (now: number) => void;
 }) {
@@ -257,13 +264,37 @@ function Choices({
             {t("when.other")}
           </button>
           {blocked && earliestNote && (
-            <p className="col-span-3 text-center text-xs text-muted">
-              {earliestNote}
-            </p>
+            <div className="col-span-3">
+              <Limit note={earliestNote} action={earliestAction} />
+            </div>
           )}
         </div>
       )}
     </>
+  );
+}
+
+/** Why the earlier times are out of reach, and the way past, if any. */
+function Limit({
+  note,
+  action,
+}: {
+  note: string;
+  action?: Props["earliestAction"];
+}) {
+  return (
+    <div className="flex flex-col items-center gap-1.5 text-center">
+      <p className="text-xs text-muted">{note}</p>
+      {action && (
+        <button
+          type="button"
+          onClick={action.onClick}
+          className="rounded-full border border-line px-3 py-1.5 text-xs text-fg-bright transition-colors hover:border-danger hover:text-danger"
+        >
+          {action.label}
+        </button>
+      )}
+    </div>
   );
 }
 
