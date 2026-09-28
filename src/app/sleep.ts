@@ -712,7 +712,7 @@ export const MIN_HISTORY_NIGHTS = 3;
  *  a point in it. */
 export const SUGGESTION_SPREAD_MINUTES = 15;
 
-function median(values: number[]): number | null {
+export function median(values: number[]): number | null {
   if (values.length === 0) return null;
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);

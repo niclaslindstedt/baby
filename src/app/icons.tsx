@@ -152,6 +152,27 @@ export function PooIcon({ className }: IconProps) {
 }
 
 /**
+ * A diaper with both — the droplet and the pile on one grid, for the places
+ * that have room for a single mark (the "when?" sheet's header and the
+ * handle on its dial). Each is the glyph above at 60%, stroked back up to
+ * the set's 2px so the pair sits beside the others at the same weight.
+ */
+export function DropPooIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <g transform="translate(-1 -1) scale(0.6)" strokeWidth={2 / 0.6}>
+        <path d="M12 2.5c3 4 6.5 7.5 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10 9 6.5 12 2.5Z" />
+      </g>
+      <g transform="translate(9.6 9.6) scale(0.6)" strokeWidth={2 / 0.6}>
+        <path d="M8.5 11.5h7a3.5 3.5 0 0 0-7 0Z" />
+        <path d="M5 16h14a4.5 4.5 0 0 0-4.5-4.5h-5A4.5 4.5 0 0 0 5 16Z" />
+        <path d="M2 20.5h20a4.5 4.5 0 0 0-4.5-4.5h-11A4.5 4.5 0 0 0 2 20.5Z" />
+      </g>
+    </Glyph>
+  );
+}
+
+/**
  * Sleep — a crescent moon. The Sleep tab, the Today card, and the Night
  * button: the tab is the sleep log as a whole, and night is what a parent
  * pictures when they think of it, so the one glyph serves both.
@@ -197,7 +218,8 @@ export function SunriseIcon({ className }: IconProps) {
   );
 }
 
-/** A clock, for the times of day a food is given. */
+/** A clock, for the times of day a food is given and for "another time"
+ *  on the "when?" sheet. */
 export function ClockIcon({ className }: IconProps) {
   return (
     <Glyph className={className}>

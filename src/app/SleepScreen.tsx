@@ -51,6 +51,7 @@ type Props = {
   today: DayKey;
   onStart: (kind: SleepKind, at: Date) => void;
   onWake: (at: Date) => void;
+  onRemoveMistaps: (ids: string[]) => void;
   onSave: (sleep: SleepSession) => void;
   onRemove: (id: string) => void;
 };
@@ -60,6 +61,7 @@ export function SleepScreen({
   today,
   onStart,
   onWake,
+  onRemoveMistaps,
   onSave,
   onRemove,
 }: Props) {
@@ -87,6 +89,7 @@ export function SleepScreen({
             data={data}
             onStart={onStart}
             onWake={onWake}
+            onRemoveMistaps={onRemoveMistaps}
             showStatus={false}
           />
         </div>

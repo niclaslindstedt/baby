@@ -109,12 +109,20 @@ export const sv: Catalog = {
     allGiven: "Alla programmets doser är noterade.",
   },
 
+  when: {
+    now: "Nu",
+    earlier: "Tidigare",
+    ago: "för {duration} sedan",
+    agoAt: "för {duration} sedan, kl. {time}",
+    other: "En annan tid",
+    back: "Tillbaka",
+    logAt: "Logga kl. {time}",
+  },
+
   quickLog: {
     title: "Logga",
     titleDiaper: "Logga en blöja",
     titleSleep: "Logga sömn",
-    subtitle:
-      "Ett tryck. Tiden är nu — om du inte väljer en tidigare för sömnen.",
     diaper: "Blöja",
     sleep: "Sömn",
   },
@@ -122,17 +130,14 @@ export const sv: Catalog = {
   diapers: {
     title: "Blöjor",
     log: "Logga ett byte",
-    logHint:
-      "Tryck på vad blöjan innehöll. Tiden sparas åt dig, och samma tre knappar finns bakom + i toppraden från vilken skärm som helst.",
+    when: "När bytte du blöjan?",
     pee: "Kiss",
     poo: "Bajs",
     both: "Båda",
-    logged: "Loggat",
+    logged: "Loggat kl. {time}",
     removed: "Borttaget",
     removeChange: "Ta bort det här bytet",
     recent: "Senaste 7 dagarna",
-    recentHint:
-      "Det som loggats, senaste först. Ta bort en rad som blev en felaktig tryckning — räkningen följer med.",
     dayToday: "Idag",
     noneToday: "Inget loggat idag.",
     noneYet: "Tryck på en knapp när du byter blöja — tiden sparas åt dig.",
@@ -169,12 +174,24 @@ export const sv: Catalog = {
     nap: "Tupplur",
     night: "Natt",
     when: {
-      fell: "Somnade",
-      woke: "Vaknade",
-      now: "Nu",
-      ago: "för {duration} sedan",
-      pick: "Välj tid",
-      at: "kl. {time}",
+      fell: "När somnade {name}?",
+      woke: "När vaknade {name}?",
+      limit: {
+        beforeStart:
+          "Sömnen började kl. {start} — uppvaknandet kan inte vara tidigare.",
+        beforeLastSleep:
+          "Förra sömnen slutade kl. {end}. Rätta den i listan först för att börja tidigare.",
+        mistap: "Förra sömnen, kl. {end}, varade under en minut.",
+        mistaps:
+          "De senaste {count} sömnerna, fram till kl. {end}, varade under en minut var.",
+      },
+      usual: {
+        bedtime: "Vanlig läggdags",
+        napLength: "Efter en vanlig tupplur, {duration}",
+        morning: "Vanlig morgon",
+      },
+      removeMistap: "Ta bort den",
+      removeMistaps: "Ta bort de {count}",
       problem: {
         future: "Den tiden har inte varit än.",
         beforeStart: "Det är före sömnen började kl. {start}.",
@@ -183,6 +200,8 @@ export const sv: Catalog = {
       },
     },
     wokeUp: "Vaknade",
+    takenBack: "Under en minut — inget loggat",
+    resumed: "Somnade om — samma sömn fortsätter",
     asleepNap: "Sover middag sedan {time}",
     asleepNight: "Sover för natten sedan {time}",
     startedNap: "Tupplur från {time}",

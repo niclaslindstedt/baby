@@ -182,6 +182,7 @@ App.tsx
 │   └── AboutScreen     Settings → About: the disclaimer, and every source from the registry
 ├── BottomNav       Today · Diapers · Sleep · Growth · Food · Vaccines (minus the trackers that are off)
 ├── QuickLogSheet   the `+` sheet — the same DiaperButtons and SleepButtons the tabs render
+│   └── WhenModal       "when?" after any logging tap: Now, the lags, a TimeDial
 └── SyncDetailsModal, ToastViewport, UpdateToast
 ```
 
@@ -202,7 +203,15 @@ along it; the three off-bar screens — the child, Settings, and About behind
 it — cross-fade in and go back where they came from. Logging a diaper is one code path: both places render `DiaperButtons`
 and both write through `addDiaper`. Logging a sleep is too: the Sleep tab and
 the sheet both render `SleepButtons`, and starting, ending and correcting a
-sleep all write through `saveSleep`.
+sleep all write through `saveSleep`. Both sets of buttons ask _when_ the same
+way: the tap opens `WhenModal.tsx` — **Now**, and only behind **Earlier** a
+tile per usual lag showing the clock time it stands for and **Another time**
+on a single-handle dial (`TimeDial.tsx`) — whose arithmetic is the pure
+`when.ts`. Nothing is on show before it is wanted: the sheet seen most is two
+rows tall. The sheet takes an
+icon, a title, a question, an optional lower bound (`sleepEarliest` for a
+sleep) and an optional usual time (`sleepDefault`: the child's own bedtime, nap
+length or morning), so the next tracker that logs a moment opens it as it is.
 
 **Live, and the dial.** A record that is still running shows its clock
 running. `live.tsx` holds the pieces: `useTick`, a clock that re-renders only
@@ -211,10 +220,12 @@ stopwatch (or a countdown) to the second; `ProgressRing`; and `FillRing`,
 stacked shares filling a ring over a track that washes in a reference band —
 the sleep rings, and the shape any "how much of the recommended amount" is to
 take. The 24-hour dial
-is `ClockDial.tsx` over the pure `dial.ts` — the face, the arcs on its track,
-the now dot — and the sleep module uses it three ways: showing the last day on
+is `ClockDial.tsx` over the pure `dial.ts` — the face, the arcs on its track
+(a span under ten minutes drawn as its chord, which WebKit can't misplace the
+way it does a near-closed arc), the now dot — and the sleep module uses it three ways: showing the last day on
 the Sleep tab (`SleepNow.tsx`), showing it with the suggested window on the
-view, and editing one sleep by dragging its ends (`SleepClock.tsx`). A running
+view, and editing one sleep by dragging its ends (`SleepClock.tsx`); and the
+"when?" sheet sets one moment on it with a single handle (`TimeDial.tsx`). A running
 clock of a record's own start is allowed on a tab; a comparison — a ring
 filling toward a suggested time — stays on Today. Every animation is CSS
 (`styles.css`, "Live") and holds still under reduced motion. The sleep module

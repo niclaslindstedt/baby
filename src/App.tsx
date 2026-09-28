@@ -49,6 +49,7 @@ import {
   usePinGateLabels,
 } from "./app/SyncEncryption.tsx";
 import { currentSleep } from "./app/sleep.ts";
+import { resumableSleep, wakeTakesBack } from "./app/sleepEdit.ts";
 import { SleepScreen } from "./app/SleepScreen.tsx";
 import { TodayScreen } from "./app/TodayScreen.tsx";
 import { TopBar } from "./app/TopBar.tsx";
@@ -218,22 +219,36 @@ export function App() {
     });
   }, [store.writeFailures, t]);
 
+  // Every log is written at the moment the "when?" sheet was answered with
+  // (`WhenModal.tsx`): the tap itself, or a time before it. The toasts name
+  // that time, so a lag picked by mistake is seen at once.
   const logDiaper = useCallback(
-    (kind: DiaperKind) => {
-      store.addDiaper({ id: newId(), kind, at: new Date().toISOString() });
-      notice(t("diapers.logged"));
+    (kind: DiaperKind, at: Date) => {
+      store.addDiaper({ id: newId(), kind, at: at.toISOString() });
+      notice(
+        t("diapers.logged", { time: formatInstant(at.getTime(), locale) }),
+      );
     },
-    [store, notice, t],
+    [store, notice, t, locale],
   );
 
   // Sleep's two taps. Both are the one `saveSleep` edit — a start writes an
-  // open sleep, a wake closes the one running — at the moment the buttons'
-  // **When** row says: the tap itself, or a few minutes before it (see
-  // `SleepButtons.tsx`). The toast names the time, so a lag picked by
-  // mistake is seen at once.
+  // open sleep, a wake closes the one running (see `SleepButtons.tsx`). A
+  // wake within a minute of the start takes the start back instead
+  // (`wakeTakesBack`): a sleep of no length is a mistap, and left in the log
+  // it would bar every earlier start behind it. Both directions cost
+  // nothing, as a mis-pressed clock does in the sibling `time` app.
   const startSleep = useCallback(
     (kind: SleepKind, at: Date) => {
       const stamp = new Date().toISOString();
+      // A start within a minute of the last wake picks that sleep back up
+      // (`resumableSleep`): the wake was the mistap, not the sleep.
+      const resumed = resumableSleep(store.data, at, new Date());
+      if (resumed) {
+        store.saveSleep({ ...resumed, end: null, updatedAt: stamp });
+        notice(t("sleep.resumed"));
+        return;
+      }
       store.saveSleep({
         id: newId(),
         kind,
@@ -253,6 +268,11 @@ export function App() {
     (at: Date) => {
       const current = currentSleep(store.data, new Date());
       if (!current) return;
+      if (wakeTakesBack(Date.parse(current.start), at.getTime())) {
+        store.removeSleep(current.id);
+        notice(t("sleep.takenBack"));
+        return;
+      }
       store.saveSleep({
         ...current,
         end: at.toISOString(),
@@ -261,6 +281,16 @@ export function App() {
       notice(t("sleep.woke", { time: formatInstant(at.getTime(), locale) }));
     },
     [store, notice, t, locale],
+  );
+
+  // The taken-back sleeps the "when?" sheet offers to clear out of the way
+  // of an earlier start (`blockingMistaps`).
+  const removeMistaps = useCallback(
+    (ids: string[]) => {
+      for (const id of ids) store.removeSleep(id);
+      notice(t("sleep.removed"));
+    },
+    [store, notice, t],
   );
 
   const pwa = usePwaUpdate({
@@ -340,6 +370,7 @@ export function App() {
               today={today}
               onStart={startSleep}
               onWake={wake}
+              onRemoveMistaps={removeMistaps}
               onSave={(sleep) => {
                 store.saveSleep(sleep);
                 notice(t("sleep.saved"));
@@ -448,6 +479,7 @@ export function App() {
         data={store.data}
         onStartSleep={startSleep}
         onWake={wake}
+        onRemoveSleep={removeMistaps}
         onClose={() => setQuickLogOpen(false)}
       />
 

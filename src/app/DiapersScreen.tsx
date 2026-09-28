@@ -21,7 +21,7 @@ import { Card, Heading } from "./ui.tsx";
 // (`DiapersModal.tsx`). Nothing on this screen is derived.
 //
 // The buttons are still reachable from anywhere without coming here: the
-// top bar's `+` opens the same three (see `DiaperSheet.tsx`), and both write
+// top bar's `+` opens the same three (see `QuickLogSheet.tsx`), and both write
 // through the same `addDiaper` edit. This screen is where you come to *look*
 // at what was logged and take back a mistap.
 //
@@ -37,7 +37,7 @@ const LIST_DAYS = 7;
 type Props = {
   data: AppData;
   today: DayKey;
-  onLog: (kind: DiaperKind) => void;
+  onLog: (kind: DiaperKind, at: Date) => void;
   onRemove: (id: string) => void;
 };
 
@@ -56,7 +56,6 @@ export function DiapersScreen({ data, today, onLog, onRemove }: Props) {
     <div className="flex flex-col gap-3 px-3 py-3">
       <Card>
         <Heading>{t("diapers.log")}</Heading>
-        <p className="mt-1 text-xs text-muted">{t("diapers.logHint")}</p>
         <div className="mt-3">
           <DiaperButtons onLog={onLog} />
         </div>
@@ -64,7 +63,6 @@ export function DiapersScreen({ data, today, onLog, onRemove }: Props) {
 
       <Card>
         <Heading>{t("diapers.recent")}</Heading>
-        <p className="mt-1 text-xs text-muted">{t("diapers.recentHint")}</p>
         {/* Today always gets a line, even with nothing under it: an empty
             today is a prompt to tap, not a gap in the list. */}
         {!hasToday && (

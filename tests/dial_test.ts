@@ -61,6 +61,17 @@ describe("the face", () => {
     expect(arcPath(150, 150, 120, 19 * 60, 8 * 60)).toMatch(/ 0 1 1 /);
     expect(arcPath(150, 150, 120, 60, 60)).toBe("");
   });
+
+  it("draws a span of a few minutes as its chord, never a near-closed arc", () => {
+    // A one-minute sleep, 12:45 to 12:46: a line, which WebKit can't misplace.
+    const minute = arcPath(150, 150, 122, 765, 766);
+    expect(minute).toMatch(/^M[\d.]+ [\d.]+L[\d.]+ [\d.]+$/);
+    expect(minute).not.toContain("A");
+    // Seconds apart, as a nap ended at once: still a (dot-long) segment.
+    expect(arcPath(150, 150, 122, 765, 765.2)).toMatch(/L/);
+    // From ten minutes on it is an arc again.
+    expect(arcPath(150, 150, 122, 765, 775)).toMatch(/A122 122 0 0 1 /);
+  });
 });
 
 describe("a drag", () => {

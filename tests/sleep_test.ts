@@ -33,10 +33,16 @@ import {
   type SleepAverage,
 } from "../src/app/sleep.ts";
 import {
-  latestClockTime,
+  blockingMistaps,
+  isMistap,
+  resumableSleep,
+  sleepDefault,
   sleepDraft,
+  sleepEarliest,
   sleepEditProblem,
   sleepTimeProblem,
+  usualSleep,
+  wakeTakesBack,
 } from "../src/app/sleepEdit.ts";
 import {
   emptyDoc,
@@ -560,20 +566,6 @@ describe("the diary", () => {
 });
 
 describe("logging after the fact", () => {
-  it("reads a picked clock time as its latest occurrence", () => {
-    // 13:05 picked at 13:40 is today; 23:50 picked at 00:10 is last night.
-    expect(latestClockTime("13:05", local("2026-09-27", 13, 40))).toEqual(
-      local("2026-09-27", 13, 5),
-    );
-    expect(latestClockTime("23:50", local("2026-09-27", 0, 10))).toEqual(
-      local("2026-09-26", 23, 50),
-    );
-    // The minute of the tap itself is now, not yesterday.
-    expect(latestClockTime("09:41", local("2026-09-27", 9, 41))).toEqual(
-      local("2026-09-27", 9, 41),
-    );
-  });
-
   it("refuses a start before the last sleep ended, and a time in the future", () => {
     const data = docWith([sleep("nap", "2026-09-27", [9, 0], [10, 0])]);
     const now = local("2026-09-27", 12, 30);
@@ -598,6 +590,159 @@ describe("logging after the fact", () => {
     expect(sleepTimeProblem(data, local("2026-09-27", 12, 10), now)).toBe(
       "beforeStart",
     );
+  });
+
+  it("bounds the when-sheet where the refusals begin", () => {
+    // Awake since a nap that ended at 10:00: a start no earlier than that.
+    const ended = docWith([sleep("nap", "2026-09-27", [9, 0], [10, 0])]);
+    const noon = local("2026-09-27", 12, 30);
+    const afterNap = sleepEarliest(ended, noon);
+    expect(afterNap).toEqual({
+      at: local("2026-09-27", 10, 0).getTime(),
+      reason: "beforeLastSleep",
+    });
+    expect(sleepTimeProblem(ended, new Date(afterNap!.at), noon)).toBeNull();
+    expect(sleepTimeProblem(ended, new Date(afterNap!.at - 60_000), noon)).toBe(
+      "beforeLastSleep",
+    );
+
+    // Asleep since 12:10: a wake strictly after it.
+    const running = docWith([sleep("nap", "2026-09-27", [12, 10], null)]);
+    const two = local("2026-09-27", 14, 0);
+    const wake = sleepEarliest(running, two);
+    expect(wake?.reason).toBe("beforeStart");
+    expect(sleepTimeProblem(running, new Date(wake!.at), two)).toBeNull();
+    expect(sleepTimeProblem(running, new Date(wake!.at - 1), two)).toBe(
+      "beforeStart",
+    );
+
+    // Nothing logged: nothing bounds it.
+    expect(sleepEarliest(docWith([]), two)).toBeNull();
+  });
+
+  it("takes a wake within a minute of the start as a mistap", () => {
+    const start = local("2026-09-28", 6, 59).getTime();
+    expect(wakeTakesBack(start, start + 20_000)).toBe(true);
+    expect(wakeTakesBack(start, start + 59_999)).toBe(true);
+    expect(wakeTakesBack(start, start + 60_000)).toBe(false);
+    const blip = sleep("nap", "2026-09-28", [6, 59], [6, 59]);
+    expect(isMistap(blip)).toBe(true);
+    expect(isMistap(sleep("nap", "2026-09-28", [6, 59], [7, 0]))).toBe(false);
+    expect(isMistap(sleep("nap", "2026-09-28", [6, 59], null))).toBe(false);
+  });
+
+  it("names the taken-back sleeps that bar last night being logged", () => {
+    // The morning after: yesterday's nap ended at 16:00, and two taps were
+    // taken back just now. Logging last night from 19:45 is barred by the
+    // two blips alone, and they are what the sheet offers to remove.
+    const blipA = sleep("nap", "2026-09-28", [6, 58], [6, 58], "blipA");
+    const blipB = sleep("nap", "2026-09-28", [6, 59], [6, 59], "blipB");
+    const data = docWith([
+      sleep("nap", "2026-09-27", [14, 30], [16, 0]),
+      blipB,
+      blipA,
+    ]);
+    const now = local("2026-09-28", 7, 51);
+    expect(sleepTimeProblem(data, local("2026-09-27", 19, 45), now)).toBe(
+      "beforeLastSleep",
+    );
+    expect(blockingMistaps(data, now).map((s) => s.id)).toEqual([
+      "blipA",
+      "blipB",
+    ]);
+    // With them gone, 19:45 yesterday is a start like any other.
+    const cleared = docWith([sleep("nap", "2026-09-27", [14, 30], [16, 0])]);
+    expect(
+      sleepTimeProblem(cleared, local("2026-09-27", 19, 45), now),
+    ).toBeNull();
+    expect(blockingMistaps(cleared, now)).toEqual([]);
+    // A blip before the last real sleep is in nobody's way.
+    const old = docWith([
+      sleep("nap", "2026-09-27", [9, 0], [9, 0]),
+      sleep("nap", "2026-09-27", [14, 30], [16, 0]),
+    ]);
+    expect(blockingMistaps(old, now)).toEqual([]);
+    // Nor while a sleep is running.
+    const running = docWith([
+      blipA,
+      sleep("night", "2026-09-28", [7, 10], null),
+    ]);
+    expect(blockingMistaps(running, now)).toEqual([]);
+  });
+});
+
+describe("the usual times the when-sheet offers", () => {
+  // A week of regular days to the night of the 25th, which ended at 6:00 on
+  // the 26th; the 26th's naps are logged and its night is not.
+  const week = [
+    ...regularDays("2026-09-20", "2026-09-25"),
+    ...regularDay("2026-09-26").filter((s) => s.kind === "nap"),
+  ];
+
+  it("reads the child's usual nap, bedtime and morning from the log", () => {
+    const usual = usualSleep(docWith(week), local("2026-09-27", 7, 51));
+    // Naps of 60, 90 and 30 minutes: the median is an hour.
+    expect(usual.napMinutes).toBe(60);
+    // 19:00 is seven hours past noon; the mornings are 6:00, except the
+    // newest night's, which could only have paused for a waking.
+    expect(usual.bedtime).toBe(7 * 60);
+    expect(usual.morning).toBe(6 * 60);
+    // Nothing logged, nothing usual.
+    expect(usualSleep(docWith([]), local("2026-09-27", 7, 51))).toEqual({
+      napMinutes: null,
+      bedtime: null,
+      morning: null,
+    });
+  });
+
+  it("offers last night's usual bedtime the morning after", () => {
+    const data = docWith(week);
+    expect(sleepDefault(data, "night", local("2026-09-27", 7, 51))).toEqual({
+      at: local("2026-09-26", 19, 0).getTime(),
+      reason: "bedtime",
+    });
+    // In the afternoon, yesterday evening is too far back to be meant.
+    expect(sleepDefault(data, "night", local("2026-09-27", 15, 0))).toBeNull();
+    // A nap has no usual start.
+    expect(sleepDefault(data, "nap", local("2026-09-27", 7, 51))).toBeNull();
+  });
+
+  it("offers a usual length for a nap's wake, once it has passed", () => {
+    const data = docWith([
+      ...week,
+      sleep("night", "2026-09-26", [19, 0], [30, 0]),
+      sleep("nap", "2026-09-27", [12, 0], null),
+    ]);
+    expect(sleepDefault(data, "wake", local("2026-09-27", 13, 30))).toEqual({
+      at: local("2026-09-27", 13, 0).getTime(),
+      reason: "napLength",
+    });
+    // Half an hour in, the usual hour is still to come: nothing to offer.
+    expect(sleepDefault(data, "wake", local("2026-09-27", 12, 30))).toBeNull();
+  });
+
+  it("offers the usual morning for a night's wake", () => {
+    const data = docWith([
+      ...week,
+      sleep("night", "2026-09-26", [19, 0], null),
+    ]);
+    expect(sleepDefault(data, "wake", local("2026-09-27", 7, 30))).toEqual({
+      at: local("2026-09-27", 6, 0).getTime(),
+      reason: "morning",
+    });
+  });
+
+  it("picks a sleep back up when a start follows its wake within a minute", () => {
+    const nap = sleep("nap", "2026-09-27", [12, 0], [13, 30], "napA");
+    const data = docWith([nap]);
+    const woke = local("2026-09-27", 13, 30).getTime();
+    const now = new Date(woke + 40_000);
+    expect(resumableSleep(data, now, now)?.id).toBe("napA");
+    const later = new Date(woke + 60_000);
+    expect(resumableSleep(data, later, later)).toBeNull();
+    // Nothing to pick up while a sleep is running.
+    const running = docWith([sleep("nap", "2026-09-27", [13, 30], null)]);
+    expect(resumableSleep(running, now, now)).toBeNull();
   });
 });
 

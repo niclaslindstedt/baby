@@ -266,6 +266,11 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   Settings → About: the disclaimer and every source in the registry) — the
   three off-bar screens;
   `QuickLogSheet.tsx` — the sheet behind the top bar's `+`.
+  `WhenModal.tsx` is the "when?" sheet both logging buttons open after the
+  tap — **Now**, and behind **Earlier** the usual lags as tiles and a
+  single-handle dial (`TimeDial.tsx`) for any other time — over the pure
+  `when.ts`. Show a control when it is wanted, not all the time: the app
+  stays uncluttered by keeping the rarer choices one tap away.
   `DiaperButtons.tsx` is the app's only diaper-logging control and
   `SleepButtons.tsx` its only sleep-logging one, and every place that logs
   either renders it; `SleepForm.tsx` is the sheet that corrects a sleep on
@@ -396,6 +401,7 @@ a new one arrives with its own.
 | A new way to log a diaper              | Never a second write path — render `DiaperButtons` and write through `addDiaper`                                                         |
 | A new way to log a sleep               | Never a second write path — render `SleepButtons` and write through `saveSleep`                                                          |
 | A running clock, a ring, a pulse       | `live.tsx` (`Elapsed`, `ProgressRing`, `FillRing`, `useTick`) and the "Live" block of `styles.css` — never a per-screen `setInterval`    |
+| When a tapped thing happened           | `WhenModal.tsx` (icon, title, question, optional `earliest` and `usual`) over `when.ts` — never a per-button time row or a second picker |
 | A time span to show or drag            | `ClockDial.tsx` over `dial.ts` (with tests in `tests/dial_test.ts`); `SleepClock.tsx` is the worked example of dragging one              |
 | A new setting                          | `src/app/useAppSettings.ts` (shape + fallbacks) + a `Section` in `SettingsScreen.tsx`                                                    |
 | A new feature switch                   | `FeatureId` in `useAppSettings.ts`, guards on the screens it owns, and `navTabs()` if it has a tab                                       |
