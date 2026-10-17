@@ -11,7 +11,7 @@ it too. There is no server in between.
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
 | **This device**  | The default, and where every install starts: a durable copy in the browser's own IndexedDB (`baby:documents`) — more room than localStorage, and kept when the browser trims other site data. Nothing leaves the device. | Nothing.                                                      |
 | **Local folder** | A directory you pick through the browser's File System Access API; the record becomes `baby.json`, a real file you can open, back up, or point another app at. The grant is stored and re-probed on boot.                | The browser's directory picker. Hidden where there isn't one. |
-| **Dropbox**      | `Apps/baby/baby.json` in your Dropbox.                                                                                                                                                                                   | `VITE_DROPBOX_APP_KEY` at build time.                         |
+| **Dropbox**      | `Apps/baby/baby.json` in your Dropbox. The website and the desktop app only: the phone app's build leaves it out.                                                                                                        | `VITE_DROPBOX_APP_KEY` at build time.                         |
 
 All three speak the framework's one `StorageAdapter` contract, so the engine
 (`src/app/useSyncEngine.ts`) is the same past the `create*Adapter` calls: it
@@ -24,6 +24,14 @@ other.
 Only the last two are _sync_ in the sense the top bar's glyph means —
 somewhere the record could also be read from. On **This device** there is no
 glyph: there is nothing to watch the status of.
+
+**The phone app has this device only.** No phone has the directory picker,
+and the phone build (`VITE_NATIVE_BUILD=on`) leaves Dropbox out whatever key
+the environment holds, so Settings says the record stays on the device and
+offers no picker; **Export a backup** is the copy to keep. A `dropbox` choice
+stored by a pre-release phone install reads as this device (`parseBackend`):
+the working copy was in localStorage all along, so nothing is stranded, and
+the copy in Dropbox is left where it is.
 
 ## Encryption
 

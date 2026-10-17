@@ -810,6 +810,10 @@ export const en = {
     sync: "Where the record lives",
     syncHint:
       "Your record is kept on this device. Keep a second, encrypted copy in a folder you pick, or in your own cloud account, to read it on another device too.",
+    // The phone app's version of the two lines above and of `privacy` below:
+    // its build keeps the record on the device and offers nothing to connect.
+    syncHintDevice:
+      "Your record is kept on this device, and the app sends it nowhere. To keep a copy of your own, export a backup below.",
     backend: "Backend",
     // The places the record can live. "This device" is the browser's own
     // storage: no account, no picker, nothing leaves the phone.
@@ -869,6 +873,8 @@ export const en = {
     build: "Build",
     privacy:
       "Everything stays on this device unless you connect a folder or a cloud account yourself, and a copy there is encrypted with your passphrase first. There is no server, no account, and no analytics.",
+    privacyDevice:
+      "Everything stays on this device; the app sends your record nowhere. There is no server, no account, and no analytics.",
     disclaimer:
       "A notebook, not medical advice. The app records what you enter and compares it with published recommendations; questions about your child's health belong with the child health center.",
   },

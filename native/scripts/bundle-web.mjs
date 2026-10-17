@@ -19,7 +19,9 @@
 //   - VITE_EMBEDDED_BUILD leaves the web edition's link-preview tags and its
 //     GitHub Pages `CNAME` out: a store app carries no link to the source.
 //   - VITE_NATIVE_BUILD says which store app this is — the phone's, the one
-//     that ships under a store listing and so takes the listing's name.
+//     that ships under a store listing and so takes the listing's name. It
+//     also leaves Dropbox out: the phone app keeps the record on the device
+//     (src/app/useSyncEngine.ts, PHONE_BUILD).
 //
 // The one value it passes is the name: APP_DISPLAY_NAME, resolved by `identifiers.js`
 // exactly as `app.config.js` resolves the name under the icon — the listing

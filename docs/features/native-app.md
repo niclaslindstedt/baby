@@ -4,7 +4,8 @@ Baby is a PWA first: open it in a browser, add it to the home screen, and it
 is an app. `native/` is the other way in — the same web app, wrapped thinly
 enough to ship through the **App Store** and **Google Play**, and in exchange
 for that wrapper it gains what the browser cannot give it: the whole app
-inside the download, and a Dropbox sign-in in a sheet over the app.
+inside the download, and a backup that goes out through the phone's share
+sheet.
 
 ## What the wrapper is
 
@@ -29,28 +30,26 @@ There is **no native UI**. Everything you see is the web app, unchanged —
 except its name: the top bar says the name the app has in the store, the same
 one under its icon.
 
-## No iCloud
+## On this device
 
-The app does not offer iCloud, on purpose. This is your child's health
-record, and App Store guideline 5.1.3(ii) says apps may not store personal
-health information in iCloud. **Settings → Where the record lives** offers
-this device and your own Dropbox — the same as the website — and the record
-never goes anywhere else.
+The phone app keeps your child's record on the phone, and nowhere else.
+**Settings → Where the record lives** says so: there is nothing to connect,
+no Dropbox and no iCloud. **Export a backup** is how you keep a copy of your
+own.
 
-## Dropbox
-
-Connecting Dropbox opens Dropbox's own sign-in in a sheet over the app. You
-approve there, the sheet closes, and the app is connected — the sign-in never
-leaves for Safari. Closing the sheet simply leaves Dropbox unconnected. The
-app never sees your Dropbox password; the sheet is Dropbox's page, and what
-comes back is a one-time code the app trades for access to its own folder.
+There is no iCloud on purpose. This is your child's health record, and App
+Store guideline 5.1.3(ii) says apps may not store personal health information
+in iCloud. Dropbox, which the website and the desktop app offer, is left out
+of the phone app's build; a pre-release install that had connected it comes
+back to this device, with its record intact.
 
 ## What the wrapper is not allowed to do
 
 Two rules, and they are what keep the app and the website the same product:
 
 - **Nothing in `src/` knows the wrapper exists.** The web app does not check
-  whether it is native. It looks for a sign-in _capability_ on `window`
+  at run time whether it is native; the one difference, no Dropbox, is
+  decided when the phone build is made. It looks for a sign-in _capability_ on `window`
   (`window.__ossAuthSession`) and uses it when one is there — which is why
   the browser shows no native-shaped hole.
 - **The wrapper decides nothing about the record.** It moves bytes. What a

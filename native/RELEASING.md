@@ -60,16 +60,14 @@ Store guideline 5.1.3(ii) says apps "may not store personal health information
 in iCloud", and the record is a child's health data. Leave the iCloud
 capability off the App ID in the Apple Developer portal.
 
-### 5. Dropbox
+### 5. No Dropbox
 
-The phone app signs in to Dropbox through an in-app authentication session
-that returns on **`se.agilator.baby://oauth`** — the bundle id is the URL scheme (see
-[README → Signing in to Dropbox](README.md#signing-in-to-dropbox)). In the
-[Dropbox App Console](https://www.dropbox.com/developers/apps), open the app
-whose key is the `VITE_DROPBOX_APP_KEY` secret and add `se.agilator.baby://oauth` under
-**Settings → OAuth 2 → Redirect URIs**, exactly as written. The same secret
-(and `VITE_DROPBOX_APP_FOLDER`) is what the build job passes to the web
-bundle; without it the app offers no Dropbox at all.
+The phone app offers no Dropbox: the record stays on the device. The build
+job does not pass `VITE_DROPBOX_APP_KEY` or `VITE_DROPBOX_APP_FOLDER` to the
+web bundle, and the bundle's own build (`VITE_NATIVE_BUILD=on`) leaves
+Dropbox out even if a key reaches it. Nothing needs registering in the
+Dropbox App Console for the phone app. The website and the desktop app keep
+their Dropbox.
 
 ## Cutting a build
 
@@ -111,11 +109,8 @@ build without it launches to a blank screen.
 - [ ] `EXPO_PUBLIC_BABY_URL` is **unset** — a build that streams the website
       is the exact shape App Store guideline 4.2 rejects.
 - [ ] The version in the root `package.json` is the one you mean to ship.
-- [ ] **Settings → Where the record lives** offers This device and Dropbox,
-      and no iCloud Drive.
-- [ ] Settings → Where the record lives → Dropbox opens Dropbox in a sheet over the app (not in
-      Safari), and approving closes the sheet and connects. Closing the sheet
-      instead leaves nothing connected and shows no error.
+- [ ] **Settings → Where the record lives** says the record is kept on this
+      device, with no picker: no Dropbox, no folder and no iCloud Drive.
 - [ ] Settings → Your data → Export a backup opens the share sheet on
       `baby-backup-<date>.json`, and Save to Files writes a file that
       Restore from a backup reads back. Not yet tried on a device: until it

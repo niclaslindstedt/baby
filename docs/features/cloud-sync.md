@@ -10,7 +10,8 @@ device can read it too:
   picker, which desktop Chrome, Edge and Opera have and no phone browser
   does, so it is offered only where it exists;
 - in your own **Dropbox** — a file in a folder you can see, so another device
-  can read the same record.
+  can read the same record. This one is in the website and the desktop app;
+  the phone app keeps the record on the phone.
 
 Either copy is **encrypted on this device with a passphrase you choose**
 before it is written, so the folder, whatever syncs it, and Dropbox hold
@@ -18,7 +19,8 @@ ciphertext; see [`encryption.md`](encryption.md).
 
 There is no iCloud option, on purpose. This is your child's health record,
 and App Store guideline 5.1.3(ii) says apps may not store personal health
-information in iCloud: it stays on your device, or in your own Dropbox.
+information in iCloud: it stays on your device, or in your own Dropbox
+where the app offers it.
 
 Two devices reconcile record by record — the later edit of a reading, a
 sleep, a food or a vaccination wins, and diaper changes from both are kept — with no

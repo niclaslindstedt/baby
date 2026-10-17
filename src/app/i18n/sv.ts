@@ -715,6 +715,8 @@ export const sv: Catalog = {
     sync: "Var journalen finns",
     syncHint:
       "Din journal sparas på den här enheten. Håll en andra, krypterad kopia i en mapp du väljer, eller i ditt eget molnkonto, för att läsa den på en annan enhet också.",
+    syncHintDevice:
+      "Din journal sparas på den här enheten, och appen skickar den ingenstans. Exportera en säkerhetskopia nedan för att ha en egen kopia.",
     backend: "Lagring",
     backendName: {
       idb: "Den här enheten",
@@ -772,6 +774,8 @@ export const sv: Catalog = {
     build: "Bygge",
     privacy:
       "Allt stannar på den här enheten om du inte själv ansluter en mapp eller ett molnkonto, och en kopia där krypteras med din lösenfras först. Det finns ingen server, inget konto och ingen statistikinsamling.",
+    privacyDevice:
+      "Allt stannar på den här enheten; appen skickar din journal ingenstans. Det finns ingen server, inget konto och ingen statistikinsamling.",
     disclaimer:
       "En anteckningsbok, inte medicinsk rådgivning. Appen sparar det du fyller i och jämför det med publicerade rekommendationer; frågor om ditt barns hälsa hör hemma på BVC.",
   },

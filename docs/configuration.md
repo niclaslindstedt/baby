@@ -13,9 +13,10 @@ lists them with comments; copy it to `.env` for local overrides.
 | ------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `VITE_BASE`               | `/`     | Deploy base path. Drives the bundler base, the service-worker scope, and the PWA install identity. The Pages workflow sets `/` for the released build and `/preview/` for main.                                                                                                                                           |
 | `VITE_PWA_IGNORE_PATHS`   | —       | Comma-separated absolute paths this build's service worker must disown. Only the root release sets it (`/preview/`), because a scope is a path prefix and the root worker would otherwise claim the preview channel's navigations.                                                                                        |
-| `VITE_DROPBOX_APP_KEY`    | —       | Dropbox OAuth app key (PKCE public client). Unset ⇒ the Dropbox backend is hidden from Settings rather than offered and then failing.                                                                                                                                                                                     |
+| `VITE_DROPBOX_APP_KEY`    | —       | Dropbox OAuth app key (PKCE public client). Unset ⇒ the Dropbox backend is hidden from Settings rather than offered and then failing. The phone build ignores it: the phone app offers no Dropbox, and `native.yml` does not pass it.                                                                                     |
 | `VITE_DROPBOX_APP_FOLDER` | `baby`  | The app-folder name shown as the file's location. Dropbox fixes this from the OAuth app's own configuration, so it has to be told what the folder is actually called.                                                                                                                                                     |
 | `APP_DISPLAY_NAME`        | `Baby`  | The store listing's name. Read **only** by the phone build (`native/scripts/bundle-web.mjs`, which resolves it through `native/identifiers.js` like the name under the icon), where it becomes the wordmark in the top bar (`app-name.ts` → `__APP_NAME__`). The website and the desktop app always say the project name. |
+| `VITE_NATIVE_BUILD`       | —       | `on` in the phone build only (`native/scripts/bundle-web.mjs` sets it): the top bar takes `APP_DISPLAY_NAME`, and the build offers no Dropbox — the record stays on the device, Settings says so, and a Dropbox choice left by a pre-release install reads as this device.                                                |
 | `VITE_SEED`               | —       | `demo` boots the app onto the demo document — one invented baby, placed from the moment it opens and held in memory — before the first render, with sync paused and backend changes refused (see `src/app/dev/`). `make demo` and the store screenshots set it; a release never does.                                     |
 
 Both OAuth identifiers are **public**: the flows are PKCE with no client
@@ -39,10 +40,8 @@ it doesn't.
 - **Dropbox** — create an app at
   [dropbox.com/developers/apps](https://www.dropbox.com/developers/apps) with
   "App folder" access, add every redirect URI the app uses — the deploy origin for the
-  website, `http://127.0.0.1:53682/`, `:53683/` and `:53684/` for the desktop
-  app, and `se.agilator.baby://oauth` for the phone app (its URL scheme is its bundle id;
-  see [`../native/README.md`](../native/README.md#signing-in-to-dropbox)) —
-  and take the
+  website, and `http://127.0.0.1:53682/`, `:53683/` and `:53684/` for the desktop
+  app — and take the
   app key. The app-folder name you pick there is what `VITE_DROPBOX_APP_FOLDER`
   must repeat.
 
@@ -56,7 +55,7 @@ crash a screen.
 | ---------------------- | ------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Theme                  | System        | light / dark / system                | Two palettes only, by design.                                                                                                                                                                                               |
 | Language               | The browser's | Svenska / English                    | Stored under `baby:language`. Dates and times take the device's formats for that language (US English: "Sep 21", "9:03 PM").                                                                                                |
-| Where the record lives | This device   | this device / local folder / Dropbox | See [sync.md](sync.md). This device is the browser's own IndexedDB. The folder option appears only in browsers with the directory picker.                                                                                   |
+| Where the record lives | This device   | this device / local folder / Dropbox | See [sync.md](sync.md). This device is the browser's own IndexedDB. The folder option appears only in browsers with the directory picker; the phone app offers this device only.                                            |
 | Developer mode         | Off           | on / off                             | Reveals everything below it: demo data, log capture, the app log, and the raw document size.                                                                                                                                |
 | Demo data              | Off           | on / off                             | Replaces your record with an invented baby of seven and a half months. In memory only — never saved, never synced, gone on reload — so it is deliberately _not_ a persisted setting. A `VITE_SEED=demo` build starts on it. |
 | Capture console output | Off           | on / off                             | Mirrors `console.*` into the in-app log buffer.                                                                                                                                                                             |

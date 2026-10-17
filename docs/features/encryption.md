@@ -4,6 +4,8 @@
 
 Your child's record is health information, so a copy that is not the
 browser's own — in a local folder or in Dropbox — is always encrypted first.
+That is the website and the desktop app: the phone app keeps the record on
+the phone and writes no copy anywhere else, so it asks for no passphrase.
 Connect either and the app asks you to **choose a passphrase**; everything it
 writes there from then on is an AES-256-GCM envelope sealed with a key derived
 from that passphrase (PBKDF2-SHA256, 600,000 iterations). The folder, whatever

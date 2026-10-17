@@ -121,6 +121,33 @@ function embedded(): Plugin {
   };
 }
 
+// The PHONE build — `native/scripts/bundle-web.mjs`, the one that ships under
+// the store listing — offers no Dropbox (`PHONE_BUILD` in
+// `src/app/useSyncEngine.ts`): the record stays on the device. The page's
+// description says the website's sentence about Dropbox, so the phone build
+// says what is true of it instead, and fails rather than ships if the
+// sentence it replaces has moved.
+const phoneBuild = process.env.VITE_NATIVE_BUILD === "on";
+const WEB_STORAGE_SENTENCE = /Everything stays on your device unless [^"]*"/;
+
+function phoneDescription(): Plugin {
+  return {
+    name: "phone-description",
+    apply: "build",
+    transformIndexHtml(html) {
+      if (!WEB_STORAGE_SENTENCE.test(html)) {
+        throw new Error(
+          "index.html: the description's storage sentence has moved; update vite.config.ts",
+        );
+      }
+      return html.replace(
+        WEB_STORAGE_SENTENCE,
+        'Everything stays on your device."',
+      );
+    },
+  };
+}
+
 export default defineConfig({
   base,
   define: {
@@ -150,5 +177,6 @@ export default defineConfig({
     tailwindcss(),
     appPwa({ base, version, ignorePaths, serviceWorker: !shellBuild }),
     ...(embeddedBuild ? [embedded()] : []),
+    ...(phoneBuild ? [phoneDescription()] : []),
   ],
 });

@@ -51,6 +51,7 @@ import type { DocStore } from "./useDocStore.ts";
 import {
   FOLDER_BACKEND_AVAILABLE,
   LOCAL_BACKEND,
+  PHONE_BUILD,
   type SyncBackendId,
   type SyncEngine,
 } from "./useSyncEngine.ts";
@@ -235,45 +236,53 @@ export function SettingsScreen({
         title={t("settings.sync")}
         icon={<CloudIcon className="h-3.5 w-3.5" />}
       >
-        <p className="text-xs text-muted">{t("settings.syncHint")}</p>
-        <SegmentedControl<SyncBackendId>
-          value={sync.backend}
-          // Demo data is showing: connecting or disconnecting would change the
-          // reader's real backend from a session that is not theirs, and the
-          // first save after a connect would copy the demo into their cloud.
-          options={sync.available.map((id) => ({
-            value: id,
-            label: t(`settings.backendName.${id}` as const),
-            disabled: demoData.on && id !== sync.backend,
-          }))}
-          onChange={(next) => {
-            if (next === sync.backend || demoData.on) return;
-            // Coming home to this device is a disconnect: the credentials
-            // and the folder grant go, and the copy left behind stays where
-            // it is.
-            if (next === LOCAL_BACKEND) {
-              sync.disconnect();
-              return;
-            }
-            setBusy(true);
-            void sync
-              .connect(next)
-              .catch((err: unknown) =>
-                onNotice(err instanceof Error ? err.message : String(err)),
-              )
-              .finally(() => setBusy(false));
-          }}
-          ariaLabel={t("settings.backend")}
-          fullWidth
-        />
+        {/* The phone app has one place for the record and nothing to
+            connect, so it says so instead of offering a one-option picker. */}
         <p className="text-xs text-muted">
-          {t(`settings.backendHint.${sync.backend}` as const)}
+          {t(PHONE_BUILD ? "settings.syncHintDevice" : "settings.syncHint")}
         </p>
+        {!PHONE_BUILD && (
+          <SegmentedControl<SyncBackendId>
+            value={sync.backend}
+            // Demo data is showing: connecting or disconnecting would change the
+            // reader's real backend from a session that is not theirs, and the
+            // first save after a connect would copy the demo into their cloud.
+            options={sync.available.map((id) => ({
+              value: id,
+              label: t(`settings.backendName.${id}` as const),
+              disabled: demoData.on && id !== sync.backend,
+            }))}
+            onChange={(next) => {
+              if (next === sync.backend || demoData.on) return;
+              // Coming home to this device is a disconnect: the credentials
+              // and the folder grant go, and the copy left behind stays where
+              // it is.
+              if (next === LOCAL_BACKEND) {
+                sync.disconnect();
+                return;
+              }
+              setBusy(true);
+              void sync
+                .connect(next)
+                .catch((err: unknown) =>
+                  onNotice(err instanceof Error ? err.message : String(err)),
+                )
+                .finally(() => setBusy(false));
+            }}
+            ariaLabel={t("settings.backend")}
+            fullWidth
+          />
+        )}
+        {!PHONE_BUILD && (
+          <p className="text-xs text-muted">
+            {t(`settings.backendHint.${sync.backend}` as const)}
+          </p>
+        )}
         {/* Why the folder isn't on the list. Silently dropping the choice
             reads as "this app can't do that"; the honest answer is that no
             mobile browser, and no Safari or Firefox, ships the directory
             picker it needs. */}
-        {!FOLDER_BACKEND_AVAILABLE && (
+        {!FOLDER_BACKEND_AVAILABLE && !PHONE_BUILD && (
           <p className="text-xs text-muted">
             {t("settings.folderUnavailable")}
           </p>
@@ -439,7 +448,7 @@ export function SettingsScreen({
           <dd className="text-fg">{__BUILD_LABEL__}</dd>
         </dl>
         <p className="text-xs leading-snug text-muted">
-          {t("settings.privacy")}
+          {t(PHONE_BUILD ? "settings.privacyDevice" : "settings.privacy")}
         </p>
         <p className="text-xs leading-snug text-muted">
           {t("settings.disclaimer")}

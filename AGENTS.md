@@ -5,7 +5,7 @@ repo. `CLAUDE.md`, `.cursorrules`, `.windsurfrules`, `GEMINI.md`,
 `.aider.conf.md`, and `.github/copilot-instructions.md` are symlinks to this
 file.
 
-Fleet guidelines: APP_GUIDELINES 1.2.0
+Fleet guidelines: APP_GUIDELINES 2.0.0
 
 ## What this app is, and the three rules that follow from it
 
@@ -72,13 +72,18 @@ make native-prebuild   # inspect what expo prebuild generates
 ```
 
 It is a thin Expo shell for the App Store and Google Play: the built site in
-a `WebView`, served from a loopback origin — nothing in `src/` asks whether
-it is native. The wrapper offers Dropbox's sign-in an in-app authentication
+a `WebView`, served from a loopback origin — nothing in `src/` asks at run
+time whether it is native. The wrapper offers a sign-in an in-app authentication
 session at `window.__ossAuthSession`, a **capability** the framework's
 `getAuthSessionHost` looks for; a browser has none and keeps its redirect.
+The phone app **offers no Dropbox**: the one thing in `src/` that tells the
+phone build apart, `VITE_NATIVE_BUILD` (`PHONE_BUILD` in `useSyncEngine.ts`),
+leaves it out of Settings and folds its code away, and `native.yml` passes no
+Dropbox key — so the phone app keeps the child's record on the device, with
+the backup export as the copy to keep. The website and the desktop app keep
+their Dropbox; do not put it back in the phone build unasked.
 There is **no iCloud, on purpose**: App Store guideline 5.1.3(ii) keeps
-personal health information out of it, so the child's record stays on the
-device or in the parent's own Dropbox. Do not add an iCloud store, CloudKit
+personal health information out of it. Do not add an iCloud store, CloudKit
 or an iCloud entitlement. See
 [`native/README.md`](native/README.md) and
 [`docs/features/native-app.md`](docs/features/native-app.md).
@@ -233,7 +238,8 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   vocabulary.
 - `src/app/useSyncEngine.ts` — the sync engine over the framework's storage
   adapters plus the app's own `idbAdapter.ts`: local, IndexedDB, a picked
-  folder, Dropbox. Suspended wholesale while demo data has
+  folder, Dropbox (not in the phone build, `PHONE_BUILD`, which has this
+  device only). Suspended wholesale while demo data has
   taken over storage. A copy in the folder or Dropbox is **always
   encrypted**: the adapter comes from the framework's
   `useEncryption` (`policy: "required"`, `remember: "device"`), which is `null` until the passphrase is held, so
@@ -516,9 +522,10 @@ references live under `docs/` proper.
 - **The auth-session bridge's names are the framework's**
   (`AUTH_SESSION_HOST_PROPERTY`, `AUTH_SESSION_HOST_EVENT`), spelled again in
   `native/src/authSessionBridge.ts`; `tests/native_auth_session_test.ts` pins
-  them. The phone app's Dropbox sign-in returns on `<scheme>://oauth` —
-  `se.agilator.baby://oauth` in a store build — and the Dropbox app must list that exact
-  URI, so changing the bundle id breaks phone sign-in until the App Console
+  them. A phone sign-in returns on `<scheme>://oauth` —
+  `se.agilator.baby://oauth` in a store build. The phone app offers no
+  Dropbox today; if it ever does again, the Dropbox app must list that exact
+  URI, and changing the bundle id breaks phone sign-in until the App Console
   follows.
 
 ## Website staleness

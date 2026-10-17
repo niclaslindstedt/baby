@@ -2,7 +2,7 @@
 // Where the record lives: which backends a build offers, and what a stored
 // choice from an older build normalises to.
 
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   AVAILABLE_BACKENDS,
@@ -69,5 +69,58 @@ describe("AVAILABLE_BACKENDS", () => {
     // A device that had it selected reads back as this device, so the stored
     // preference resolves rather than sticking on a backend that is gone.
     expect(parseBackend("gdrive")).toBe("idb");
+  });
+});
+
+describe("the phone build", () => {
+  // The store app keeps the record on the device: its build leaves Dropbox
+  // out whatever key the environment holds, while the website and the
+  // desktop app offer it exactly as before.
+  async function build(env: Record<string, string>) {
+    for (const [name, value] of Object.entries(env)) vi.stubEnv(name, value);
+    vi.resetModules();
+    return import("../src/app/useSyncEngine.ts");
+  }
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
+  it("offers no Dropbox, even with a key configured", async () => {
+    const sync = await build({
+      VITE_NATIVE_BUILD: "on",
+      VITE_DROPBOX_APP_KEY: "key",
+    });
+    expect(sync.PHONE_BUILD).toBe(true);
+    expect(sync.DROPBOX_APP_KEY).toBe("");
+    expect(sync.AVAILABLE_BACKENDS).toEqual(["idb"]);
+  });
+
+  it("reads a Dropbox choice left by a pre-release install as this device", async () => {
+    const sync = await build({
+      VITE_NATIVE_BUILD: "on",
+      VITE_DROPBOX_APP_KEY: "key",
+    });
+    expect(sync.parseBackend("dropbox")).toBe(sync.LOCAL_BACKEND);
+    expect(sync.parseBackend("idb")).toBe("idb");
+  });
+
+  it("leaves the website's Dropbox as it was", async () => {
+    const sync = await build({ VITE_DROPBOX_APP_KEY: "key" });
+    expect(sync.PHONE_BUILD).toBe(false);
+    expect(sync.DROPBOX_APP_KEY).toBe("key");
+    expect(sync.AVAILABLE_BACKENDS).toContain("dropbox");
+    expect(sync.parseBackend("dropbox")).toBe("dropbox");
+  });
+
+  it("is the build the phone wrapper makes, and only that one", async () => {
+    // The desktop shell sets the embedded flag too, never the native one.
+    const desktop = await build({
+      VITE_EMBEDDED_BUILD: "on",
+      VITE_SHELL_BUILD: "on",
+      VITE_DROPBOX_APP_KEY: "key",
+    });
+    expect(desktop.AVAILABLE_BACKENDS).toContain("dropbox");
   });
 });

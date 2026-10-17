@@ -2,8 +2,8 @@
 
 A **thin** Expo / React Native shell around the baby log, so it can ship to
 the App Store and Google Play — and so it can do what a PWA cannot: run
-entirely from inside its own download, and sign in to the parent's own
-Dropbox in a system sheet over the app.
+entirely from inside its own download, and hand a backup to the phone's
+share sheet.
 
 Thin is the design, not an aspiration. The wrapper:
 
@@ -18,9 +18,10 @@ Thin is the design, not an aspiration. The wrapper:
   from the phone's light or dark setting (`barStyleFor` in `src/injected.ts`);
   off-origin links go to the system browser, and Android's back button drives
   the WebView's history;
-- opens Dropbox's sign-in in an **authentication session** when the page asks
-  for one (`src/authSessionBridge.ts` → `src/authSession.ts` →
-  `expo-web-browser`) — see [Signing in to Dropbox](#signing-in-to-dropbox);
+- opens a sign-in in an **authentication session** when the page asks for
+  one (`src/authSessionBridge.ts` → `src/authSession.ts` →
+  `expo-web-browser`) — see [Signing in to Dropbox](#signing-in-to-dropbox).
+  The phone build offers no Dropbox today, so nothing asks;
 - hands a backup export to the **share sheet** — see
   [Exporting a backup](#exporting-a-backup). A `blob:` or `data:` URL is
   never sent to the system browser: it only exists inside the WebView.
@@ -28,18 +29,20 @@ Thin is the design, not an aspiration. The wrapper:
 That is the entire list, and it is deliberately not empty: **App Store
 guideline 4.2 rejects a build that is only a viewer for a website**, so the
 wrapper has to do things the browser cannot. The self-contained bundle and
-the sign-in sheet are those things. Adding another is allowed; adding one that
+the share-sheet export are those things. Adding another is allowed; adding one that
 makes `src/` aware of this wrapper is not.
 
 **There is no iCloud, on purpose.** App Store guideline 5.1.3(ii) says apps
 "may not store personal health information in iCloud", and the record is a
-child's health data. It stays on the device, or in the parent's own Dropbox
-when they connect it. Do not add an iCloud store, CloudKit, or an iCloud
+child's health data. It stays on the device: the phone build offers no
+Dropbox either (see [Signing in to Dropbox](#signing-in-to-dropbox)). Do not add an iCloud store, CloudKit, or an iCloud
 entitlement to this wrapper.
 
 **Nothing in the repo's `src/` knows this exists.** The app looks for
 **capabilities** on `window` — the sign-in sheet is one — so a browser, which
-has none, keeps its own flow. The app never asks what it is running inside.
+has none, keeps its own flow. The app never asks what it is running inside;
+the one thing its phone build leaves out, Dropbox, is decided at build time
+(`VITE_NATIVE_BUILD`).
 
 The wrapper also decides nothing about the baby log. It moves bytes: a file
 in, a file out. What a feed, a weighing or a diaper change is, and how two
@@ -94,6 +97,13 @@ EXPO_PUBLIC_BABY_URL=https://baby.niclaslindstedt.se/preview/ npm run ios
 ```
 
 ## Signing in to Dropbox
+
+**The phone app offers no Dropbox.** `native.yml` does not pass the Dropbox
+key to the bundle, and the phone build (`VITE_NATIVE_BUILD=on`) leaves
+Dropbox out of Settings even if a key reaches it, so the record stays on the
+device. The website and the desktop app keep their Dropbox. The bridge below
+stays in the wrapper, unused, for the day the phone app offers a sign-in
+again; what follows is how it works when it is asked.
 
 The page's own Dropbox sign-in is a redirect: consent at dropbox.com, then
 back to the page's origin with a code, which the page trades for tokens using

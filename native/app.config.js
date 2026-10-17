@@ -52,7 +52,7 @@ module.exports = () => ({
       bundleIdentifier: BUNDLE_ID,
       // No entitlements, and deliberately no iCloud: App Store guideline
       // 5.1.3(ii) keeps personal health information out of it, and this is a
-      // child's. The record stays on the device or in the parent's Dropbox.
+      // child's. The record stays on the device.
       infoPlist: {
         // The bundled build is served over plain HTTP on the loopback
         // interface. ATS is left ON — only localhost is excepted, so nothing

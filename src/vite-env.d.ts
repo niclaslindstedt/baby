@@ -21,10 +21,14 @@ declare const __BUILD_NUMBER__: string;
 // app builds and runs with none of them set. See `docs/configuration.md`.
 interface ImportMetaEnv {
   // Dropbox app key (PKCE public client). Unset hides the Dropbox backend in
-  // Settings → Sync. See `src/app/useSyncEngine.ts`.
+  // Settings → Sync; the phone build ignores it. See `src/app/useSyncEngine.ts`.
   readonly VITE_DROPBOX_APP_KEY?: string;
   // App-folder names the synced document is filed under, per provider.
   readonly VITE_DROPBOX_APP_FOLDER?: string;
+  // "on" in the phone app's build only (`native/scripts/bundle-web.mjs`): it
+  // takes the store listing's name and offers no Dropbox. See
+  // `src/app/useSyncEngine.ts`.
+  readonly VITE_NATIVE_BUILD?: string;
   // "demo" boots the app onto the in-memory demo document, and nothing else:
   // `make demo` and the store screenshots. See `src/app/dev/useDemoData.ts`.
   readonly VITE_SEED?: string;

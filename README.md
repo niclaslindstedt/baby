@@ -70,7 +70,8 @@ This one has no account and no server. The record lives on your device, in
 your browser's own storage. If you want it on more than one device, you keep
 a copy in a folder you pick, or in **your own** Dropbox — encrypted on the
 device with a passphrase only you know, so the folder and Dropbox hold
-ciphertext. Your child's record never goes to iCloud. Nothing else leaves the device: no analytics, no telemetry, no third-party
+ciphertext. (The phone app keeps the record on the phone: it has no Dropbox,
+and the backup export is the copy to keep.) Your child's record never goes to iCloud. Nothing else leaves the device: no analytics, no telemetry, no third-party
 requests at runtime. The growth standards, the food presets and the
 vaccination schedule are bundled with the app and read locally.
 

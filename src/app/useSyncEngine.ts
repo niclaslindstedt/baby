@@ -70,6 +70,10 @@ import type { DocStore } from "./useDocStore.ts";
 //   - **Dropbox** — the user's own cloud account, so a second device can read
 //     the same document.
 //
+// The phone app offers neither of the last two: no phone has the folder
+// picker, and its build leaves Dropbox out (`PHONE_BUILD`), so there the
+// record lives on the device and the backup export is the copy to keep.
+//
 // There is deliberately no iCloud. App Store guideline 5.1.3(ii) says apps
 // "may not store personal health information in iCloud", and this record is
 // a child's health data: it stays on the device or in the parent's own
@@ -120,10 +124,21 @@ const SAVE_DEBOUNCE_MS = 1200;
 /** The document's file name on a file backend. */
 const CLOUD_FILE_NAME = "baby.json";
 
+/** Whether this is the phone app's build — the one `native/scripts/bundle-web.mjs`
+ *  makes, which ships under the store listing. It keeps the record on the
+ *  device: Settings shows no Dropbox, not even a disabled choice, and its
+ *  code folds out of the bundle. A folder is not on offer there either (no phone has the picker),
+ *  so the phone app has nothing to connect, and nothing to encrypt for. The
+ *  website and the desktop app are unaffected. */
+export const PHONE_BUILD: boolean = import.meta.env.VITE_NATIVE_BUILD === "on";
+
 // OAuth app identities, injected at build time. Without them the matching
 // backend is hidden rather than offered and then failing at connect time.
-export const DROPBOX_APP_KEY: string =
-  (import.meta.env.VITE_DROPBOX_APP_KEY as string | undefined) ?? "";
+// The phone build never takes the key, whatever the environment holds, so
+// Vite folds every Dropbox branch below out of it.
+export const DROPBOX_APP_KEY: string = PHONE_BUILD
+  ? ""
+  : ((import.meta.env.VITE_DROPBOX_APP_KEY as string | undefined) ?? "");
 
 // Dropbox fixes the app-folder name from the app's own configuration (an
 // "App folder"-scoped app lives under `Apps/<name>/`), so it isn't always
@@ -147,7 +162,8 @@ export const PROVIDER_NAMES: Record<SyncBackendId, string> = {
 };
 
 /** Which backends this build can offer — a provider with no client id
- *  configured, or a picker the browser lacks, is hidden entirely. */
+ *  configured, a picker the browser lacks, or Dropbox in the phone build, is
+ *  hidden entirely. */
 export const AVAILABLE_BACKENDS: SyncBackendId[] = [
   "idb",
   ...(FOLDER_BACKEND_AVAILABLE ? (["folder"] as const) : []),
@@ -172,9 +188,16 @@ type DropboxTokens = { accessToken: string; refreshToken: string | null };
  * that offered iCloud Drive. The app keeps a child's health data out of
  * iCloud (App Store guideline 5.1.3(ii)), so that choice reads as this device;
  * no released build ever wrote it, so there is no copy there to bring back.
+ *
+ * And a stored `"dropbox"` in the phone build, left by a pre-release install
+ * that offered it: the phone app has no Dropbox, so it reads as this device.
+ * The working copy is in localStorage whatever the backend was, so nothing is
+ * stranded, and the copy in Dropbox stays where it is.
  */
 export function parseBackend(raw: unknown): SyncBackendId {
-  return raw === "dropbox" || raw === "folder" ? raw : LOCAL_BACKEND;
+  if (raw === "folder") return raw;
+  if (raw === "dropbox" && !PHONE_BUILD) return raw;
+  return LOCAL_BACKEND;
 }
 
 function readBackend(): SyncBackendId {
@@ -306,7 +329,7 @@ export function useSyncEngine(
         logger: logStore.createLogger("folder"),
       });
     }
-    if (backend === "dropbox" && dropboxTokens) {
+    if (backend === "dropbox" && !PHONE_BUILD && dropboxTokens) {
       const auth = {
         accessToken: dropboxTokens.accessToken,
         refreshToken: dropboxTokens.refreshToken,
@@ -698,7 +721,7 @@ export function useSyncEngine(
 
   /** The document's human-readable location on the active backend. */
   const path = (() => {
-    if (backend === "dropbox") {
+    if (backend === "dropbox" && !PHONE_BUILD) {
       return `Apps/${DROPBOX_APP_FOLDER}/${CLOUD_FILE_NAME}`;
     }
     if (backend === "folder") {

@@ -4,7 +4,8 @@ A frontend-only, local-first PWA. There is no server: the app is static files
 on GitHub Pages, and every byte of user data lives in the browser — by
 default in this device's own IndexedDB, and, if the user connects one, also
 in a picked folder, or as a single file in their own Dropbox — encrypted on
-the device first either way (see [sync.md](sync.md#encryption)). Never in
+the device first either way (see [sync.md](sync.md#encryption)). The phone
+app has this device only: its build offers no Dropbox. Never in
 iCloud: App Store guideline 5.1.3(ii) keeps personal health information out
 of it.
 

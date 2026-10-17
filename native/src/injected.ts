@@ -10,9 +10,8 @@
 //
 // Nothing else crosses this way. The wrapper does not copy the document out of
 // `localStorage` and has no use for it: the record stays in the page, and
-// the app's own sync engine is the only thing that sends it anywhere — to the
-// parent's own Dropbox, when they connect it — without this script ever
-// seeing it.
+// the phone build's sync engine keeps it on the device, and the only way out
+// is the backup the parent exports — without this script ever seeing it.
 //
 // It also unregisters the service worker (see `SW_TEARDOWN`).
 //
