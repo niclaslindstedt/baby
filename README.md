@@ -1,6 +1,6 @@
 # Baby
 
-> A local-first baby health and nutrition tracker for parents in Sweden — is the food regimen still enough, is the baby growing along the curve, how many diapers today, how much sleep and when the next nap, and which vaccination comes next. No account, no server.
+> A local-first baby health and nutrition tracker for parents in Sweden — is the food regimen still enough, is the baby growing along the curve, how many diapers today, how much sleep and when the next nap, and which vaccination comes next. Nothing to sign up for, no server.
 
 [![ci](https://github.com/niclaslindstedt/baby/actions/workflows/ci.yml/badge.svg)](https://github.com/niclaslindstedt/baby/actions/workflows/ci.yml)
 [![pages](https://github.com/niclaslindstedt/baby/actions/workflows/pages.yml/badge.svg)](https://github.com/niclaslindstedt/baby/actions/workflows/pages.yml)
@@ -66,7 +66,7 @@ A child's growth readings, diaper log and vaccination card are health data,
 and most apps in this category are an account wrapped around a server you
 cannot inspect — often with a feeding diary that asks for every millilitre.
 
-This one has no account and no server. The record lives on your device, in
+This one has nothing to sign up for and no server. The record lives on your device, in
 your browser's own storage. If you want it on more than one device, you keep
 a copy in a folder you pick, or in **your own** Dropbox — encrypted on the
 device with a passphrase only you know, so the folder and Dropbox hold

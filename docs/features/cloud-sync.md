@@ -1,7 +1,7 @@
 # Where the record lives
 
 Your record is kept on **this device** out of the box, in the browser's own
-storage — no account, no picker, and nothing leaves the phone. Under
+storage — nothing to sign up for, no picker, and nothing leaves the phone. Under
 **Settings → Where the record lives** you can put it somewhere another
 device can read it too:
 

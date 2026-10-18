@@ -110,9 +110,9 @@ export const enSettings = {
   version: "Version",
   build: "Build",
   privacy:
-    "Everything stays on this device unless you connect a folder or a cloud account yourself, and a copy there is encrypted with your passphrase first. There is no server, no account, and no analytics.",
+    "Everything stays on this device unless you connect a folder or a cloud account yourself, and a copy there is encrypted with your passphrase first. There is no server, nothing to sign up for, and no analytics.",
   privacyDevice:
-    "Everything stays on this device; the app sends your record nowhere. There is no server, no account, and no analytics.",
+    "Everything stays on this device; the app sends your record nowhere. There is no server, nothing to sign up for, and no analytics.",
   disclaimer:
     "A notebook, not medical advice. The app records what you enter and compares it with published recommendations; questions about your child's health belong with the child health center.",
 } as const;

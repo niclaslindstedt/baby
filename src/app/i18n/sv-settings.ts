@@ -103,9 +103,9 @@ export const svSettings: Catalog["settings"] = {
   version: "Version",
   build: "Bygge",
   privacy:
-    "Allt stannar på den här enheten om du inte själv ansluter en mapp eller ett molnkonto, och en kopia där krypteras med din lösenfras först. Det finns ingen server, inget konto och ingen statistikinsamling.",
+    "Allt stannar på den här enheten om du inte själv ansluter en mapp eller ett molnkonto, och en kopia där krypteras med din lösenfras först. Det finns ingen server, ingen registrering och ingen statistikinsamling.",
   privacyDevice:
-    "Allt stannar på den här enheten; appen skickar din journal ingenstans. Det finns ingen server, inget konto och ingen statistikinsamling.",
+    "Allt stannar på den här enheten; appen skickar din journal ingenstans. Det finns ingen server, ingen registrering och ingen statistikinsamling.",
   disclaimer:
     "En anteckningsbok, inte medicinsk rådgivning. Appen sparar det du fyller i och jämför det med publicerade rekommendationer; frågor om ditt barns hälsa hör hemma på BVC.",
 };
