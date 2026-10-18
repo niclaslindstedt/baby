@@ -92,7 +92,6 @@ describe("the phone build", () => {
       VITE_NATIVE_BUILD: "on",
       VITE_DROPBOX_APP_KEY: "key",
     });
-    expect(sync.PHONE_BUILD).toBe(true);
     expect(sync.DROPBOX_APP_KEY).toBe("");
     expect(sync.AVAILABLE_BACKENDS).toEqual(["idb"]);
   });
@@ -106,9 +105,30 @@ describe("the phone build", () => {
     expect(sync.parseBackend("idb")).toBe("idb");
   });
 
+  it("offers no local folder, and reads a stored one as this device", async () => {
+    // Even where the directory picker exists: the phone's WebView has none,
+    // and the phone build leaves the choice out rather than hide it.
+    const globals = globalThis as { window?: unknown };
+    const previous = globals.window;
+    globals.window = { showDirectoryPicker: () => undefined };
+    try {
+      const sync = await build({ VITE_NATIVE_BUILD: "on" });
+      expect(sync.FOLDER_BACKEND_AVAILABLE).toBe(false);
+      expect(sync.AVAILABLE_BACKENDS).toEqual(["idb"]);
+      expect(sync.parseBackend("folder")).toBe(sync.LOCAL_BACKEND);
+    } finally {
+      if (previous === undefined) delete globals.window;
+      else globals.window = previous;
+    }
+  });
+
+  it("leaves the website's folder choice as it was", async () => {
+    const sync = await build({});
+    expect(sync.parseBackend("folder")).toBe("folder");
+  });
+
   it("leaves the website's Dropbox as it was", async () => {
     const sync = await build({ VITE_DROPBOX_APP_KEY: "key" });
-    expect(sync.PHONE_BUILD).toBe(false);
     expect(sync.DROPBOX_APP_KEY).toBe("key");
     expect(sync.AVAILABLE_BACKENDS).toContain("dropbox");
     expect(sync.parseBackend("dropbox")).toBe("dropbox");

@@ -71,7 +71,7 @@ import type { DocStore } from "./useDocStore.ts";
 //     the same document.
 //
 // The phone app offers neither of the last two: no phone has the folder
-// picker, and its build leaves Dropbox out (`PHONE_BUILD`), so there the
+// picker, and its build leaves both out (`VITE_NATIVE_BUILD`), so there the
 // record lives on the device and the backup export is the copy to keep.
 //
 // There is deliberately no iCloud. App Store guideline 5.1.3(ii) says apps
@@ -124,21 +124,25 @@ const SAVE_DEBOUNCE_MS = 1200;
 /** The document's file name on a file backend. */
 const CLOUD_FILE_NAME = "baby.json";
 
-/** Whether this is the phone app's build — the one `native/scripts/bundle-web.mjs`
- *  makes, which ships under the store listing. It keeps the record on the
- *  device: Settings shows no Dropbox, not even a disabled choice, and its
- *  code folds out of the bundle. A folder is not on offer there either (no phone has the picker),
- *  so the phone app has nothing to connect, and nothing to encrypt for. The
- *  website and the desktop app are unaffected. */
-export const PHONE_BUILD: boolean = import.meta.env.VITE_NATIVE_BUILD === "on";
+// The phone app's build — the one `native/scripts/bundle-web.mjs` makes, with
+// VITE_NATIVE_BUILD=on, which ships under the store listing — keeps the record
+// on the device: Settings has no section for where it lives, offers no folder
+// (no phone has the picker) and no Dropbox, not even a disabled choice, so the
+// phone app has nothing to connect and nothing to encrypt for. The website and
+// the desktop app are unaffected. Every branch tests
+// `import.meta.env.VITE_NATIVE_BUILD === "on"` where it stands: Vite folds
+// that comparison at the use site, but not a constant derived from it or
+// imported from another module, so that is what takes the folder and Dropbox
+// paths out of the phone bundle.
 
 // OAuth app identities, injected at build time. Without them the matching
 // backend is hidden rather than offered and then failing at connect time.
 // The phone build never takes the key, whatever the environment holds, so
 // Vite folds every Dropbox branch below out of it.
-export const DROPBOX_APP_KEY: string = PHONE_BUILD
-  ? ""
-  : ((import.meta.env.VITE_DROPBOX_APP_KEY as string | undefined) ?? "");
+export const DROPBOX_APP_KEY: string =
+  import.meta.env.VITE_NATIVE_BUILD === "on"
+    ? ""
+    : ((import.meta.env.VITE_DROPBOX_APP_KEY as string | undefined) ?? "");
 
 // Dropbox fixes the app-folder name from the app's own configuration (an
 // "App folder"-scoped app lives under `Apps/<name>/`), so it isn't always
@@ -149,8 +153,10 @@ export const DROPBOX_APP_FOLDER: string =
   "baby";
 
 /** Whether the File System Access directory picker exists in this browser
- *  (Chromium-based). The local-folder backend is hidden where it doesn't. */
-export const FOLDER_BACKEND_AVAILABLE = isFolderBackendAvailable();
+ *  (Chromium-based). The local-folder backend is hidden where it doesn't,
+ *  and is not in the phone app at all. */
+export const FOLDER_BACKEND_AVAILABLE: boolean =
+  import.meta.env.VITE_NATIVE_BUILD !== "on" && isFolderBackendAvailable();
 
 /** The fallback display names, for the log lines and for anything that
  *  reaches the framework before a catalog does. The screens spell them
@@ -166,8 +172,12 @@ export const PROVIDER_NAMES: Record<SyncBackendId, string> = {
  *  hidden entirely. */
 export const AVAILABLE_BACKENDS: SyncBackendId[] = [
   "idb",
-  ...(FOLDER_BACKEND_AVAILABLE ? (["folder"] as const) : []),
-  ...(DROPBOX_APP_KEY ? (["dropbox"] as const) : []),
+  ...(import.meta.env.VITE_NATIVE_BUILD !== "on" && FOLDER_BACKEND_AVAILABLE
+    ? (["folder"] as const)
+    : []),
+  ...(import.meta.env.VITE_NATIVE_BUILD !== "on" && DROPBOX_APP_KEY
+    ? (["dropbox"] as const)
+    : []),
 ];
 
 type DropboxTokens = { accessToken: string; refreshToken: string | null };
@@ -189,14 +199,15 @@ type DropboxTokens = { accessToken: string; refreshToken: string | null };
  * iCloud (App Store guideline 5.1.3(ii)), so that choice reads as this device;
  * no released build ever wrote it, so there is no copy there to bring back.
  *
- * And a stored `"dropbox"` in the phone build, left by a pre-release install
- * that offered it: the phone app has no Dropbox, so it reads as this device.
- * The working copy is in localStorage whatever the backend was, so nothing is
- * stranded, and the copy in Dropbox stays where it is.
+ * And a stored `"dropbox"` or `"folder"` in the phone build, left by a
+ * pre-release install that offered it: the phone app has neither, so it reads
+ * as this device. The working copy is in localStorage whatever the backend
+ * was, so nothing is stranded, and the copy elsewhere stays where it is.
  */
 export function parseBackend(raw: unknown): SyncBackendId {
+  if (import.meta.env.VITE_NATIVE_BUILD === "on") return LOCAL_BACKEND;
   if (raw === "folder") return raw;
-  if (raw === "dropbox" && !PHONE_BUILD) return raw;
+  if (raw === "dropbox") return raw;
   return LOCAL_BACKEND;
 }
 
@@ -322,14 +333,22 @@ export function useSyncEngine(
     if (backend === "idb") {
       return createIdbDocAdapter({ dbName: IDB_DB_NAME });
     }
-    if (backend === "folder" && folderHandle) {
+    if (
+      import.meta.env.VITE_NATIVE_BUILD !== "on" &&
+      backend === "folder" &&
+      folderHandle
+    ) {
       return createFolderAdapter(folderHandle, {
         fileName: CLOUD_FILE_NAME,
         onPermissionLost: markFolderPermissionLost,
         logger: logStore.createLogger("folder"),
       });
     }
-    if (backend === "dropbox" && !PHONE_BUILD && dropboxTokens) {
+    if (
+      import.meta.env.VITE_NATIVE_BUILD !== "on" &&
+      backend === "dropbox" &&
+      dropboxTokens
+    ) {
       const auth = {
         accessToken: dropboxTokens.accessToken,
         refreshToken: dropboxTokens.refreshToken,
@@ -489,7 +508,13 @@ export function useSyncEngine(
   // Complete a Dropbox OAuth redirect: trade the `?code=` for tokens, persist
   // them, and adopt the backend. Runs once on boot when a flow is mid-flight.
   useEffect(() => {
-    if (!DROPBOX_APP_KEY || !hasPendingDropboxAuth()) return;
+    if (
+      import.meta.env.VITE_NATIVE_BUILD === "on" ||
+      !DROPBOX_APP_KEY ||
+      !hasPendingDropboxAuth()
+    ) {
+      return;
+    }
     const code = new URLSearchParams(window.location.search).get("code");
     if (!code) return;
     void (async () => {
@@ -569,7 +594,11 @@ export function useSyncEngine(
   }, [adapter, paused, baselineReady, dirty, status, store.editCount, push]);
 
   const connectFolder = useCallback(async (): Promise<void> => {
-    if (!FOLDER_BACKEND_AVAILABLE || !window.showDirectoryPicker) {
+    if (
+      import.meta.env.VITE_NATIVE_BUILD === "on" ||
+      !FOLDER_BACKEND_AVAILABLE ||
+      !window.showDirectoryPicker
+    ) {
       throw new Error("This browser cannot open a local folder");
     }
     let handle: FileSystemDirectoryHandle;
@@ -620,7 +649,9 @@ export function useSyncEngine(
         await connectFolder();
         return;
       }
-      if (!DROPBOX_APP_KEY) throw new Error("Dropbox is not configured");
+      if (import.meta.env.VITE_NATIVE_BUILD === "on" || !DROPBOX_APP_KEY) {
+        throw new Error("Dropbox is not configured");
+      }
       // In the phone app the redirect would land in the system browser, not
       // in the app, so a host that offers an authentication session is asked
       // for one: consent in a sheet over the app, the redirect handed back,
@@ -721,10 +752,10 @@ export function useSyncEngine(
 
   /** The document's human-readable location on the active backend. */
   const path = (() => {
-    if (backend === "dropbox" && !PHONE_BUILD) {
+    if (import.meta.env.VITE_NATIVE_BUILD !== "on" && backend === "dropbox") {
       return `Apps/${DROPBOX_APP_FOLDER}/${CLOUD_FILE_NAME}`;
     }
-    if (backend === "folder") {
+    if (import.meta.env.VITE_NATIVE_BUILD !== "on" && backend === "folder") {
       return `${folderHandle?.name ?? "…"}/${CLOUD_FILE_NAME}`;
     }
     return `IndexedDB · ${IDB_DB_NAME}`;

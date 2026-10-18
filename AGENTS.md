@@ -76,11 +76,20 @@ a `WebView`, served from a loopback origin — nothing in `src/` asks at run
 time whether it is native. The wrapper offers a sign-in an in-app authentication
 session at `window.__ossAuthSession`, a **capability** the framework's
 `getAuthSessionHost` looks for; a browser has none and keeps its redirect.
-The phone app **offers no Dropbox**: the one thing in `src/` that tells the
-phone build apart, `VITE_NATIVE_BUILD` (`PHONE_BUILD` in `useSyncEngine.ts`),
-leaves it out of Settings and folds its code away, and `native.yml` passes no
-Dropbox key — so the phone app keeps the child's record on the device, with
-the backup export as the copy to keep. The website and the desktop app keep
+The phone app **offers no Dropbox and no folder**: the one thing in `src/`
+that tells the phone build apart, `VITE_NATIVE_BUILD`, leaves Settings → Where
+the record lives out altogether and folds their code away, and `native.yml`
+passes no Dropbox key — so the phone app keeps the child's record on the
+device, with the backup export as the copy to keep. Every branch tests
+`import.meta.env.VITE_NATIVE_BUILD === "on"` at the use site itself: Vite 8
+folds that comparison where it stands, but not a constant derived from it or
+imported from another module, so a shared `PHONE_BUILD` would leave the other
+builds' branches riding in the phone bundle. Never `VITE_EMBEDDED_BUILD`,
+which the desktop build sets too. In the phone app Settings → About and the
+About screen say the record leaves the device only in a backup, and link to
+the privacy policy on apps.agilator.se (`src/app/PrivacyNote.tsx`); the phone
+build's `index.html` carries its own description and no HTML comments
+(`vite.config.ts`). The website and the desktop app keep
 their Dropbox; do not put it back in the phone build unasked.
 There is **no iCloud, on purpose**: App Store guideline 5.1.3(ii) keeps
 personal health information out of it. Do not add an iCloud store, CloudKit
@@ -238,8 +247,8 @@ like SVG's `focusable` as `"false"` rather than a JSX boolean.
   vocabulary.
 - `src/app/useSyncEngine.ts` — the sync engine over the framework's storage
   adapters plus the app's own `idbAdapter.ts`: local, IndexedDB, a picked
-  folder, Dropbox (not in the phone build, `PHONE_BUILD`, which has this
-  device only). Suspended wholesale while demo data has
+  folder, Dropbox (neither in the phone build, `VITE_NATIVE_BUILD`, which has
+  this device only). Suspended wholesale while demo data has
   taken over storage. A copy in the folder or Dropbox is **always
   encrypted**: the adapter comes from the framework's
   `useEncryption` (`policy: "required"`, `remember: "device"`), which is `null` until the passphrase is held, so

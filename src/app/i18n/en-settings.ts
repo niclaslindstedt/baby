@@ -48,9 +48,10 @@ export const enSettings = {
   sync: "Where the record lives",
   syncHint:
     "Your record is kept on this device. Keep a second, encrypted copy in a folder you pick, or in your own cloud account, to read it on another device too.",
-  // The phone app's version of the two lines above and of `privacy` below:
-  // its build keeps the record on the device and offers nothing to connect.
-  syncHintDevice:
+  // The phone app's only word on where the record is, at the top of Your
+  // data, in place of the section above: its build keeps the record on the
+  // device and offers nothing to connect.
+  deviceOnly:
     "Your record is kept on this device, and the app sends it nowhere. To keep a copy of your own, export a backup below.",
   backend: "Backend",
   // The places the record can live. "This device" is the browser's own
@@ -109,10 +110,16 @@ export const enSettings = {
   about: "About",
   version: "Version",
   build: "Build",
+  // Where the record goes. The phone app offers no copy elsewhere, not even
+  // iCloud — the record is a child's health data — so its sentence says the
+  // record leaves the device only in a backup. Tested at this use site, so
+  // each build carries only its own words.
   privacy:
-    "Everything stays on this device unless you connect a folder or a cloud account yourself, and a copy there is encrypted with your passphrase first. There is no server, nothing to sign up for, and no analytics.",
-  privacyDevice:
-    "Everything stays on this device; the app sends your record nowhere. There is no server, nothing to sign up for, and no analytics.",
+    import.meta.env.VITE_NATIVE_BUILD === "on"
+      ? "Everything stays on this device. The app sends nothing when it opens, and there is no cloud copy — not iCloud, not anywhere else: the record leaves the device only in a backup you export yourself. There is no server of ours, so nothing about you or your child is logged, there is nothing to sign up for, and there are no analytics."
+      : "Everything stays on this device unless you connect a folder or a cloud account yourself, and a copy there is encrypted with your passphrase first. There is no server, nothing to sign up for, and no analytics.",
+  // The phone app's link under it, to the policy its store listing points at.
+  privacyPolicy: "Read the full privacy policy",
   disclaimer:
     "A notebook, not medical advice. The app records what you enter and compares it with published recommendations; questions about your child's health belong with the child health center.",
 } as const;

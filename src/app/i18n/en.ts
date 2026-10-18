@@ -109,8 +109,12 @@ export const en = {
 
   today: {
     title: "Today",
+    // The phone app has no browser to send anyone to, and a full device is
+    // what refuses the write there.
     saveFailed:
-      "Couldn't save to this device — check the browser's storage settings.",
+      import.meta.env.VITE_NATIVE_BUILD === "on"
+        ? "Couldn't save to this device — check that it has storage space left."
+        : "Couldn't save to this device — check the browser's storage settings.",
     // The headline cards: the four questions the app answers, one line each,
     // each opening its own read-only view over this screen rather than
     // sending the parent off to a tab.

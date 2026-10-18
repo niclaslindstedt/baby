@@ -91,8 +91,12 @@ export const sv: Catalog = {
 
   today: {
     title: "Idag",
+    // The phone app has no browser to send anyone to, and a full device is
+    // what refuses the write there.
     saveFailed:
-      "Kunde inte spara på den här enheten — kontrollera webbläsarens lagringsinställningar.",
+      import.meta.env.VITE_NATIVE_BUILD === "on"
+        ? "Kunde inte spara på den här enheten — kontrollera att den har lagringsutrymme kvar."
+        : "Kunde inte spara på den här enheten — kontrollera webbläsarens lagringsinställningar.",
     diapersCard: "Blöjor",
     sleepCard: "Sömn",
     foodCard: "Matregim",

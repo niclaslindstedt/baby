@@ -122,11 +122,13 @@ function embedded(): Plugin {
 }
 
 // The PHONE build — `native/scripts/bundle-web.mjs`, the one that ships under
-// the store listing — offers no Dropbox (`PHONE_BUILD` in
-// `src/app/useSyncEngine.ts`): the record stays on the device. The page's
+// the store listing — offers no Dropbox and no folder (`VITE_NATIVE_BUILD`,
+// see `src/app/useSyncEngine.ts`): the record stays on the device. The page's
 // description says the website's sentence about Dropbox, so the phone build
 // says what is true of it instead, and fails rather than ships if the
-// sentence it replaces has moved.
+// sentence it replaces has moved. Its HTML comments go too: they talk about
+// an installed PWA and the web edition's indexing, which the phone app is
+// neither.
 const phoneBuild = process.env.VITE_NATIVE_BUILD === "on";
 const WEB_STORAGE_SENTENCE = /Everything stays on your device unless [^"]*"/;
 
@@ -140,10 +142,9 @@ function phoneDescription(): Plugin {
           "index.html: the description's storage sentence has moved; update vite.config.ts",
         );
       }
-      return html.replace(
-        WEB_STORAGE_SENTENCE,
-        'Everything stays on your device."',
-      );
+      return html
+        .replace(/\n?[ \t]*<!--[\s\S]*?-->/g, "")
+        .replace(WEB_STORAGE_SENTENCE, 'Everything stays on your device."');
     },
   };
 }

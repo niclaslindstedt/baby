@@ -16,7 +16,7 @@ import { useLang, useLocale, useT } from "./i18n/index.ts";
 import { useReferences } from "./references.ts";
 import { Card, Heading } from "./ui.tsx";
 import { FEATURES } from "./useAppSettings.ts";
-import { PHONE_BUILD } from "./useSyncEngine.ts";
+import { PrivacyNote } from "./PrivacyNote.tsx";
 
 // About, behind Settings: what the app is, and every published source its
 // numbers rest on. The list is the references registry
@@ -71,9 +71,9 @@ export function AboutScreen({ onBack }: Props) {
         <p className="mt-2 text-sm leading-snug text-fg">
           {t("settings.disclaimer")}
         </p>
-        <p className="mt-2 text-xs leading-snug text-muted">
-          {t(PHONE_BUILD ? "settings.privacyDevice" : "settings.privacy")}
-        </p>
+        <div className="mt-2 flex flex-col gap-2">
+          <PrivacyNote />
+        </div>
       </Card>
 
       <Card>

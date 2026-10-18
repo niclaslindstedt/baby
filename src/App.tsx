@@ -322,8 +322,10 @@ export function App() {
               ? t("nav.logSleep")
               : t("nav.logDiaper")
         }
+        // The phone app keeps the record on the device, so it has no copy
+        // elsewhere to show the state of.
         syncSlot={
-          sync.remote ? (
+          import.meta.env.VITE_NATIVE_BUILD !== "on" && sync.remote ? (
             <SyncStatus
               providerName={t(`settings.backendName.${sync.backend}` as const)}
               status={sync.status}
@@ -484,30 +486,37 @@ export function App() {
       />
 
       {/* Asks for the passphrase whenever sync is waiting on one. A dialog,
-          not a gate: the working copy on this device works behind it. */}
-      <EncryptionGate
-        encryption={sync.encryption}
-        location={t(`settings.backendName.${sync.backend}` as const)}
-        labels={encryptionLabels}
-        paused={demo.on}
-      />
+          not a gate: the working copy on this device works behind it. The
+          phone app has no copy to encrypt, and no glyph to open details from. */}
+      {import.meta.env.VITE_NATIVE_BUILD !== "on" && (
+        <EncryptionGate
+          encryption={sync.encryption}
+          location={t(`settings.backendName.${sync.backend}` as const)}
+          labels={encryptionLabels}
+          paused={demo.on}
+        />
+      )}
 
-      <SyncDetailsModal
-        open={syncDetailsOpen}
-        providerName={t(`settings.backendName.${sync.backend}` as const)}
-        backendKind={sync.backend === "dropbox" ? "cloud" : "folder"}
-        location={sync.location}
-        status={sync.status}
-        statusDetail={sync.statusDetail}
-        dirty={sync.dirty}
-        offline={sync.offline}
-        onSaveNow={sync.saveNow}
-        onReload={() => void sync.reload()}
-        onReconnect={sync.reconnect}
-        onCheckConnection={sync.checkConnection}
-        logPanel={settings.devMode ? <LogViewer store={logStore} /> : undefined}
-        onClose={() => setSyncDetailsOpen(false)}
-      />
+      {import.meta.env.VITE_NATIVE_BUILD !== "on" && (
+        <SyncDetailsModal
+          open={syncDetailsOpen}
+          providerName={t(`settings.backendName.${sync.backend}` as const)}
+          backendKind={sync.backend === "dropbox" ? "cloud" : "folder"}
+          location={sync.location}
+          status={sync.status}
+          statusDetail={sync.statusDetail}
+          dirty={sync.dirty}
+          offline={sync.offline}
+          onSaveNow={sync.saveNow}
+          onReload={() => void sync.reload()}
+          onReconnect={sync.reconnect}
+          onCheckConnection={sync.checkConnection}
+          logPanel={
+            settings.devMode ? <LogViewer store={logStore} /> : undefined
+          }
+          onClose={() => setSyncDetailsOpen(false)}
+        />
+      )}
 
       <ToastViewport
         store={toasts}

@@ -33,15 +33,17 @@ one under its icon.
 ## On this device
 
 The phone app keeps your child's record on the phone, and nowhere else.
-**Settings → Where the record lives** says so: there is nothing to connect,
-no Dropbox and no iCloud. **Export a backup** is how you keep a copy of your
-own.
+Settings has no section for where the record lives — there is nothing to
+connect, no folder, no Dropbox and no iCloud — and **Settings → Your data**
+says the record stays on this device. **Export a backup** is how you keep a
+copy of your own. Settings → About and the About screen say the same, and
+link to the full privacy policy.
 
 There is no iCloud on purpose. This is your child's health record, and App
 Store guideline 5.1.3(ii) says apps may not store personal health information
-in iCloud. Dropbox, which the website and the desktop app offer, is left out
-of the phone app's build; a pre-release install that had connected it comes
-back to this device, with its record intact.
+in iCloud. Dropbox and a local folder, which the website and the desktop app
+offer, are left out of the phone app's build; a pre-release install that had
+connected either comes back to this device, with its record intact.
 
 ## What the wrapper is not allowed to do
 

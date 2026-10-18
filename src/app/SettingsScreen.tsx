@@ -38,6 +38,7 @@ import {
   type Lang,
 } from "./i18n/index.ts";
 import { mergeDocs } from "./merge.ts";
+import { PrivacyNote } from "./PrivacyNote.tsx";
 import { useEncryptionLabels, usePinControlLabels } from "./SyncEncryption.tsx";
 import { serializeDoc } from "./migrations.ts";
 import { emptyDoc } from "./types.ts";
@@ -51,7 +52,6 @@ import type { DocStore } from "./useDocStore.ts";
 import {
   FOLDER_BACKEND_AVAILABLE,
   LOCAL_BACKEND,
-  PHONE_BUILD,
   type SyncBackendId,
   type SyncEngine,
 } from "./useSyncEngine.ts";
@@ -232,16 +232,15 @@ export function SettingsScreen({
         </div>
       </Section>
 
-      <Section
-        title={t("settings.sync")}
-        icon={<CloudIcon className="h-3.5 w-3.5" />}
-      >
-        {/* The phone app has one place for the record and nothing to
-            connect, so it says so instead of offering a one-option picker. */}
-        <p className="text-xs text-muted">
-          {t(PHONE_BUILD ? "settings.syncHintDevice" : "settings.syncHint")}
-        </p>
-        {!PHONE_BUILD && (
+      {/* The phone app has one place for the record and nothing to connect,
+          so it has no section for where the record lives: Your data says it
+          stays on the device instead. */}
+      {import.meta.env.VITE_NATIVE_BUILD !== "on" && (
+        <Section
+          title={t("settings.sync")}
+          icon={<CloudIcon className="h-3.5 w-3.5" />}
+        >
+          <p className="text-xs text-muted">{t("settings.syncHint")}</p>
           <SegmentedControl<SyncBackendId>
             value={sync.backend}
             // Demo data is showing: connecting or disconnecting would change the
@@ -272,76 +271,74 @@ export function SettingsScreen({
             ariaLabel={t("settings.backend")}
             fullWidth
           />
-        )}
-        {!PHONE_BUILD && (
           <p className="text-xs text-muted">
             {t(`settings.backendHint.${sync.backend}` as const)}
           </p>
-        )}
-        {/* Why the folder isn't on the list. Silently dropping the choice
+          {/* Why the folder isn't on the list. Silently dropping the choice
             reads as "this app can't do that"; the honest answer is that no
             mobile browser, and no Safari or Firefox, ships the directory
             picker it needs. */}
-        {!FOLDER_BACKEND_AVAILABLE && !PHONE_BUILD && (
-          <p className="text-xs text-muted">
-            {t("settings.folderUnavailable")}
-          </p>
-        )}
-        <p className="text-xs text-muted">
-          {sync.remote
-            ? t("settings.connected", {
-                name: t(`settings.backendName.${sync.backend}` as const),
-              })
-            : t("settings.localOnly")}
-          {" · "}
-          {sync.location.path}
-        </p>
-        {sync.backend === "folder" && sync.folderReconnectNeeded && (
-          <div className="flex flex-col gap-1">
-            <p className="text-xs text-danger">
-              {t("settings.folderReconnectNeeded")}
+          {!FOLDER_BACKEND_AVAILABLE && (
+            <p className="text-xs text-muted">
+              {t("settings.folderUnavailable")}
             </p>
-            <div>
-              <Button variant="primary" onClick={() => void sync.reconnect()}>
-                {t("settings.folderReconnect")}
-              </Button>
+          )}
+          <p className="text-xs text-muted">
+            {sync.remote
+              ? t("settings.connected", {
+                  name: t(`settings.backendName.${sync.backend}` as const),
+                })
+              : t("settings.localOnly")}
+            {" · "}
+            {sync.location.path}
+          </p>
+          {sync.backend === "folder" && sync.folderReconnectNeeded && (
+            <div className="flex flex-col gap-1">
+              <p className="text-xs text-danger">
+                {t("settings.folderReconnectNeeded")}
+              </p>
+              <div>
+                <Button variant="primary" onClick={() => void sync.reconnect()}>
+                  {t("settings.folderReconnect")}
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
-        {sync.remote && (
-          <EncryptionSettings
-            encryption={sync.encryption}
-            location={t(`settings.backendName.${sync.backend}` as const)}
-            labels={encryptionLabels}
-            disabled={demoData.on}
-            onChanged={() => {
-              onNotice(t("encryption.changed"));
-              void sync.reload();
-            }}
-          />
-        )}
-        {sync.connected && (
-          <div className="flex flex-wrap gap-2">
-            <Button onClick={sync.saveNow} disabled={busy || !sync.dirty}>
-              {t("settings.saveNow")}
-            </Button>
-            <Button onClick={() => void sync.reload()} disabled={busy}>
-              {t("settings.reload")}
-            </Button>
-            {/* Nothing to disconnect *from* on this device: there are no
-                credentials and no grant, and the copy is the browser's own. */}
-            {sync.remote && (
-              <Button
-                variant="danger"
-                onClick={sync.disconnect}
-                disabled={demoData.on}
-              >
-                {t("settings.disconnect")}
+          )}
+          {sync.remote && (
+            <EncryptionSettings
+              encryption={sync.encryption}
+              location={t(`settings.backendName.${sync.backend}` as const)}
+              labels={encryptionLabels}
+              disabled={demoData.on}
+              onChanged={() => {
+                onNotice(t("encryption.changed"));
+                void sync.reload();
+              }}
+            />
+          )}
+          {sync.connected && (
+            <div className="flex flex-wrap gap-2">
+              <Button onClick={sync.saveNow} disabled={busy || !sync.dirty}>
+                {t("settings.saveNow")}
               </Button>
-            )}
-          </div>
-        )}
-      </Section>
+              <Button onClick={() => void sync.reload()} disabled={busy}>
+                {t("settings.reload")}
+              </Button>
+              {/* Nothing to disconnect *from* on this device: there are no
+                credentials and no grant, and the copy is the browser's own. */}
+              {sync.remote && (
+                <Button
+                  variant="danger"
+                  onClick={sync.disconnect}
+                  disabled={demoData.on}
+                >
+                  {t("settings.disconnect")}
+                </Button>
+              )}
+            </div>
+          )}
+        </Section>
+      )}
 
       <Section
         title={t("pin.title")}
@@ -354,6 +351,9 @@ export function SettingsScreen({
         title={t("settings.data")}
         icon={<DatabaseIcon className="h-3.5 w-3.5" />}
       >
+        {import.meta.env.VITE_NATIVE_BUILD === "on" && (
+          <p className="text-xs text-muted">{t("settings.deviceOnly")}</p>
+        )}
         <div className="flex flex-col gap-1">
           <div>
             <Button onClick={() => void exportBackup()}>
@@ -447,9 +447,7 @@ export function SettingsScreen({
           <dt className="text-muted">{t("settings.build")}</dt>
           <dd className="text-fg">{__BUILD_LABEL__}</dd>
         </dl>
-        <p className="text-xs leading-snug text-muted">
-          {t(PHONE_BUILD ? "settings.privacyDevice" : "settings.privacy")}
-        </p>
+        <PrivacyNote />
         <p className="text-xs leading-snug text-muted">
           {t("settings.disclaimer")}
         </p>

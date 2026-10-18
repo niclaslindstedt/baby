@@ -45,7 +45,7 @@ export const svSettings: Catalog["settings"] = {
   sync: "Var journalen finns",
   syncHint:
     "Din journal sparas på den här enheten. Håll en andra, krypterad kopia i en mapp du väljer, eller i ditt eget molnkonto, för att läsa den på en annan enhet också.",
-  syncHintDevice:
+  deviceOnly:
     "Din journal sparas på den här enheten, och appen skickar den ingenstans. Exportera en säkerhetskopia nedan för att ha en egen kopia.",
   backend: "Lagring",
   backendName: {
@@ -103,9 +103,10 @@ export const svSettings: Catalog["settings"] = {
   version: "Version",
   build: "Bygge",
   privacy:
-    "Allt stannar på den här enheten om du inte själv ansluter en mapp eller ett molnkonto, och en kopia där krypteras med din lösenfras först. Det finns ingen server, ingen registrering och ingen statistikinsamling.",
-  privacyDevice:
-    "Allt stannar på den här enheten; appen skickar din journal ingenstans. Det finns ingen server, ingen registrering och ingen statistikinsamling.",
+    import.meta.env.VITE_NATIVE_BUILD === "on"
+      ? "Allt stannar på den här enheten. Appen skickar ingenting när den öppnas, och det finns ingen molnkopia — inte i iCloud, inte någon annanstans: journalen lämnar enheten bara i en säkerhetskopia som du själv exporterar. Vi har ingen server, så ingenting om dig eller ditt barn loggas, det finns ingen registrering och ingen statistikinsamling."
+      : "Allt stannar på den här enheten om du inte själv ansluter en mapp eller ett molnkonto, och en kopia där krypteras med din lösenfras först. Det finns ingen server, ingen registrering och ingen statistikinsamling.",
+  privacyPolicy: "Läs hela integritetspolicyn",
   disclaimer:
     "En anteckningsbok, inte medicinsk rådgivning. Appen sparar det du fyller i och jämför det med publicerade rekommendationer; frågor om ditt barns hälsa hör hemma på BVC.",
 };
